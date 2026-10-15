@@ -1,0 +1,7 @@
+# Frontier-model baselines (plan §0.2 #17). API keys are read from the env vars named here,
+# never written in configs. Model entries are added (and verified) in Phase 7.3.
+inherit: base.yaml
+task: baselines
+baselines:
+  models: []
+  # - {name: <api model id>, backend: openai, base_url: <endpoint>, api_key_env: <ENV_VAR>}

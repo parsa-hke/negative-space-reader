@@ -1,0 +1,8 @@
+# Schema induction (plan Phase 3). Stage via --set induce.stage=...; genres: all, or one with --set pack=<genre>.
+#   3.1 eye test, local 7B:  python -m experiments.run --config configs/induce.yaml --overlay local
+#   3.1 confirm on the 72B:  python -m experiments.run --config configs/induce.yaml --overlay gpu \
+#                              --set induce.eye_test.compare_with=runs/<local eye-test run dir>
+inherit: base.yaml
+task: induce
+run:
+  seeds: [0]

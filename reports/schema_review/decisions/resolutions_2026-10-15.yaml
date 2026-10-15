@@ -1,0 +1,48 @@
+# Parsa's resolutions of the review-page answers (page_answers_2026-10-15.json), given in chat on 2026-10-15 after
+# Claude reported four problems with the answers as saved. Applied by analysis/apply_review_decisions.py.
+
+# 1. Splits saved with placeholder halves (_a/_b, identical definitions): each group is kept as ONE item, named after
+#    the group (privacy c037 included: kept, not dropped).
+keep_as_one:
+  privacy: [c008, c031, c037, c045, c047]
+  papers: [c002, c006, c008, c010]
+
+# 2. Privacy down to <= 60 items: merges accepted (all four offered).
+merge:
+  privacy:
+    c048: provides_privacy_contact          # with c014 and c071: one contact item
+    c071: provides_privacy_contact
+    c039: tracking_data_not_linked_to_identity   # with c027
+    c060: collects_usage_data_automatically      # with c001
+    c051: limits_internal_access                 # with c072: internal safeguards
+    c072: limits_internal_access
+  papers:
+    c051: describes_training_procedure      # 4. the orphaned training-process group folds back in
+
+# 3. Items kept under the group's own name inherit the severity weight and OPP-115 label source of the proposed
+#    item they replace (same group, same legal duty).
+carry_over: true
+
+# 5. After the coverage check (run coverage_72b_s0: privacy 18% of sections with an unmapped statement, papers 3%),
+#    Parsa approved widening these definitions; the re-check uses a fresh sample of held-out sections (seed 1).
+definitions:
+  privacy:
+    content_and_usage_restrictions: "States the site's terms of use or legal conditions rather than a data practice: rules for using the site or its content, disclaimers of liability (for example use at your own risk), indemnification or release, legal penalties, or that the policy creates no contractual rights."
+    defines_personal_information: "Defines terms used in the policy, most often what counts as personal (personally identifiable) information or anonymous information."
+    company_identification_and_service_definition: "Identifies who operates the site and is responsible for the information: the company or organisation and its affiliates, responsible representatives (such as a director of publication), its address, or its registration with a data-protection authority; sometimes with the services the policy covers."
+    third_party_advertising_and_cookies: "States that third parties (advertisers, ad networks, analytics providers or social-media plugins) serve ads or embed features on the site and may collect information about visits through cookies, web beacons or plugins, including for targeted advertising and what advertisers may infer from a response to an ad."
+    opt_out_of_communications: "States that users can opt out of or unsubscribe from marketing emails or other communications, how, and which messages continue after opting out (such as administrative or transactional emails)."
+    states_how_changes_are_notified: "States how users will learn about changes to the policy (posting on the site or this page, email or other notice for material changes), or asks users to review the policy periodically for changes."
+    reserves_right_to_change_policy: "States that the company may change or update the policy at any time, with or without notice, and sometimes why it may change (new laws, practices or features)."
+    transfers_data_internationally: "States that personal information may be transferred to, stored or processed in another country (typically the United States), sometimes with the safeguard or consent relied on, or warns that the laws there may protect it less."
+    user_data_control: "States that users can review, update, correct or delete their personal information, how (account settings, contacting the company), and any conditions on such requests (identity verification, fees, limits)."
+    discloses_public_areas: "States that information users post in public areas (forums, reviews, profiles) can be seen and used by others and may persist or be reposted after deletion, often with a warning to be careful."
+    # 6. After the fresh re-check (coverage_72b_v2_s1: privacy 17%), Parsa approved these five widenings together with
+    #    the coverage prompt v2 (background_or_filler label) and the plan clarification of "assertion".
+    disclose_data_rights: "States the user's legal rights over their personal data as rights (access, correction, objection to processing, portability, withdrawing consent, complaining to a data protection authority)."
+    consent_by_use: "States that using the site or giving information means consenting to the policy or to the collection and use it describes, or that users who do not agree should not use the site."
+    security_not_guaranteed: "States that no transmission or storage method is completely secure, so the company cannot guarantee security or disclaims liability for breaches, interception or technical failures."
+    states_information_required_to_register: "States that users must create an account or register to use the service or parts of it, and which personal information they must provide to do so (mandatory fields), as opposed to information they may choose to give."
+    complies_with_laws_and_programs: "States that the company complies with named privacy or marketing laws, frameworks, standards or self-regulatory programs (e.g. COPPA, CAN-SPAM, Safe Harbor/Privacy Shield, P3P, TRUSTe) and what that commits it to."
+  papers:
+    code_and_data_availability: "States whether and where the code, data or models are released (URL, repository, on request) and under what licence, including the licence under which the paper itself is published."

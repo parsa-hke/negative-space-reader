@@ -1,0 +1,7 @@
+# Time-window expectation drift (plan §0.2 #19, §10.1).
+inherit: base.yaml
+task: drift
+drift:
+  windows:
+    privacy: [2016, 2017, 2019, 2021, 2023]
+    papers: null                  # Phase 10.1: windows around the 2022 ACL limitations mandate

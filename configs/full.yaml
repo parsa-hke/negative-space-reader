@@ -1,0 +1,35 @@
+# FULL tier overlay (plan §0.2 #25): the pre-revision design, every tiered key flipped to the large model.
+# Usage: python -m experiments.run --config configs/<task>.yaml --overlay full --overlay gpu
+# Pack manifests record the tier; packs/builder.py rebuilds only the artefacts whose model ids changed.
+# Note: jina-colbert-v2 and NV-Embed-v2 are CC-BY-NC-4.0 (class and paper only, plan §12.3).
+
+tier: full
+
+models:
+  embedder:
+    id: Qwen/Qwen3-Embedding-8B
+    fallback_ids: [nvidia/NV-Embed-v2, BAAI/bge-m3]
+    dtype: float16
+  late_interaction:
+    id: jinaai/jina-colbert-v2
+    fallback_dense_id: BAAI/bge-m3
+
+distil:
+  label_sections_per_genre: 5000
+
+presence:
+  head: finetune
+  label_sources:
+    privacy: teacher
+    papers: teacher
+
+explain:
+  mode: teacher
+
+bench:
+  real:
+    source: annotation
+
+baselines:
+  rag_peers: 20
+  open_ended_mapping: teacher

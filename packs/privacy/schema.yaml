@@ -1,0 +1,944 @@
+genre: privacy
+version: 1
+status: frozen
+frozen:
+  date: '2026-10-15'
+  signed_off_by: Parsa Hosseini, 2026-10-15
+  coverage_run: coverage_72b_v4_s3
+  unmapped_section_rate: 0.02
+  candidate_sha1: d64a8d0e7dc4
+types:
+- id: states_information_required_to_register
+  name: states_information_required_to_register
+  definition: States that users must create an account or register to use the service or parts of it, and which personal information
+    they must provide to do so (mandatory fields), as opposed to information they may choose to give.
+  positive_examples:
+  - The company asks for specific personal information when users register.
+  - The company requires users to provide personal information during registration.
+  near_miss: The company collects personal information when users register or place an order on the site.
+  severity_weight: 1.5
+  section_hint: in the first half of the document
+  label_source:
+  - 'First Party Collection/Use :: Collection Mode = Explicit & User Type = User with account'
+  source_clusters:
+  - c021
+- id: collects_usage_data_automatically
+  name: collects_usage_data_automatically
+  definition: States that the company automatically collects technical or usage data about visits (IP address, browser, pages
+    viewed, log files) without the user entering it.
+  positive_examples:
+  - The company collects information about the number of users visiting the website and the number of pages viewed.
+  - The company uses log files to collect various types of data for analyzing trends, administering the site, tracking user
+    movement, and gathering demographic information.
+  near_miss: The company uses web beacons to track user visits and email opens for analytics purposes.
+  severity_weight: 1.5
+  section_hint: in the first half of the document
+  label_source:
+  - 'First Party Collection/Use :: Collection Mode = Implicit & Personal Information Type = User online activities'
+  - 'First Party Collection/Use :: Collection Mode = Implicit & Personal Information Type = IP address and device IDs'
+  - 'First Party Collection/Use :: Collection Mode = Implicit & Personal Information Type = Computer information'
+  source_clusters:
+  - c001
+  - c060
+- id: uses_cookies
+  name: uses_cookies
+  definition: States that the company sets cookies or similar tracking technologies and what it uses them for (recognising
+    users, remembering preferences, tracking visits).
+  positive_examples:
+  - The company uses cookies to identify which pages on their website have been accessed.
+  - The company uses cookies and similar tracking technologies to access or store information.
+  near_miss: The company mentions that third-party advertising and marketing partners may use their own cookies.
+  severity_weight: 1.0
+  section_hint: under a heading like 'cookies', in the first half of the document
+  label_source:
+  - 'First Party Collection/Use :: Personal Information Type = Cookies and tracking elements'
+  source_clusters:
+  - c000
+  - c050
+- id: uses_web_beacons
+  name: uses_web_beacons
+  definition: States that the company uses web beacons, pixel tags or clear GIFs (on pages or in emails) to collect information
+    about visits or email opens; plain cookie statements are uses_cookies.
+  positive_examples:
+  - The company uses web beacons to track user visits and email opens for analytics purposes.
+  - The company uses web beacons to track which visitors interact with specific elements on web pages or emails.
+  near_miss: The company collects information about the number of users visiting the website and the number of pages viewed.
+  severity_weight: 1.0
+  section_hint: in the first half of the document
+  label_source:
+  - teacher
+  source_clusters:
+  - c052
+- id: tracking_data_not_linked_to_identity
+  name: tracking_data_not_linked_to_identity
+  definition: States that cookies, IP addresses or other technical data are not linked to, or not used to identify, the person
+    (except where stated).
+  positive_examples:
+  - The company does not link collected IP addresses and other information to personally identifiable information.
+  - The company does not use cookies to collect personally identifiable information.
+  near_miss: The company allows users to visit the site without providing personal information.
+  severity_weight: 1.0
+  section_hint: in the first half of the document
+  label_source:
+  - teacher
+  source_clusters:
+  - c027
+  - c039
+- id: defines_personal_information
+  name: defines_personal_information
+  definition: Defines terms used in the policy, most often what counts as personal (personally identifiable) information or
+    anonymous information.
+  positive_examples:
+  - The company defines personal information as personally identifiable information about an individual.
+  - The company defines Personal Information as data that can identify an individual.
+  near_miss: The company discloses that the privacy policy covers the collection, use, and choices about personal information
+    collected on or through the services.
+  severity_weight: 1.0
+  section_hint: near the start of the document
+  label_source:
+  - teacher
+  source_clusters:
+  - c069
+- id: uses_data_to_improve_services
+  name: uses_data_to_improve_services
+  definition: States that collected information is used to analyse, maintain or improve the website, services or user experience.
+  positive_examples:
+  - The company uses collected information to improve the sites and services.
+  - The company uses collected information to improve their website and personalize your experience.
+  near_miss: The company uses data to personalize and tailor the user experience and products.
+  severity_weight: 1.0
+  section_hint: under a heading like 'what do we use your information for', in the first half of the document
+  label_source:
+  - 'First Party Collection/Use :: Purpose = Analytics/Research'
+  source_clusters:
+  - c028
+- id: uses_data_to_personalize
+  name: uses_data_to_personalize
+  definition: States that collected information is used to personalise or customise content, offers or the user's experience.
+  positive_examples:
+  - The company uses data to personalize and tailor the user experience and products.
+  - The company uses collected information to personalize the user experience.
+  near_miss: The company uses collected information to improve the sites and services.
+  severity_weight: 1.0
+  section_hint: under a heading like 'what do we use your information for', in the first half of the document
+  label_source:
+  - 'First Party Collection/Use :: Purpose = Personalization/Customization'
+  source_clusters:
+  - c057
+- id: sends_marketing_communications
+  name: sends_marketing_communications
+  definition: States that the company uses contact details (mainly email) to send newsletters, promotions or other marketing
+    communications about its own products and services.
+  positive_examples:
+  - The company may send promotional emails about new products or special offers.
+  - The company uses information to contact users about relevant services and offers.
+  near_miss: The company collects information when users participate in contests or promotions.
+  severity_weight: 1.0
+  section_hint: in the first half of the document
+  label_source:
+  - 'First Party Collection/Use :: Purpose = Marketing'
+  source_clusters:
+  - c006
+  - c032
+- id: does_not_sell_or_share
+  name: does_not_sell_or_share
+  definition: States that the company does not sell, rent, trade or share personal information (or email addresses) with third
+    parties, apart from any stated exceptions.
+  positive_examples:
+  - The company does not sell, rent, or trade personal information to third parties.
+  - The company does not sell, trade, share, or rent the user's email address to anyone.
+  near_miss: The company does not link collected IP addresses and other information to personally identifiable information.
+  severity_weight: 1.5
+  section_hint: in the first half of the document
+  label_source:
+  - 'Third Party Sharing/Collection :: Does/Does Not = Does Not'
+  source_clusters:
+  - c004
+  - c043
+- id: shares_with_service_providers
+  name: shares_with_service_providers
+  definition: States that personal information is shared with, or processed by, third-party service providers acting on the
+    company's behalf (payment, delivery, hosting, mailing).
+  positive_examples:
+  - The company may share personal information with third parties hired to perform services, under strict conditions.
+  - The company uses third party service providers to perform various functions on its behalf.
+  near_miss: The company may share personal information with business partners to fulfill requests for products or services.
+  severity_weight: 1.5
+  section_hint: in the first half of the document
+  label_source:
+  - 'Third Party Sharing/Collection :: Purpose = Basic service/feature & Does/Does Not = Does'
+  - 'Third Party Sharing/Collection :: Purpose = Service operation and security & Does/Does Not = Does'
+  source_clusters:
+  - c024
+  - c055
+- id: shares_with_affiliates_and_partners
+  name: shares_with_affiliates_and_partners
+  definition: States that personal information may be shared with affiliates, subsidiaries or business partners, and for what
+    purposes.
+  positive_examples:
+  - The company may share personal information with business partners to fulfill requests for products or services.
+  - The company states that personal information may be shared with partners providing services on their behalf.
+  near_miss: The company may share personal information with third parties hired to perform services, under strict conditions.
+  severity_weight: 1.5
+  section_hint: in the first half of the document
+  label_source:
+  - 'Third Party Sharing/Collection :: Third Party Entity = Other part of company/affiliate'
+  source_clusters:
+  - c030
+- id: shares_aggregated_data
+  name: shares_aggregated_data
+  definition: States that aggregated, anonymised or non-identifying information may be shared with third parties such as advertisers
+    or partners.
+  positive_examples:
+  - The company may share aggregated non-personally identifiable demographic information with third parties.
+  - The company may share aggregated demographic information not linked to personal identification with business partners,
+    affiliates, and advertisers.
+  near_miss: The company may share personal information with business partners to fulfill requests for products or services.
+  severity_weight: 1.0
+  section_hint: in the first half of the document
+  label_source:
+  - 'Third Party Sharing/Collection :: Identifiability = Aggregated or anonymized'
+  source_clusters:
+  - c044
+- id: discloses_when_legally_required
+  name: discloses_when_legally_required
+  definition: States that personal information may be disclosed when required by law or legal process, or to protect the rights,
+    property or safety of the company or others.
+  positive_examples:
+  - The company discloses personal information when required by law or in good-faith belief that such action is necessary
+    to protect rights or comply with legal processes.
+  - The company may disclose personal information as required by legal process or law.
+  near_miss: The company allows individuals to complain to a data protection authority about their collection and use of personal
+    information.
+  severity_weight: 1.0
+  section_hint: in the first half of the document
+  label_source:
+  - 'Third Party Sharing/Collection :: Purpose = Legal requirement'
+  source_clusters:
+  - c003
+- id: transfers_data_in_business_transfer
+  name: transfers_data_in_business_transfer
+  definition: States that personal information may be transferred to another party if the company is merged, acquired, sold
+    or goes bankrupt.
+  positive_examples:
+  - The company may transfer personal information to an acquiring or merging party as part of a business transaction.
+  - The company may transfer personal information as part of a merger, acquisition, or sale of assets.
+  near_miss: The company states that personal information may be transferred to, stored, or processed in the USA.
+  severity_weight: 1.0
+  section_hint: in the second half of the document
+  label_source:
+  - 'Third Party Sharing/Collection :: Purpose = Merger/Acquisition'
+  source_clusters:
+  - c033
+- id: transfers_data_internationally
+  name: transfers_data_internationally
+  definition: States that personal information may be transferred to, stored or processed in another country (typically the
+    United States), sometimes with the safeguard or consent relied on, or warns that the laws there may protect it less.
+  positive_examples:
+  - The company states that personal information may be transferred to, stored, or processed in the USA.
+  - Personal data provided by users outside the United States will be transferred to the United States.
+  near_miss: The company may transfer personal information to an acquiring or merging party as part of a business transaction.
+  severity_weight: 1.5
+  section_hint: in the second half of the document
+  label_source:
+  - teacher
+  source_clusters:
+  - c040
+- id: third_party_advertising_and_cookies
+  name: third_party_advertising_and_cookies
+  definition: States that third parties (advertisers, ad networks, analytics providers or social-media plugins) serve ads
+    or embed features on the site and may collect information about visits through cookies, web beacons or plugins, including
+    for targeted advertising and what advertisers may infer from a response to an ad.
+  positive_examples:
+  - A third party vendor, such as Google, uses cookies to serve ads on the site.
+  - Third-party companies may use information about visits to provide targeted advertisements.
+  near_miss: The company uses cookies to identify which pages on their website have been accessed.
+  severity_weight: 1.0
+  section_hint: in the second half of the document
+  label_source:
+  - 'Third Party Sharing/Collection :: Purpose = Advertising'
+  - 'Third Party Sharing/Collection :: Action Third Party = Track on first party website/app'
+  - 'Third Party Sharing/Collection :: Action Third Party = Collect on first party website/app'
+  source_clusters:
+  - c042
+  - c049
+  - c053
+  - c058
+- id: disclaims_control_of_third_party_cookies
+  name: disclaims_control_of_third_party_cookies
+  definition: States that the company has no access to or control over cookies and tracking used by third-party advertisers,
+    and that their use is governed by the third parties' own policies.
+  positive_examples:
+  - The company has no access to or control over cookies used by third-party advertisers.
+  - The company does not have access to or control over the cookies used by third-party advertisers.
+  near_miss: The company is not responsible for the content, policies, practices, or products of third-party websites.
+  severity_weight: 1.0
+  section_hint: in the second half of the document
+  label_source:
+  - teacher
+  source_clusters:
+  - c023
+- id: states_security_measures
+  name: states_security_measures
+  definition: States in general terms that the company takes technical, physical or administrative measures to protect personal
+    information against loss, misuse or unauthorised access.
+  positive_examples:
+  - The company has implemented security measures to protect personal information.
+  - The company employs appropriate security measures to protect personal information against unauthorized access, disclosure,
+    alteration, or destruction.
+  near_miss: The company uses SSL to encrypt information transmitted over the Internet.
+  severity_weight: 1.0
+  section_hint: under a heading like 'security', in the second half of the document
+  label_source:
+  - 'Data Security :: Security Measure = Generic'
+  - 'Data Security :: Security Measure = Privacy/Security program'
+  source_clusters:
+  - c007
+- id: encrypts_data_in_transit
+  name: encrypts_data_in_transit
+  definition: States that sensitive information is encrypted in transmission (for example with SSL/TLS).
+  positive_examples:
+  - The company uses SSL to encrypt information transmitted over the Internet.
+  - The company uses Secure Sockets Layer (SSL) encryption for sensitive information to prevent unauthorized access.
+  near_miss: The company has implemented security measures to protect personal information.
+  severity_weight: 1.0
+  section_hint: under a heading like 'security', in the second half of the document
+  label_source:
+  - 'Data Security :: Security Measure = Secure data transfer'
+  source_clusters:
+  - c020
+- id: stores_data_securely
+  name: stores_data_securely
+  definition: States how personal information is stored securely (secure servers, firewalls, password-protected systems).
+  positive_examples:
+  - The company stores personal information in secured and password-protected databases.
+  - The company stores information in a database that is secured with a firewall and password protection.
+  near_miss: The company has implemented security measures to protect personal information.
+  severity_weight: 1.0
+  section_hint: under a heading like 'security', in the second half of the document
+  label_source:
+  - 'Data Security :: Security Measure = Secure data storage'
+  source_clusters:
+  - c065
+- id: limits_internal_access
+  name: limits_internal_access
+  definition: States that access to personal information is limited to staff or contractors who need it, and that they are
+    bound to keep it confidential.
+  positive_examples:
+  - The company restricts access to personal information to only those personnel who need it for business activities.
+  - The company requires its employees to protect and keep personal information confidential.
+  near_miss: The company stores personal information in secured and password-protected databases.
+  severity_weight: 1.0
+  section_hint: in the first half of the document
+  label_source:
+  - 'Data Security :: Security Measure = Data access limitation'
+  - 'Data Security :: Security Measure = Privacy training'
+  source_clusters:
+  - c051
+  - c072
+- id: does_not_store_payment_cards
+  name: does_not_store_payment_cards
+  definition: States that credit card or payment details are not stored by the company (often because a third-party processor
+    handles them).
+  positive_examples:
+  - The company does not store credit card information on its servers.
+  - The company does not store or save credit card numbers or information.
+  near_miss: The company does not link collected IP addresses and other information to personally identifiable information.
+  severity_weight: 1.0
+  section_hint: in the first half of the document
+  label_source:
+  - teacher
+  source_clusters:
+  - c070
+- id: security_not_guaranteed
+  name: security_not_guaranteed
+  definition: States that no transmission or storage method is completely secure, so the company cannot guarantee security
+    or disclaims liability for breaches, interception or technical failures.
+  positive_examples:
+  - The company cannot guarantee the security of any information transmitted over the internet.
+  - The company cannot guarantee the security of any information transmitted over the Internet or wireless networks.
+  near_miss: The company advises users to be cautious when sharing personal information in public areas of the site.
+  severity_weight: 1.0
+  section_hint: under a heading like 'security', in the second half of the document
+  label_source:
+  - teacher
+  source_clusters:
+  - c016
+- id: advises_users_on_security
+  name: advises_users_on_security
+  definition: Advises users on what they should do to protect their own information (keep passwords secret, log out, be careful
+    what they share).
+  positive_examples:
+  - The company advises users to be cautious when sharing personal information in public areas of the site.
+  - The company advises users to exercise caution with personal information posted on its websites.
+  near_miss: The company advises users to review the privacy policies of websites they link to.
+  severity_weight: 1.0
+  section_hint: under a heading like 'security', in the second half of the document
+  label_source:
+  - teacher
+  source_clusters:
+  - c018
+- id: opt_out_of_communications
+  name: opt_out_of_communications
+  definition: States that users can opt out of or unsubscribe from marketing emails or other communications, how, and which
+    messages continue after opting out (such as administrative or transactional emails).
+  positive_examples:
+  - The company allows users to opt-out of receiving communications from the company.
+  - The company allows users to unsubscribe from receiving future emails.
+  near_miss: The company provides a way for users to opt out of the DART cookie use.
+  severity_weight: 1.5
+  section_hint: in the second half of the document
+  label_source:
+  - 'User Choice/Control :: Purpose = Marketing & Choice Type = Opt-out link'
+  - 'User Choice/Control :: Purpose = Marketing & Choice Type = Opt-out via contacting company'
+  source_clusters:
+  - c005
+  - c046
+- id: opt_out_of_tracking_or_ads
+  name: opt_out_of_tracking_or_ads
+  definition: States that users can opt out of targeted advertising, ad-network cookies or similar data collection, and points
+    to how (opt-out pages, industry tools).
+  positive_examples:
+  - The company provides a way for users to opt out of the DART cookie use.
+  - Users may opt out of the use of the DART cookie by visiting the advertising opt-out page.
+  near_miss: The company allows users to opt-out of receiving communications from the company.
+  severity_weight: 1.0
+  section_hint: in the second half of the document
+  label_source:
+  - 'User Choice/Control :: Purpose = Advertising'
+  - 'User Choice/Control :: Choice Type = Third-party privacy controls'
+  source_clusters:
+  - c035
+- id: browser_cookie_controls
+  name: browser_cookie_controls
+  definition: States that users can refuse, delete or be warned about cookies through their browser settings.
+  positive_examples:
+  - The company allows users to disable cookies through their web browser settings.
+  - The company allows users to decline cookies by adjusting their browser settings.
+  near_miss: The company notes that refusing cookies may affect the functionality of the website.
+  severity_weight: 1.0
+  section_hint: under a heading like 'cookies', in the second half of the document
+  label_source:
+  - 'User Choice/Control :: Choice Type = Browser/device privacy controls'
+  source_clusters:
+  - c022
+- id: warns_disabling_cookies_limits_site
+  name: warns_disabling_cookies_limits_site
+  definition: Warns that refusing or disabling cookies may stop parts of the website from working.
+  positive_examples:
+  - The company notes that refusing cookies may affect the functionality of the website.
+  - Disabling cookies may prevent some parts of the website from operating correctly and may limit access to some features
+    or services.
+  near_miss: The company allows users to disable cookies through their web browser settings.
+  severity_weight: 1.0
+  section_hint: under a heading like 'cookies', in the first half of the document
+  label_source:
+  - teacher
+  source_clusters:
+  - c034
+- id: information_provision_is_optional
+  name: information_provision_is_optional
+  definition: States that users may visit the site or use parts of it without giving personal information, or may choose what
+    to provide (sometimes at the cost of some features).
+  positive_examples:
+  - The company allows users to choose whether to provide personal information.
+  - The company allows users to visit the site without providing personal information.
+  near_miss: The company allows users to update and correct their personal information at any time.
+  severity_weight: 1.0
+  section_hint: in the first half of the document
+  label_source:
+  - 'User Choice/Control :: Choice Type = Dont use service/feature'
+  source_clusters:
+  - c059
+  - c062
+- id: deletion_on_request
+  name: deletion_on_request
+  definition: States that users can ask for their personal information or account to be deleted or removed from the company's
+    records.
+  positive_examples:
+  - The company allows users to request the removal of their personal information at any time.
+  - The company provides options for users to remove their information from its database.
+  near_miss: The company allows users to unsubscribe from receiving future emails.
+  severity_weight: 1.5
+  section_hint: under a heading like 'choice opt out', in the second half of the document
+  label_source:
+  - 'User Access, Edit and Deletion :: Access Type = Delete account (full)'
+  - 'User Access, Edit and Deletion :: Access Type = Delete account (partial)'
+  source_clusters:
+  - c054
+- id: states_retention_period
+  name: states_retention_period
+  definition: States how long personal information is kept (a period, 'as long as necessary for the purpose', or as long as
+    the law requires).
+  positive_examples:
+  - The company retains personal information as long as necessary for the original purpose or as required by law.
+  - The company retains collected information as long as the user's account is active and as required by legal obligations.
+  near_miss: The company stores personal information in secured and password-protected databases.
+  severity_weight: 1.5
+  section_hint: in the second half of the document
+  label_source:
+  - Data Retention
+  source_clusters:
+  - c026
+- id: no_knowing_collection_from_children
+  name: no_knowing_collection_from_children
+  definition: States that the company does not knowingly collect personal information from children under a stated age (usually
+    13).
+  positive_examples:
+  - The company does not knowingly collect personal information from children under 13.
+  - The company does not knowingly collect, use, or disclose personal information from children under the age of 13.
+  near_miss: The company prohibits the use of its websites or services by anyone under 13 years of age.
+  severity_weight: 1.0
+  section_hint: under a heading like 'children s privacy', in the second half of the document
+  label_source:
+  - 'International and Specific Audiences :: Audience Type = Children'
+  source_clusters:
+  - c041
+- id: states_minimum_age
+  name: states_minimum_age
+  definition: States that the site or service is not meant for, or may not be used by, people below a minimum age, or requires
+    parental consent below it.
+  positive_examples:
+  - The company prohibits the use of its websites or services by anyone under 13 years of age.
+  - The company prohibits anyone under the age of 13 from using the service.
+  near_miss: The company does not knowingly collect personal information from children under 13.
+  severity_weight: 1.0
+  section_hint: under a heading like 'children', in the second half of the document
+  label_source:
+  - teacher
+  source_clusters:
+  - c019
+- id: deletes_children_data_if_found
+  name: deletes_children_data_if_found
+  definition: States what the company does if it learns it has collected a child's information (deletes it, lets parents ask
+    for deletion).
+  positive_examples:
+  - The company will delete personal information from children under 13 if it is discovered without parental consent.
+  - The company will delete personal information from children under 13 if they learn it was collected without parental consent.
+  near_miss: The company does not knowingly collect personal information from children under 13.
+  severity_weight: 1.0
+  section_hint: under a heading like 'children s privacy', in the second half of the document
+  label_source:
+  - teacher
+  source_clusters:
+  - c068
+- id: reserves_right_to_change_policy
+  name: reserves_right_to_change_policy
+  definition: States that the company may change or update the policy at any time, with or without notice, and sometimes why
+    it may change (new laws, practices or features).
+  positive_examples:
+  - The company reserves the right to change the privacy policy at any time.
+  - The company reserves the right to modify the privacy policy at any time.
+  near_miss: The company will post any changes to the privacy policy on their website.
+  severity_weight: 1.0
+  section_hint: under a heading like 'changes to this privacy policy', in the second half of the document
+  label_source:
+  - Policy Change
+  source_clusters:
+  - c015
+- id: states_how_changes_are_notified
+  name: states_how_changes_are_notified
+  definition: States how users will learn about changes to the policy (posting on the site or this page, email or other notice
+    for material changes), or asks users to review the policy periodically for changes.
+  positive_examples:
+  - The company will notify users of material changes to the privacy policy.
+  - The company will post any changes to the privacy policy on their website.
+  near_miss: The company reserves the right to change the privacy policy at any time.
+  severity_weight: 1.0
+  section_hint: under a heading like 'changes to this privacy policy', in the second half of the document
+  label_source:
+  - 'Policy Change :: Notification Type = General notice in privacy policy'
+  - 'Policy Change :: Notification Type = General notice on website'
+  - 'Policy Change :: Notification Type = Personal notice'
+  source_clusters:
+  - c056
+  - c061
+  - c067
+- id: continued_use_means_acceptance
+  name: continued_use_means_acceptance
+  definition: States that continuing to use the site after the policy changes means accepting the changes.
+  positive_examples:
+  - The company states that continued use of the Sites after changes to the Privacy Policy constitutes acceptance of the changes.
+  - Continued use of the website after changes to the privacy policy means acceptance of those changes.
+  near_miss: The company will post any changes to the privacy policy on their website.
+  severity_weight: 1.0
+  section_hint: under a heading like 'changes to this privacy policy', in the second half of the document
+  label_source:
+  - teacher
+  source_clusters:
+  - c073
+- id: states_last_updated_date
+  name: states_last_updated_date
+  definition: States the date on which the policy was last updated or took effect.
+  positive_examples:
+  - The company indicates the last update date of the privacy policy.
+  - The company states the date when the privacy policy was last updated.
+  near_miss: The company reserves the right to change the privacy policy at any time.
+  severity_weight: 1.0
+  section_hint: in the second half of the document
+  label_source:
+  - teacher
+  source_clusters:
+  - c063
+- id: states_policy_scope_and_commitment
+  name: states_policy_scope_and_commitment
+  definition: Introduces the policy, stating what it covers and/or the company's commitment to protecting privacy.
+  positive_examples:
+  - The company commits to protecting the privacy and personal information of its users.
+  - The company is committed to protecting and respecting the privacy of individuals.
+  near_miss: The company has implemented security measures to protect personal information.
+  severity_weight: 1.0
+  section_hint: near the start of the document
+  label_source:
+  - 'Other :: Other Type = Introductory/Generic'
+  source_clusters:
+  - c017
+- id: scope_excludes_third_party_sites
+  name: scope_excludes_third_party_sites
+  definition: States that the policy applies only to the company's own sites and not to other websites or services, even linked
+    ones.
+  positive_examples:
+  - The company's privacy policy applies only to its own website and not to other linked websites.
+  - The company's privacy policy does not apply to external websites.
+  near_miss: The company is not responsible for the content, policies, practices, or products of third-party websites.
+  severity_weight: 1.0
+  section_hint: in the first half of the document
+  label_source:
+  - teacher
+  source_clusters:
+  - c036
+- id: third_party_sites_and_their_policies
+  name: third_party_sites_and_their_policies
+  definition: States that the site links to third-party websites, that the company is not responsible for their content or
+    practices, and/or advises users to read their privacy policies.
+  positive_examples:
+  - The company is not responsible for the content, policies, practices, or products of third-party websites.
+  - The company advises users to review the privacy policies of websites they link to.
+  near_miss: The company has no access to or control over cookies used by third-party advertisers.
+  severity_weight: 1.0
+  section_hint: in the second half of the document
+  label_source:
+  - teacher
+  source_clusters:
+  - c009
+  - c010
+  - c064
+- id: consent_by_use
+  name: consent_by_use
+  definition: States that using the site or giving information means consenting to the policy or to the collection and use
+    it describes, or that users who do not agree should not use the site.
+  positive_examples:
+  - The company states that using the site implies consent to the privacy policy.
+  - The company states that by using the site, users signify their acceptance of the privacy policy.
+  near_miss: The company states that continued use of the Sites after changes to the Privacy Policy constitutes acceptance
+    of the changes.
+  severity_weight: 1.0
+  section_hint: in the first half of the document
+  label_source:
+  - teacher
+  source_clusters:
+  - c029
+- id: complies_with_laws_and_programs
+  name: complies_with_laws_and_programs
+  definition: States that the company complies with named privacy or marketing laws, frameworks, standards or self-regulatory
+    programs (e.g. COPPA, CAN-SPAM, Safe Harbor/Privacy Shield, P3P, TRUSTe) and what that commits it to.
+  positive_examples:
+  - The company participates in and has certified compliance with the EU-U.S. Privacy Shield Framework.
+  - The company complies with the Children's Online Privacy Protection Act and all other applicable laws.
+  near_miss: The company commits to protecting the privacy and personal information of its users.
+  severity_weight: 1.0
+  section_hint: in the first half of the document
+  label_source:
+  - teacher
+  source_clusters:
+  - c038
+- id: governing_law_and_disputes
+  name: governing_law_and_disputes
+  definition: States which jurisdiction's law governs the policy or site and how disputes are resolved.
+  positive_examples:
+  - The Privacy Policy is governed by the laws of a specific state.
+  - The company states that the policy and use of the site are governed by New York law.
+  near_miss: The company's privacy policy applies only to its own website and not to other linked websites.
+  severity_weight: 1.0
+  section_hint: in the second half of the document
+  label_source:
+  - teacher
+  source_clusters:
+  - c025
+- id: provides_privacy_contact
+  name: provides_privacy_contact
+  definition: Tells readers how to contact the company about the policy or their information (email, address, phone, form,
+    named contact person).
+  positive_examples:
+  - The company provides a contact method for questions about the privacy policy or services.
+  - The company provides contact information for questions about privacy policy or practices.
+  near_miss: The company uses information to contact users about relevant services and offers.
+  severity_weight: 1.5
+  section_hint: in the second half of the document
+  label_source:
+  - 'Other :: Other Type = Privacy contact information'
+  source_clusters:
+  - c014
+  - c048
+  - c071
+- id: do_not_track_response
+  name: do_not_track_response
+  definition: States whether and how the company responds to browser Do Not Track signals (most often that it does not).
+  positive_examples:
+  - The company does not respond to browser 'Do Not Track' signals at this time.
+  - The company honors do not track signals.
+  near_miss: The company allows users to disable cookies through their web browser settings.
+  severity_weight: 1.0
+  section_hint: in or next to the cookies and tracking section, in the second half of the document
+  label_source:
+  - Do Not Track
+  source_clusters: []
+- id: california_disclosure_rights
+  name: california_disclosure_rights
+  definition: States the rights of California residents to learn which third parties received their information for direct
+    marketing, and how to make the request.
+  positive_examples:
+  - The company discloses that California residents can request a list of third parties to which personal information was
+    disclosed for direct marketing purposes.
+  - California residents have the right to request a list of third parties to whom the company has disclosed personal information
+    for direct marketing purposes.
+  near_miss: The company allows individuals to complain to a data protection authority about their collection and use of personal
+    information.
+  severity_weight: 1.0
+  section_hint: near the end, under a heading like 'Your California Privacy Rights'
+  label_source:
+  - 'International and Specific Audiences :: Audience Type = Californians'
+  source_clusters: []
+- id: data_collection_methods
+  name: data_collection_methods
+  definition: States that the company collects personal information from users through various activities on the website,
+    such as registration, placing orders, or providing information.
+  positive_examples:
+  - The company collects personal information when users register or place an order on the site.
+  - The company collects various types of personal information from users, including contact details and demographic information.
+  near_miss: The company collects information about the number of users visiting the website and the number of pages viewed.
+  severity_weight: 1.5
+  section_hint: near the start of the document
+  label_source:
+  - 'First Party Collection/Use :: Collection Mode = Explicit & Does/Does Not = Does'
+  source_clusters:
+  - c002
+- id: data_use_for_services
+  name: data_use_for_services
+  definition: States that the company uses collected personal information for providing products, services, processing orders,
+    and customer support.
+  positive_examples:
+  - The company uses collected personal information to provide products and services, process orders, and offer customer service.
+  - The company uses collected information to fulfill orders, provide quotes, process orders, notify about order status, prepare
+    drawings, and provide information about offers or products.
+  near_miss: The company uses collected information to improve the sites and services.
+  severity_weight: 1.5
+  section_hint: in the first half of the document
+  label_source:
+  - 'First Party Collection/Use :: Purpose = Basic service/feature'
+  source_clusters:
+  - c008
+- id: policy_coverage
+  name: policy_coverage
+  definition: States that the privacy policy covers the collection, use, and handling of personal information, typically specifying
+    the scope of the policy to include the company's websites, services, and sometimes its family of companies.
+  positive_examples:
+  - The company discloses that the privacy policy covers the collection, use, and choices about personal information collected
+    on or through the services.
+  - The company explains the scope of its privacy policy to cover personal information provided through its websites.
+  near_miss: The company defines personal information as personally identifiable information about an individual.
+  severity_weight: 1.0
+  section_hint: near the start of the document
+  label_source:
+  - teacher
+  source_clusters:
+  - c011
+- id: user_data_control
+  name: user_data_control
+  definition: States that users can review, update, correct or delete their personal information, how (account settings, contacting
+    the company), and any conditions on such requests (identity verification, fees, limits).
+  positive_examples:
+  - The company allows users to update and correct their personal information at any time.
+  - The company allows users to update or correct their personal information through their account or by contacting customer
+    service.
+  near_miss: The company allows users to choose whether to provide personal information.
+  severity_weight: 1.5
+  section_hint: in the second half of the document
+  label_source:
+  - 'User Access, Edit and Deletion :: Access Type = Edit information'
+  - 'User Access, Edit and Deletion :: Access Type = View'
+  source_clusters:
+  - c012
+- id: discloses_public_areas
+  name: discloses_public_areas
+  definition: States that information users post in public areas (forums, reviews, profiles) can be seen and used by others
+    and may persist or be reposted after deletion, often with a warning to be careful.
+  positive_examples:
+  - The company allows users to set up public profiles that other users can view.
+  - The company discloses that information posted in public areas of the sites is publicly available and may be viewed and
+    shared by other users.
+  near_miss: The company may share personal information with business partners to fulfill requests for products or services.
+  severity_weight: 1.0
+  section_hint: in the first half of the document
+  label_source:
+  - 'Third Party Sharing/Collection :: Third Party Entity = Public'
+  - 'Third Party Sharing/Collection :: Third Party Entity = Other users'
+  source_clusters:
+  - c013
+- id: disclose_data_rights
+  name: disclose_data_rights
+  definition: States the user's legal rights over their personal data as rights (access, correction, objection to processing,
+    portability, withdrawing consent, complaining to a data protection authority).
+  positive_examples:
+  - The company allows individuals to complain to a data protection authority about their collection and use of personal information.
+  - The company discloses that individuals have the right to raise a complaint with the data protection regulator.
+  near_miss: The company provides a contact method for questions about the privacy policy or services.
+  severity_weight: 1.5
+  section_hint: in the second half of the document
+  label_source:
+  - teacher
+  source_clusters:
+  - c031
+- id: content_and_usage_restrictions
+  name: content_and_usage_restrictions
+  definition: 'States the site''s terms of use or legal conditions rather than a data practice: rules for using the site or
+    its content, disclaimers of liability (for example use at your own risk), indemnification or release, legal penalties,
+    or that the policy creates no contractual rights.'
+  positive_examples:
+  - The company states that users are not allowed to submit content that violates or infringes the rights of others.
+  - The company states that users may not modify, copy, reproduce, create derivative works, republish, display, upload, post,
+    transmit, or distribute content without prior written consent.
+  near_miss: The Privacy Policy is governed by the laws of a specific state.
+  severity_weight: 1.0
+  section_hint: in the second half of the document
+  label_source:
+  - teacher
+  source_clusters:
+  - c037
+- id: data_collection_contests_surveys
+  name: data_collection_contests_surveys
+  definition: States that the company collects personal information from users through contests, surveys, and other similar
+    activities on their website.
+  positive_examples:
+  - The company collects information when users participate in contests or promotions.
+  - The company collects personal information when you participate in contests, promotions, or sweepstakes on their websites.
+  near_miss: The company may send promotional emails about new products or special offers.
+  severity_weight: 1.5
+  section_hint: in the first half of the document
+  label_source:
+  - 'First Party Collection/Use :: Collection Mode = Explicit & Does/Does Not = Does'
+  source_clusters:
+  - c045
+- id: company_identification_and_service_definition
+  name: company_identification_and_service_definition
+  definition: 'Identifies who operates the site and is responsible for the information: the company or organisation and its
+    affiliates, responsible representatives (such as a director of publication), its address, or its registration with a data-protection
+    authority; sometimes with the services the policy covers.'
+  positive_examples:
+  - The company identifies itself as the owner and operator of the website or online service.
+  - The company defines the term 'Services' to include the websites, applications, and community features operated by the
+    company.
+  near_miss: The company uses third party service providers to perform various functions on its behalf.
+  severity_weight: 1.5
+  section_hint: under a heading like 'india', in the first half of the document
+  label_source:
+  - teacher
+  source_clusters:
+  - c047
+- id: provides_third_party_links
+  name: provides_third_party_links
+  definition: States that the company includes or provides links to third-party websites, often advising users to review the
+    privacy policies of those sites.
+  positive_examples:
+  - The company includes links to third-party sites on its website.
+  - The company provides links to other websites.
+  near_miss: The company states that third-party sites have separate and independent privacy policies.
+  severity_weight: 1.0
+  section_hint: in the second half of the document
+  label_source:
+  - teacher
+  source_clusters:
+  - c066
+seed_mapping:
+  first_party_collection_use:
+    types:
+    - states_information_required_to_register
+    - collects_usage_data_automatically
+    - uses_cookies
+    - uses_web_beacons
+    - tracking_data_not_linked_to_identity
+    - uses_data_to_improve_services
+    - uses_data_to_personalize
+    - sends_marketing_communications
+    - data_collection_methods
+    - data_use_for_services
+    - data_collection_contests_surveys
+  third_party_sharing_collection:
+    types:
+    - does_not_sell_or_share
+    - shares_with_service_providers
+    - shares_with_affiliates_and_partners
+    - shares_aggregated_data
+    - discloses_when_legally_required
+    - transfers_data_in_business_transfer
+    - third_party_advertising_and_cookies
+    - disclaims_control_of_third_party_cookies
+    - third_party_sites_and_their_policies
+    - discloses_public_areas
+  user_choice_control:
+    types:
+    - opt_out_of_communications
+    - opt_out_of_tracking_or_ads
+    - browser_cookie_controls
+    - warns_disabling_cookies_limits_site
+    - information_provision_is_optional
+  user_access_edit_deletion:
+    types:
+    - deletion_on_request
+    - user_data_control
+    - disclose_data_rights
+  data_retention:
+    types:
+    - states_retention_period
+  data_security:
+    types:
+    - states_security_measures
+    - encrypts_data_in_transit
+    - stores_data_securely
+    - limits_internal_access
+    - does_not_store_payment_cards
+    - security_not_guaranteed
+    - advises_users_on_security
+  policy_change:
+    types:
+    - reserves_right_to_change_policy
+    - states_how_changes_are_notified
+    - continued_use_means_acceptance
+    - states_last_updated_date
+  do_not_track:
+    types:
+    - do_not_track_response
+  international_specific_audiences:
+    types:
+    - transfers_data_internationally
+    - no_knowing_collection_from_children
+    - states_minimum_age
+    - deletes_children_data_if_found
+    - california_disclosure_rights
+  other:
+    types:
+    - defines_personal_information
+    - states_policy_scope_and_commitment
+    - scope_excludes_third_party_sites
+    - consent_by_use
+    - complies_with_laws_and_programs
+    - governing_law_and_disputes
+    - provides_privacy_contact
+    - company_identification_and_service_definition
+pruned_clusters: []
+provenance:
+  date: '2026-10-15'
+  workbook: schema_review_privacy.xlsx
+  workbook_sha1: 274b25bdcab2
+  cluster_run: cluster_v1_s0
+  candidate_run: candidate_v3_s0

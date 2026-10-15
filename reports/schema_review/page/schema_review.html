@@ -1,0 +1,634 @@
+<title>Schema Review Desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@1,6..72,400;1,6..72,500&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a review desk. Sticky bar with genre + step; on wide screens a group index on the left and one
+   "case card" on the right; on phones the index becomes a select above the card. */
+:root {
+  --bg: #f3f5f6;
+  --surface: #ffffff;
+  --surface-2: #e9eef0;
+  --ink: #17232b;
+  --ink-2: #4c5b64;
+  --line: #d3dce0;
+  --accent: #1d5f86;
+  --accent-ink: #ffffff;
+  --accent-soft: #dceaf2;
+  --good: #23704a;
+  --good-soft: #dff0e6;
+  --warn: #8a5a00;
+  --warn-soft: #f7ebcf;
+  --bad: #a3322a;
+  --bad-soft: #f6dedb;
+  --quote: #2b3a43;
+  --f-body: "Public Sans", "Helvetica Neue", Arial, sans-serif;
+  --f-quote: "Newsreader", Georgia, "Times New Roman", serif;
+  --f-mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  --r: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111619; --surface: #182024; --surface-2: #1f292e; --ink: #e4ebee; --ink-2: #a3b2b9; --line: #2e3b41;
+    --accent: #6fb3dc; --accent-ink: #0d1a22; --accent-soft: #1d3442; --good: #72c99a; --good-soft: #17322a;
+    --warn: #e2b55a; --warn-soft: #3a2f17; --bad: #ec8d84; --bad-soft: #3d2220; --quote: #d3dde1; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111619; --surface: #182024; --surface-2: #1f292e; --ink: #e4ebee; --ink-2: #a3b2b9; --line: #2e3b41;
+  --accent: #6fb3dc; --accent-ink: #0d1a22; --accent-soft: #1d3442; --good: #72c99a; --good-soft: #17322a;
+  --warn: #e2b55a; --warn-soft: #3a2f17; --bad: #ec8d84; --bad-soft: #3d2220; --quote: #d3dde1; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 15px/1.55 var(--f-body); }
+button, select, textarea, input { font: inherit; color: inherit; }
+h1, h2, h3 { text-wrap: balance; margin: 0; line-height: 1.25; }
+.mono { font-family: var(--f-mono); font-size: 0.86em; }
+.muted { color: var(--ink-2); }
+.wrap { max-width: 1240px; margin: 0 auto; padding-inline: 20px; }
+
+/* top bar */
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--surface);
+  border-bottom: 1px solid var(--line); }
+.bar-in { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 22px; padding-block: 12px; }
+.brand { font-weight: 700; letter-spacing: 0.01em; font-size: 16px; }
+.brand small { display: block; font-weight: 500; color: var(--ink-2); font-size: 12px; letter-spacing: 0.02em; }
+.seg { display: inline-flex; background: var(--surface-2); border-radius: 999px; padding: 3px; gap: 2px; flex-wrap: wrap; }
+.seg button { border: 0; background: transparent; padding: 6px 13px; border-radius: 999px; cursor: pointer; font-size: 13.5px;
+  font-weight: 500; color: var(--ink-2); }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgb(0 0 0 / 0.12); }
+.seg button .count { font-family: var(--f-mono); font-size: 11.5px; margin-left: 5px; color: var(--ink-2); }
+.progress { flex: 1 1 220px; min-width: 0; }
+.progress-label { font-size: 12.5px; color: var(--ink-2); display: flex; justify-content: space-between; gap: 8px; }
+.track { height: 6px; background: var(--surface-2); border-radius: 99px; overflow: hidden; margin-top: 5px; }
+.track span { display: block; height: 100%; background: var(--accent); border-radius: 99px; transition: width 0.3s; }
+.save-state { font-size: 12.5px; color: var(--ink-2); white-space: nowrap; }
+.save-state.err { color: var(--bad); }
+
+/* intro */
+.intro { padding-block: 22px 6px; display: grid; gap: 10px; max-width: 78ch; }
+.intro h1 { font-size: 24px; }
+.intro p { margin: 0; }
+.how { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; padding-block: 8px 18px; }
+.how div { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px; font-size: 13.5px; }
+.how b { display: block; font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); margin-bottom: 3px; }
+
+/* layout */
+.desk { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 20px; padding-block: 10px 60px; align-items: start; }
+@media (max-width: 860px) { .desk { grid-template-columns: minmax(0, 1fr); } .index { display: none; } .mobile-pick { display: block !important; } }
+.mobile-pick { display: none; }
+.mobile-pick select { width: 100%; padding: 9px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); }
+
+.index { position: sticky; top: 84px; max-height: calc(100vh - 100px); overflow: auto; background: var(--surface);
+  border: 1px solid var(--line); border-radius: var(--r); }
+.index-head { padding: 10px 12px; border-bottom: 1px solid var(--line); display: flex; gap: 6px; flex-wrap: wrap; }
+.index-head button { border: 1px solid var(--line); background: var(--surface); border-radius: 99px; padding: 3px 10px;
+  font-size: 12px; cursor: pointer; }
+.index-head button[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--ink); }
+.index ol { list-style: none; margin: 0; padding: 4px; }
+.index li button { width: 100%; text-align: left; border: 0; background: transparent; border-radius: 7px; padding: 7px 8px;
+  cursor: pointer; display: grid; grid-template-columns: 12px 46px minmax(0, 1fr); gap: 8px; align-items: center; font-size: 13px; }
+.index li button:hover { background: var(--surface-2); }
+.index li button[aria-current="true"] { background: var(--accent-soft); }
+.index li .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dot { width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--line); }
+.dot.done { background: var(--good); border-color: var(--good); }
+.dot.flag { border-color: var(--warn); }
+
+/* case card */
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+.card-head { padding: 20px 22px 16px; border-bottom: 1px solid var(--line); display: grid; gap: 6px; }
+.eyebrow { font-size: 12px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-2); font-weight: 600;
+  display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.card-head h2 { font-size: 22px; }
+.card-head .def { color: var(--ink-2); max-width: 75ch; }
+.sec { padding: 18px 22px; border-bottom: 1px solid var(--line); display: grid; gap: 12px; }
+.sec:last-child { border-bottom: 0; }
+.sec h3 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-2); font-weight: 600; }
+.quotes { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.quotes li { font-family: var(--f-quote); font-style: italic; font-size: 17px; line-height: 1.45; color: var(--quote);
+  padding-left: 14px; border-left: 3px solid var(--accent-soft); }
+.more summary { cursor: pointer; color: var(--accent); font-weight: 600; font-size: 13.5px; }
+.more .quotes li { font-size: 15px; }
+.more h4 { margin: 12px 0 6px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-2); }
+
+.metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.metric { border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px; display: grid; gap: 6px; align-content: start; }
+.metric .k { font-size: 12.5px; color: var(--ink-2); font-weight: 600; }
+.metric .v { font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.metric .m { font-size: 13.5px; color: var(--ink-2); }
+.meter { height: 6px; border-radius: 99px; background: var(--surface-2); position: relative; overflow: hidden; }
+.meter i { position: absolute; inset: 0 auto 0 0; border-radius: 99px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 2px 9px;
+  border-radius: 99px; width: fit-content; }
+.chip::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.chip.good { background: var(--good-soft); color: var(--good); }
+.chip.warn { background: var(--warn-soft); color: var(--warn); }
+.chip.bad { background: var(--bad-soft); color: var(--bad); }
+.chip.info { background: var(--accent-soft); color: var(--accent); }
+
+.near { display: grid; gap: 8px; }
+.near button { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; align-items: center; text-align: left;
+  border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 8px 10px; cursor: pointer; }
+.near button:hover { border-color: var(--accent); }
+.near .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.labels { display: flex; flex-wrap: wrap; gap: 6px; }
+.labels span { background: var(--surface-2); border-radius: 6px; padding: 2px 8px; font-family: var(--f-mono); font-size: 12px; }
+.warnbox { background: var(--warn-soft); color: var(--ink); border-radius: var(--r); padding: 10px 14px; font-size: 14px; }
+
+.reco { background: var(--accent-soft); border-radius: 12px; padding: 14px 16px; display: grid; gap: 8px; }
+.reco .what { font-size: 16.5px; font-weight: 600; }
+.reco .why { font-size: 14px; color: var(--ink-2); }
+.reco .tdef { font-size: 14px; }
+
+.decide { display: grid; gap: 12px; }
+.choices { display: flex; flex-wrap: wrap; gap: 8px; }
+.choices button { border: 1.5px solid var(--line); background: var(--surface); border-radius: 9px; padding: 9px 14px; cursor: pointer;
+  font-weight: 600; font-size: 14px; }
+.choices button:hover { border-color: var(--accent); }
+.choices button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.choices button[aria-pressed="true"] { outline: 3px solid var(--accent); outline-offset: 1px; }
+.choices button.primary[aria-pressed="true"] { outline-color: var(--good); }
+.sub { display: grid; gap: 8px; background: var(--surface-2); border-radius: var(--r); padding: 12px 14px; }
+.sub label { font-size: 13px; font-weight: 600; }
+.sub select, .sub input, textarea { width: 100%; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; background: var(--surface); }
+textarea { min-height: 60px; resize: vertical; }
+.status-line { font-size: 14px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.nav { display: flex; justify-content: space-between; gap: 10px; padding: 14px 22px; background: var(--surface-2); flex-wrap: wrap; }
+.nav button { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 8px 14px; cursor: pointer; font-weight: 600; }
+.kbd { font-family: var(--f-mono); font-size: 11px; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; padding: 0 5px; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.sub button, .item .sub button { justify-self: start; border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink);
+  border-radius: 8px; padding: 7px 14px; cursor: pointer; font-weight: 600; }
+.linkish { border: 0; background: none; color: var(--accent); cursor: pointer; text-decoration: underline; padding: 0; font-weight: 600; }
+.empty button { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 6px 12px; cursor: pointer; margin-left: 6px; }
+
+/* items + checklists */
+.list { display: grid; gap: 14px; padding-block: 10px 60px; }
+.item { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; display: grid; gap: 10px; }
+.item.ok { border-color: color-mix(in srgb, var(--good) 55%, var(--line)); }
+.item-head { display: flex; gap: 10px; align-items: baseline; justify-content: space-between; flex-wrap: wrap; }
+.item-head h3 { font-size: 17px; }
+.fields { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+@media (max-width: 760px) { .fields { grid-template-columns: minmax(0, 1fr); } }
+.field { display: grid; gap: 4px; min-width: 0; }
+.field > span { font-size: 12.5px; font-weight: 600; color: var(--ink-2); }
+.field .help { font-size: 12.5px; color: var(--ink-2); }
+.field .ex { font-family: var(--f-quote); font-style: italic; font-size: 15px; color: var(--quote); }
+.filters { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; padding-block: 6px; }
+.toolbar-note { font-size: 13.5px; color: var(--ink-2); }
+
+.finish { display: grid; gap: 14px; padding-block: 16px 60px; max-width: 900px; }
+.tally { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.tally div { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 14px; display: grid; gap: 4px; }
+.tally .n { font-size: 26px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.empty { background: var(--surface); border: 1px dashed var(--line); border-radius: 12px; padding: 30px; text-align: center; color: var(--ink-2); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<header class="bar">
+  <div class="wrap bar-in">
+    <div class="brand">Schema Review Desk<small>Negative-Space Reader · task 3.4</small></div>
+    <div class="seg" id="genreSeg" role="group" aria-label="Genre"></div>
+    <div class="seg" id="stepSeg" role="group" aria-label="Step"></div>
+    <div class="progress"><div class="progress-label"><span id="progText">Loading…</span><span id="saveState" class="save-state"></span></div><div class="track"><span id="progBar" style="width:0%"></span></div></div>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+  <section class="intro" id="intro">
+    <h1>Build the checklist the reader will use</h1>
+    <p>The finished system tells a reader things like <em>"72% of policies like this one say how long they keep your data; this one doesn't."</em> To do that it needs a fixed list of the statements documents of a genre usually make. The computer grouped about 65,000 extracted sentences into groups of similar statements. Here you decide which groups become items on that list.</p>
+  </section>
+  <div class="how" id="how">
+    <div><b>Step 1 · Groups</b>For each group: read the example sentences, glance at the readings, then agree with Claude's recommendation or choose otherwise.</div>
+    <div><b>Step 2 · Items</b>Check the final list: is each definition clear enough to say yes or no for a new sentence? Fix anything marked "please check".</div>
+    <div><b>Step 3 · Checklists</b>Confirm that each item of the experts' checklists (OPP-115, NeurIPS, ACL) is covered, or say why not.</div>
+    <div><b>Finish</b>When both genres say "complete", tell Claude "review done". Your answers save as you go.</div>
+  </div>
+  <div id="view"><div class="empty">Loading the groups…</div></div>
+</main>
+
+<script>
+(() => {
+  "use strict";
+  // ------------------------------------------------------------------ state
+  const S = { data: null, genre: "privacy", step: "groups", idx: 0, filter: "all",
+              groups: {}, items: {}, checks: {}, db: null, canWrite: true, local: false };
+  const $ = (sel, el = document) => el.querySelector(sel);
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const human = (id) => String(id || "").replace(/_/g, " ");
+  const G = () => S.data.genres.find((g) => g.genre === S.genre);
+  const key = (kind, id) => `${S.genre}--${id}`;
+  const LS = "schema-review-desk-v1";
+
+  // ------------------------------------------------------------------ storage
+  function saveState(text, err) { const el = $("#saveState"); el.textContent = text; el.classList.toggle("err", !!err); }
+  function loadLocal() { try { const v = JSON.parse(localStorage.getItem(LS) || "{}"); S.groups = v.groups || {}; S.items = v.items || {}; S.checks = v.checks || {}; } catch (e) {} }
+  function saveLocal() { try { localStorage.setItem(LS, JSON.stringify({ groups: S.groups, items: S.items, checks: S.checks })); } catch (e) {} }
+  const COLL = { groups: "groups", items: "items", checks: "checks" };
+  async function write(kind, id, body) {
+    const k = key(kind, id);
+    const doc = { genre: S.genre, id, ...body, updatedAt: new Date().toISOString() };
+    S[kind][k] = doc;
+    saveLocal();
+    render();
+    if (!S.db || !S.canWrite) { saveState(S.local ? "Saved in this browser only" : "Saved"); return; }
+    saveState("Saving…");
+    try { await S.db.collection(COLL[kind]).doc(k).set(doc); saveState("Saved"); }
+    catch (e) {
+      if (e && e.code === "invalid_argument") { S.canWrite = false; saveState("This view can't save to the shared record; kept in this browser", true); }
+      else saveState("Couldn't save (" + (e && e.code || "error") + "). Try again.", true);
+    }
+  }
+  async function clear(kind, id) {
+    const k = key(kind, id); delete S[kind][k]; saveLocal(); render();
+    if (S.db && S.canWrite) { try { await S.db.collection(COLL[kind]).doc(k).delete(); saveState("Saved"); } catch (e) { saveState("Couldn't save", true); } }
+  }
+  async function connect() {
+    let db = null;
+    try { db = await (window.claude && window.claude.use ? window.claude.use("db") : null); } catch (e) { db = null; }
+    if (!db) { S.local = true; saveState("Saving in this browser only"); return; }
+    S.db = db;
+    try { const user = await window.claude.use("user"); if (user) { const c = await user.can("data.write"); if (c === false) { S.canWrite = false; saveState("Read-only view", true); } } } catch (e) {}
+    for (const kind of Object.keys(COLL)) {
+      db.collection(COLL[kind]).onSnapshot((snap) => {
+        const next = {};
+        snap.docs.forEach((d) => { if (d.exists) next[d.id] = d.data(); });
+        // merge: the shared record wins, local-only answers (written while offline) are kept until saved
+        S[kind] = { ...S[kind], ...next };
+        render();
+      }, (e) => saveState("Live sync stopped (" + (e && e.code) + ")", true));
+    }
+  }
+
+  // ------------------------------------------------------------------ derived
+  function groupDecision(c) { return S.groups[key("groups", c.id)]; }
+  function effectiveTypes(c) {
+    const d = groupDecision(c);
+    if (!d) return null;
+    if (d.action === "accept") return c.proposal.action === "prune" ? [] : c.proposal.types;
+    if (d.action === "drop") return [];
+    return d.types || [];
+  }
+  function itemList() {
+    const g = G();
+    const owners = {}; // item id -> clusters assigned by decisions (or proposals where undecided)
+    for (const c of g.clusters) {
+      const t = effectiveTypes(c) ?? (c.proposal.action === "prune" ? [] : c.proposal.types);
+      for (const id of t) (owners[id] = owners[id] || []).push(c.id);
+    }
+    const byId = Object.fromEntries(g.types.map((t) => [t.id, t]));
+    const out = [];
+    for (const t of g.types) {
+      const cl = owners[t.id] || [];
+      if (t.clusters.length && !cl.length) continue; // every group it came from went elsewhere
+      out.push({ ...t, assigned: cl, isNew: false });
+    }
+    for (const [id, cl] of Object.entries(owners)) {
+      if (byId[id]) continue;
+      const src = g.clusters.find((c) => c.id === cl[0]);
+      out.push({ id, name: id, definition: src ? src.definition : "", positives: src ? src.examples.slice(0, 2) : [],
+        near_miss: "", severity: 1.0, section_hint: "", label_source: g.label_source ? ["teacher"] : [], seeds: [],
+        clusters: cl, notes: "New item from your decisions: check every field.", auto: ["definition", "positive_examples", "near_miss", "section_hint"],
+        assigned: cl, isNew: true });
+    }
+    for (const it of out) {
+      const e = S.items[key("items", it.id)];
+      if (e) Object.assign(it, { definition: e.definition ?? it.definition, near_miss: e.near_miss ?? it.near_miss,
+        severity: e.severity ?? it.severity, section_hint: e.section_hint ?? it.section_hint, removed: !!e.removed, checked: !!e.checked });
+    }
+    return out;
+  }
+  function counts(genre) {
+    const keep = S.genre; S.genre = genre;
+    const g = G();
+    const groupsDone = g.clusters.filter((c) => groupDecision(c)).length;
+    const items = itemList().filter((i) => !i.removed);
+    const itemsChecked = items.filter((i) => i.checked).length;
+    const checksDone = g.seeds.filter((s) => S.checks[key("checks", s.id)]).length;
+    S.genre = keep;
+    return { groupsDone, groups: g.clusters.length, items: items.length, itemsChecked, checksDone, checks: g.seeds.length };
+  }
+
+  // ------------------------------------------------------------------ readings (plain language)
+  function spreadReading(c, g) {
+    const pct = Math.round(c.share * 100);
+    const v = `${c.documents} of ${g.n_documents} ${g.unit} (${pct}%)`;
+    if (c.share < 0.05) return { v, chip: ["bad", "Rare: maybe one topic"], m: `Only a handful of ${g.unit} say this. It is probably one research topic or a few authors' habit, not something the genre usually says. Usually: fold it into a broader item, or drop it.`, w: c.share };
+    if (c.share > 0.9) return { v, chip: ["warn", "Almost everyone"], m: `Nearly every ${g.unit.slice(0, -1)} says this, so it will rarely be reported missing. Still worth keeping: other documents need somewhere to map.`, w: c.share };
+    return { v, chip: ["good", "Good spread"], m: `Common, but not universal. If a document leaves this out, that tells the reader something. This is the kind of item the checklist is for.`, w: c.share };
+  }
+  function tightReading(c, g) {
+    const q = g.cohesion;
+    if (c.cohesion >= q.median) return { v: "Tight", chip: ["good", "Sentences agree"], m: "The sentences in this group say much the same thing. The examples are a fair picture of the whole group." };
+    if (c.cohesion >= q.q1) return { v: "Average", chip: ["info", "Mostly agree"], m: "Typical for this genre. Glance at the extra sentences if the examples look uneven." };
+    return { v: "Loose", chip: ["warn", "Mixed bag?"], m: "Looser than three quarters of the groups. It may mix different kinds of statement. Open \"more sentences\" before deciding; a split may be right." };
+  }
+  function place(p) { return p < 0.25 ? "near the start" : p < 0.5 ? "in the first half" : p < 0.75 ? "in the second half" : "near the end"; }
+  function nearReading(sim) {
+    if (sim >= 0.8) return ["bad", "Likely the same"];
+    if (sim >= 0.6) return ["warn", "Related"];
+    return ["good", "Different"];
+  }
+  const FLAG_TEXT = {
+    mixed: "The naming model thought this group mixes two kinds of statement",
+    duplicate_name: "Another group got exactly the same name. Compare the two; they may be one item",
+    example_label_name: "The name contains a word from the extraction prompt's examples. Usually harmless here (for privacy, \"policy change\" is a real category), but check the sentences really match the name",
+  };
+  function recoText(c, g) {
+    const p = c.proposal;
+    const t = p.types.map((id) => `<strong>${esc(human(id))}</strong>`);
+    if (p.action === "prune") return { what: "Drop this group", why: p.reason || "It is not a statement this genre usually makes." };
+    if (p.action === "split") return { what: `Split it into ${t.join(" and ")}`, why: "The group mixes kinds of statement that are worth reporting separately." };
+    if (p.action === "merge") {
+      const others = g.clusters.filter((x) => x.id !== c.id && x.proposal.types.some((id) => p.types.includes(id))).map((x) => x.id);
+      return { what: `Combine it into ${t.join(", ")}`, why: others.length ? `Together with ${others.join(", ")}: they would produce the same report sentence.` : "" };
+    }
+    if (p.action === "keep") return { what: `Keep it as its own item: ${t.join(", ")}`, why: "One clear kind of statement, not a duplicate of another group." };
+    return { what: "No recommendation", why: "Decide from the sentences." };
+  }
+
+  // ------------------------------------------------------------------ render: chrome
+  function renderChrome() {
+    const gs = S.data.genres;
+    $("#genreSeg").innerHTML = gs.map((g) => {
+      const c = counts(g.genre);
+      return `<button type="button" data-genre="${g.genre}" aria-pressed="${g.genre === S.genre}">${esc(g.label)}<span class="count">${c.groupsDone}/${c.groups}</span></button>`;
+    }).join("");
+    const c = counts(S.genre);
+    const steps = [["groups", "1 · Groups"], ["items", "2 · Items"], ["checks", "3 · Checklists"], ["finish", "Finish"]];
+    $("#stepSeg").innerHTML = steps.map(([k, l]) => `<button type="button" data-step="${k}" aria-pressed="${k === S.step}">${l}</button>`).join("");
+    const total = c.groups + c.items + c.checks, done = c.groupsDone + c.itemsChecked + c.checksDone;
+    $("#progText").textContent = `${G().label}: ${c.groupsDone}/${c.groups} groups · ${c.itemsChecked}/${c.items} items · ${c.checksDone}/${c.checks} checklist rows`;
+    $("#progBar").style.width = (total ? Math.round((100 * done) / total) : 0) + "%";
+    const showIntro = S.step === "groups";
+    $("#intro").hidden = !showIntro; $("#how").hidden = !showIntro;
+  }
+
+  // ------------------------------------------------------------------ render: groups
+  function visibleGroups() {
+    const g = G();
+    return g.clusters.filter((c) => {
+      if (S.filter === "open") return !groupDecision(c);
+      if (S.filter === "attention") return c.flags.length || c.share < 0.05 || c.cohesion < g.cohesion.q1 || c.nearest.some(([, s]) => s >= 0.8);
+      return true;
+    });
+  }
+  function renderGroups() {
+    const g = G();
+    const list = visibleGroups();
+    if (!list.length) { $("#view").innerHTML = `<div class="empty">No groups match this filter. <button type="button" data-filter="all">Show all groups</button></div>`; return; }
+    S.idx = Math.max(0, Math.min(S.idx, list.length - 1));
+    const c = list[S.idx];
+    const d = groupDecision(c);
+    const sp = spreadReading(c, g), ti = tightReading(c, g), r = recoText(c, g);
+    const recoTypes = c.proposal.types.map((id) => g.types.find((t) => t.id === id)).filter(Boolean);
+    const itemIds = itemList().map((i) => i.id).sort();
+    const typeOptions = (sel) => itemIds.map((id) => `<option value="${esc(id)}" ${sel === id ? "selected" : ""}>${esc(human(id))}</option>`).join("");
+    const act = d ? d.action : "";
+    const indexHtml = `
+      <div class="index-head">
+        ${[["all", "All"], ["open", "Not decided"], ["attention", "Needs a look"]].map(([k, l]) => `<button type="button" data-filter="${k}" aria-pressed="${S.filter === k}">${l}</button>`).join("")}
+      </div>
+      <ol>${list.map((x, i) => {
+        const dd = groupDecision(x);
+        const att = x.flags.length || x.share < 0.05 || x.cohesion < g.cohesion.q1;
+        return `<li><button type="button" data-jump="${i}" aria-current="${i === S.idx}"><span class="dot ${dd ? "done" : att ? "flag" : ""}" aria-hidden="true"></span><span class="mono muted">${x.id}</span><span class="nm">${esc(human(x.name))}</span></button></li>`;
+      }).join("")}</ol>`;
+    const mobile = `<div class="mobile-pick"><label class="muted" for="pick">Group</label><select id="pick">${list.map((x, i) => `<option value="${i}" ${i === S.idx ? "selected" : ""}>${x.id} · ${esc(human(x.name))}${groupDecision(x) ? " ✓" : ""}</option>`).join("")}</select></div>`;
+    $("#view").innerHTML = `
+    <div class="desk">
+      <nav class="index" aria-label="Groups">${indexHtml}</nav>
+      <div style="display:grid;gap:12px;min-width:0">
+        ${mobile}
+        <article class="card">
+          <div class="card-head">
+            <div class="eyebrow"><span class="mono">${c.id}</span><span>Group ${S.idx + 1} of ${list.length}${S.filter !== "all" ? " (filtered)" : ""}</span>${d ? `<span class="chip good">Decided</span>` : `<span class="chip info">Waiting for you</span>`}</div>
+            <h2>${esc(human(c.name))}</h2>
+            <div class="def">${esc(c.definition)} <span class="muted">(the naming model's description)</span></div>
+          </div>
+
+          <div class="sec">
+            <h3>What the sentences say</h3>
+            <ul class="quotes">${c.examples.map((e) => `<li>${esc(e)}</li>`).join("")}</ul>
+            <details class="more"><summary>Show ${c.typical.length + c.random.length} more sentences</summary>
+              <h4>Most typical</h4><ul class="quotes">${c.typical.map((e) => `<li>${esc(e)}</li>`).join("")}</ul>
+              <h4>Random picks (show the edges of the group)</h4><ul class="quotes">${c.random.map((e) => `<li>${esc(e)}</li>`).join("")}</ul>
+            </details>
+          </div>
+
+          <div class="sec">
+            <h3>The readings, in plain words</h3>
+            <div class="metrics">
+              <div class="metric"><div class="k">How many ${g.unit} say this</div><div class="v">${sp.v}</div><div class="meter"><i style="width:${Math.max(2, Math.round(sp.w * 100))}%;background:var(--${sp.chip[0] === "info" ? "accent" : sp.chip[0]})"></i></div><span class="chip ${sp.chip[0]}">${sp.chip[1]}</span><div class="m">${sp.m}</div></div>
+              <div class="metric"><div class="k">How alike the sentences are</div><div class="v">${ti.v} <span class="muted mono">${c.cohesion.toFixed(2)}</span></div><span class="chip ${ti.chip[0]}">${ti.chip[1]}</span><div class="m">${ti.m} <span class="muted">(${g.label}: middle half of groups between ${g.cohesion.q1} and ${g.cohesion.q3})</span></div></div>
+              <div class="metric"><div class="k">How much material</div><div class="v">${c.size.toLocaleString()} sentences</div><div class="m">From ${c.documents} ${g.unit}. Size alone decides nothing: one long ${g.unit.slice(0, -1)} can contribute many sentences.</div></div>
+              <div class="metric"><div class="k">Where it usually appears</div><div class="v">${esc(place(c.position))}</div><div class="m">${c.headings.length ? "Common headings: " + c.headings.map(([h, n]) => `“${esc(h)}” (${n})`).join(", ") : "No common heading."} This becomes the item's placement hint.</div></div>
+            </div>
+          </div>
+
+          <div class="sec">
+            <h3>Similar groups</h3>
+            <div class="near">${c.nearest.map(([id, s]) => {
+              const x = g.clusters.find((y) => y.id === id); const [cls, lab] = nearReading(s);
+              return `<button type="button" data-goto="${id}"><span class="chip ${cls}">${lab}</span><span class="nm"><span class="mono muted">${id}</span> ${esc(human(x ? x.name : id))}</span><span class="mono muted">${s.toFixed(2)}</span></button>`;
+            }).join("")}</div>
+            <div class="m muted" style="font-size:13.5px">"Likely the same" (0.80 or more) usually means combine them. "Related" means look at both, but they can stay separate if missing one tells the reader something different from missing the other.</div>
+            ${c.flags.length ? `<div class="warnbox">${c.flags.map((f) => `<div>⚑ ${esc(FLAG_TEXT[f] || f)}${f === "mixed" && c.split_note ? `: <em>${esc(c.split_note)}</em>` : ""}</div>`).join("")}</div>` : ""}
+            <div><div class="muted" style="font-size:12.5px;margin-bottom:6px">What the extraction step called these sentences (a rough second opinion)</div><div class="labels">${c.labels.map(([l, n]) => `<span>${esc(l)} ${n}</span>`).join("")}</div></div>
+          </div>
+
+          <div class="sec">
+            <h3>Claude's recommendation</h3>
+            <div class="reco">
+              <div class="what">${r.what}</div>
+              ${r.why ? `<div class="why">${esc(r.why)}</div>` : ""}
+              ${recoTypes.map((t) => `<div class="tdef"><strong>${esc(human(t.id))}:</strong> ${esc(t.definition)}${t.notes ? `<div class="why" style="margin-top:4px">${esc(t.notes)}</div>` : ""}</div>`).join("")}
+            </div>
+          </div>
+
+          <div class="sec decide">
+            <h3>Your decision</h3>
+            <div class="choices">
+              <button type="button" class="primary" data-act="accept" aria-pressed="${act === "accept"}">Agree with Claude <span class="kbd">A</span></button>
+              <button type="button" data-act="own" aria-pressed="${act === "own"}">Keep as its own item</button>
+              <button type="button" data-act="merge" aria-pressed="${act === "merge"}">Combine into another item</button>
+              <button type="button" data-act="split" aria-pressed="${act === "split"}">Split into two</button>
+              <button type="button" data-act="drop" aria-pressed="${act === "drop"}">Drop it</button>
+            </div>
+            <div id="subform"></div>
+            <div class="field"><span>Note (optional, kept with your decision)</span><textarea id="note" placeholder="Why, in a few words">${esc(d && d.note || "")}</textarea></div>
+            <div class="status-line">${d ? `<span class="chip good">Saved</span> <span>${esc(describeDecision(d, c))}</span> <button type="button" class="linkish" data-undo="1">Undo</button>` : `<span class="muted">Nothing chosen yet.</span>`}</div>
+          </div>
+          <div class="nav"><button type="button" data-move="-1">← Previous</button><span class="muted" style="font-size:13px;align-self:center">Keys: <span class="kbd">A</span> agree · <span class="kbd">←</span> <span class="kbd">→</span> move</span><button type="button" data-move="1">Next →</button></div>
+        </article>
+      </div>
+    </div>`;
+    S._pending = { c, typeOptions };
+    if (["own", "merge", "split"].includes(act)) showSub(act, c, d);
+  }
+  function describeDecision(d, c) {
+    if (d.action === "accept") return "You agreed with the recommendation.";
+    if (d.action === "drop") return "Dropped.";
+    if (d.action === "own") return `Its own item: ${human(d.types[0])}.`;
+    if (d.action === "merge") return `Combined into ${human(d.types[0])}.`;
+    if (d.action === "split") return `Split into ${d.types.map(human).join(" and ")}.`;
+    return "";
+  }
+  function slug(s) { return String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "").slice(0, 60); }
+  function showSub(act, c, d) {
+    const box = $("#subform"); if (!box) return;
+    const opts = S._pending.typeOptions;
+    if (act === "own") {
+      const v = d && d.action === "own" ? d.types[0] : slug(c.name);
+      box.innerHTML = `<div class="sub"><label for="ownName">Name of the new item (lowercase words joined by _)</label><input id="ownName" value="${esc(v)}"><div><button type="button" class="primary-sm" data-save="own">Save as its own item</button></div></div>`;
+    } else if (act === "merge") {
+      const v = d && d.action === "merge" ? d.types[0] : c.proposal.types[0];
+      box.innerHTML = `<div class="sub"><label for="mergeInto">Combine into which item?</label><select id="mergeInto">${opts(v)}</select><div><button type="button" data-save="merge">Save</button></div></div>`;
+    } else if (act === "split") {
+      const a = d && d.action === "split" ? d.types : (c.proposal.action === "split" ? c.proposal.types : [slug(c.name) + "_a", slug(c.name) + "_b"]);
+      box.innerHTML = `<div class="sub"><label for="splitA">First item (an existing item's name, or a new name)</label><input id="splitA" list="itemNames" value="${esc(a[0] || "")}"><label for="splitB">Second item</label><input id="splitB" list="itemNames" value="${esc(a[1] || "")}"><datalist id="itemNames">${opts("")}</datalist><div class="muted" style="font-size:13px">The groups can't separate the two halves automatically; the model will sort each sentence later (Phase 4).</div><div><button type="button" data-save="split">Save the split</button></div></div>`;
+    }
+  }
+  function decide(action, c, types) {
+    const note = ($("#note") || {}).value || "";
+    return write("groups", c.id, { action, types: types || [], note });
+  }
+  function moveBy(n) { const len = visibleGroups().length; S.idx = Math.max(0, Math.min(len - 1, S.idx + n)); render(); window.scrollTo({ top: 0 }); }
+
+  // ------------------------------------------------------------------ render: items
+  function renderItems() {
+    const g = G();
+    const items = itemList();
+    const open = counts(S.genre).groups - counts(S.genre).groupsDone;
+    const show = items.filter((i) => S.filter !== "open" || !i.checked);
+    $("#view").innerHTML = `
+      <div class="filters"><div class="seg">${[["all", "All items"], ["open", "Not checked yet"]].map(([k, l]) => `<button type="button" data-filter="${k}" aria-pressed="${S.filter === k}">${l}</button>`).join("")}</div>
+      <span class="toolbar-note">${items.filter((i) => !i.removed).length} items (the gate needs 40–60). ${open ? `${open} groups are still undecided, so this list can still change.` : "All groups decided."}</span></div>
+      <div class="list">${show.map((it) => itemCard(it, g)).join("") || `<div class="empty">Every item is checked.</div>`}</div>`;
+  }
+  function itemCard(it, g) {
+    const auto = new Set(it.auto || []);
+    const check = (f) => auto.has(f) ? `<span class="chip warn">picked automatically, please check</span>` : "";
+    return `<article class="item ${it.checked ? "ok" : ""}" data-item="${esc(it.id)}">
+      <div class="item-head"><h3>${esc(human(it.id))}</h3><div style="display:flex;gap:6px;flex-wrap:wrap">${it.isNew ? `<span class="chip info">new, from your decisions</span>` : ""}${it.removed ? `<span class="chip bad">removed</span>` : it.checked ? `<span class="chip good">checked</span>` : `<span class="chip info">to check</span>`}<span class="muted mono" style="font-size:12px">${it.assigned.length ? "from " + it.assigned.join(", ") : "no group: found among unclustered sentences"}</span></div></div>
+      <label class="field"><span>Definition: can you say yes or no for a new sentence using only this?</span><textarea data-f="definition">${esc(it.definition)}</textarea></label>
+      <div class="fields">
+        <div class="field"><span>Example sentences that belong ${check("positive_examples")}</span>${it.positives.map((p) => `<div class="ex">“${esc(p)}”</div>`).join("") || `<div class="muted">None yet; Claude will pick two from the group.</div>`}</div>
+        <label class="field"><span>Near miss: similar, but does NOT belong ${check("near_miss")}</span><textarea data-f="near_miss">${esc(it.near_miss)}</textarea><span class="help">It shows where the edge of the item is. Replace it if it is obviously unrelated.</span></label>
+        <label class="field"><span>Where peers usually put it ${check("section_hint")}</span><input data-f="section_hint" value="${esc(it.section_hint)}"></label>
+        ${g.legal_weight ? `<label class="field"><span>Importance weight</span><select data-f="severity"><option value="1" ${Number(it.severity) !== 1.5 ? "selected" : ""}>1.0 · normal</option><option value="1.5" ${Number(it.severity) === 1.5 ? "selected" : ""}>1.5 · required by GDPR Art. 13/14 or CCPA</option></select><span class="help">Missing legally required statements rank higher in the report.</span></label>` : ""}
+      </div>
+      ${g.label_source ? `<div class="field"><span>Matching labels in the OPP-115 human annotations (used to train detection; "teacher" = none fit)</span><div class="labels">${it.label_source.map((l) => `<span>${esc(l)}</span>`).join("")}</div></div>` : ""}
+      ${it.notes ? `<div class="muted" style="font-size:13.5px">Claude's note: ${esc(it.notes)}</div>` : ""}
+      <div class="choices"><button type="button" class="primary" data-item-ok="${esc(it.id)}" aria-pressed="${!!it.checked && !it.removed}">Looks right, save</button><button type="button" data-item-remove="${esc(it.id)}" aria-pressed="${!!it.removed}">${it.removed ? "Keep this item" : "Remove this item"}</button></div>
+    </article>`;
+  }
+  function saveItem(id, extra) {
+    const card = document.querySelector(`[data-item="${CSS.escape(id)}"]`);
+    const body = { ...(S.items[key("items", id)] || {}) };
+    if (card) card.querySelectorAll("[data-f]").forEach((el) => { body[el.dataset.f] = el.dataset.f === "severity" ? Number(el.value) : el.value; });
+    delete body.genre; delete body.id; delete body.updatedAt;
+    return write("items", id, { ...body, ...extra });
+  }
+
+  // ------------------------------------------------------------------ render: checklists
+  function renderChecks() {
+    const g = G();
+    const items = itemList().filter((i) => !i.removed).map((i) => i.id).sort();
+    const src = g.genre === "privacy" ? "OPP-115, the human-annotated privacy policy corpus (10 categories)" : "the NeurIPS 2026 paper checklist (16 items) and the ACL responsible-NLP checklist (18 items)";
+    $("#view").innerHTML = `<div class="intro" style="padding-top:14px"><p>Does the checklist cover what experts already consider important? These rows come from ${src}. Each must point to at least one item, or be excluded with a reason.</p></div>
+      <div class="list">${g.seeds.map((s) => {
+        const d = S.checks[key("checks", s.id)];
+        const mapped = d ? (d.exclude ? `Excluded: ${esc(d.exclude)}` : d.types.map(human).join(", ")) : "";
+        return `<article class="item ${d ? "ok" : ""}" data-seed="${esc(s.id)}">
+          <div class="item-head"><h3>${esc(s.title)}</h3><span class="mono muted" style="font-size:12px">${esc(s.id)}</span></div>
+          <div class="reco"><div class="what">${s.exclude ? `Claude suggests excluding it: <span style="font-weight:400">${esc(s.exclude)}</span>` : `Covered by: ${s.types.map((t) => `<strong>${esc(human(t))}</strong>`).join(", ") || "<em>nothing yet</em>"}`}</div></div>
+          <div class="choices"><button type="button" class="primary" data-seed-ok="${esc(s.id)}" aria-pressed="${!!(d && d.action === "accept")}">Agree</button><button type="button" data-seed-change="${esc(s.id)}">Choose items</button><button type="button" data-seed-ex="${esc(s.id)}">Exclude it</button></div>
+          <div class="sub" data-seed-form="${esc(s.id)}" hidden>
+            <label for="sel-${esc(s.id)}">Items that cover it (hold Ctrl/Cmd to pick several)</label><select id="sel-${esc(s.id)}" multiple size="6">${items.map((i) => `<option value="${esc(i)}" ${(d && d.types || s.types).includes(i) ? "selected" : ""}>${esc(human(i))}</option>`).join("")}</select>
+            <label for="ex-${esc(s.id)}">Or a reason to exclude it</label><input id="ex-${esc(s.id)}" value="${esc(d && d.exclude || "")}">
+            <div><button type="button" data-seed-save="${esc(s.id)}">Save</button></div>
+          </div>
+          ${d ? `<div class="status-line"><span class="chip good">Saved</span> ${mapped}</div>` : ""}
+        </article>`;
+      }).join("")}</div>`;
+  }
+
+  // ------------------------------------------------------------------ render: finish
+  function renderFinish() {
+    const rows = S.data.genres.map((g) => ({ g, c: counts(g.genre) }));
+    $("#view").innerHTML = `<div class="finish">
+      ${rows.map(({ g, c }) => {
+        const inRange = c.items >= 40 && c.items <= 60;
+        const complete = c.groupsDone === c.groups && c.itemsChecked === c.items && c.checksDone === c.checks && inRange;
+        return `<section class="item ${complete ? "ok" : ""}"><div class="item-head"><h3>${esc(g.label)}</h3>${complete ? `<span class="chip good">Complete</span>` : `<span class="chip warn">Not finished</span>`}</div>
+          <div class="tally">
+            <div><span class="muted">Groups decided</span><span class="n">${c.groupsDone}/${c.groups}</span></div>
+            <div><span class="muted">Items in the checklist</span><span class="n">${c.items}</span><span class="chip ${inRange ? "good" : "bad"}">${inRange ? "within 40–60" : "needs 40–60"}</span></div>
+            <div><span class="muted">Items checked</span><span class="n">${c.itemsChecked}/${c.items}</span></div>
+            <div><span class="muted">Expert checklist rows</span><span class="n">${c.checksDone}/${c.checks}</span></div>
+          </div></section>`;
+      }).join("")}
+      <div class="reco"><div class="what">When both genres show "Complete", tell Claude: "review done".</div><div class="why">Claude reads your answers from this page, writes them into the workbooks, checks them against the gate (40–60 items, every field filled, every checklist row covered) and runs the coverage check. Nothing is frozen until you sign off.</div></div>
+      ${S.local ? `<div class="warnbox">This view could not reach the shared record, so your answers are only in this browser. Copy the text below and paste it to Claude.</div><textarea readonly style="min-height:160px" id="exportBox">${esc(JSON.stringify({ groups: S.groups, items: S.items, checks: S.checks }))}</textarea>` : ""}
+    </div>`;
+  }
+
+  // ------------------------------------------------------------------ main render + events
+  function render() {
+    if (!S.data) return;
+    renderChrome();
+    if (S.step === "groups") renderGroups();
+    else if (S.step === "items") renderItems();
+    else if (S.step === "checks") renderChecks();
+    else renderFinish();
+  }
+  document.addEventListener("click", (ev) => {
+    const b = ev.target.closest("button"); if (!b) return;
+    const g = S.data && G();
+    if (b.dataset.genre) { S.genre = b.dataset.genre; S.idx = 0; render(); return; }
+    if (b.dataset.step) { S.step = b.dataset.step; S.filter = "all"; render(); window.scrollTo({ top: 0 }); return; }
+    if (b.dataset.filter) { S.filter = b.dataset.filter; S.idx = 0; render(); return; }
+    if (b.dataset.jump) { S.idx = Number(b.dataset.jump); render(); window.scrollTo({ top: 0 }); return; }
+    if (b.dataset.goto) { S.filter = "all"; S.idx = g.clusters.findIndex((c) => c.id === b.dataset.goto); render(); window.scrollTo({ top: 0 }); return; }
+    if (b.dataset.move) { moveBy(Number(b.dataset.move)); return; }
+    const c = S._pending && S._pending.c;
+    if (b.dataset.act && c) {
+      if (b.dataset.act === "accept") { decide("accept", c, c.proposal.action === "prune" ? [] : c.proposal.types).then(() => setTimeout(() => moveBy(1), 250)); return; }
+      if (b.dataset.act === "drop") { decide("drop", c, []); return; }
+      document.querySelectorAll("[data-act]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+      showSub(b.dataset.act, c, groupDecision(c)); return;
+    }
+    if (b.dataset.save && c) {
+      if (b.dataset.save === "own") { const v = slug($("#ownName").value); if (v) decide("own", c, [v]); return; }
+      if (b.dataset.save === "merge") { decide("merge", c, [$("#mergeInto").value]); return; }
+      if (b.dataset.save === "split") { const a = slug($("#splitA").value), bb = slug($("#splitB").value); if (a && bb && a !== bb) decide("split", c, [a, bb]); return; }
+    }
+    if (b.dataset.undo && c) { clear("groups", c.id); return; }
+    if (b.dataset.itemOk) { saveItem(b.dataset.itemOk, { checked: true, removed: false }); return; }
+    if (b.dataset.itemRemove) { const cur = S.items[key("items", b.dataset.itemRemove)]; saveItem(b.dataset.itemRemove, { removed: !(cur && cur.removed), checked: !(cur && cur.removed) ? true : false }); return; }
+    if (b.dataset.seedOk) { const s = g.seeds.find((x) => x.id === b.dataset.seedOk); write("checks", s.id, s.exclude ? { action: "accept", types: [], exclude: s.exclude } : { action: "accept", types: s.types, exclude: "" }); return; }
+    if (b.dataset.seedChange || b.dataset.seedEx) { const id = b.dataset.seedChange || b.dataset.seedEx; const f = document.querySelector(`[data-seed-form="${CSS.escape(id)}"]`); f.hidden = false; (b.dataset.seedEx ? f.querySelector("input") : f.querySelector("select")).focus(); return; }
+    if (b.dataset.seedSave) {
+      const id = b.dataset.seedSave; const sel = document.getElementById("sel-" + id); const ex = document.getElementById("ex-" + id).value.trim();
+      if (ex) write("checks", id, { action: "exclude", types: [], exclude: ex });
+      else { const t = [...sel.selectedOptions].map((o) => o.value); if (t.length) write("checks", id, { action: "map", types: t, exclude: "" }); }
+      return;
+    }
+  });
+  document.addEventListener("change", (ev) => { if (ev.target.id === "pick") { S.idx = Number(ev.target.value); render(); } });
+  document.addEventListener("keydown", (ev) => {
+    if (S.step !== "groups" || ev.metaKey || ev.ctrlKey || ev.altKey) return;
+    if (["INPUT", "TEXTAREA", "SELECT"].includes(document.activeElement && document.activeElement.tagName)) return;
+    if (ev.key === "ArrowRight") moveBy(1); else if (ev.key === "ArrowLeft") moveBy(-1);
+    else if (ev.key === "a" || ev.key === "A") { const b = document.querySelector('[data-act="accept"]'); if (b) b.click(); }
+  });
+
+  loadLocal();
+  fetch("review_data.json").then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); }).then((d) => { S.data = d; render(); })
+    .catch(() => { $("#view").innerHTML = `<div class="empty">The review data did not load. Reload the page; if it persists, tell Claude.</div>`; });
+  connect();
+})();
+</script>

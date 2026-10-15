@@ -1,0 +1,3376 @@
+{
+ "groups": {
+  "papers--c000": {
+   "action": "split",
+   "genre": "papers",
+   "id": "c000",
+   "note": "",
+   "types": [
+    "states_own_limitations",
+    "states_limitations_of_existing_approaches"
+   ],
+   "updatedAt": "2026-10-15T11:26:57.560Z"
+  },
+  "papers--c001": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c001",
+   "note": "",
+   "types": [
+    "describes_model_architecture"
+   ],
+   "updatedAt": "2026-10-15T11:28:23.959Z"
+  },
+  "papers--c002": {
+   "action": "split",
+   "genre": "papers",
+   "id": "c002",
+   "note": "",
+   "types": [
+    "describes_evaluation_metrics_a",
+    "describes_comparison_to_related_work"
+   ],
+   "updatedAt": "2026-10-15T16:14:25.429Z"
+  },
+  "papers--c003": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c003",
+   "note": "",
+   "types": [
+    "specifies_hyperparameters"
+   ],
+   "updatedAt": "2026-10-15T16:15:20.095Z"
+  },
+  "papers--c004": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c004",
+   "note": "",
+   "types": [
+    "reports_computational_cost"
+   ],
+   "updatedAt": "2026-10-15T16:15:55.495Z"
+  },
+  "papers--c005": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c005",
+   "note": "",
+   "types": [
+    "describes_datasets"
+   ],
+   "updatedAt": "2026-10-15T16:16:03.394Z"
+  },
+  "papers--c006": {
+   "action": "split",
+   "genre": "papers",
+   "id": "c006",
+   "note": "",
+   "types": [
+    "assumption_and_distribution_a",
+    "assumption_and_distribution_b"
+   ],
+   "updatedAt": "2026-10-15T16:16:17.661Z"
+  },
+  "papers--c007": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c007",
+   "note": "",
+   "types": [
+    "suggests_future_work"
+   ],
+   "updatedAt": "2026-10-15T16:16:24.878Z"
+  },
+  "papers--c008": {
+   "action": "split",
+   "genre": "papers",
+   "id": "c008",
+   "note": "",
+   "types": [
+    "mdp_component_definition_a",
+    "mdp_component_definition_b"
+   ],
+   "updatedAt": "2026-10-15T16:17:30.660Z"
+  },
+  "papers--c009": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c009",
+   "note": "",
+   "types": [
+    "proves_or_derives"
+   ],
+   "updatedAt": "2026-10-15T16:17:50.827Z"
+  },
+  "papers--c010": {
+   "action": "split",
+   "genre": "papers",
+   "id": "c010",
+   "note": "",
+   "types": [
+    "task_description_a",
+    "task_description_b"
+   ],
+   "updatedAt": "2026-10-15T16:18:32.159Z"
+  },
+  "papers--c011": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c011",
+   "note": "",
+   "types": [
+    "reviews_prior_work"
+   ],
+   "updatedAt": "2026-10-15T16:18:38.428Z"
+  },
+  "papers--c012": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c012",
+   "note": "",
+   "types": [
+    "describes_method_details"
+   ],
+   "updatedAt": "2026-10-15T16:19:11.292Z"
+  },
+  "papers--c013": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c013",
+   "note": "",
+   "types": [
+    "describes_method_details"
+   ],
+   "updatedAt": "2026-10-15T16:19:59.009Z"
+  },
+  "papers--c014": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c014",
+   "note": "",
+   "types": [
+    "reports_experimental_results"
+   ],
+   "updatedAt": "2026-10-15T16:20:10.342Z"
+  },
+  "papers--c015": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c015",
+   "note": "",
+   "types": [
+    "refers_to_appendix"
+   ],
+   "updatedAt": "2026-10-15T16:20:15.208Z"
+  },
+  "papers--c016": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c016",
+   "note": "",
+   "types": [
+    "reviews_prior_work"
+   ],
+   "updatedAt": "2026-10-15T16:20:36.325Z"
+  },
+  "papers--c017": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c017",
+   "note": "",
+   "types": [
+    "proves_or_derives"
+   ],
+   "updatedAt": "2026-10-15T16:20:44.441Z"
+  },
+  "papers--c018": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c018",
+   "note": "",
+   "types": [
+    "code_and_data_availability"
+   ],
+   "updatedAt": "2026-10-15T16:20:53.692Z"
+  },
+  "papers--c019": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c019",
+   "note": "",
+   "types": [
+    "describes_training_procedure"
+   ],
+   "updatedAt": "2026-10-15T16:21:00.158Z"
+  },
+  "papers--c020": {
+   "action": "own",
+   "genre": "papers",
+   "id": "c020",
+   "note": "",
+   "types": [
+    "method_proposal"
+   ],
+   "updatedAt": "2026-10-15T16:21:40.424Z"
+  },
+  "papers--c021": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c021",
+   "note": "",
+   "types": [
+    "states_theoretical_result"
+   ],
+   "updatedAt": "2026-10-15T16:21:46.424Z"
+  },
+  "papers--c022": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c022",
+   "note": "",
+   "types": [
+    "names_software_and_libraries"
+   ],
+   "updatedAt": "2026-10-15T16:21:52.357Z"
+  },
+  "papers--c023": {
+   "action": "own",
+   "genre": "papers",
+   "id": "c023",
+   "note": "",
+   "types": [
+    "performance_comparison_across_other_works"
+   ],
+   "updatedAt": "2026-10-15T16:23:25.806Z"
+  },
+  "papers--c024": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c024",
+   "note": "",
+   "types": [
+    "describes_method_details"
+   ],
+   "updatedAt": "2026-10-15T16:23:33.714Z"
+  },
+  "papers--c025": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c025",
+   "note": "",
+   "types": [
+    "describes_data_split"
+   ],
+   "updatedAt": "2026-10-15T16:25:09.105Z"
+  },
+  "papers--c026": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c026",
+   "note": "",
+   "types": [
+    "describes_method_details"
+   ],
+   "updatedAt": "2026-10-15T16:25:36.871Z"
+  },
+  "papers--c027": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c027",
+   "note": "",
+   "types": [
+    "describes_training_procedure"
+   ],
+   "updatedAt": "2026-10-15T16:25:43.222Z"
+  },
+  "papers--c028": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c028",
+   "note": "",
+   "types": [
+    "describes_method_details"
+   ],
+   "updatedAt": "2026-10-15T16:25:49.322Z"
+  },
+  "papers--c029": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c029",
+   "note": "",
+   "types": [
+    "visualizes_results"
+   ],
+   "updatedAt": "2026-10-15T16:25:54.088Z"
+  },
+  "papers--c030": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c030",
+   "note": "",
+   "types": [
+    "defines_notation"
+   ],
+   "updatedAt": "2026-10-15T16:25:58.055Z"
+  },
+  "papers--c031": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c031",
+   "note": "",
+   "types": [
+    "describes_method_details"
+   ],
+   "updatedAt": "2026-10-15T16:26:07.838Z"
+  },
+  "papers--c032": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c032",
+   "note": "",
+   "types": [
+    "describes_method_details"
+   ],
+   "updatedAt": "2026-10-15T16:26:14.038Z"
+  },
+  "papers--c033": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c033",
+   "note": "",
+   "types": [
+    "states_theoretical_result"
+   ],
+   "updatedAt": "2026-10-15T16:26:19.587Z"
+  },
+  "papers--c034": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c034",
+   "note": "",
+   "types": [
+    "generates_synthetic_data"
+   ],
+   "updatedAt": "2026-10-15T16:26:25.504Z"
+  },
+  "papers--c035": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c035",
+   "note": "",
+   "types": [
+    "describes_preprocessing"
+   ],
+   "updatedAt": "2026-10-15T16:26:45.388Z"
+  },
+  "papers--c036": {
+   "action": "own",
+   "genre": "papers",
+   "id": "c036",
+   "note": "",
+   "types": [
+    "performance_comparison"
+   ],
+   "updatedAt": "2026-10-15T16:27:00.087Z"
+  },
+  "papers--c037": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c037",
+   "note": "",
+   "types": [
+    "describes_training_objective"
+   ],
+   "updatedAt": "2026-10-15T16:27:11.404Z"
+  },
+  "papers--c038": {
+   "action": "own",
+   "genre": "papers",
+   "id": "c038",
+   "note": "",
+   "types": [
+    "method_comparison"
+   ],
+   "updatedAt": "2026-10-15T16:27:20.820Z"
+  },
+  "papers--c039": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c039",
+   "note": "",
+   "types": [
+    "describes_method_details"
+   ],
+   "updatedAt": "2026-10-15T16:27:36.537Z"
+  },
+  "papers--c040": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c040",
+   "note": "",
+   "types": [
+    "states_difference_from_prior_work"
+   ],
+   "updatedAt": "2026-10-15T16:27:47.237Z"
+  },
+  "papers--c041": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c041",
+   "note": "",
+   "types": [
+    "specifies_hyperparameters"
+   ],
+   "updatedAt": "2026-10-15T16:28:13.320Z"
+  },
+  "papers--c042": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c042",
+   "note": "",
+   "types": [
+    "reviews_prior_work"
+   ],
+   "updatedAt": "2026-10-15T16:28:19.037Z"
+  },
+  "papers--c043": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c043",
+   "note": "",
+   "types": [
+    "states_theoretical_result"
+   ],
+   "updatedAt": "2026-10-15T16:28:25.637Z"
+  },
+  "papers--c044": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c044",
+   "note": "",
+   "types": [
+    "describes_algorithm_steps"
+   ],
+   "updatedAt": "2026-10-15T16:28:31.587Z"
+  },
+  "papers--c045": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c045",
+   "note": "",
+   "types": [
+    "describes_preprocessing"
+   ],
+   "updatedAt": "2026-10-15T16:28:38.137Z"
+  },
+  "papers--c046": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c046",
+   "note": "",
+   "types": [
+    "describes_annotation_process"
+   ],
+   "updatedAt": "2026-10-15T16:28:42.720Z"
+  },
+  "papers--c047": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c047",
+   "note": "",
+   "types": [
+    "uses_baselines"
+   ],
+   "updatedAt": "2026-10-15T16:28:48.554Z"
+  },
+  "papers--c048": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c048",
+   "note": "",
+   "types": [
+    "reports_observations"
+   ],
+   "updatedAt": "2026-10-15T16:28:54.853Z"
+  },
+  "papers--c049": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c049",
+   "note": "",
+   "types": [
+    "states_method_advantages"
+   ],
+   "updatedAt": "2026-10-15T16:29:10.587Z"
+  },
+  "papers--c050": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c050",
+   "note": "",
+   "types": [
+    "proposes_method"
+   ],
+   "updatedAt": "2026-10-15T16:29:23.920Z"
+  },
+  "papers--c051": {
+   "action": "own",
+   "genre": "papers",
+   "id": "c051",
+   "note": "",
+   "types": [
+    "training_process_description"
+   ],
+   "updatedAt": "2026-10-15T16:29:43.136Z"
+  },
+  "papers--c052": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c052",
+   "note": "",
+   "types": [
+    "discloses_funding"
+   ],
+   "updatedAt": "2026-10-15T16:29:55.753Z"
+  },
+  "papers--c053": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c053",
+   "note": "",
+   "types": [
+    "motivates_problem"
+   ],
+   "updatedAt": "2026-10-15T16:30:18.236Z"
+  },
+  "papers--c054": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c054",
+   "note": "",
+   "types": [
+    "reports_dataset_statistics"
+   ],
+   "updatedAt": "2026-10-15T16:31:19.135Z"
+  },
+  "papers--c055": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c055",
+   "note": "",
+   "types": [
+    "acknowledges_contributors"
+   ],
+   "updatedAt": "2026-10-15T16:31:24.368Z"
+  },
+  "papers--c056": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c056",
+   "note": "",
+   "types": [
+    "describes_method_details"
+   ],
+   "updatedAt": "2026-10-15T16:31:44.485Z"
+  },
+  "papers--c057": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c057",
+   "note": "",
+   "types": [
+    "ethics_and_declarations"
+   ],
+   "updatedAt": "2026-10-15T16:31:50.001Z"
+  },
+  "papers--c058": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c058",
+   "note": "",
+   "types": [
+    "claims_broader_applicability"
+   ],
+   "updatedAt": "2026-10-15T16:31:54.918Z"
+  },
+  "papers--c059": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c059",
+   "note": "",
+   "types": [
+    "describes_method_details"
+   ],
+   "updatedAt": "2026-10-15T16:31:59.685Z"
+  },
+  "papers--c060": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c060",
+   "note": "",
+   "types": [
+    "proves_or_derives"
+   ],
+   "updatedAt": "2026-10-15T16:32:08.351Z"
+  },
+  "papers--c061": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c061",
+   "note": "",
+   "types": [
+    "gives_illustrative_example"
+   ],
+   "updatedAt": "2026-10-15T16:32:14.785Z"
+  },
+  "papers--c062": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c062",
+   "note": "",
+   "types": [
+    "reports_experimental_results"
+   ],
+   "updatedAt": "2026-10-15T16:32:21.051Z"
+  },
+  "papers--c063": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c063",
+   "note": "",
+   "types": [
+    "fine_tunes_pretrained_model"
+   ],
+   "updatedAt": "2026-10-15T16:32:25.851Z"
+  },
+  "papers--c064": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c064",
+   "note": "",
+   "types": [
+    "introduces_dataset_or_benchmark"
+   ],
+   "updatedAt": "2026-10-15T16:33:30.934Z"
+  },
+  "papers--c065": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c065",
+   "note": "",
+   "types": [
+    "describes_method_details"
+   ],
+   "updatedAt": "2026-10-15T16:34:41.549Z"
+  },
+  "papers--c066": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c066",
+   "note": "",
+   "types": [
+    "describes_method_details"
+   ],
+   "updatedAt": "2026-10-15T16:34:48.849Z"
+  },
+  "papers--c067": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c067",
+   "note": "",
+   "types": [
+    "describes_method_details"
+   ],
+   "updatedAt": "2026-10-15T16:34:55.750Z"
+  },
+  "papers--c068": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c068",
+   "note": "",
+   "types": [
+    "describes_method_details"
+   ],
+   "updatedAt": "2026-10-15T16:35:09.682Z"
+  },
+  "papers--c069": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c069",
+   "note": "",
+   "types": [
+    "describes_model_architecture"
+   ],
+   "updatedAt": "2026-10-15T11:28:12.259Z"
+  },
+  "papers--c070": {
+   "action": "own",
+   "genre": "papers",
+   "id": "c070",
+   "note": "",
+   "types": [
+    "introduces_regularization"
+   ],
+   "updatedAt": "2026-10-15T16:35:38.682Z"
+  },
+  "papers--c071": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c071",
+   "note": "",
+   "types": [
+    "specifies_compute_resources"
+   ],
+   "updatedAt": "2026-10-15T16:35:51.832Z"
+  },
+  "papers--c072": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c072",
+   "note": "",
+   "types": [
+    "reports_observations"
+   ],
+   "updatedAt": "2026-10-15T16:35:59.166Z"
+  },
+  "papers--c073": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c073",
+   "note": "",
+   "types": [
+    "describes_data_augmentation"
+   ],
+   "updatedAt": "2026-10-15T16:46:09.983Z"
+  },
+  "papers--c074": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c074",
+   "note": "",
+   "types": [
+    "states_theoretical_result"
+   ],
+   "updatedAt": "2026-10-15T16:46:31.628Z"
+  },
+  "papers--c075": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c075",
+   "note": "",
+   "types": [
+    "reports_variance_or_significance"
+   ],
+   "updatedAt": "2026-10-15T16:46:35.918Z"
+  },
+  "papers--c076": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c076",
+   "note": "",
+   "types": [
+    "describes_method_details"
+   ],
+   "updatedAt": "2026-10-15T16:47:11.294Z"
+  },
+  "papers--c077": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c077",
+   "note": "",
+   "types": [
+    "reports_ablation_or_improvement"
+   ],
+   "updatedAt": "2026-10-15T16:47:52.744Z"
+  },
+  "papers--c078": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c078",
+   "note": "",
+   "types": [
+    "describes_method_details"
+   ],
+   "updatedAt": "2026-10-15T16:48:05.977Z"
+  },
+  "papers--c079": {
+   "action": "accept",
+   "genre": "papers",
+   "id": "c079",
+   "note": "",
+   "types": [
+    "proves_or_derives"
+   ],
+   "updatedAt": "2026-10-15T16:48:13.877Z"
+  },
+  "privacy--c000": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c000",
+   "note": "",
+   "types": [
+    "uses_cookies"
+   ],
+   "updatedAt": "2026-10-15T07:12:31.155Z"
+  },
+  "privacy--c001": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c001",
+   "note": "",
+   "types": [
+    "collects_usage_data_automatically"
+   ],
+   "updatedAt": "2026-10-15T07:16:50.787Z"
+  },
+  "privacy--c002": {
+   "action": "own",
+   "genre": "privacy",
+   "id": "c002",
+   "note": "",
+   "types": [
+    "data_collection_methods"
+   ],
+   "updatedAt": "2026-10-15T07:24:00.417Z"
+  },
+  "privacy--c003": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c003",
+   "note": "",
+   "types": [
+    "discloses_when_legally_required"
+   ],
+   "updatedAt": "2026-10-15T07:26:03.648Z"
+  },
+  "privacy--c004": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c004",
+   "note": "",
+   "types": [
+    "does_not_sell_or_share"
+   ],
+   "updatedAt": "2026-10-15T07:26:51.998Z"
+  },
+  "privacy--c005": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c005",
+   "note": "",
+   "types": [
+    "opt_out_of_communications"
+   ],
+   "updatedAt": "2026-10-15T07:31:17.812Z"
+  },
+  "privacy--c006": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c006",
+   "note": "",
+   "types": [
+    "sends_marketing_communications"
+   ],
+   "updatedAt": "2026-10-15T07:34:12.160Z"
+  },
+  "privacy--c007": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c007",
+   "note": "",
+   "types": [
+    "states_security_measures"
+   ],
+   "updatedAt": "2026-10-15T07:34:52.309Z"
+  },
+  "privacy--c008": {
+   "action": "split",
+   "genre": "privacy",
+   "id": "c008",
+   "note": "",
+   "types": [
+    "data_use_for_services_a",
+    "data_use_for_services_b"
+   ],
+   "updatedAt": "2026-10-15T07:35:47.442Z"
+  },
+  "privacy--c009": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c009",
+   "note": "",
+   "types": [
+    "third_party_sites_and_their_policies"
+   ],
+   "updatedAt": "2026-10-15T07:37:08.991Z"
+  },
+  "privacy--c010": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c010",
+   "note": "",
+   "types": [
+    "third_party_sites_and_their_policies"
+   ],
+   "updatedAt": "2026-10-15T07:37:16.307Z"
+  },
+  "privacy--c011": {
+   "action": "own",
+   "genre": "privacy",
+   "id": "c011",
+   "note": "",
+   "types": [
+    "policy_coverage"
+   ],
+   "updatedAt": "2026-10-15T07:38:23.057Z"
+  },
+  "privacy--c012": {
+   "action": "own",
+   "genre": "privacy",
+   "id": "c012",
+   "note": "",
+   "types": [
+    "user_data_control"
+   ],
+   "updatedAt": "2026-10-15T07:44:04.739Z"
+  },
+  "privacy--c013": {
+   "action": "own",
+   "genre": "privacy",
+   "id": "c013",
+   "note": "",
+   "types": [
+    "discloses_public_areas"
+   ],
+   "updatedAt": "2026-10-15T07:48:26.390Z"
+  },
+  "privacy--c014": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c014",
+   "note": "",
+   "types": [
+    "provides_privacy_contact"
+   ],
+   "updatedAt": "2026-10-15T07:48:49.106Z"
+  },
+  "privacy--c015": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c015",
+   "note": "",
+   "types": [
+    "reserves_right_to_change_policy"
+   ],
+   "updatedAt": "2026-10-15T07:49:31.256Z"
+  },
+  "privacy--c016": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c016",
+   "note": "",
+   "types": [
+    "security_not_guaranteed"
+   ],
+   "updatedAt": "2026-10-15T07:49:49.706Z"
+  },
+  "privacy--c017": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c017",
+   "note": "",
+   "types": [
+    "states_policy_scope_and_commitment"
+   ],
+   "updatedAt": "2026-10-15T07:50:30.472Z"
+  },
+  "privacy--c018": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c018",
+   "note": "",
+   "types": [
+    "advises_users_on_security"
+   ],
+   "updatedAt": "2026-10-15T07:51:11.222Z"
+  },
+  "privacy--c019": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c019",
+   "note": "",
+   "types": [
+    "states_minimum_age"
+   ],
+   "updatedAt": "2026-10-15T07:52:32.987Z"
+  },
+  "privacy--c020": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c020",
+   "note": "",
+   "types": [
+    "encrypts_data_in_transit"
+   ],
+   "updatedAt": "2026-10-15T07:52:48.704Z"
+  },
+  "privacy--c021": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c021",
+   "note": "",
+   "types": [
+    "states_information_required_to_register"
+   ],
+   "updatedAt": "2026-10-15T07:54:50.786Z"
+  },
+  "privacy--c022": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c022",
+   "note": "",
+   "types": [
+    "browser_cookie_controls"
+   ],
+   "updatedAt": "2026-10-15T07:54:59.686Z"
+  },
+  "privacy--c023": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c023",
+   "note": "",
+   "types": [
+    "disclaims_control_of_third_party_cookies"
+   ],
+   "updatedAt": "2026-10-15T07:55:35.602Z"
+  },
+  "privacy--c024": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c024",
+   "note": "",
+   "types": [
+    "shares_with_service_providers"
+   ],
+   "updatedAt": "2026-10-15T07:55:47.736Z"
+  },
+  "privacy--c025": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c025",
+   "note": "",
+   "types": [
+    "governing_law_and_disputes"
+   ],
+   "updatedAt": "2026-10-15T07:56:37.951Z"
+  },
+  "privacy--c026": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c026",
+   "note": "",
+   "types": [
+    "states_retention_period"
+   ],
+   "updatedAt": "2026-10-15T07:57:03.868Z"
+  },
+  "privacy--c027": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c027",
+   "note": "",
+   "types": [
+    "tracking_data_not_linked_to_identity"
+   ],
+   "updatedAt": "2026-10-15T07:57:24.351Z"
+  },
+  "privacy--c028": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c028",
+   "note": "",
+   "types": [
+    "uses_data_to_improve_services"
+   ],
+   "updatedAt": "2026-10-15T07:57:36.918Z"
+  },
+  "privacy--c029": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c029",
+   "note": "",
+   "types": [
+    "consent_by_use"
+   ],
+   "updatedAt": "2026-10-15T07:57:58.651Z"
+  },
+  "privacy--c030": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c030",
+   "note": "",
+   "types": [
+    "shares_with_affiliates_and_partners"
+   ],
+   "updatedAt": "2026-10-15T07:58:05.384Z"
+  },
+  "privacy--c031": {
+   "action": "split",
+   "genre": "privacy",
+   "id": "c031",
+   "note": "",
+   "types": [
+    "disclose_data_rights_a",
+    "disclose_data_rights_b"
+   ],
+   "updatedAt": "2026-10-15T07:58:32.967Z"
+  },
+  "privacy--c032": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c032",
+   "note": "",
+   "types": [
+    "sends_marketing_communications"
+   ],
+   "updatedAt": "2026-10-15T07:58:46.017Z"
+  },
+  "privacy--c033": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c033",
+   "note": "",
+   "types": [
+    "transfers_data_in_business_transfer"
+   ],
+   "updatedAt": "2026-10-15T07:58:55.900Z"
+  },
+  "privacy--c034": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c034",
+   "note": "",
+   "types": [
+    "warns_disabling_cookies_limits_site"
+   ],
+   "updatedAt": "2026-10-15T07:59:05.183Z"
+  },
+  "privacy--c035": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c035",
+   "note": "",
+   "types": [
+    "opt_out_of_tracking_or_ads"
+   ],
+   "updatedAt": "2026-10-15T07:59:11.533Z"
+  },
+  "privacy--c036": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c036",
+   "note": "",
+   "types": [
+    "scope_excludes_third_party_sites"
+   ],
+   "updatedAt": "2026-10-15T07:59:16.716Z"
+  },
+  "privacy--c037": {
+   "action": "split",
+   "genre": "privacy",
+   "id": "c037",
+   "note": "",
+   "types": [
+    "content_and_usage_restrictions_a",
+    "content_and_usage_restrictions_b"
+   ],
+   "updatedAt": "2026-10-15T07:59:32.550Z"
+  },
+  "privacy--c038": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c038",
+   "note": "",
+   "types": [
+    "complies_with_laws_and_programs"
+   ],
+   "updatedAt": "2026-10-15T08:00:10.012Z"
+  },
+  "privacy--c039": {
+   "action": "own",
+   "genre": "privacy",
+   "id": "c039",
+   "note": "",
+   "types": [
+    "cookie_non_identification"
+   ],
+   "updatedAt": "2026-10-15T08:00:36.126Z"
+  },
+  "privacy--c040": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c040",
+   "note": "",
+   "types": [
+    "transfers_data_internationally"
+   ],
+   "updatedAt": "2026-10-15T08:00:49.126Z"
+  },
+  "privacy--c041": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c041",
+   "note": "",
+   "types": [
+    "no_knowing_collection_from_children"
+   ],
+   "updatedAt": "2026-10-15T08:00:56.375Z"
+  },
+  "privacy--c042": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c042",
+   "note": "",
+   "types": [
+    "third_party_advertising_and_cookies"
+   ],
+   "updatedAt": "2026-10-15T08:01:02.875Z"
+  },
+  "privacy--c043": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c043",
+   "note": "",
+   "types": [
+    "does_not_sell_or_share"
+   ],
+   "updatedAt": "2026-10-15T08:01:48.208Z"
+  },
+  "privacy--c044": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c044",
+   "note": "",
+   "types": [
+    "shares_aggregated_data"
+   ],
+   "updatedAt": "2026-10-15T08:01:54.041Z"
+  },
+  "privacy--c045": {
+   "action": "split",
+   "genre": "privacy",
+   "id": "c045",
+   "note": "",
+   "types": [
+    "data_collection_contests_surveys_a",
+    "data_collection_contests_surveys_b"
+   ],
+   "updatedAt": "2026-10-15T08:03:31.524Z"
+  },
+  "privacy--c046": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c046",
+   "note": "",
+   "types": [
+    "opt_out_of_communications"
+   ],
+   "updatedAt": "2026-10-15T08:03:40.040Z"
+  },
+  "privacy--c047": {
+   "action": "split",
+   "genre": "privacy",
+   "id": "c047",
+   "note": "",
+   "types": [
+    "company_identification_and_service_definition_a",
+    "company_identification_and_service_definition_b"
+   ],
+   "updatedAt": "2026-10-15T08:04:15.857Z"
+  },
+  "privacy--c048": {
+   "action": "own",
+   "genre": "privacy",
+   "id": "c048",
+   "note": "",
+   "types": [
+    "provides_contact_information_about_privacy"
+   ],
+   "updatedAt": "2026-10-15T08:05:37.272Z"
+  },
+  "privacy--c049": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c049",
+   "note": "",
+   "types": [
+    "third_party_advertising_and_cookies"
+   ],
+   "updatedAt": "2026-10-15T08:05:46.072Z"
+  },
+  "privacy--c050": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c050",
+   "note": "",
+   "types": [
+    "uses_cookies"
+   ],
+   "updatedAt": "2026-10-15T08:05:55.371Z"
+  },
+  "privacy--c051": {
+   "action": "own",
+   "genre": "privacy",
+   "id": "c051",
+   "note": "",
+   "types": [
+    "access_restriction"
+   ],
+   "updatedAt": "2026-10-15T08:06:37.522Z"
+  },
+  "privacy--c052": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c052",
+   "note": "",
+   "types": [
+    "uses_web_beacons"
+   ],
+   "updatedAt": "2026-10-15T08:06:43.688Z"
+  },
+  "privacy--c053": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c053",
+   "note": "",
+   "types": [
+    "third_party_advertising_and_cookies"
+   ],
+   "updatedAt": "2026-10-15T08:06:53.205Z"
+  },
+  "privacy--c054": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c054",
+   "note": "",
+   "types": [
+    "deletion_on_request"
+   ],
+   "updatedAt": "2026-10-15T08:06:57.771Z"
+  },
+  "privacy--c055": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c055",
+   "note": "",
+   "types": [
+    "shares_with_service_providers"
+   ],
+   "updatedAt": "2026-10-15T08:07:06.437Z"
+  },
+  "privacy--c056": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c056",
+   "note": "",
+   "types": [
+    "states_how_changes_are_notified"
+   ],
+   "updatedAt": "2026-10-15T08:07:22.904Z"
+  },
+  "privacy--c057": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c057",
+   "note": "",
+   "types": [
+    "uses_data_to_personalize"
+   ],
+   "updatedAt": "2026-10-15T08:07:27.771Z"
+  },
+  "privacy--c058": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c058",
+   "note": "",
+   "types": [
+    "third_party_advertising_and_cookies"
+   ],
+   "updatedAt": "2026-10-15T08:08:16.104Z"
+  },
+  "privacy--c059": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c059",
+   "note": "",
+   "types": [
+    "information_provision_is_optional"
+   ],
+   "updatedAt": "2026-10-15T08:08:26.187Z"
+  },
+  "privacy--c060": {
+   "action": "own",
+   "genre": "privacy",
+   "id": "c060",
+   "note": "",
+   "types": [
+    "log_file_data_collection"
+   ],
+   "updatedAt": "2026-10-15T08:08:37.304Z"
+  },
+  "privacy--c061": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c061",
+   "note": "",
+   "types": [
+    "states_how_changes_are_notified"
+   ],
+   "updatedAt": "2026-10-15T08:08:45.736Z"
+  },
+  "privacy--c062": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c062",
+   "note": "",
+   "types": [
+    "information_provision_is_optional"
+   ],
+   "updatedAt": "2026-10-15T08:09:04.120Z"
+  },
+  "privacy--c063": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c063",
+   "note": "",
+   "types": [
+    "states_last_updated_date"
+   ],
+   "updatedAt": "2026-10-15T08:10:12.619Z"
+  },
+  "privacy--c064": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c064",
+   "note": "",
+   "types": [
+    "third_party_sites_and_their_policies"
+   ],
+   "updatedAt": "2026-10-15T08:10:22.869Z"
+  },
+  "privacy--c065": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c065",
+   "note": "",
+   "types": [
+    "stores_data_securely"
+   ],
+   "updatedAt": "2026-10-15T08:10:27.202Z"
+  },
+  "privacy--c066": {
+   "action": "own",
+   "genre": "privacy",
+   "id": "c066",
+   "note": "",
+   "types": [
+    "provides_third_party_links"
+   ],
+   "updatedAt": "2026-10-15T08:10:41.501Z"
+  },
+  "privacy--c067": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c067",
+   "note": "",
+   "types": [
+    "states_how_changes_are_notified"
+   ],
+   "updatedAt": "2026-10-15T08:11:32.168Z"
+  },
+  "privacy--c068": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c068",
+   "note": "",
+   "types": [
+    "deletes_children_data_if_found"
+   ],
+   "updatedAt": "2026-10-15T08:11:36.818Z"
+  },
+  "privacy--c069": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c069",
+   "note": "",
+   "types": [
+    "defines_personal_information"
+   ],
+   "updatedAt": "2026-10-15T08:11:41.701Z"
+  },
+  "privacy--c070": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c070",
+   "note": "",
+   "types": [
+    "does_not_store_payment_cards"
+   ],
+   "updatedAt": "2026-10-15T08:11:46.168Z"
+  },
+  "privacy--c071": {
+   "action": "own",
+   "genre": "privacy",
+   "id": "c071",
+   "note": "",
+   "types": [
+    "provides_contact_information"
+   ],
+   "updatedAt": "2026-10-15T08:12:15.384Z"
+  },
+  "privacy--c072": {
+   "action": "own",
+   "genre": "privacy",
+   "id": "c072",
+   "note": "",
+   "types": [
+    "confidentiality_requirements"
+   ],
+   "updatedAt": "2026-10-15T08:12:26.234Z"
+  },
+  "privacy--c073": {
+   "action": "accept",
+   "genre": "privacy",
+   "id": "c073",
+   "note": "",
+   "types": [
+    "continued_use_means_acceptance"
+   ],
+   "updatedAt": "2026-10-15T08:12:36.567Z"
+  }
+ },
+ "items": {
+  "papers--acknowledges_contributors": {
+   "checked": true,
+   "definition": "Thanks people (colleagues, reviewers, annotators) for contributions, feedback or discussions.",
+   "genre": "papers",
+   "id": "acknowledges_contributors",
+   "near_miss": "The authors disclose the sources of funding that support their work.",
+   "removed": false,
+   "section_hint": "under a heading like 'acknowledgements', near the end of the document",
+   "updatedAt": "2026-10-15T17:11:05.511Z"
+  },
+  "papers--assumption_and_distribution_a": {
+   "checked": true,
+   "definition": "States that the authors make assumptions about the distributions of variables, often specifying the type of distribution or the conditions under which these distributions are used.",
+   "genre": "papers",
+   "id": "assumption_and_distribution_a",
+   "near_miss": "",
+   "removed": false,
+   "section_hint": "",
+   "updatedAt": "2026-10-15T17:11:17.495Z"
+  },
+  "papers--assumption_and_distribution_b": {
+   "checked": true,
+   "definition": "States that the authors make assumptions about the distributions of variables, often specifying the type of distribution or the conditions under which these distributions are used.",
+   "genre": "papers",
+   "id": "assumption_and_distribution_b",
+   "near_miss": "",
+   "removed": false,
+   "section_hint": "",
+   "updatedAt": "2026-10-15T17:11:19.561Z"
+  },
+  "papers--claims_broader_applicability": {
+   "checked": true,
+   "definition": "States that the method or framework can be applied or generalised to other domains, tasks or settings.",
+   "genre": "papers",
+   "id": "claims_broader_applicability",
+   "near_miss": "The authors suggest future work on the framework.",
+   "removed": false,
+   "section_hint": "under a heading like 'introduction', in the first half of the document",
+   "updatedAt": "2026-10-15T16:50:14.442Z"
+  },
+  "papers--code_and_data_availability": {
+   "checked": true,
+   "definition": "States whether and where the code, data or models are released (URL, repository, on request), and under what licence.",
+   "genre": "papers",
+   "id": "code_and_data_availability",
+   "near_miss": "The authors disclose the sources of funding that support their work.",
+   "removed": false,
+   "section_hint": "in the second half of the document",
+   "updatedAt": "2026-10-15T17:11:02.145Z"
+  },
+  "papers--defines_notation": {
+   "checked": true,
+   "definition": "Defines the mathematical or symbolic notation used in the paper.",
+   "genre": "papers",
+   "id": "defines_notation",
+   "near_miss": "The authors direct the reader to the appendix for more details.",
+   "removed": false,
+   "section_hint": "in the first half of the document",
+   "updatedAt": "2026-10-15T16:50:16.742Z"
+  },
+  "papers--describes_algorithm_steps": {
+   "checked": true,
+   "definition": "Describes an algorithm step by step (initialisation, iterations, termination), often with reference to pseudocode.",
+   "genre": "papers",
+   "id": "describes_algorithm_steps",
+   "near_miss": "The authors propose a novel algorithm named ${\\tt LyOn}$ for solving constrained bandit optimization problems.",
+   "removed": false,
+   "section_hint": "in the first half of the document",
+   "updatedAt": "2026-10-15T16:50:43.492Z"
+  },
+  "papers--describes_annotation_process": {
+   "checked": true,
+   "definition": "Describes how data was annotated (guidelines, who annotated, how annotators were recruited or trained, agreement).",
+   "genre": "papers",
+   "id": "describes_annotation_process",
+   "near_miss": "The authors state that the content of their work represents their own opinion and not necessarily that of their employers or sponsors.",
+   "removed": false,
+   "section_hint": "in the first half of the document",
+   "updatedAt": "2026-10-15T16:55:40.139Z"
+  },
+  "papers--describes_comparison_to_related_work": {
+   "checked": true,
+   "definition": "Describes the specific metrics or methods used to evaluate the performance of models or methods, including precision, recall, F1 score, and other quantitative or qualitative measures.",
+   "genre": "papers",
+   "id": "describes_comparison_to_related_work",
+   "near_miss": "",
+   "removed": false,
+   "section_hint": "",
+   "updatedAt": "2026-10-15T17:11:15.478Z"
+  },
+  "papers--describes_data_augmentation": {
+   "checked": true,
+   "definition": "Describes how training data is augmented (transformations, synthetic variants, back-translation).",
+   "genre": "papers",
+   "id": "describes_data_augmentation",
+   "near_miss": "The authors use a specific procedure to generate synthetic data.",
+   "removed": false,
+   "section_hint": "under a heading like 'data augmentation', in the first half of the document",
+   "updatedAt": "2026-10-15T16:50:59.309Z"
+  },
+  "papers--describes_data_split": {
+   "checked": true,
+   "definition": "States how the data is divided into training, validation and test sets (proportions, sizes, or the standard split used).",
+   "genre": "papers",
+   "id": "describes_data_split",
+   "near_miss": "The authors describe the dataset they use for their experiments.",
+   "removed": false,
+   "section_hint": "in the second half of the document",
+   "updatedAt": "2026-10-15T16:52:34.241Z"
+  },
+  "papers--describes_datasets": {
+   "checked": true,
+   "definition": "Describes the datasets used (source, content, domain, language), crediting where they come from.",
+   "genre": "papers",
+   "id": "describes_datasets",
+   "near_miss": "The authors report the size of the datasets used in their experiments.",
+   "removed": false,
+   "section_hint": "in the first half of the document",
+   "updatedAt": "2026-10-15T16:51:25.325Z"
+  },
+  "papers--describes_evaluation_metrics_a": {
+   "checked": true,
+   "definition": "Describes the specific metrics or methods used to evaluate the performance of models or methods, including precision, recall, F1 score, and other quantitative or qualitative measures.",
+   "genre": "papers",
+   "id": "describes_evaluation_metrics_a",
+   "near_miss": "",
+   "removed": false,
+   "section_hint": "",
+   "updatedAt": "2026-10-15T17:11:12.228Z"
+  },
+  "papers--describes_method_details": {
+   "checked": true,
+   "definition": "Describes how a specific technique or component of the approach works (for example a graph construction, a sampling scheme, a classifier, a decomposition), when no more specific method type applies.",
+   "genre": "papers",
+   "id": "describes_method_details",
+   "near_miss": "The authors define the action value function of a policy in terms of a trajectory generated by rolling out in the environment following the policy.",
+   "removed": false,
+   "section_hint": "in the first half of the document",
+   "updatedAt": "2026-10-15T16:50:48.242Z"
+  },
+  "papers--describes_model_architecture": {
+   "checked": true,
+   "definition": "Describes the structure of the model or system (layers, modules, components and how they connect).",
+   "genre": "papers",
+   "id": "describes_model_architecture",
+   "near_miss": "The authors initialize their model with the architecture and weights of a pre-existing visual language model and then finetune it for a specific task.",
+   "removed": false,
+   "section_hint": "in the first half of the document",
+   "updatedAt": "2026-10-15T16:50:35.841Z"
+  },
+  "papers--describes_preprocessing": {
+   "checked": true,
+   "definition": "Describes how data is preprocessed, filtered or cleaned before use (tokenisation, normalisation, removal of noisy or irrelevant items).",
+   "genre": "papers",
+   "id": "describes_preprocessing",
+   "near_miss": "The authors describe data augmentation as a method for creating variations of existing data.",
+   "removed": false,
+   "section_hint": "in the second half of the document",
+   "updatedAt": "2026-10-15T16:55:10.472Z"
+  },
+  "papers--describes_training_objective": {
+   "checked": true,
+   "definition": "Describes the loss function or training objective, including regularisation terms.",
+   "genre": "papers",
+   "id": "describes_training_objective",
+   "near_miss": "The authors describe the update process for the regressor and EMA via SGD.",
+   "removed": false,
+   "section_hint": "in the first half of the document",
+   "updatedAt": "2026-10-15T16:50:38.492Z"
+  },
+  "papers--describes_training_procedure": {
+   "checked": true,
+   "definition": "Describes how the model is trained or optimised (training steps, update rules, optimisation algorithm, initialisation).",
+   "genre": "papers",
+   "id": "describes_training_procedure",
+   "near_miss": "The authors initialize their model with the architecture and weights of a pre-existing visual language model and then finetune it for a specific task.",
+   "removed": false,
+   "section_hint": "in the first half of the document",
+   "updatedAt": "2026-10-15T16:50:40.859Z"
+  },
+  "papers--discloses_funding": {
+   "checked": true,
+   "definition": "Names the funding sources, grants or projects that supported the work.",
+   "genre": "papers",
+   "id": "discloses_funding",
+   "near_miss": "The authors thank specific individuals for their assistance and feedback.",
+   "removed": false,
+   "section_hint": "under a heading like 'acknowledgments', near the end of the document",
+   "updatedAt": "2026-10-15T17:11:04.011Z"
+  },
+  "papers--discusses_societal_impact_or_misuse": {
+   "checked": true,
+   "definition": "Discusses the broader societal impact of the work, including possible misuse, bias or harm and any safeguards.",
+   "genre": "papers",
+   "id": "discusses_societal_impact_or_misuse",
+   "near_miss": "The authors describe the prevalence of false and misleading information about COVID-19 in digital spaces.",
+   "removed": false,
+   "section_hint": "in a 'Broader impact' or 'Ethics' section near the end, or in the conclusion",
+   "updatedAt": "2026-10-15T17:11:09.278Z"
+  },
+  "papers--ethics_and_declarations": {
+   "checked": true,
+   "definition": "Makes a formal declaration about the research (ethics statement, ethics approval or consent, competing interests, that views are the authors' own, how participants were paid or who they were).",
+   "genre": "papers",
+   "id": "ethics_and_declarations",
+   "near_miss": "The authors disclose the sources of funding that support their work.",
+   "removed": false,
+   "section_hint": "in the second half of the document",
+   "updatedAt": "2026-10-15T17:11:07.095Z"
+  },
+  "papers--fine_tunes_pretrained_model": {
+   "checked": true,
+   "definition": "States that a pre-trained model is fine-tuned on the task or data, with what model and data.",
+   "genre": "papers",
+   "id": "fine_tunes_pretrained_model",
+   "near_miss": "The authors describe the update process for the regressor and EMA via SGD.",
+   "removed": false,
+   "section_hint": "in the first half of the document",
+   "updatedAt": "2026-10-15T16:50:51.775Z"
+  },
+  "papers--generates_synthetic_data": {
+   "checked": true,
+   "definition": "Describes how synthetic or simulated data is generated for experiments.",
+   "genre": "papers",
+   "id": "generates_synthetic_data",
+   "near_miss": "The authors describe data augmentation as a method for creating variations of existing data.",
+   "removed": false,
+   "section_hint": "in the second half of the document",
+   "updatedAt": "2026-10-15T16:55:27.156Z"
+  },
+  "papers--gives_illustrative_example": {
+   "checked": true,
+   "definition": "Gives a worked or illustrative example to explain a concept, method or result.",
+   "genre": "papers",
+   "id": "gives_illustrative_example",
+   "near_miss": "The authors visualize results using bar graphs.",
+   "removed": false,
+   "section_hint": "in the first half of the document",
+   "updatedAt": "2026-10-15T16:51:02.175Z"
+  },
+  "papers--introduces_dataset_or_benchmark": {
+   "checked": true,
+   "definition": "Introduces a new dataset or benchmark created by the authors and describes its design and purpose.",
+   "genre": "papers",
+   "id": "introduces_dataset_or_benchmark",
+   "near_miss": "The authors conduct extensive experiments on real-world datasets to demonstrate the effectiveness of their methods.",
+   "removed": true,
+   "section_hint": "under a heading like 'introduction', in the first half of the document",
+   "updatedAt": "2026-10-15T16:51:40.875Z"
+  },
+  "papers--introduces_regularization": {
+   "checked": true,
+   "definition": "Introduces or describes the use of regularization techniques in the loss function or model formulation to improve performance or prevent overfitting.",
+   "genre": "papers",
+   "id": "introduces_regularization",
+   "near_miss": "",
+   "removed": false,
+   "section_hint": "",
+   "updatedAt": "2026-10-15T17:11:40.077Z"
+  },
+  "papers--mdp_component_definition_a": {
+   "checked": true,
+   "definition": "Defines or describes components of a Markov Decision Process (MDP), including states, actions, transition functions, reward functions, and initial state distributions.",
+   "genre": "papers",
+   "id": "mdp_component_definition_a",
+   "near_miss": "",
+   "removed": false,
+   "section_hint": "",
+   "updatedAt": "2026-10-15T17:11:21.395Z"
+  },
+  "papers--mdp_component_definition_b": {
+   "checked": true,
+   "definition": "Defines or describes components of a Markov Decision Process (MDP), including states, actions, transition functions, reward functions, and initial state distributions.",
+   "genre": "papers",
+   "id": "mdp_component_definition_b",
+   "near_miss": "",
+   "removed": false,
+   "section_hint": "",
+   "updatedAt": "2026-10-15T17:11:22.961Z"
+  },
+  "papers--method_comparison": {
+   "checked": true,
+   "definition": "Compares the authors' method with other existing methods, algorithms, or baselines to evaluate performance.",
+   "genre": "papers",
+   "id": "method_comparison",
+   "near_miss": "",
+   "removed": false,
+   "section_hint": "",
+   "updatedAt": "2026-10-15T17:11:35.528Z"
+  },
+  "papers--method_proposal": {
+   "checked": true,
+   "definition": "Proposes a new method, model, or framework, often with a specific name, to address a particular problem or improve an existing approach.",
+   "genre": "papers",
+   "id": "method_proposal",
+   "near_miss": "",
+   "removed": false,
+   "section_hint": "",
+   "updatedAt": "2026-10-15T17:11:28.794Z"
+  },
+  "papers--motivates_problem": {
+   "checked": true,
+   "definition": "States why the problem matters (its importance, prevalence, real-world risks or costs), usually in the introduction, without yet describing the authors' method.",
+   "genre": "papers",
+   "id": "motivates_problem",
+   "near_miss": "The authors state that the content of their work represents their own opinion and not necessarily that of their employers or sponsors.",
+   "removed": false,
+   "section_hint": "under a heading like 'introduction', in the first half of the document",
+   "updatedAt": "2026-10-15T16:48:55.627Z"
+  },
+  "papers--names_software_and_libraries": {
+   "checked": true,
+   "definition": "Names the software packages or libraries used to implement the method or experiments, sometimes with versions.",
+   "genre": "papers",
+   "id": "names_software_and_libraries",
+   "near_miss": "The authors describe the algorithm for discovering incremental skills, including the initialization and update steps.",
+   "removed": false,
+   "section_hint": "in the second half of the document",
+   "updatedAt": "2026-10-15T16:56:17.039Z"
+  },
+  "papers--performance_comparison": {
+   "checked": true,
+   "definition": "Reports that the authors' model or method outperforms other models or baselines on specific datasets or metrics.",
+   "genre": "papers",
+   "id": "performance_comparison",
+   "near_miss": "",
+   "removed": false,
+   "section_hint": "",
+   "updatedAt": "2026-10-15T17:11:34.244Z"
+  },
+  "papers--performance_comparison_across_other_works": {
+   "checked": true,
+   "definition": "Reports that the authors' method, approach, or system outperforms other methods, baselines, or state-of-the-art techniques in terms of various performance metrics or tasks.",
+   "genre": "papers",
+   "id": "performance_comparison_across_other_works",
+   "near_miss": "",
+   "removed": false,
+   "section_hint": "",
+   "updatedAt": "2026-10-15T17:11:30.411Z"
+  },
+  "papers--proposes_method": {
+   "checked": true,
+   "definition": "Announces the authors' proposed method, model, algorithm or framework, often by name, as the paper's contribution.",
+   "genre": "papers",
+   "id": "proposes_method",
+   "near_miss": "The authors state that their method differs from existing works in adopting a separate exploration policy.",
+   "removed": false,
+   "section_hint": "under a heading like 'abstract', in the first half of the document",
+   "updatedAt": "2026-10-15T16:49:59.642Z"
+  },
+  "papers--proves_or_derives": {
+   "checked": true,
+   "definition": "Carries out or reports steps of a proof or derivation (applying a lemma, deriving a bound or expression, establishing a property of a function).",
+   "genre": "papers",
+   "id": "proves_or_derives",
+   "near_miss": "The authors present a theorem that describes a condition for the optimal transport plan.",
+   "removed": false,
+   "section_hint": "in the second half of the document",
+   "updatedAt": "2026-10-15T16:50:30.908Z"
+  },
+  "papers--refers_to_appendix": {
+   "checked": true,
+   "definition": "Refers the reader to an appendix or supplementary material for further details, proofs or results.",
+   "genre": "papers",
+   "id": "refers_to_appendix",
+   "near_miss": "The authors disclose the sources of funding that support their work.",
+   "removed": false,
+   "section_hint": "under a heading like 'introduction', in the first half of the document",
+   "updatedAt": "2026-10-15T17:10:54.245Z"
+  },
+  "papers--reports_ablation_or_improvement": {
+   "checked": true,
+   "definition": "Reports the effect of adding, removing or changing a component of the method (ablations, improvements from a modification).",
+   "genre": "papers",
+   "id": "reports_ablation_or_improvement",
+   "near_miss": "The authors report that RadNet outperforms benchmark models across all metrics for the RadSet dataset.",
+   "removed": false,
+   "section_hint": "in the second half of the document",
+   "updatedAt": "2026-10-15T17:10:47.928Z"
+  },
+  "papers--reports_computational_cost": {
+   "checked": true,
+   "definition": "Reports or compares computational efficiency (time or memory complexity, training or inference time, resource use).",
+   "genre": "papers",
+   "id": "reports_computational_cost",
+   "near_miss": "The authors provide an upper bound for the expected regret of the BIAS-OFUL algorithm.",
+   "removed": false,
+   "section_hint": "in the second half of the document",
+   "updatedAt": "2026-10-15T17:10:14.529Z"
+  },
+  "papers--reports_dataset_statistics": {
+   "checked": true,
+   "definition": "Reports the size or other statistics of the datasets (number of examples, classes, tokens), often in a table.",
+   "genre": "papers",
+   "id": "reports_dataset_statistics",
+   "near_miss": "The authors describe the dataset they use for their experiments.",
+   "removed": false,
+   "section_hint": "in the second half of the document",
+   "updatedAt": "2026-10-15T16:52:28.307Z"
+  },
+  "papers--reports_experimental_results": {
+   "checked": true,
+   "definition": "Reports what the experiments showed for the authors' method (scores on datasets or tasks), without a direct comparison claim.",
+   "genre": "papers",
+   "id": "reports_experimental_results",
+   "near_miss": "The authors introduce a new benchmark suite, S2-VLUE, to evaluate their proposed methods.",
+   "removed": false,
+   "section_hint": "under a heading like 'abstract', in the second half of the document",
+   "updatedAt": "2026-10-15T17:10:44.628Z"
+  },
+  "papers--reports_observations": {
+   "checked": true,
+   "definition": "Reports qualitative observations, trends or findings from data or a study (differences between groups, participants' responses), rather than scores of a method.",
+   "genre": "papers",
+   "id": "reports_observations",
+   "near_miss": "The authors declare the mode of a predicate as an identity or inverse relationship with another predicate.",
+   "removed": false,
+   "section_hint": "in the second half of the document",
+   "updatedAt": "2026-10-15T17:10:52.062Z"
+  },
+  "papers--reports_variance_or_significance": {
+   "checked": true,
+   "definition": "States how reliable the results are (runs repeated over random seeds and averaged, standard deviations or error bars, significance tests).",
+   "genre": "papers",
+   "id": "reports_variance_or_significance",
+   "near_miss": "The authors train and evaluate the models using the same hyper-parameters as described in the original works.",
+   "removed": false,
+   "section_hint": "in the second half of the document",
+   "updatedAt": "2026-10-15T17:10:41.411Z"
+  },
+  "papers--reviews_prior_work": {
+   "checked": true,
+   "definition": "Reviews or cites previous work on the problem or on background methods, including recent advances in the field, without contrasting it with the authors' own contribution.",
+   "genre": "papers",
+   "id": "reviews_prior_work",
+   "near_miss": "The authors direct the reader to the appendix for more details.",
+   "removed": false,
+   "section_hint": "under a heading like 'related work', in the first half of the document",
+   "updatedAt": "2026-10-15T16:49:19.827Z"
+  },
+  "papers--specifies_compute_resources": {
+   "checked": true,
+   "definition": "States the hardware and computing environment used (GPUs, CPUs, memory, cluster), sometimes with run time.",
+   "genre": "papers",
+   "id": "specifies_compute_resources",
+   "near_miss": "The authors use a specific software library for their implementation.",
+   "removed": false,
+   "section_hint": "in the second half of the document",
+   "updatedAt": "2026-10-15T16:56:06.239Z"
+  },
+  "papers--specifies_hyperparameters": {
+   "checked": true,
+   "definition": "Reports hyperparameter values or how they were chosen (learning rate, batch size, epochs, search procedure), including using the same settings as another work for a fair comparison.",
+   "genre": "papers",
+   "id": "specifies_hyperparameters",
+   "near_miss": "The authors initialize their model with the architecture and weights of a pre-existing visual language model and then finetune it for a specific task.",
+   "removed": false,
+   "section_hint": "in the second half of the document",
+   "updatedAt": "2026-10-15T16:55:44.489Z"
+  },
+  "papers--states_difference_from_prior_work": {
+   "checked": true,
+   "definition": "States how the authors' work differs from, or is novel with respect to, specific prior work.",
+   "genre": "papers",
+   "id": "states_difference_from_prior_work",
+   "near_miss": "The authors propose a new method called SpliMe to leverage static embedding models for temporal knowledge graphs.",
+   "removed": true,
+   "section_hint": "under a heading like 'related work', in the first half of the document",
+   "updatedAt": "2026-10-15T16:49:21.510Z"
+  },
+  "papers--states_limitations_of_existing_approaches": {
+   "checked": true,
+   "definition": "States a limitation, weakness or open challenge of existing methods or prior work, usually to motivate the authors' approach.",
+   "genre": "papers",
+   "id": "states_limitations_of_existing_approaches",
+   "near_miss": "The authors acknowledge the lack of language variety as a limitation of their work.",
+   "removed": false,
+   "section_hint": "in the introduction or related work, in the first half of the document",
+   "updatedAt": "2026-10-15T17:10:58.395Z"
+  },
+  "papers--states_method_advantages": {
+   "checked": true,
+   "definition": "States an advantage of the proposed method, such as needing less data, no retraining or fewer resources than alternatives.",
+   "genre": "papers",
+   "id": "states_method_advantages",
+   "near_miss": "The authors enable both zero-shot and multi-task transfer learning.",
+   "removed": false,
+   "section_hint": "under a heading like 'abstract', in the first half of the document",
+   "updatedAt": "2026-10-15T16:50:03.259Z"
+  },
+  "papers--states_own_limitations": {
+   "checked": true,
+   "definition": "States a limitation or weakness of the authors' own method, data, experiments or claims (what it cannot do, where it fails, what it assumes).",
+   "genre": "papers",
+   "id": "states_own_limitations",
+   "near_miss": "The authors discuss the limitations of pre-trained language models due to differences in word distributions between general and financial corpora.",
+   "removed": false,
+   "section_hint": "in a 'Limitations' or 'Discussion' section, or the conclusion, near the end of the document",
+   "updatedAt": "2026-10-15T17:10:56.094Z"
+  },
+  "papers--states_theoretical_result": {
+   "checked": true,
+   "definition": "States a theorem or formal guarantee (convergence, regret or error bounds, properties of an estimator) as a result of the paper.",
+   "genre": "papers",
+   "id": "states_theoretical_result",
+   "near_miss": "The authors provide a proof for Theorem [ref] that relies on an auxiliary result.",
+   "removed": false,
+   "section_hint": "in the first half of the document",
+   "updatedAt": "2026-10-15T16:50:24.292Z"
+  },
+  "papers--suggests_future_work": {
+   "checked": true,
+   "definition": "States directions for future work or what the authors plan to investigate next.",
+   "genre": "papers",
+   "id": "suggests_future_work",
+   "near_miss": "The authors suggest that the framework has potential applications in other scenarios.",
+   "removed": false,
+   "section_hint": "under a heading like 'conclusion', in the second half of the document",
+   "updatedAt": "2026-10-15T17:11:00.178Z"
+  },
+  "papers--task_description_a": {
+   "checked": true,
+   "definition": "Describes the specific tasks, subtasks, or objectives of the research, including their nature and scope, but not the methods or results.",
+   "genre": "papers",
+   "id": "task_description_a",
+   "near_miss": "",
+   "removed": false,
+   "section_hint": "",
+   "updatedAt": "2026-10-15T17:11:24.995Z"
+  },
+  "papers--task_description_b": {
+   "checked": true,
+   "definition": "Describes the specific tasks, subtasks, or objectives of the research, including their nature and scope, but not the methods or results.",
+   "genre": "papers",
+   "id": "task_description_b",
+   "near_miss": "",
+   "removed": false,
+   "section_hint": "",
+   "updatedAt": "2026-10-15T17:11:26.911Z"
+  },
+  "papers--training_process_description": {
+   "checked": true,
+   "definition": "Describes the detailed steps, methods, and parameters used in the training process of a model, including initialization, data preparation, loss computation, and parameter updates.",
+   "genre": "papers",
+   "id": "training_process_description",
+   "near_miss": "",
+   "removed": true,
+   "section_hint": "",
+   "updatedAt": "2026-10-15T17:11:38.295Z"
+  },
+  "papers--uses_baselines": {
+   "checked": true,
+   "definition": "Names or describes the baseline methods the approach is compared against.",
+   "genre": "papers",
+   "id": "uses_baselines",
+   "near_miss": "The authors compare their method with several existing methods.",
+   "removed": false,
+   "section_hint": "under a heading like 'baselines', in the second half of the document",
+   "updatedAt": "2026-10-15T16:55:46.739Z"
+  },
+  "papers--visualizes_results": {
+   "checked": true,
+   "definition": "Presents results or model behaviour in figures (plots, heat maps, attention visualisations) and says what they show.",
+   "genre": "papers",
+   "id": "visualizes_results",
+   "near_miss": "The authors provide an example to illustrate the method.",
+   "removed": false,
+   "section_hint": "in the second half of the document",
+   "updatedAt": "2026-10-15T17:10:50.378Z"
+  },
+  "privacy--access_restriction": {
+   "checked": true,
+   "definition": "States that the company restricts access to personal information to only those individuals who have a specific business need to know or perform their duties.",
+   "genre": "privacy",
+   "id": "access_restriction",
+   "near_miss": "",
+   "removed": false,
+   "section_hint": "",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:25:10.728Z"
+  },
+  "privacy--advises_users_on_security": {
+   "checked": true,
+   "definition": "Advises users on what they should do to protect their own information (keep passwords secret, log out, be careful what they share).",
+   "genre": "privacy",
+   "id": "advises_users_on_security",
+   "near_miss": "The company advises users to review the privacy policies of websites they link to.",
+   "removed": false,
+   "section_hint": "under a heading like 'security', in the second half of the document",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:17:06.189Z"
+  },
+  "privacy--browser_cookie_controls": {
+   "checked": true,
+   "definition": "States that users can refuse, delete or be warned about cookies through their browser settings.",
+   "genre": "privacy",
+   "id": "browser_cookie_controls",
+   "near_miss": "The company notes that refusing cookies may affect the functionality of the website.",
+   "removed": false,
+   "section_hint": "under a heading like 'cookies', in the second half of the document",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:17:14.721Z"
+  },
+  "privacy--california_disclosure_rights": {
+   "checked": true,
+   "definition": "States the rights of California residents to learn which third parties received their information for direct marketing, and how to make the request.",
+   "genre": "privacy",
+   "id": "california_disclosure_rights",
+   "near_miss": "The company allows individuals to complain to a data protection authority about their collection and use of personal information.",
+   "removed": false,
+   "section_hint": "near the end, under a heading like 'Your California Privacy Rights'",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:18:21.088Z"
+  },
+  "privacy--collects_usage_data_automatically": {
+   "checked": true,
+   "definition": "States that the company automatically collects technical or usage data about visits (IP address, browser, pages viewed, log files) without the user entering it.",
+   "genre": "privacy",
+   "id": "collects_usage_data_automatically",
+   "near_miss": "The company uses web beacons to track user visits and email opens for analytics purposes.",
+   "removed": false,
+   "section_hint": "in the first half of the document",
+   "severity": 1.5,
+   "updatedAt": "2026-10-15T09:03:53.652Z"
+  },
+  "privacy--company_identification_and_service_definition_a": {
+   "checked": true,
+   "definition": "States that the company identifies itself, its affiliates, or subsidiaries, and defines the services, products, or terms related to its operations.",
+   "genre": "privacy",
+   "id": "company_identification_and_service_definition_a",
+   "near_miss": "",
+   "removed": false,
+   "section_hint": "",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:25:05.395Z"
+  },
+  "privacy--company_identification_and_service_definition_b": {
+   "checked": true,
+   "definition": "States that the company identifies itself, its affiliates, or subsidiaries, and defines the services, products, or terms related to its operations.",
+   "genre": "privacy",
+   "id": "company_identification_and_service_definition_b",
+   "near_miss": "",
+   "removed": false,
+   "section_hint": "",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:25:06.996Z"
+  },
+  "privacy--complies_with_laws_and_programs": {
+   "checked": true,
+   "definition": "States that the company complies with named privacy laws, frameworks or self-regulatory programs (e.g. COPPA, Safe Harbor/Privacy Shield, TRUSTe).",
+   "genre": "privacy",
+   "id": "complies_with_laws_and_programs",
+   "near_miss": "The company commits to protecting the privacy and personal information of its users.",
+   "removed": false,
+   "section_hint": "in the first half of the document",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:18:11.287Z"
+  },
+  "privacy--confidentiality_requirements": {
+   "checked": true,
+   "definition": "States that the company requires its employees, contractors, third parties, and authorized personnel to keep personal information confidential and secure.",
+   "genre": "privacy",
+   "id": "confidentiality_requirements",
+   "near_miss": "",
+   "removed": false,
+   "section_hint": "",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:25:18.195Z"
+  },
+  "privacy--consent_by_use": {
+   "checked": true,
+   "definition": "States that using the site or giving information means consenting to the policy or to the collection and use it describes.",
+   "genre": "privacy",
+   "id": "consent_by_use",
+   "near_miss": "The company states that continued use of the Sites after changes to the Privacy Policy constitutes acceptance of the changes.",
+   "removed": false,
+   "section_hint": "in the first half of the document",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:18:09.938Z"
+  },
+  "privacy--content_and_usage_restrictions_a": {
+   "checked": true,
+   "definition": "States that users must not use the site or its content in certain ways, including reproducing, modifying, or distributing content without permission, and must not use the site if they do not agree to the terms or privacy policy.",
+   "genre": "privacy",
+   "id": "content_and_usage_restrictions_a",
+   "near_miss": "",
+   "removed": false,
+   "section_hint": "",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:24:54.645Z"
+  },
+  "privacy--content_and_usage_restrictions_b": {
+   "checked": true,
+   "definition": "States that users must not use the site or its content in certain ways, including reproducing, modifying, or distributing content without permission, and must not use the site if they do not agree to the terms or privacy policy.",
+   "genre": "privacy",
+   "id": "content_and_usage_restrictions_b",
+   "near_miss": "",
+   "removed": false,
+   "section_hint": "",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:24:57.928Z"
+  },
+  "privacy--continued_use_means_acceptance": {
+   "checked": true,
+   "definition": "States that continuing to use the site after the policy changes means accepting the changes.",
+   "genre": "privacy",
+   "id": "continued_use_means_acceptance",
+   "near_miss": "The company will post any changes to the privacy policy on their website.",
+   "removed": false,
+   "section_hint": "under a heading like 'changes to this privacy policy', in the second half of the document",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:17:54.738Z"
+  },
+  "privacy--cookie_non_identification": {
+   "checked": true,
+   "definition": "States that the company does not use cookies to collect, store, or link to personally identifiable information.",
+   "genre": "privacy",
+   "id": "cookie_non_identification",
+   "near_miss": "",
+   "removed": false,
+   "section_hint": "",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:25:00.229Z"
+  },
+  "privacy--data_collection_contests_surveys_a": {
+   "checked": true,
+   "definition": "States that the company collects personal information from users through contests, surveys, and other similar activities on their website.",
+   "genre": "privacy",
+   "id": "data_collection_contests_surveys_a",
+   "near_miss": "",
+   "removed": false,
+   "section_hint": "",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:25:01.895Z"
+  },
+  "privacy--data_collection_contests_surveys_b": {
+   "checked": true,
+   "definition": "States that the company collects personal information from users through contests, surveys, and other similar activities on their website.",
+   "genre": "privacy",
+   "id": "data_collection_contests_surveys_b",
+   "near_miss": "",
+   "removed": false,
+   "section_hint": "",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:25:03.779Z"
+  },
+  "privacy--data_collection_methods": {
+   "checked": true,
+   "definition": "States that the company collects personal information from users through various activities on the website, such as registration, placing orders, or providing information.",
+   "genre": "privacy",
+   "id": "data_collection_methods",
+   "near_miss": "",
+   "removed": false,
+   "section_hint": "",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:24:25.896Z"
+  },
+  "privacy--data_use_for_services_a": {
+   "checked": true,
+   "definition": "States that the company uses collected personal information for providing products, services, processing orders, and customer support.",
+   "genre": "privacy",
+   "id": "data_use_for_services_a",
+   "near_miss": "",
+   "removed": false,
+   "section_hint": "",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:24:35.379Z"
+  },
+  "privacy--data_use_for_services_b": {
+   "checked": true,
+   "definition": "States that the company uses collected personal information for providing products, services, processing orders, and customer support.",
+   "genre": "privacy",
+   "id": "data_use_for_services_b",
+   "near_miss": "",
+   "removed": false,
+   "section_hint": "",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:24:40.912Z"
+  },
+  "privacy--defines_personal_information": {
+   "checked": true,
+   "definition": "Defines what the policy means by personal (personally identifiable) information, usually by listing examples.",
+   "genre": "privacy",
+   "id": "defines_personal_information",
+   "near_miss": "The company discloses that the privacy policy covers the collection, use, and choices about personal information collected on or through the services.",
+   "removed": false,
+   "section_hint": "near the start of the document",
+   "severity": 1,
+   "updatedAt": "2026-10-15T10:59:07.932Z"
+  },
+  "privacy--deletes_children_data_if_found": {
+   "checked": true,
+   "definition": "States what the company does if it learns it has collected a child's information (deletes it, lets parents ask for deletion).",
+   "genre": "privacy",
+   "id": "deletes_children_data_if_found",
+   "near_miss": "The company does not knowingly collect personal information from children under 13.",
+   "removed": false,
+   "section_hint": "under a heading like 'children s privacy', in the second half of the document",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:17:45.404Z"
+  },
+  "privacy--deletion_on_request": {
+   "checked": true,
+   "definition": "States that users can ask for their personal information or account to be deleted or removed from the company's records.",
+   "genre": "privacy",
+   "id": "deletion_on_request",
+   "near_miss": "The company allows users to unsubscribe from receiving future emails.",
+   "removed": false,
+   "section_hint": "under a heading like 'choice opt out', in the second half of the document",
+   "severity": 1.5,
+   "updatedAt": "2026-10-15T11:17:35.721Z"
+  },
+  "privacy--disclaims_control_of_third_party_cookies": {
+   "checked": true,
+   "definition": "States that the company has no access to or control over cookies and tracking used by third-party advertisers, and that their use is governed by the third parties' own policies.",
+   "genre": "privacy",
+   "id": "disclaims_control_of_third_party_cookies",
+   "near_miss": "The company is not responsible for the content, policies, practices, or products of third-party websites.",
+   "removed": false,
+   "section_hint": "in the second half of the document",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:00:22.097Z"
+  },
+  "privacy--disclose_data_rights_a": {
+   "checked": true,
+   "definition": "States that the company informs users of their rights to access, complain, or request changes to their personal data held by the company.",
+   "genre": "privacy",
+   "id": "disclose_data_rights_a",
+   "near_miss": "",
+   "removed": false,
+   "section_hint": "",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:24:50.595Z"
+  },
+  "privacy--disclose_data_rights_b": {
+   "checked": true,
+   "definition": "States that the company informs users of their rights to access, complain, or request changes to their personal data held by the company.",
+   "genre": "privacy",
+   "id": "disclose_data_rights_b",
+   "near_miss": "",
+   "removed": false,
+   "section_hint": "",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:24:52.879Z"
+  },
+  "privacy--discloses_public_areas": {
+   "checked": true,
+   "definition": "States that the company provides or allows users to access public areas on its website where information can be shared and viewed by others.",
+   "genre": "privacy",
+   "id": "discloses_public_areas",
+   "near_miss": "",
+   "removed": false,
+   "section_hint": "",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:24:47.362Z"
+  },
+  "privacy--discloses_when_legally_required": {
+   "checked": true,
+   "definition": "States that personal information may be disclosed when required by law or legal process, or to protect the rights, property or safety of the company or others.",
+   "genre": "privacy",
+   "id": "discloses_when_legally_required",
+   "near_miss": "The company allows individuals to complain to a data protection authority about their collection and use of personal information.",
+   "removed": false,
+   "section_hint": "in the first half of the document",
+   "severity": 1,
+   "updatedAt": "2026-10-15T10:59:50.131Z"
+  },
+  "privacy--do_not_track_response": {
+   "checked": true,
+   "definition": "States whether and how the company responds to browser Do Not Track signals (most often that it does not).",
+   "genre": "privacy",
+   "id": "do_not_track_response",
+   "near_miss": "The company allows users to disable cookies through their web browser settings.",
+   "removed": false,
+   "section_hint": "in or next to the cookies and tracking section, in the second half of the document",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:18:18.821Z"
+  },
+  "privacy--does_not_sell_or_share": {
+   "checked": true,
+   "definition": "States that the company does not sell, rent, trade or share personal information (or email addresses) with third parties, apart from any stated exceptions.",
+   "genre": "privacy",
+   "id": "does_not_sell_or_share",
+   "near_miss": "The company does not link collected IP addresses and other information to personally identifiable information.",
+   "removed": false,
+   "section_hint": "in the first half of the document",
+   "severity": 1.5,
+   "updatedAt": "2026-10-15T10:59:32.782Z"
+  },
+  "privacy--does_not_store_payment_cards": {
+   "checked": true,
+   "definition": "States that credit card or payment details are not stored by the company (often because a third-party processor handles them).",
+   "genre": "privacy",
+   "id": "does_not_store_payment_cards",
+   "near_miss": "The company does not link collected IP addresses and other information to personally identifiable information.",
+   "removed": false,
+   "section_hint": "in the first half of the document",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:06:24.372Z"
+  },
+  "privacy--encrypts_data_in_transit": {
+   "checked": true,
+   "definition": "States that sensitive information is encrypted in transmission (for example with SSL/TLS).",
+   "genre": "privacy",
+   "id": "encrypts_data_in_transit",
+   "near_miss": "The company has implemented security measures to protect personal information.",
+   "removed": false,
+   "section_hint": "under a heading like 'security', in the second half of the document",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:00:28.547Z"
+  },
+  "privacy--governing_law_and_disputes": {
+   "checked": true,
+   "definition": "States which jurisdiction's law governs the policy or site and how disputes are resolved.",
+   "genre": "privacy",
+   "id": "governing_law_and_disputes",
+   "near_miss": "The company's privacy policy applies only to its own website and not to other linked websites.",
+   "removed": false,
+   "section_hint": "in the second half of the document",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:18:13.304Z"
+  },
+  "privacy--information_provision_is_optional": {
+   "checked": true,
+   "definition": "States that users may visit the site or use parts of it without giving personal information, or may choose what to provide (sometimes at the cost of some features).",
+   "genre": "privacy",
+   "id": "information_provision_is_optional",
+   "near_miss": "The company does not link collected IP addresses and other information to personally identifiable information.",
+   "removed": false,
+   "section_hint": "in the first half of the document",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:17:24.271Z"
+  },
+  "privacy--log_file_data_collection": {
+   "checked": true,
+   "definition": "States that the company uses log files to collect various types of data for purposes such as analyzing trends, administering the site, tracking user movement, and gathering demographic information.",
+   "genre": "privacy",
+   "id": "log_file_data_collection",
+   "near_miss": "",
+   "removed": false,
+   "section_hint": "",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:25:12.295Z"
+  },
+  "privacy--no_knowing_collection_from_children": {
+   "checked": true,
+   "definition": "States that the company does not knowingly collect personal information from children under a stated age (usually 13).",
+   "genre": "privacy",
+   "id": "no_knowing_collection_from_children",
+   "near_miss": "The company prohibits the use of its websites or services by anyone under 13 years of age.",
+   "removed": false,
+   "section_hint": "under a heading like 'children s privacy', in the second half of the document",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:17:40.071Z"
+  },
+  "privacy--opt_out_of_communications": {
+   "checked": true,
+   "definition": "States that users can opt out of or unsubscribe from marketing emails or other communications, and how.",
+   "genre": "privacy",
+   "id": "opt_out_of_communications",
+   "near_miss": "The company provides a way for users to opt out of the DART cookie use.",
+   "removed": false,
+   "section_hint": "in the second half of the document",
+   "severity": 1.5,
+   "updatedAt": "2026-10-15T11:17:10.955Z"
+  },
+  "privacy--opt_out_of_tracking_or_ads": {
+   "checked": true,
+   "definition": "States that users can opt out of targeted advertising, ad-network cookies or similar data collection, and points to how (opt-out pages, industry tools).",
+   "genre": "privacy",
+   "id": "opt_out_of_tracking_or_ads",
+   "near_miss": "The company allows users to opt-out of receiving communications from the company.",
+   "removed": false,
+   "section_hint": "in the second half of the document",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:17:12.888Z"
+  },
+  "privacy--policy_coverage": {
+   "checked": true,
+   "definition": "States that the privacy policy covers the collection, use, and handling of personal information, typically specifying the scope of the policy to include the company's websites, services, and sometimes its family of companies.",
+   "genre": "privacy",
+   "id": "policy_coverage",
+   "near_miss": "",
+   "removed": false,
+   "section_hint": "",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:24:42.995Z"
+  },
+  "privacy--provides_contact_information": {
+   "checked": true,
+   "definition": "States that the company provides contact information for various purposes, including inquiries, customer service, and managing personal information, but not the specific content of the contact information.",
+   "genre": "privacy",
+   "id": "provides_contact_information",
+   "near_miss": "",
+   "removed": false,
+   "section_hint": "",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:25:16.462Z"
+  },
+  "privacy--provides_contact_information_about_privacy": {
+   "checked": true,
+   "definition": "States that the company provides contact information for questions, concerns, or inquiries about the privacy policy, practices, or related matters.",
+   "genre": "privacy",
+   "id": "provides_contact_information_about_privacy",
+   "near_miss": "",
+   "removed": false,
+   "section_hint": "",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:25:08.945Z"
+  },
+  "privacy--provides_privacy_contact": {
+   "checked": true,
+   "definition": "Tells readers how to contact the company about the policy or their information (email, address, phone, form, named contact person).",
+   "genre": "privacy",
+   "id": "provides_privacy_contact",
+   "near_miss": "The company uses information to contact users about relevant services and offers.",
+   "removed": false,
+   "section_hint": "in the second half of the document",
+   "severity": 1.5,
+   "updatedAt": "2026-10-15T11:18:15.154Z"
+  },
+  "privacy--provides_third_party_links": {
+   "checked": true,
+   "definition": "States that the company includes or provides links to third-party websites, often advising users to review the privacy policies of those sites.",
+   "genre": "privacy",
+   "id": "provides_third_party_links",
+   "near_miss": "",
+   "removed": false,
+   "section_hint": "",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:25:13.779Z"
+  },
+  "privacy--reserves_right_to_change_policy": {
+   "checked": true,
+   "definition": "States that the company may change or update the policy at any time, with or without notice.",
+   "genre": "privacy",
+   "id": "reserves_right_to_change_policy",
+   "near_miss": "The company will post any changes to the privacy policy on their website.",
+   "removed": false,
+   "section_hint": "under a heading like 'changes to this privacy policy', in the second half of the document",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:17:51.105Z"
+  },
+  "privacy--scope_excludes_third_party_sites": {
+   "checked": true,
+   "definition": "States that the policy applies only to the company's own sites and not to other websites or services, even linked ones.",
+   "genre": "privacy",
+   "id": "scope_excludes_third_party_sites",
+   "near_miss": "The company is not responsible for the content, policies, practices, or products of third-party websites.",
+   "removed": false,
+   "section_hint": "in the first half of the document",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:18:06.871Z"
+  },
+  "privacy--security_not_guaranteed": {
+   "checked": true,
+   "definition": "States that no transmission over the internet or method of storage is completely secure, so the company cannot guarantee security.",
+   "genre": "privacy",
+   "id": "security_not_guaranteed",
+   "near_miss": "The company advises users to be cautious when sharing personal information in public areas of the site.",
+   "removed": false,
+   "section_hint": "under a heading like 'security', in the second half of the document",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:16:53.005Z"
+  },
+  "privacy--sends_marketing_communications": {
+   "checked": true,
+   "definition": "States that the company uses contact details (mainly email) to send newsletters, promotions or other marketing communications about its own products and services.",
+   "genre": "privacy",
+   "id": "sends_marketing_communications",
+   "near_miss": "The company collects information when users participate in contests or promotions.",
+   "removed": false,
+   "section_hint": "in the first half of the document",
+   "severity": 1,
+   "updatedAt": "2026-10-15T10:59:23.765Z"
+  },
+  "privacy--shares_aggregated_data": {
+   "checked": true,
+   "definition": "States that aggregated, anonymised or non-identifying information may be shared with third parties such as advertisers or partners.",
+   "genre": "privacy",
+   "id": "shares_aggregated_data",
+   "near_miss": "The company may share personal information with business partners to fulfill requests for products or services.",
+   "removed": false,
+   "section_hint": "in the first half of the document",
+   "severity": 1,
+   "updatedAt": "2026-10-15T10:59:47.132Z"
+  },
+  "privacy--shares_with_affiliates_and_partners": {
+   "checked": true,
+   "definition": "States that personal information may be shared with affiliates, subsidiaries or business partners, and for what purposes.",
+   "genre": "privacy",
+   "id": "shares_with_affiliates_and_partners",
+   "near_miss": "The company may share personal information with third parties hired to perform services, under strict conditions.",
+   "removed": false,
+   "section_hint": "in the first half of the document",
+   "severity": 1.5,
+   "updatedAt": "2026-10-15T10:59:42.398Z"
+  },
+  "privacy--shares_with_service_providers": {
+   "checked": true,
+   "definition": "States that personal information is shared with, or processed by, third-party service providers acting on the company's behalf (payment, delivery, hosting, mailing).",
+   "genre": "privacy",
+   "id": "shares_with_service_providers",
+   "near_miss": "The company may share personal information with business partners to fulfill requests for products or services.",
+   "removed": false,
+   "section_hint": "in the first half of the document",
+   "severity": 1.5,
+   "updatedAt": "2026-10-15T10:59:37.864Z"
+  },
+  "privacy--states_how_changes_are_notified": {
+   "checked": true,
+   "definition": "States how users will learn about changes to the policy (posting on the site or this page, email or other notice for material changes).",
+   "genre": "privacy",
+   "id": "states_how_changes_are_notified",
+   "near_miss": "The company reserves the right to change the privacy policy at any time.",
+   "removed": false,
+   "section_hint": "under a heading like 'changes to this privacy policy', in the second half of the document",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:17:52.955Z"
+  },
+  "privacy--states_information_required_to_register": {
+   "checked": true,
+   "definition": "States which personal information users must provide to register or use a service (mandatory fields), as opposed to information they may choose to give.",
+   "genre": "privacy",
+   "id": "states_information_required_to_register",
+   "near_miss": "The company collects personal information when users register or place an order on the site.",
+   "removed": false,
+   "section_hint": "in the first half of the document",
+   "severity": 1.5,
+   "updatedAt": "2026-10-15T09:03:44.985Z"
+  },
+  "privacy--states_last_updated_date": {
+   "checked": true,
+   "definition": "States the date on which the policy was last updated or took effect.",
+   "genre": "privacy",
+   "id": "states_last_updated_date",
+   "near_miss": "The company reserves the right to change the privacy policy at any time.",
+   "removed": false,
+   "section_hint": "in the second half of the document",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:18:00.038Z"
+  },
+  "privacy--states_minimum_age": {
+   "checked": true,
+   "definition": "States that the site or service is not meant for, or may not be used by, people below a minimum age, or requires parental consent below it.",
+   "genre": "privacy",
+   "id": "states_minimum_age",
+   "near_miss": "The company does not knowingly collect personal information from children under 13.",
+   "removed": false,
+   "section_hint": "under a heading like 'children', in the second half of the document",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:17:42.471Z"
+  },
+  "privacy--states_policy_scope_and_commitment": {
+   "checked": true,
+   "definition": "Introduces the policy, stating what it covers and/or the company's commitment to protecting privacy.",
+   "genre": "privacy",
+   "id": "states_policy_scope_and_commitment",
+   "near_miss": "The company defines personal information as personally identifiable information about an individual.",
+   "removed": false,
+   "section_hint": "near the start of the document",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:18:05.021Z"
+  },
+  "privacy--states_retention_period": {
+   "checked": true,
+   "definition": "States how long personal information is kept (a period, 'as long as necessary for the purpose', or as long as the law requires).",
+   "genre": "privacy",
+   "id": "states_retention_period",
+   "near_miss": "The company stores personal information in secured and password-protected databases.",
+   "removed": false,
+   "section_hint": "in the second half of the document",
+   "severity": 1.5,
+   "updatedAt": "2026-10-15T11:17:38.088Z"
+  },
+  "privacy--states_security_measures": {
+   "checked": true,
+   "definition": "States in general terms that the company takes technical, physical or administrative measures to protect personal information against loss, misuse or unauthorised access.",
+   "genre": "privacy",
+   "id": "states_security_measures",
+   "near_miss": "The company uses SSL to encrypt information transmitted over the Internet.",
+   "removed": false,
+   "section_hint": "under a heading like 'security', in the second half of the document",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:00:26.298Z"
+  },
+  "privacy--stores_data_securely": {
+   "checked": true,
+   "definition": "States how personal information is stored securely (secure servers, firewalls, password-protected systems).",
+   "genre": "privacy",
+   "id": "stores_data_securely",
+   "near_miss": "The company has implemented security measures to protect personal information.",
+   "removed": false,
+   "section_hint": "under a heading like 'security', in the second half of the document",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:00:31.864Z"
+  },
+  "privacy--third_party_advertising_and_cookies": {
+   "checked": true,
+   "definition": "States that third-party advertisers or ad networks serve ads on the site and may set cookies or web beacons to collect information about visits for targeted advertising.",
+   "genre": "privacy",
+   "id": "third_party_advertising_and_cookies",
+   "near_miss": "The company uses third party service providers to perform various functions on its behalf.",
+   "removed": false,
+   "section_hint": "in the second half of the document",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:00:11.531Z"
+  },
+  "privacy--third_party_sites_and_their_policies": {
+   "checked": true,
+   "definition": "States that the site links to third-party websites, that the company is not responsible for their content or practices, and/or advises users to read their privacy policies.",
+   "genre": "privacy",
+   "id": "third_party_sites_and_their_policies",
+   "near_miss": "The company has no access to or control over cookies used by third-party advertisers.",
+   "removed": false,
+   "section_hint": "in the second half of the document",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:18:08.221Z"
+  },
+  "privacy--tracking_data_not_linked_to_identity": {
+   "checked": true,
+   "definition": "States that cookies, IP addresses or other technical data are not linked to, or not used to identify, the person (except where stated).",
+   "genre": "privacy",
+   "id": "tracking_data_not_linked_to_identity",
+   "near_miss": "The company allows users to visit the site without providing personal information.",
+   "removed": false,
+   "section_hint": "in the first half of the document",
+   "severity": 1,
+   "updatedAt": "2026-10-15T10:58:58.266Z"
+  },
+  "privacy--transfers_data_in_business_transfer": {
+   "checked": true,
+   "definition": "States that personal information may be transferred to another party if the company is merged, acquired, sold or goes bankrupt.",
+   "genre": "privacy",
+   "id": "transfers_data_in_business_transfer",
+   "near_miss": "The company states that personal information may be transferred to, stored, or processed in the USA.",
+   "removed": false,
+   "section_hint": "in the second half of the document",
+   "severity": 1,
+   "updatedAt": "2026-10-15T10:59:54.181Z"
+  },
+  "privacy--transfers_data_internationally": {
+   "checked": true,
+   "definition": "States that personal information may be transferred to, stored or processed in another country (typically the United States), sometimes with the safeguard or consent relied on.",
+   "genre": "privacy",
+   "id": "transfers_data_internationally",
+   "near_miss": "The company may transfer personal information to an acquiring or merging party as part of a business transaction.",
+   "removed": false,
+   "section_hint": "in the second half of the document",
+   "severity": 1.5,
+   "updatedAt": "2026-10-15T11:00:02.615Z"
+  },
+  "privacy--user_data_control": {
+   "checked": true,
+   "definition": "States that the company provides users with the ability to review, update, correct, or delete their personal information, often through their account or by contacting customer service.",
+   "genre": "privacy",
+   "id": "user_data_control",
+   "near_miss": "",
+   "removed": false,
+   "section_hint": "",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:24:44.846Z"
+  },
+  "privacy--uses_cookies": {
+   "checked": true,
+   "definition": "States that the company sets cookies or similar tracking technologies and what it uses them for (recognising users, remembering preferences, tracking visits).",
+   "genre": "privacy",
+   "id": "uses_cookies",
+   "near_miss": "The company mentions that third-party advertising and marketing partners may use their own cookies.",
+   "removed": false,
+   "section_hint": "under a heading like 'cookies', in the first half of the document",
+   "severity": 1,
+   "updatedAt": "2026-10-15T10:58:29.232Z"
+  },
+  "privacy--uses_data_to_improve_services": {
+   "checked": true,
+   "definition": "States that collected information is used to analyse, maintain or improve the website, services or user experience.",
+   "genre": "privacy",
+   "id": "uses_data_to_improve_services",
+   "near_miss": "The company uses data to personalize and tailor the user experience and products.",
+   "removed": false,
+   "section_hint": "under a heading like 'what do we use your information for', in the first half of the document",
+   "severity": 1,
+   "updatedAt": "2026-10-15T10:59:14.699Z"
+  },
+  "privacy--uses_data_to_personalize": {
+   "checked": true,
+   "definition": "States that collected information is used to personalise or customise content, offers or the user's experience.",
+   "genre": "privacy",
+   "id": "uses_data_to_personalize",
+   "near_miss": "The company uses collected information to improve the sites and services.",
+   "removed": false,
+   "section_hint": "under a heading like 'what do we use your information for', in the first half of the document",
+   "severity": 1,
+   "updatedAt": "2026-10-15T10:59:20.915Z"
+  },
+  "privacy--uses_web_beacons": {
+   "checked": true,
+   "definition": "States that the company uses web beacons, pixel tags or clear GIFs (on pages or in emails) to collect information about visits or email opens; plain cookie statements are uses_cookies.",
+   "genre": "privacy",
+   "id": "uses_web_beacons",
+   "near_miss": "The company collects information about the number of users visiting the website and the number of pages viewed.",
+   "removed": false,
+   "section_hint": "in the first half of the document",
+   "severity": 1,
+   "updatedAt": "2026-10-15T10:58:43.900Z"
+  },
+  "privacy--warns_disabling_cookies_limits_site": {
+   "checked": true,
+   "definition": "Warns that refusing or disabling cookies may stop parts of the website from working.",
+   "genre": "privacy",
+   "id": "warns_disabling_cookies_limits_site",
+   "near_miss": "The company allows users to disable cookies through their web browser settings.",
+   "removed": false,
+   "section_hint": "under a heading like 'cookies', in the first half of the document",
+   "severity": 1,
+   "updatedAt": "2026-10-15T11:17:19.055Z"
+  }
+ },
+ "checks": {
+  "papers--acl_A1": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "papers",
+   "id": "acl_A1",
+   "types": [
+    "states_own_limitations"
+   ],
+   "updatedAt": "2026-10-15T17:14:59.925Z"
+  },
+  "papers--acl_A2": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "papers",
+   "id": "acl_A2",
+   "types": [
+    "discusses_societal_impact_or_misuse"
+   ],
+   "updatedAt": "2026-10-15T17:15:01.409Z"
+  },
+  "papers--acl_B1": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "papers",
+   "id": "acl_B1",
+   "types": [
+    "describes_datasets",
+    "names_software_and_libraries"
+   ],
+   "updatedAt": "2026-10-15T17:15:02.675Z"
+  },
+  "papers--acl_B2": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "papers",
+   "id": "acl_B2",
+   "types": [
+    "code_and_data_availability"
+   ],
+   "updatedAt": "2026-10-15T17:15:04.108Z"
+  },
+  "papers--acl_B3": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "papers",
+   "id": "acl_B3",
+   "types": [
+    "code_and_data_availability"
+   ],
+   "updatedAt": "2026-10-15T17:15:05.325Z"
+  },
+  "papers--acl_B4": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "papers",
+   "id": "acl_B4",
+   "types": [
+    "ethics_and_declarations"
+   ],
+   "updatedAt": "2026-10-15T17:15:06.558Z"
+  },
+  "papers--acl_B5": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "papers",
+   "id": "acl_B5",
+   "types": [
+    "describes_datasets",
+    "introduces_dataset_or_benchmark"
+   ],
+   "updatedAt": "2026-10-15T17:15:07.709Z"
+  },
+  "papers--acl_B6": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "papers",
+   "id": "acl_B6",
+   "types": [
+    "reports_dataset_statistics",
+    "describes_data_split"
+   ],
+   "updatedAt": "2026-10-15T17:15:08.842Z"
+  },
+  "papers--acl_C1": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "papers",
+   "id": "acl_C1",
+   "types": [
+    "specifies_compute_resources",
+    "reports_computational_cost"
+   ],
+   "updatedAt": "2026-10-15T17:15:09.625Z"
+  },
+  "papers--acl_C2": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "papers",
+   "id": "acl_C2",
+   "types": [
+    "specifies_hyperparameters"
+   ],
+   "updatedAt": "2026-10-15T17:15:12.242Z"
+  },
+  "papers--acl_C3": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "papers",
+   "id": "acl_C3",
+   "types": [
+    "reports_variance_or_significance"
+   ],
+   "updatedAt": "2026-10-15T17:15:12.958Z"
+  },
+  "papers--acl_C4": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "papers",
+   "id": "acl_C4",
+   "types": [
+    "names_software_and_libraries"
+   ],
+   "updatedAt": "2026-10-15T17:15:14.725Z"
+  },
+  "papers--acl_D1": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "papers",
+   "id": "acl_D1",
+   "types": [
+    "describes_annotation_process"
+   ],
+   "updatedAt": "2026-10-15T17:15:17.759Z"
+  },
+  "papers--acl_D2": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "papers",
+   "id": "acl_D2",
+   "types": [
+    "describes_annotation_process",
+    "ethics_and_declarations"
+   ],
+   "updatedAt": "2026-10-15T17:15:18.692Z"
+  },
+  "papers--acl_D3": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "papers",
+   "id": "acl_D3",
+   "types": [
+    "ethics_and_declarations"
+   ],
+   "updatedAt": "2026-10-15T17:15:19.775Z"
+  },
+  "papers--acl_D4": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "papers",
+   "id": "acl_D4",
+   "types": [
+    "ethics_and_declarations"
+   ],
+   "updatedAt": "2026-10-15T17:15:21.409Z"
+  },
+  "papers--acl_D5": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "papers",
+   "id": "acl_D5",
+   "types": [
+    "describes_annotation_process",
+    "ethics_and_declarations"
+   ],
+   "updatedAt": "2026-10-15T17:15:22.458Z"
+  },
+  "papers--acl_E1": {
+   "action": "accept",
+   "exclude": "as neurips_16: AI-assistant declarations post-date the 2018-2022 corpus",
+   "genre": "papers",
+   "id": "acl_E1",
+   "types": [],
+   "updatedAt": "2026-10-15T17:15:23.625Z"
+  },
+  "papers--neurips_1": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "papers",
+   "id": "neurips_1",
+   "types": [
+    "proposes_method"
+   ],
+   "updatedAt": "2026-10-15T17:11:46.277Z"
+  },
+  "papers--neurips_10": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "papers",
+   "id": "neurips_10",
+   "types": [
+    "discusses_societal_impact_or_misuse"
+   ],
+   "updatedAt": "2026-10-15T17:14:51.958Z"
+  },
+  "papers--neurips_11": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "papers",
+   "id": "neurips_11",
+   "types": [
+    "discusses_societal_impact_or_misuse"
+   ],
+   "updatedAt": "2026-10-15T17:14:53.058Z"
+  },
+  "papers--neurips_12": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "papers",
+   "id": "neurips_12",
+   "types": [
+    "describes_datasets",
+    "code_and_data_availability"
+   ],
+   "updatedAt": "2026-10-15T17:14:54.475Z"
+  },
+  "papers--neurips_13": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "papers",
+   "id": "neurips_13",
+   "types": [
+    "introduces_dataset_or_benchmark",
+    "code_and_data_availability"
+   ],
+   "updatedAt": "2026-10-15T17:14:55.642Z"
+  },
+  "papers--neurips_14": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "papers",
+   "id": "neurips_14",
+   "types": [
+    "describes_annotation_process",
+    "ethics_and_declarations"
+   ],
+   "updatedAt": "2026-10-15T17:14:56.625Z"
+  },
+  "papers--neurips_15": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "papers",
+   "id": "neurips_15",
+   "types": [
+    "ethics_and_declarations"
+   ],
+   "updatedAt": "2026-10-15T17:14:57.792Z"
+  },
+  "papers--neurips_16": {
+   "action": "accept",
+   "exclude": "declaring LLM use post-dates the corpus (papers up to 2022): 14 claims in 4 papers mention LLMs as tools; revisit with unarXive 2024 (Phase 10)",
+   "genre": "papers",
+   "id": "neurips_16",
+   "types": [],
+   "updatedAt": "2026-10-15T17:14:58.925Z"
+  },
+  "papers--neurips_2": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "papers",
+   "id": "neurips_2",
+   "types": [
+    "states_own_limitations"
+   ],
+   "updatedAt": "2026-10-15T17:13:37.600Z"
+  },
+  "papers--neurips_3": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "papers",
+   "id": "neurips_3",
+   "types": [
+    "states_modeling_assumptions",
+    "states_theoretical_result",
+    "proves_or_derives"
+   ],
+   "updatedAt": "2026-10-15T17:13:41.476Z"
+  },
+  "papers--neurips_4": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "papers",
+   "id": "neurips_4",
+   "types": [
+    "describes_training_procedure",
+    "specifies_hyperparameters",
+    "code_and_data_availability"
+   ],
+   "updatedAt": "2026-10-15T17:13:43.559Z"
+  },
+  "papers--neurips_5": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "papers",
+   "id": "neurips_5",
+   "types": [
+    "code_and_data_availability"
+   ],
+   "updatedAt": "2026-10-15T17:13:45.593Z"
+  },
+  "papers--neurips_6": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "papers",
+   "id": "neurips_6",
+   "types": [
+    "describes_data_split",
+    "specifies_hyperparameters"
+   ],
+   "updatedAt": "2026-10-15T17:13:47.593Z"
+  },
+  "papers--neurips_7": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "papers",
+   "id": "neurips_7",
+   "types": [
+    "reports_variance_or_significance"
+   ],
+   "updatedAt": "2026-10-15T17:13:50.126Z"
+  },
+  "papers--neurips_8": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "papers",
+   "id": "neurips_8",
+   "types": [
+    "specifies_compute_resources",
+    "reports_computational_cost"
+   ],
+   "updatedAt": "2026-10-15T17:13:51.343Z"
+  },
+  "papers--neurips_9": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "papers",
+   "id": "neurips_9",
+   "types": [
+    "ethics_and_declarations"
+   ],
+   "updatedAt": "2026-10-15T17:14:50.242Z"
+  },
+  "privacy--data_retention": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "privacy",
+   "id": "data_retention",
+   "types": [
+    "states_retention_period"
+   ],
+   "updatedAt": "2026-10-15T08:14:17.883Z"
+  },
+  "privacy--data_security": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "privacy",
+   "id": "data_security",
+   "types": [
+    "states_security_measures",
+    "encrypts_data_in_transit",
+    "stores_data_securely",
+    "limits_internal_access",
+    "does_not_store_payment_cards",
+    "security_not_guaranteed",
+    "advises_users_on_security"
+   ],
+   "updatedAt": "2026-10-15T08:14:19.383Z"
+  },
+  "privacy--do_not_track": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "privacy",
+   "id": "do_not_track",
+   "types": [
+    "do_not_track_response"
+   ],
+   "updatedAt": "2026-10-15T08:14:22.532Z"
+  },
+  "privacy--first_party_collection_use": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "privacy",
+   "id": "first_party_collection_use",
+   "types": [
+    "collects_information_users_provide",
+    "states_information_required_to_register",
+    "collects_usage_data_automatically",
+    "uses_cookies",
+    "uses_web_beacons",
+    "tracking_data_not_linked_to_identity",
+    "uses_data_to_provide_services",
+    "uses_data_to_improve_services",
+    "uses_data_to_personalize",
+    "sends_marketing_communications"
+   ],
+   "updatedAt": "2026-10-15T08:14:07.783Z"
+  },
+  "privacy--international_specific_audiences": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "privacy",
+   "id": "international_specific_audiences",
+   "types": [
+    "transfers_data_internationally",
+    "no_knowing_collection_from_children",
+    "states_minimum_age",
+    "deletes_children_data_if_found",
+    "california_disclosure_rights"
+   ],
+   "updatedAt": "2026-10-15T08:14:23.999Z"
+  },
+  "privacy--other": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "privacy",
+   "id": "other",
+   "types": [
+    "defines_personal_information",
+    "identifies_operator",
+    "states_policy_scope_and_commitment",
+    "scope_excludes_third_party_sites",
+    "consent_by_use",
+    "complies_with_laws_and_programs",
+    "governing_law_and_disputes",
+    "provides_privacy_contact"
+   ],
+   "updatedAt": "2026-10-15T08:14:26.449Z"
+  },
+  "privacy--policy_change": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "privacy",
+   "id": "policy_change",
+   "types": [
+    "reserves_right_to_change_policy",
+    "states_how_changes_are_notified",
+    "continued_use_means_acceptance",
+    "states_last_updated_date"
+   ],
+   "updatedAt": "2026-10-15T08:14:20.966Z"
+  },
+  "privacy--third_party_sharing_collection": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "privacy",
+   "id": "third_party_sharing_collection",
+   "types": [
+    "does_not_sell_or_share",
+    "shares_with_service_providers",
+    "shares_with_affiliates_and_partners",
+    "shares_aggregated_data",
+    "discloses_when_legally_required",
+    "transfers_data_in_business_transfer",
+    "third_party_advertising_and_cookies",
+    "disclaims_control_of_third_party_cookies",
+    "warns_about_public_areas",
+    "third_party_sites_and_their_policies"
+   ],
+   "updatedAt": "2026-10-15T08:14:09.716Z"
+  },
+  "privacy--user_access_edit_deletion": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "privacy",
+   "id": "user_access_edit_deletion",
+   "types": [
+    "access_and_correct_information",
+    "deletion_on_request",
+    "states_data_subject_rights"
+   ],
+   "updatedAt": "2026-10-15T08:14:15.966Z"
+  },
+  "privacy--user_choice_control": {
+   "action": "accept",
+   "exclude": "",
+   "genre": "privacy",
+   "id": "user_choice_control",
+   "types": [
+    "opt_out_of_communications",
+    "opt_out_of_tracking_or_ads",
+    "browser_cookie_controls",
+    "warns_disabling_cookies_limits_site",
+    "information_provision_is_optional"
+   ],
+   "updatedAt": "2026-10-15T08:14:11.783Z"
+  }
+ },
+ "_source": {
+  "artifact": "https://claude.ai/artifact/BXtRWoATairWDT6uvZiweU",
+  "read": "2026-10-15",
+  "by": "ArtifactData list"
+ }
+}

@@ -1,0 +1,18 @@
+# Seeds for the schema cross-check (plan §0.2 #5, §3.4): every OPP-115 category must map to at least one type or be
+# excluded with a reason. Source: data/raw/opp115/OPP-115/documentation/categories-july30.xml (scheme version
+# 20151115-01), OPP-115 v1.0 (Wilson et al., ACL 2016); see data/README.md. Attributes listed are the ones whose
+# values most often decide which schema type a practice belongs to (all values are in the XML).
+source: OPP-115 v1.0, categories-july30.xml (version 20151115-01)
+items:
+  - {id: first_party_collection_use, category: First Party Collection/Use,
+     split_by: [Personal Information Type, Purpose, Collection Mode, Action First-Party, Does/Does Not]}
+  - {id: third_party_sharing_collection, category: Third Party Sharing/Collection,
+     split_by: [Third Party Entity, Action Third Party, Purpose, Identifiability, Does/Does Not]}
+  - {id: user_choice_control, category: User Choice/Control, split_by: [Choice Type, Choice Scope]}
+  - {id: user_access_edit_deletion, category: "User Access, Edit and Deletion", split_by: [Access Type]}
+  - {id: data_retention, category: Data Retention, split_by: [Retention Period, Retention Purpose]}
+  - {id: data_security, category: Data Security, split_by: [Security Measure]}
+  - {id: policy_change, category: Policy Change, split_by: [Notification Type, User Choice]}
+  - {id: do_not_track, category: Do Not Track, split_by: [Do Not Track policy]}
+  - {id: international_specific_audiences, category: International and Specific Audiences, split_by: [Audience Type]}
+  - {id: other, category: Other, split_by: [Other Type]}   # Introductory/Generic, Practice not covered, Privacy contact information

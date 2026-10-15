@@ -1,0 +1,17 @@
+# Lab machine (Windows, CUDA) — only what the lab jobs import. Install with uv, in this order:
+#   uv pip install torch==2.13.0 --index-url https://download.pytorch.org/whl/cu126
+#   uv pip install -r requirements-lab.txt
+transformers==5.17.0
+sentence-transformers==6.1.0
+accelerate==1.15.0
+huggingface-hub==1.33.0
+numpy==2.4.6
+scipy==1.17.1
+datasketch==2.0.0
+pyyaml==6.0.3
+pydantic==2.14.1
+openai==3.29.0
+httpx==0.28.1
+psutil==7.2.2
+tqdm==4.70.1
+pytest==9.1.1

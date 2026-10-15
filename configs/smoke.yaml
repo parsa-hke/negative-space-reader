@@ -1,0 +1,81 @@
+# Smoke overlay (plan §0.2 #23, CLAUDE.md): 200 documents per genre, tiny models, one seed.
+# Must pass before any full run. Target: the whole pipeline in ~10 minutes on the local machine.
+# Usage: python -m experiments.run --config configs/<task>.yaml --overlay local --overlay smoke
+# (compute overlay first, smoke last, so the tiny models win)
+
+run:
+  seeds: [0]
+
+paths:                            # smoke never overwrites the real corpus, tables or figures
+  data_processed: data/processed_smoke
+  splits: data/processed_smoke/splits
+  tables: data/processed_smoke/tables
+  figures: data/processed_smoke/figures
+
+corpus:
+  max_documents_per_genre: 200
+
+data_sources:
+  papers:
+    arxiv_eprints:
+      max_pairs: 3                # smoke touches the network for 6 e-prints at most (cached afterwards)
+
+models:
+  teacher:
+    backend: transformers         # in-process HF stand-in, structured output via xgrammar
+    id: Qwen/Qwen2.5-1.5B-Instruct
+    quantization: null
+    max_model_len: 4096
+    max_tokens: 512
+    batch_size: 4
+  embedder:
+    id: BAAI/bge-small-en-v1.5
+    dtype: float32
+    max_length: 512
+  late_interaction:
+    id: answerdotai/answerai-colbert-small-v1
+  reranker:
+    id: cross-encoder/ms-marco-MiniLM-L6-v2
+  student:
+    id: answerdotai/ModernBERT-base
+    epochs: 1
+    batch_size: 8
+
+schema:
+  sample_documents: 50            # the cluster stage uses claims of 50 documents per genre
+  target_clusters: [10, 40]
+  coverage_check_sections: 20
+
+induce:
+  cluster:
+    grid:
+      min_cluster_size: [5, 10, 20]
+      min_samples: [5]
+      selection: [eom, leaf]
+  name:
+    limit: 3
+    write_pack: false             # smoke never writes packs/<genre>/schema_draft.yaml
+
+distil:
+  label_sections_per_genre: 200
+  human_set_per_genre: 30
+
+cohort:
+  k: 20
+
+mam:
+  d_model: 64
+  n_layers: 2
+  n_heads: 4
+  max_epochs: 2
+  batch_size: 64
+
+bench:
+  instances_per_regime: 20
+  bootstrap_samples: 100
+  ablation_k: [5, 20]
+  real_documents_per_genre: 10
+
+baselines:
+  runs_per_model: 1
+  llm_gap_instances: 10

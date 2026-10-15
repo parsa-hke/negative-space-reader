@@ -1,0 +1,280 @@
+# Claude's proposals for the papers schema (plan task 3.4), written 2026-10-13 after reading the 80 clusters of
+# runs/cluster_v1_s0 named by the 72B (runs/name_72b_papers_s0), the members of the large clusters, and a keyword
+# search of all 44,367 claims for checklist items. Parsa decides: these are inputs to the review workbook.
+# Severity: 1.0 throughout (the plan's 1.5 rule is for privacy legal requirements). Label source: none needed
+# (presence.label_sources.papers = teacher). Positive examples, near-misses and section hints left out here are
+# auto-filled from the clusters (marked in the workbook's Notes column).
+# Clusters in brackets after a comment "topical" are research-topic remnants that survived centring; they are proposed
+# as part of one generic method type (they are method descriptions, just topic-flavoured) rather than as types.
+
+types:
+  # ---------------------------------------------------------------- framing and positioning
+  - id: motivates_problem
+    name: motivates_problem
+    definition: States why the problem matters (its importance, prevalence, real-world risks or costs), usually in the introduction, without yet describing the authors' method.
+    clusters: [c053]
+    seeds: []
+  - id: reviews_prior_work
+    name: reviews_prior_work
+    definition: Reviews or cites previous work on the problem or on background methods, including recent advances in the field, without contrasting it with the authors' own contribution.
+    clusters: [c016, c011, c042]
+    seeds: []
+  - id: states_difference_from_prior_work
+    name: states_difference_from_prior_work
+    definition: States how the authors' work differs from, or is novel with respect to, specific prior work.
+    clusters: [c040]
+    seeds: []
+  - id: defines_task_or_problem_setting
+    name: defines_task_or_problem_setting
+    definition: Defines the task, problem or formal setting the paper addresses (inputs, outputs, objective; for example a sequence-labelling task or a Markov decision process).
+    clusters: [c010, c008]
+    seeds: []
+    notes: "c008 (MDP components, 64 papers) is topic-flavoured but is a problem formalisation"
+  - id: proposes_method
+    name: proposes_method
+    definition: Announces the authors' proposed method, model, algorithm or framework, often by name, as the paper's contribution.
+    clusters: [c020, c050]
+    seeds: [neurips_1]
+  - id: states_method_advantages
+    name: states_method_advantages
+    definition: States an advantage of the proposed method, such as needing less data, no retraining or fewer resources than alternatives.
+    clusters: [c049]
+    seeds: []
+  - id: claims_broader_applicability
+    name: claims_broader_applicability
+    definition: States that the method or framework can be applied or generalised to other domains, tasks or settings.
+    clusters: [c058]
+    seeds: []
+  # ---------------------------------------------------------------- formal content
+  - id: defines_notation
+    name: defines_notation
+    definition: Defines the mathematical or symbolic notation used in the paper.
+    clusters: [c030]
+    seeds: []
+  - id: states_modeling_assumptions
+    name: states_modeling_assumptions
+    definition: States the assumptions the model or analysis rests on (distributions, independence, known quantities, conditions under which results hold).
+    clusters: [c006]
+    seeds: [neurips_3]
+  - id: states_theoretical_result
+    name: states_theoretical_result
+    definition: States a theorem or formal guarantee (convergence, regret or error bounds, properties of an estimator) as a result of the paper.
+    clusters: [c074, c043, c021, c033]
+    seeds: [neurips_3]
+  - id: proves_or_derives
+    name: proves_or_derives
+    definition: Carries out or reports steps of a proof or derivation (applying a lemma, deriving a bound or expression, establishing a property of a function).
+    clusters: [c009, c060, c017, c079]
+    seeds: [neurips_3]
+    notes: "the over-split proofs seen in the 3.1 eye test (residual c) land here"
+  # ---------------------------------------------------------------- method
+  - id: describes_model_architecture
+    name: describes_model_architecture
+    definition: Describes the structure of the model or system (layers, modules, components and how they connect).
+    clusters: [c001, c069]
+    seeds: []
+  - id: describes_training_objective
+    name: describes_training_objective
+    definition: Describes the loss function or training objective, including regularisation terms.
+    clusters: [c037, c070]
+    seeds: []
+  - id: describes_training_procedure
+    name: describes_training_procedure
+    definition: Describes how the model is trained or optimised (training steps, update rules, optimisation algorithm, initialisation).
+    clusters: [c051, c019, c027]
+    seeds: [neurips_4]
+  - id: describes_algorithm_steps
+    name: describes_algorithm_steps
+    definition: Describes an algorithm step by step (initialisation, iterations, termination), often with reference to pseudocode.
+    clusters: [c044]
+    seeds: []
+  - id: describes_method_details
+    name: describes_method_details
+    definition: Describes how a specific technique or component of the approach works (for example a graph construction, a sampling scheme, a classifier, a decomposition), when no more specific method type applies.
+    clusters: [c012, c013, c024, c026, c028, c032, c039, c056, c059, c065, c066, c067, c068, c076, c078, c031]
+    seeds: []
+    notes: "generic catch-all for topic-flavoured method clusters (RL, adversarial attacks, graphs, logic predicates, clustering, linear algebra, forecasting, classifiers, sampling, FL/CL, theories, transfer learning, summarisation, RDF, interpretability, remote sensing). c031 comes from 5 papers, c068 from 13, c076 from 19: prune them instead if you prefer. Near-universal, so it will rarely be 'absent'; it exists so that method sections map to something in 3.5"
+  - id: fine_tunes_pretrained_model
+    name: fine_tunes_pretrained_model
+    definition: States that a pre-trained model is fine-tuned on the task or data, with what model and data.
+    clusters: [c063]
+    seeds: []
+  - id: describes_data_augmentation
+    name: describes_data_augmentation
+    definition: Describes how training data is augmented (transformations, synthetic variants, back-translation).
+    clusters: [c073]
+    seeds: []
+  - id: gives_illustrative_example
+    name: gives_illustrative_example
+    definition: Gives a worked or illustrative example to explain a concept, method or result.
+    clusters: [c061]
+    seeds: []
+  # ---------------------------------------------------------------- data
+  - id: describes_datasets
+    name: describes_datasets
+    definition: Describes the datasets used (source, content, domain, language), crediting where they come from.
+    clusters: [c005]
+    seeds: [neurips_12, acl_B1, acl_B5]
+  - id: introduces_dataset_or_benchmark
+    name: introduces_dataset_or_benchmark
+    definition: Introduces a new dataset or benchmark created by the authors and describes its design and purpose.
+    clusters: [c064]
+    seeds: [neurips_13, acl_B5]
+  - id: reports_dataset_statistics
+    name: reports_dataset_statistics
+    definition: Reports the size or other statistics of the datasets (number of examples, classes, tokens), often in a table.
+    clusters: [c054]
+    seeds: [acl_B6]
+  - id: describes_data_split
+    name: describes_data_split
+    definition: States how the data is divided into training, validation and test sets (proportions, sizes, or the standard split used).
+    clusters: [c025]
+    seeds: [neurips_6, acl_B6]
+  - id: describes_preprocessing
+    name: describes_preprocessing
+    definition: Describes how data is preprocessed, filtered or cleaned before use (tokenisation, normalisation, removal of noisy or irrelevant items).
+    clusters: [c035, c045]
+    seeds: []
+  - id: generates_synthetic_data
+    name: generates_synthetic_data
+    definition: Describes how synthetic or simulated data is generated for experiments.
+    clusters: [c034]
+    seeds: []
+  - id: describes_annotation_process
+    name: describes_annotation_process
+    definition: Describes how data was annotated (guidelines, who annotated, how annotators were recruited or trained, agreement).
+    clusters: [c046]
+    seeds: [neurips_14, acl_D1, acl_D2, acl_D5]
+  # ---------------------------------------------------------------- experimental setup
+  - id: describes_evaluation_metrics
+    name: describes_evaluation_metrics
+    definition: States which metrics or evaluation procedures are used to measure performance.
+    clusters: [c002]
+    seeds: []
+  - id: specifies_hyperparameters
+    name: specifies_hyperparameters
+    definition: Reports hyperparameter values or how they were chosen (learning rate, batch size, epochs, search procedure), including using the same settings as another work for a fair comparison.
+    clusters: [c003, c041]
+    seeds: [neurips_4, neurips_6, acl_C2]
+  - id: uses_baselines
+    name: uses_baselines
+    definition: Names or describes the baseline methods the approach is compared against.
+    clusters: [c047]
+    seeds: []
+  - id: specifies_compute_resources
+    name: specifies_compute_resources
+    definition: States the hardware and computing environment used (GPUs, CPUs, memory, cluster), sometimes with run time.
+    clusters: [c071]
+    seeds: [neurips_8, acl_C1]
+  - id: names_software_and_libraries
+    name: names_software_and_libraries
+    definition: Names the software packages or libraries used to implement the method or experiments, sometimes with versions.
+    clusters: [c022]
+    seeds: [acl_B1, acl_C4]
+  - id: reports_computational_cost
+    name: reports_computational_cost
+    definition: Reports or compares computational efficiency (time or memory complexity, training or inference time, resource use).
+    clusters: [c004]
+    seeds: [neurips_8, acl_C1]
+  - id: reports_variance_or_significance
+    name: reports_variance_or_significance
+    definition: States how reliable the results are (runs repeated over random seeds and averaged, standard deviations or error bars, significance tests).
+    clusters: [c075]
+    positive_examples: ["unarxive:2203.07362#5#2", "unarxive:2003.12908#11#8"]
+    seeds: [neurips_7, acl_C3]
+    notes: "c075 covers repeated runs; significance tests and standard deviations were mostly HDBSCAN noise (147 claims from 60 papers mention them, 100 in noise), so the definition is widened and the examples come from noise"
+  # ---------------------------------------------------------------- results
+  - id: reports_experimental_results
+    name: reports_experimental_results
+    definition: Reports what the experiments showed for the authors' method (scores on datasets or tasks), without a direct comparison claim.
+    clusters: [c014, c062]
+    seeds: []
+  - id: reports_outperforming_others
+    name: reports_outperforming_others
+    definition: States that the authors' method performs better than (or comparably to) baselines or other methods, on stated data or metrics.
+    clusters: [c023, c036, c038]
+    seeds: []
+    notes: "c023 and c036 had the same teacher name. Watch: some 'outperform' claims report prior work's results, not the authors' (3.1 residual a)"
+  - id: reports_ablation_or_improvement
+    name: reports_ablation_or_improvement
+    definition: Reports the effect of adding, removing or changing a component of the method (ablations, improvements from a modification).
+    clusters: [c077]
+    seeds: []
+  - id: visualizes_results
+    name: visualizes_results
+    definition: Presents results or model behaviour in figures (plots, heat maps, attention visualisations) and says what they show.
+    clusters: [c029]
+    seeds: []
+  - id: reports_observations
+    name: reports_observations
+    definition: Reports qualitative observations, trends or findings from data or a study (differences between groups, participants' responses), rather than scores of a method.
+    clusters: [c072, c048]
+    seeds: []
+  - id: refers_to_appendix
+    name: refers_to_appendix
+    definition: Refers the reader to an appendix or supplementary material for further details, proofs or results.
+    clusters: [c015]
+    seeds: []
+  # ---------------------------------------------------------------- closing, statements, declarations
+  - id: states_own_limitations
+    name: states_own_limitations
+    definition: States a limitation or weakness of the authors' own method, data, experiments or claims (what it cannot do, where it fails, what it assumes).
+    clusters: [c000]
+    positive_examples: ["unarxive:2012.15606#38#3", "unarxive:2210.14492#22#8"]
+    near_miss: "unarxive:2010.08319#1#4"
+    section_hint: in a 'Limitations' or 'Discussion' section, or the conclusion, near the end of the document
+    seeds: [neurips_2, acl_A1]
+    notes: "split from c000 (2,669 claims, cohesion 0.39), which mixes the authors' OWN limitations with limitations of PRIOR approaches. The clusters cannot separate the two; the teacher will when it labels sections (Phase 4). This is the NeurIPS 2 / ACL A1 item"
+  - id: states_limitations_of_existing_approaches
+    name: states_limitations_of_existing_approaches
+    definition: States a limitation, weakness or open challenge of existing methods or prior work, usually to motivate the authors' approach.
+    clusters: [c000]
+    positive_examples: ["unarxive:2010.08319#1#4", "unarxive:2011.12380#1#6"]
+    near_miss: "unarxive:2012.15606#38#3"
+    section_hint: in the introduction or related work, in the first half of the document
+    seeds: []
+    notes: "the other half of c000 (see states_own_limitations)"
+  - id: suggests_future_work
+    name: suggests_future_work
+    definition: States directions for future work or what the authors plan to investigate next.
+    clusters: [c007]
+    seeds: []
+  - id: code_and_data_availability
+    name: code_and_data_availability
+    definition: States whether and where the code, data or models are released (URL, repository, on request), and under what licence.
+    clusters: [c018]
+    seeds: [neurips_4, neurips_5, neurips_12, neurips_13, acl_B2, acl_B3]
+    notes: "licence mentions are rare (9 claims, 6 papers) and mostly fall here"
+  - id: discloses_funding
+    name: discloses_funding
+    definition: Names the funding sources, grants or projects that supported the work.
+    clusters: [c052]
+    seeds: []
+  - id: acknowledges_contributors
+    name: acknowledges_contributors
+    definition: Thanks people (colleagues, reviewers, annotators) for contributions, feedback or discussions.
+    clusters: [c055]
+    seeds: []
+  - id: ethics_and_declarations
+    name: ethics_and_declarations
+    definition: Makes a formal declaration about the research (ethics statement, ethics approval or consent, competing interests, that views are the authors' own, how participants were paid or who they were).
+    clusters: [c057]
+    seeds: [neurips_9, neurips_14, neurips_15, acl_B4, acl_D2, acl_D3, acl_D4, acl_D5]
+    notes: "teacher named it 'disclaimer_of_views', but the members include ethics statements, IRB and consent, competing interests, annotator pay and demographics; split into 'views disclaimer / competing interests' and 'ethics, consent and participants' if you want finer types"
+  - id: discusses_societal_impact_or_misuse
+    name: discusses_societal_impact_or_misuse
+    definition: Discusses the broader societal impact of the work, including possible misuse, bias or harm and any safeguards.
+    clusters: []
+    positive_examples: ["unarxive:2206.00761#24#4", "unarxive:2203.09679#24#2"]
+    near_miss: "unarxive:2103.00747#1#0"
+    section_hint: in a 'Broader impact' or 'Ethics' section near the end, or in the conclusion
+    seeds: [neurips_10, neurips_11, acl_A2]
+    notes: "no cluster: 17 claims from 13 of 303 papers (2018-2022) mention societal impact or misuse, spread over c053 and noise. Kept as a type because these sections become common after 2021 (drift analysis, Phase 10)"
+
+clusters: {}
+
+seeds:
+  neurips_16:
+    exclude: "declaring LLM use post-dates the corpus (papers up to 2022): 14 claims in 4 papers mention LLMs as tools; revisit with unarXive 2024 (Phase 10)"
+  acl_E1:
+    exclude: "as neurips_16: AI-assistant declarations post-date the 2018-2022 corpus"

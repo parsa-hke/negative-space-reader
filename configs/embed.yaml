@@ -1,0 +1,8 @@
+# Corpus embeddings (plan §5.1): every section and title of both genres with models.embedder.
+# Lab: python lab_session.py embed   (or: python -m experiments.run --config configs/embed.yaml --overlay lab)
+inherit: base.yaml
+task: embed
+run:
+  seeds: [0]
+embed:
+  limit: null                     # first N sections/documents per genre (tests and smoke only)

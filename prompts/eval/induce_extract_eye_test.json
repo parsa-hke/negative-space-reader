@@ -1,0 +1,282 @@
+[
+ {
+  "genre": "privacy",
+  "doc_id": "privacy_pl:776806",
+  "section_idx": 3,
+  "text_sha1": "604110e9f88643630580b680953b8ec6b4dd9f85",
+  "position": "first"
+ },
+ {
+  "genre": "privacy",
+  "doc_id": "privacy_pl:111209",
+  "section_idx": 4,
+  "text_sha1": "e3a580dadf988712f64a4d4f264cf9121b2a2efe",
+  "position": "middle"
+ },
+ {
+  "genre": "privacy",
+  "doc_id": "privacy_pl:1047858",
+  "section_idx": 10,
+  "text_sha1": "a2387b3e4e118052f80acdb24b0c03c2b1b53003",
+  "position": "last"
+ },
+ {
+  "genre": "privacy",
+  "doc_id": "privacy_pl:145691",
+  "section_idx": 2,
+  "text_sha1": "5ac81623822762963417fc0772cf31d58eb0c2e0",
+  "position": "first"
+ },
+ {
+  "genre": "privacy",
+  "doc_id": "privacy_pl:673601",
+  "section_idx": 5,
+  "text_sha1": "08a913cf23e46563372e4c9e8779ec8a06a6a0d5",
+  "position": "middle"
+ },
+ {
+  "genre": "privacy",
+  "doc_id": "privacy_pl:1011918",
+  "section_idx": 3,
+  "text_sha1": "d5ba10489599ca0651c0e6c2c680867832ffbc55",
+  "position": "last"
+ },
+ {
+  "genre": "privacy",
+  "doc_id": "opp115:1206",
+  "section_idx": 0,
+  "text_sha1": "b5e66cf161b507ba5827b7d4ac114a13c509df39",
+  "position": "first"
+ },
+ {
+  "genre": "privacy",
+  "doc_id": "opp115:1300",
+  "section_idx": 54,
+  "text_sha1": "fb2eb3faaf31fe43fb08d716e5771c6542d99dfb",
+  "position": "middle"
+ },
+ {
+  "genre": "privacy",
+  "doc_id": "privacy_pl:307917",
+  "section_idx": 3,
+  "text_sha1": "afcb789bd87392de0d61e2b1dcddf38bd677d54e",
+  "position": "last"
+ },
+ {
+  "genre": "privacy",
+  "doc_id": "privacy_pl:1057874",
+  "section_idx": 1,
+  "text_sha1": "f2988d246438c40d0ede56dc08c969c1e0b62f3d",
+  "position": "first"
+ },
+ {
+  "genre": "privacy",
+  "doc_id": "privacy_pl:651995",
+  "section_idx": 2,
+  "text_sha1": "6d3484291d6d2b39f5c297de8619c3f8de2648f6",
+  "position": "middle"
+ },
+ {
+  "genre": "privacy",
+  "doc_id": "privacy_pl:651174",
+  "section_idx": 12,
+  "text_sha1": "f7937eca27f4539b4f2c5bf399521306a9a2ba94",
+  "position": "last"
+ },
+ {
+  "genre": "privacy",
+  "doc_id": "opp115:33",
+  "section_idx": 13,
+  "text_sha1": "257a288f4338443bea0eda599b1ee698997e5376",
+  "position": "first"
+ },
+ {
+  "genre": "privacy",
+  "doc_id": "privacy_pl:526141",
+  "section_idx": 10,
+  "text_sha1": "52d3745947372d1a0dfd67429be16812c9bd4832",
+  "position": "middle"
+ },
+ {
+  "genre": "privacy",
+  "doc_id": "privacy_pl:463796",
+  "section_idx": 7,
+  "text_sha1": "217b79f2819e242d9bcff241f98f66d2686b56fe",
+  "position": "last"
+ },
+ {
+  "genre": "privacy",
+  "doc_id": "privacy_pl:109760",
+  "section_idx": 0,
+  "text_sha1": "d086d8352c9c1ecd1157ef408269eda248b643f6",
+  "position": "first"
+ },
+ {
+  "genre": "privacy",
+  "doc_id": "privacy_pl:247954",
+  "section_idx": 6,
+  "text_sha1": "72f1eef69c289ab812dca11e0f63d3cbcf220691",
+  "position": "middle"
+ },
+ {
+  "genre": "privacy",
+  "doc_id": "privacy_pl:491269",
+  "section_idx": 17,
+  "text_sha1": "44b0f5676a2f102be958fe11778a4e3cb1be3262",
+  "position": "last"
+ },
+ {
+  "genre": "privacy",
+  "doc_id": "privacy_pl:619232",
+  "section_idx": 4,
+  "text_sha1": "bfda3c53b5dfb8ee13384b153cb64fce38835f46",
+  "position": "first"
+ },
+ {
+  "genre": "privacy",
+  "doc_id": "privacy_pl:1018282",
+  "section_idx": 7,
+  "text_sha1": "7e8ac7f5f86c56ad662d722ca6b782ce64b7d62c",
+  "position": "middle"
+ },
+ {
+  "genre": "papers",
+  "doc_id": "unarxive:2205.07444",
+  "section_idx": 2,
+  "text_sha1": "4a27a1f7a8d02837a1a71ccac1eb1190f7e0d3c2",
+  "position": "first"
+ },
+ {
+  "genre": "papers",
+  "doc_id": "unarxive:2104.09696",
+  "section_idx": 19,
+  "text_sha1": "75650a3ede03e6790716c2e3b98f11bdc2698f8f",
+  "position": "middle"
+ },
+ {
+  "genre": "papers",
+  "doc_id": "unarxive:2203.09711",
+  "section_idx": 21,
+  "text_sha1": "ab6149ba38481bf9cd5f087cd20844789bd31f8d",
+  "position": "last"
+ },
+ {
+  "genre": "papers",
+  "doc_id": "unarxive:2101.02398",
+  "section_idx": 4,
+  "text_sha1": "1fe7838e423f09dc9d9a3b9e89fda78c7dd3d3a1",
+  "position": "first"
+ },
+ {
+  "genre": "papers",
+  "doc_id": "unarxive:2106.06875",
+  "section_idx": 8,
+  "text_sha1": "c39a0042cb9826b57729550f8e1cc23e4e785e40",
+  "position": "middle"
+ },
+ {
+  "genre": "papers",
+  "doc_id": "unarxive:2107.14589",
+  "section_idx": 14,
+  "text_sha1": "3c99d0e1fa59f79917415c8a6ceb12256af9d353",
+  "position": "last"
+ },
+ {
+  "genre": "papers",
+  "doc_id": "unarxive:1806.04381",
+  "section_idx": 5,
+  "text_sha1": "1899d237bbdfa61b2a7af68a6b2b433e06d5f503",
+  "position": "first"
+ },
+ {
+  "genre": "papers",
+  "doc_id": "unarxive:2105.15069",
+  "section_idx": 11,
+  "text_sha1": "84914e72823dae5a3ace87e00330b24520ea518a",
+  "position": "middle"
+ },
+ {
+  "genre": "papers",
+  "doc_id": "unarxive:2204.13650",
+  "section_idx": 57,
+  "text_sha1": "a0a3c9421f382e104339d916f8a1b732a4af0b2e",
+  "position": "last"
+ },
+ {
+  "genre": "papers",
+  "doc_id": "unarxive:2011.12919",
+  "section_idx": 3,
+  "text_sha1": "a66b072528196fe6fc764813ff2795474b4e417e",
+  "position": "first"
+ },
+ {
+  "genre": "papers",
+  "doc_id": "unarxive:2109.15142",
+  "section_idx": 10,
+  "text_sha1": "52d387facb1c2740a9a89502deab735b102e5898",
+  "position": "middle"
+ },
+ {
+  "genre": "papers",
+  "doc_id": "unarxive:2206.02468",
+  "section_idx": 19,
+  "text_sha1": "695bb451510286987696a077e2187e6dd33c2c55",
+  "position": "last"
+ },
+ {
+  "genre": "papers",
+  "doc_id": "unarxive:2210.16079",
+  "section_idx": 8,
+  "text_sha1": "7cba24a7f7a5d9062347afddc10aecaa21126842",
+  "position": "first"
+ },
+ {
+  "genre": "papers",
+  "doc_id": "unarxive:2110.03722",
+  "section_idx": 9,
+  "text_sha1": "23778022afbcafcb784f23954170067699578df7",
+  "position": "middle"
+ },
+ {
+  "genre": "papers",
+  "doc_id": "unarxive:2206.07681",
+  "section_idx": 16,
+  "text_sha1": "298f9e993d940abcff7cda46ca3692dff36ef810",
+  "position": "last"
+ },
+ {
+  "genre": "papers",
+  "doc_id": "unarxive:1910.05570",
+  "section_idx": 2,
+  "text_sha1": "f5c6c44750e118a481e3c1025adb2ee450584084",
+  "position": "first"
+ },
+ {
+  "genre": "papers",
+  "doc_id": "unarxive:2211.05766",
+  "section_idx": 15,
+  "text_sha1": "6df707c82fb4ae637df5f2c1774c700600b4430a",
+  "position": "middle"
+ },
+ {
+  "genre": "papers",
+  "doc_id": "unarxive:2210.09683",
+  "section_idx": 18,
+  "text_sha1": "bae7ad525bbff51a42071d186f8302bce062ef1c",
+  "position": "last"
+ },
+ {
+  "genre": "papers",
+  "doc_id": "unarxive:2011.07728",
+  "section_idx": 1,
+  "text_sha1": "48523bbaf7e4b3b94b35b83c12f997c1f85e0c2e",
+  "position": "first"
+ },
+ {
+  "genre": "papers",
+  "doc_id": "unarxive:2206.07593",
+  "section_idx": 8,
+  "text_sha1": "d21ea6bbab9c5c79ac25b3b874cfffa1fc4cfcd6",
+  "position": "middle"
+ }
+]

@@ -1,0 +1,3 @@
+# Masked-assertion model training (plan Phase 8). Choose the pack with --set pack=privacy|papers.
+inherit: base.yaml
+task: train_mam

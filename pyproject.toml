@@ -1,0 +1,62 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "negspace"
+version = "0.0.1"
+description = "Negative-Space Reader: detecting what a document conspicuously omits, relative to its genre peers."
+authors = [{ name = "Parsa Hosseini" }]
+requires-python = ">=3.11,<3.12"
+readme = "README.md"
+# Direct dependencies, pinned. torch / transformers / xgrammar are pinned to the
+# versions vllm==0.31.0 requires (torch==2.13.0, transformers<5.18, xgrammar==0.2.7),
+# so `pip install -e ".[gpu]"` resolves on the GPU server with the same pins as local.
+# The full transitive freeze of the local environment is requirements.txt.
+dependencies = [
+  "torch==2.13.0",
+  "transformers==5.17.0",
+  "sentence-transformers==6.1.0",
+  "accelerate==1.15.0",
+  "xgrammar==0.2.7",
+  "outlines==1.3.3",
+  "openai==3.29.0",
+  "qdrant-client==1.19.1",
+  "faiss-cpu==1.15.1",
+  "scikit-learn==1.9.1",
+  "hdbscan==0.8.44",
+  "openpyxl==3.1.5",               # 2026-10-13: schema review workbook (task 3.4)
+  "umap-learn==0.5.12",            # 2026-10-13: reduction before HDBSCAN in schema induction (PCA left 70-95% noise)
+  "datasketch==2.0.0",
+  "pandas==3.0.6",
+  "pyarrow==26.0.0",
+  "numpy==2.4.6",
+  "pyyaml==6.0.3",
+  "pydantic==2.14.1",
+  "gradio==6.30.0",
+  "fastapi==0.143.0",
+  "uvicorn==0.54.0",
+  "pytest==9.1.1",
+  "tqdm==4.70.1",
+  "matplotlib==3.11.2",
+  "psutil==7.2.2",
+  "httpx==0.28.1",
+  "pylatexenc==2.11",
+]
+
+[project.optional-dependencies]
+# Linux + CUDA only (no macOS wheels).
+gpu = ["vllm==0.31.0"]
+# Apple Silicon only: the local teacher tier (Qwen2.5-7B-Instruct 4-bit under MLX, plan §0.2 #6 route i).
+mac = ["mlx==0.32.3", "mlx-lm==0.32.0"]
+tracking = ["wandb==0.30.0"]
+
+[tool.setuptools.packages.find]
+include = ["data*", "packs*", "engine*", "models*", "experiments*", "bench*", "app*", "analysis*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+markers = [
+  "model: loads a real (tiny) model from the Hugging Face cache",
+]

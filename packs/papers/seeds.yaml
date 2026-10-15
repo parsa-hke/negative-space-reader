@@ -1,0 +1,40 @@
+# Seeds for the schema cross-check (plan §0.2 #5, §3.4): every item must map to at least one type or be excluded
+# with a reason. Titles are short paraphrases; the official wording is at the URLs (read 2026-10-13, data/README.md).
+sources:
+  neurips: {name: NeurIPS Paper Checklist, version: NeurIPS 2026 guidelines, url: "https://neurips.cc/public/guides/PaperChecklist"}
+  acl: {name: ACL Responsible NLP Research checklist, version: ARR revision of October 2024, url: "https://aclrollingreview.org/responsibleNLPresearch/"}
+items:
+  - {id: neurips_1, title: "claims in abstract and introduction match contributions and scope"}
+  - {id: neurips_2, title: "limitations (assumptions, robustness, scope of claims)"}
+  - {id: neurips_3, title: "theoretical assumptions stated and complete proofs given"}
+  - {id: neurips_4, title: "what makes the experimental results reproducible"}
+  - {id: neurips_5, title: "open access to code and data with instructions"}
+  - {id: neurips_6, title: "experimental settings (splits, hyperparameters and how chosen)"}
+  - {id: neurips_7, title: "statistical significance (error bars, tests, how computed)"}
+  - {id: neurips_8, title: "compute resources (hardware, memory, time)"}
+  - {id: neurips_9, title: "conformity with the NeurIPS Code of Ethics"}
+  - {id: neurips_10, title: "broader impacts (negative societal impacts, mitigations)"}
+  - {id: neurips_11, title: "safeguards for releasing high-risk models or data"}
+  - {id: neurips_12, title: "licences and credit for existing assets"}
+  - {id: neurips_13, title: "documentation of new assets"}
+  - {id: neurips_14, title: "crowdsourcing and human subjects (instructions, compensation)"}
+  - {id: neurips_15, title: "IRB or equivalent approval and participant risks"}
+  - {id: neurips_16, title: "declaration of LLM usage in the core method"}
+  - {id: acl_A1, title: "limitations of the work"}
+  - {id: acl_A2, title: "potential risks (misuse, environment, fairness, privacy, security)"}
+  - {id: acl_B1, title: "creators of used artifacts cited, with versions"}
+  - {id: acl_B2, title: "licence or terms of use of artifacts"}
+  - {id: acl_B3, title: "use of artifacts consistent with their intended use"}
+  - {id: acl_B4, title: "personal information or offensive content checked and handled"}
+  - {id: acl_B5, title: "documentation of artifacts (domains, languages, demographics)"}
+  - {id: acl_B6, title: "data statistics (example counts, split sizes)"}
+  - {id: acl_C1, title: "model size, compute budget and infrastructure"}
+  - {id: acl_C2, title: "experimental setup, hyperparameter search and chosen values"}
+  - {id: acl_C3, title: "descriptive statistics (error bars; single run, max or mean)"}
+  - {id: acl_C4, title: "existing packages used, with versions and settings"}
+  - {id: acl_D1, title: "full instructions given to human participants"}
+  - {id: acl_D2, title: "recruitment and payment of participants"}
+  - {id: acl_D3, title: "consent from people whose data is used"}
+  - {id: acl_D4, title: "ethics review board approval of data collection"}
+  - {id: acl_D5, title: "demographics of annotators"}
+  - {id: acl_E1, title: "use of AI assistants disclosed"}

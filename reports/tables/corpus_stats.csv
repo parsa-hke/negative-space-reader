@@ -1,0 +1,9 @@
+genre,split,documents,entities,sections_per_doc_mean,sections_per_doc_median,sentences_per_section_mean,chars_per_doc_median,date_min,date_max,sources,top_categories
+privacy,train,22300,18284,8.64,7.0,8.09,5796.5,1998-07-12,2019-12-31,"{""privacy_pl"": 22300}","{""education"": 4087, ""business"": 3902, ""shopping"": 3148, ""informationtech"": 2842, ""entertainment"": 1882, ""uncategorized"": 887, ""newsandmedia"": 636, ""economyandfinance"": 601, ""games"": 487, ""travel"": 487}"
+privacy,dev,3043,2494,9.42,8,8.0,5873,1999-11-09,2019-12-31,"{""privacy_pl"": 2928, ""opp115"": 115}","{""education"": 530, ""business"": 499, ""informationtech"": 405, ""shopping"": 380, ""entertainment"": 249, ""null"": 157, ""uncategorized"": 116, ""newsandmedia"": 92, ""economyandfinance"": 89, ""travel"": 72}"
+privacy,test,3097,2532,8.69,7,7.94,5709,1999-11-16,2019-12-31,"{""privacy_pl"": 3097}","{""business"": 544, ""education"": 532, ""shopping"": 416, ""informationtech"": 403, ""entertainment"": 261, ""uncategorized"": 150, ""newsandmedia"": 100, ""adult"": 84, ""economyandfinance"": 79, ""games"": 64}"
+privacy,all,28440,23310,8.73,7.0,8.06,5791.0,1998-07-12,2019-12-31,"{""privacy_pl"": 28325, ""opp115"": 115}","{""education"": 5149, ""business"": 4945, ""shopping"": 3944, ""informationtech"": 3650, ""entertainment"": 2392, ""uncategorized"": 1153, ""newsandmedia"": 828, ""economyandfinance"": 769, ""travel"": 623, ""games"": 613}"
+papers,train,14114,14114,21.21,19.0,14.81,28894.5,2018-01-10,2022-12-28,"{""unarxive"": 14114}","{""cs.LG"": 8538, ""cs.CL"": 5576}"
+papers,dev,1784,1784,21.14,19.0,14.55,28604.0,2018-01-21,2022-12-28,"{""unarxive"": 1784}","{""cs.LG"": 1088, ""cs.CL"": 696}"
+papers,test,1746,1746,20.81,19.0,17.34,29347.0,2018-01-09,2022-12-28,"{""unarxive"": 1746}","{""cs.LG"": 1029, ""cs.CL"": 717}"
+papers,all,17644,17644,21.17,19.0,15.03,28914.0,2018-01-09,2022-12-28,"{""unarxive"": 17644}","{""cs.LG"": 10655, ""cs.CL"": 6989}"

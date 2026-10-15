@@ -1,0 +1,2888 @@
+genre: privacy
+status: draft
+version: null
+note: 'Plan §3.3 output. Not a schema: the human pass (§3.4) merges, splits and prunes these to 40-60 types and adds examples,
+  near-misses, severity weights, section hints and label sources.'
+induced:
+  date: '2026-10-13'
+  claims_file: runs/extract_32b_privacy_s0/claims_privacy.jsonl
+  excluded_documents:
+  - unarxive:2110.04947
+  claims: 21046
+  documents: 500
+  extraction_teacher: openai:llama.cpp-b11280/Qwen/Qwen2.5-32B-Instruct-GGUF/q4_k_m
+  extraction_prompt: induce_extract v2:a756e28a41a1
+  embedder: Qwen/Qwen3-Embedding-0.6B
+  reduce:
+    method: umap
+    dims: 10
+    n_neighbors: 15
+    min_dist: 0.0
+  hdbscan:
+    min_cluster_size: null
+    min_samples: null
+    selection: null
+  clusters: 74
+  named: 74
+  noise_rate: null
+  cluster_run: cluster_v1_s0
+  name_run: name_72b_privacy_s0
+  naming_teacher: openai:openrouter.ai:qwen/qwen-2.5-72b-instruct@deepinfra/fp8
+  naming_prompt: induce_name v2:4f63706fe4d1
+types:
+- id: c000
+  name: cookie_usage_purposes
+  definition: States that the company uses cookies for various purposes, including to identify and track users, store preferences,
+    and enhance the user experience.
+  size: 956
+  documents: 355
+  document_share: 0.71
+  cohesion: 0.6586
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.005
+  representative_claims:
+  - claim_id: privacy_pl:189196#14#1
+    claim: The company uses cookies to identify which pages on their website have been accessed.
+  - claim_id: privacy_pl:114032#0#5
+    claim: The company uses cookies for various purposes, including to access user information and track preferences.
+  - claim_id: privacy_pl:16957#6#1
+    claim: The company uses cookies to identify and track visitors and their preferences.
+  type_guess_top:
+  - - cookie_usage
+    - 146
+  - - disclosing_practice
+    - 91
+  - - cookie_use
+    - 71
+  - - data_collection
+    - 36
+  - - data_use
+    - 30
+  heading_top:
+  - - cookies
+    - 236
+  - - (no heading)
+    - 130
+  - - use of cookies
+    - 65
+  position_mean: 0.437
+- id: c001
+  name: collects_website_usage_data
+  definition: States that the company collects various types of data about user interactions with the website, including visits,
+    page views, and technical information, but not specific personal data.
+  size: 835
+  documents: 329
+  document_share: 0.658
+  cohesion: 0.5602
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:189196#2#4
+    claim: The company collects information about the number of users visiting the website and the number of pages viewed.
+  - claim_id: privacy_pl:912176#2#5
+    claim: The company collects information about the visitor's use of the platform such as URLs visited, time spent, and
+      actions taken.
+  - claim_id: privacy_pl:526683#1#4
+    claim: The company collects automated information about how users use and navigate the website.
+  type_guess_top:
+  - - data_collection
+    - 167
+  - - data_use
+    - 70
+  - - specific_data_type
+    - 28
+  - - data_collection_purpose
+    - 23
+  - - data_usage
+    - 16
+  heading_top:
+  - - (no heading)
+    - 142
+  - - log files
+    - 22
+  - - privacy policy
+    - 14
+  position_mean: 0.326
+- id: c002
+  name: data_collection_methods
+  definition: States that the company collects personal information from users through various activities on the website,
+    such as registration, placing orders, or providing information.
+  size: 651
+  documents: 333
+  document_share: 0.666
+  cohesion: 0.687
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:355028#1#0
+    claim: The company collects personal information when users register or place an order on the site.
+  - claim_id: privacy_pl:155718#0#2
+    claim: The company collects various types of personal information from users, including contact details and demographic
+      information.
+  - claim_id: opp115:807#3#0
+    claim: The company collects information when users place orders or enter information on the site.
+  type_guess_top:
+  - - data_collection
+    - 318
+  - - data_collection_method
+    - 13
+  - - specific_data_collection
+    - 11
+  - - data_collection_purpose
+    - 9
+  - - data_collection_types
+    - 8
+  heading_top:
+  - - (no heading)
+    - 107
+  - - what information do we collect
+    - 31
+  - - privacy policy
+    - 17
+  position_mean: 0.178
+- id: c003
+  name: legal_disclosure_conditions
+  definition: States that the company may disclose personal information when required by law or to protect rights, property,
+    or safety.
+  size: 621
+  documents: 283
+  document_share: 0.566
+  cohesion: 0.5407
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:817656#5#7
+    claim: The company discloses personal information when required by law or in good-faith belief that such action is necessary
+      to protect rights or comply with legal processes.
+  - claim_id: privacy_pl:518818#13#1
+    claim: The company may disclose personal information as required by legal process or law.
+  - claim_id: privacy_pl:217721#7#0
+    claim: The company reserves the right to disclose personal information when required by law or to protect its rights.
+  type_guess_top:
+  - - legal_disclosure
+    - 116
+  - - legal_compliance
+    - 20
+  - - legal_sharing
+    - 11
+  - - legal_release
+    - 10
+  - - disclosure_reason
+    - 9
+  heading_top:
+  - - (no heading)
+    - 108
+  - - information sharing
+    - 17
+  - - do we disclose any information to outside parties
+    - 14
+  position_mean: 0.468
+- id: c004
+  name: no_third_party_sharing
+  definition: States that the company does not share, sell, rent, or otherwise disclose personal information to third parties
+    without permission or legal requirement.
+  size: 586
+  documents: 341
+  document_share: 0.682
+  cohesion: 0.6257
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:239341#6#0
+    claim: The company does not sell, rent, or trade personal information to third parties.
+  - claim_id: privacy_pl:53451#4#0
+    claim: The company does not share personal information with non-affiliated third parties without permission.
+  - claim_id: privacy_pl:978663#6#0
+    claim: The company will not share personal information with third parties without permission or legal requirement.
+  type_guess_top:
+  - - data_sharing_policy
+    - 78
+  - - data_protection
+    - 15
+  - - no_third_party_sales
+    - 14
+  - - data_sharing
+    - 14
+  - - no_third_party_sharing
+    - 13
+  heading_top:
+  - - (no heading)
+    - 115
+  - - privacy policy
+    - 20
+  - - california online privacy protection act compliance
+    - 12
+  position_mean: 0.368
+- id: c005
+  name: opt_out_communications
+  definition: States that the company provides users with the option to opt-out of receiving various types of communications,
+    including emails, direct mailings, and phone calls, from the company and its partners.
+  size: 528
+  documents: 240
+  document_share: 0.48
+  cohesion: 0.6788
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:144687#7#1
+    claim: The company allows users to opt-out of receiving communications from the company.
+  - claim_id: privacy_pl:1042150#5#0
+    claim: The company provides users the opportunity to opt-out of receiving communications from the company and its partners.
+  - claim_id: privacy_pl:856042#10#5
+    claim: The company allows users to opt out of receiving email newsletters by selecting specific links or following opt-out
+      instructions.
+  type_guess_top:
+  - - opt_out_option
+    - 28
+  - - user_opt_out
+    - 26
+  - - opt_out_provision
+    - 22
+  - - opt_out
+    - 17
+  - - communication_opt_out
+    - 13
+  heading_top:
+  - - (no heading)
+    - 94
+  - - choice opt out
+    - 33
+  - - your california privacy rights
+    - 11
+  position_mean: 0.531
+- id: c006
+  name: sends_promotional_emails
+  definition: States that the company may send promotional emails to users about products, services, and special offers, including
+    newsletters and updates.
+  size: 463
+  documents: 258
+  document_share: 0.516
+  cohesion: 0.5344
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:24102#2#2
+    claim: The company may send promotional emails about new products or special offers.
+  - claim_id: privacy_pl:978663#2#3
+    claim: The company may send promotional emails to users using the provided email address.
+  - claim_id: privacy_pl:145691#8#2
+    claim: The company may send promotional emails about its products, services, and special offers.
+  type_guess_top:
+  - - data_use
+    - 52
+  - - disclosing_practice
+    - 23
+  - - data_collection
+    - 17
+  - - email_use
+    - 13
+  - - marketing_communication
+    - 13
+  heading_top:
+  - - (no heading)
+    - 65
+  - - what do we use your information for
+    - 18
+  - - how we use your information
+    - 10
+  position_mean: 0.365
+- id: c007
+  name: states_security_measures
+  definition: States that the company has implemented or adopted security measures to protect personal information against
+    unauthorized actions, access, disclosure, alteration, or destruction.
+  size: 444
+  documents: 303
+  document_share: 0.606
+  cohesion: 0.7835
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:991957#22#0
+    claim: The company has implemented security measures to protect personal information.
+  - claim_id: privacy_pl:962857#3#6
+    claim: The company employs appropriate security measures to protect personal information against unauthorized access,
+      disclosure, alteration, or destruction.
+  - claim_id: privacy_pl:405423#7#1
+    claim: The company uses various security technologies and procedures to protect personal information.
+  type_guess_top:
+  - - security_measures
+    - 149
+  - - security_commitment
+    - 30
+  - - security_procedures
+    - 15
+  - - data_protection
+    - 14
+  - - data_protection_commitment
+    - 11
+  heading_top:
+  - - security
+    - 87
+  - - (no heading)
+    - 69
+  - - how do we protect your information
+    - 14
+  position_mean: 0.519
+- id: c008
+  name: data_use_for_services
+  definition: States that the company uses collected personal information for providing products, services, processing orders,
+    and customer support.
+  size: 440
+  documents: 252
+  document_share: 0.504
+  cohesion: 0.5784
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:854286#3#1
+    claim: The company uses collected personal information to provide products and services, process orders, and offer customer
+      service.
+  - claim_id: privacy_pl:626412#1#2
+    claim: The company uses collected information to fulfill orders, provide quotes, process orders, notify about order status,
+      prepare drawings, and provide information about offers or products.
+  - claim_id: privacy_pl:987524#1#3
+    claim: The company uses collected information to deliver requested products and services, manage accounts, and provide
+      customer support.
+  type_guess_top:
+  - - data_use
+    - 81
+  - - data_collection_purpose
+    - 23
+  - - service_provision
+    - 22
+  - - data_collection
+    - 17
+  - - data_use_purpose
+    - 16
+  heading_top:
+  - - (no heading)
+    - 65
+  - - how we use your information
+    - 11
+  - - personal information
+    - 10
+  position_mean: 0.286
+- id: c009
+  name: disclaim_third_party_responsibility
+  definition: States that the company is not responsible for the content, practices, policies, or privacy of third-party websites
+    linked from its site.
+  size: 432
+  documents: 263
+  document_share: 0.526
+  cohesion: 0.672
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.002
+  representative_claims:
+  - claim_id: privacy_pl:912176#0#6
+    claim: The company is not responsible for the content, policies, practices, or products of third-party websites.
+  - claim_id: privacy_pl:731825#12#4
+    claim: The company is not responsible for the content, privacy, or security practices of third-party websites.
+  - claim_id: privacy_pl:962857#3#7
+    claim: The company is not responsible for the content or privacy practices of third-party websites linked to its website.
+  type_guess_top:
+  - - third_party_disclaimer
+    - 54
+  - - disclaim_responsibility
+    - 46
+  - - third_party_responsibility
+    - 17
+  - - liability_disclaimer
+    - 15
+  - - external_site_disclaimer
+    - 12
+  heading_top:
+  - - (no heading)
+    - 65
+  - - external links
+    - 18
+  - - links
+    - 18
+  position_mean: 0.605
+- id: c010
+  name: advice_on_policy_review
+  definition: Advises users to review, read, or check the privacy policies of other websites, linked sites, or third-party
+    services, and to stay informed about updates or changes.
+  size: 430
+  documents: 264
+  document_share: 0.528
+  cohesion: 0.6339
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.007
+  representative_claims:
+  - claim_id: opp115:1673#36#4
+    claim: The company advises users to review the privacy policies of websites they link to.
+  - claim_id: privacy_pl:883619#12#5
+    claim: The company encourages users to review the privacy policy frequently.
+  - claim_id: privacy_pl:1058891#0#1
+    claim: The company advises users to regularly check the privacy policy for changes.
+  type_guess_top:
+  - - user_advice
+    - 22
+  - - review_encouragement
+    - 15
+  - - user_information_link
+    - 14
+  - - third_party_policy_reference
+    - 11
+  - - advice_to_users
+    - 10
+  heading_top:
+  - - (no heading)
+    - 74
+  - - changes to this privacy policy
+    - 18
+  - - links
+    - 16
+  position_mean: 0.594
+- id: c011
+  name: policy_coverage
+  definition: States that the privacy policy covers the collection, use, and handling of personal information, typically specifying
+    the scope of the policy to include the company's websites, services, and sometimes its family of companies.
+  size: 412
+  documents: 266
+  document_share: 0.532
+  cohesion: 0.5104
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:53451#0#6
+    claim: The company discloses that the privacy policy covers the collection, use, and choices about personal information
+      collected on or through the services.
+  - claim_id: privacy_pl:996495#0#3
+    claim: The company explains the scope of its privacy policy to cover personal information provided through its websites.
+  - claim_id: privacy_pl:45745#0#2
+    claim: The company explains that the privacy policy document describes the personal information collected and its usage.
+  type_guess_top:
+  - - policy_scope
+    - 51
+  - - policy_purpose
+    - 30
+  - - policy_coverage
+    - 28
+  - - policy_description
+    - 23
+  - - policy_application
+    - 15
+  heading_top:
+  - - (no heading)
+    - 184
+  - - privacy policy
+    - 30
+  - - introduction
+    - 8
+  position_mean: 0.11
+- id: c012
+  name: user_data_control
+  definition: States that the company provides users with the ability to review, update, correct, or delete their personal
+    information, often through their account or by contacting customer service.
+  size: 383
+  documents: 231
+  document_share: 0.462
+  cohesion: 0.6601
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:603038#6#0
+    claim: The company allows users to update and correct their personal information at any time.
+  - claim_id: privacy_pl:74423#10#0
+    claim: The company allows users to update or correct their personal information through their account or by contacting
+      customer service.
+  - claim_id: privacy_pl:211885#9#0
+    claim: The company allows users to review, update, correct, edit, or delete their personal information at any time.
+  type_guess_top:
+  - - user_control
+    - 21
+  - - contact_method
+    - 14
+  - - user_rights
+    - 7
+  - - data_modification
+    - 7
+  - - data_correction
+    - 6
+  heading_top:
+  - - (no heading)
+    - 48
+  - - correct update
+    - 12
+  - - your rights
+    - 6
+  position_mean: 0.657
+- id: c013
+  name: discloses_public_areas
+  definition: States that the company provides or allows users to access public areas on its website where information can
+    be shared and viewed by others.
+  size: 313
+  documents: 143
+  document_share: 0.286
+  cohesion: 0.4267
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:518818#3#2
+    claim: The company allows users to set up public profiles that other users can view.
+  - claim_id: privacy_pl:735785#10#2
+    claim: The company discloses that information posted in public areas of the sites is publicly available and may be viewed
+      and shared by other users.
+  - claim_id: privacy_pl:239341#4#0
+    claim: The company discloses that it offers publicly accessible blogs or community forums on its website.
+  type_guess_top:
+  - - data_use
+    - 8
+  - - disclosure_of_practice
+    - 7
+  - - public_disclosure
+    - 5
+  - - provides_public_areas
+    - 5
+  - - public_information
+    - 4
+  heading_top:
+  - - (no heading)
+    - 43
+  - - public forums
+    - 16
+  - - social media
+    - 6
+  position_mean: 0.448
+- id: c014
+  name: provides_contact_method
+  definition: States that the company provides a contact method for questions, concerns, or suggestions about the privacy
+    policy, data security, or related matters.
+  size: 308
+  documents: 240
+  document_share: 0.48
+  cohesion: 0.7074
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:605963#18#4
+    claim: The company provides a contact method for questions about the privacy policy or services.
+  - claim_id: privacy_pl:131098#5#2
+    claim: The company provides a contact method for questions about the privacy policy.
+  - claim_id: opp115:1099#27#0
+    claim: The company provides an email address for inquiries or requests about the privacy policy or personal information
+      handling.
+  type_guess_top:
+  - - contact_method
+    - 101
+  - - contact_information
+    - 97
+  - - feedback_welcome
+    - 9
+  - - contact_provision
+    - 8
+  - - contact_invitation
+    - 6
+  heading_top:
+  - - (no heading)
+    - 67
+  - - privacy policy
+    - 9
+  - - contacting us
+    - 9
+  position_mean: 0.645
+- id: c015
+  name: policy_change_right
+  definition: States that the company reserves the right to change, modify, or update the privacy policy at any time, with
+    or without notice.
+  size: 299
+  documents: 249
+  document_share: 0.498
+  cohesion: 0.8294
+  single_kind: true
+  split_note: ''
+  flags:
+  - example_label_name
+  example_label_share: 0.13
+  representative_claims:
+  - claim_id: privacy_pl:735785#2#0
+    claim: The company reserves the right to change the privacy policy at any time.
+  - claim_id: opp115:1673#4#0
+    claim: The company reserves the right to modify the privacy policy at any time.
+  - claim_id: privacy_pl:1013276#13#2
+    claim: The company reserves the right to change the privacy policy without notice.
+  type_guess_top:
+  - - policy_change
+    - 39
+  - - policy_modification_right
+    - 38
+  - - policy_change_right
+    - 36
+  - - policy_modification
+    - 31
+  - - policy_update
+    - 29
+  heading_top:
+  - - (no heading)
+    - 63
+  - - changes to this privacy policy
+    - 35
+  - - changes to our privacy policy
+    - 8
+  position_mean: 0.65
+- id: c016
+  name: disclaims_internet_security
+  definition: States that the company cannot guarantee the security of information transmitted over the internet or wireless
+    networks, often emphasizing the inherent risks and limitations of online transmission.
+  size: 286
+  documents: 175
+  document_share: 0.35
+  cohesion: 0.7136
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:809594#7#1
+    claim: The company cannot guarantee the security of any information transmitted over the internet.
+  - claim_id: privacy_pl:517009#7#3
+    claim: The company cannot guarantee the security of any information transmitted over the Internet or wireless networks.
+  - claim_id: privacy_pl:986407#3#3
+    claim: The company acknowledges that it cannot guarantee 100% security of information transmitted over the Internet.
+  type_guess_top:
+  - - security_disclaimer
+    - 69
+  - - security_limitation
+    - 43
+  - - security_guarantee
+    - 11
+  - - transmission_risk
+    - 10
+  - - security_disclosure
+    - 6
+  heading_top:
+  - - security
+    - 60
+  - - (no heading)
+    - 57
+  - - data security
+    - 7
+  position_mean: 0.633
+- id: c017
+  name: privacy_commitment
+  definition: States that the company is committed to protecting and respecting the privacy and personal information of its
+    users.
+  size: 283
+  documents: 235
+  document_share: 0.47
+  cohesion: 0.7312
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:579928#0#0
+    claim: The company commits to protecting the privacy and personal information of its users.
+  - claim_id: privacy_pl:891776#0#0
+    claim: The company is committed to protecting and respecting the privacy of individuals.
+  - claim_id: privacy_pl:180016#0#0
+    claim: The company is committed to protecting the privacy of its users.
+  type_guess_top:
+  - - privacy_commitment
+    - 153
+  - - commitment_to_privacy
+    - 11
+  - - protection_commitment
+    - 8
+  - - privacy_acknowledgment
+    - 5
+  - - privacy_respect
+    - 5
+  heading_top:
+  - - (no heading)
+    - 130
+  - - privacy policy
+    - 24
+  - - privacy statement
+    - 7
+  position_mean: 0.088
+- id: c018
+  name: advises_user_security
+  definition: Advises users to take specific security measures, such as being cautious with personal information, protecting
+    passwords, and securing accounts, but does not include detailed technical requirements or user responsibilities beyond
+    basic security practices.
+  size: 282
+  documents: 152
+  document_share: 0.304
+  cohesion: 0.6224
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:180016#7#1
+    claim: The company advises users to be cautious when sharing personal information in public areas of the site.
+  - claim_id: privacy_pl:987524#4#4
+    claim: The company advises users to exercise caution with personal information posted on its websites.
+  - claim_id: privacy_pl:394498#8#1
+    claim: The company advises users to protect their passwords and limit access to their accounts.
+  type_guess_top:
+  - - security_advice
+    - 23
+  - - user_responsibility
+    - 23
+  - - user_advice
+    - 19
+  - - caution_advice
+    - 13
+  - - public_disclosure_warning
+    - 9
+  heading_top:
+  - - (no heading)
+    - 45
+  - - security
+    - 30
+  - - public forums
+    - 17
+  position_mean: 0.584
+- id: c019
+  name: age_restriction_declaration
+  definition: States that the company restricts the use of its services or websites to individuals above a certain age, typically
+    13, and may require parental consent for minors.
+  size: 282
+  documents: 171
+  document_share: 0.342
+  cohesion: 0.7069
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:605963#14#1
+    claim: The company prohibits the use of its websites or services by anyone under 13 years of age.
+  - claim_id: privacy_pl:605656#10#1
+    claim: The company prohibits anyone under the age of 13 from using the service.
+  - claim_id: privacy_pl:24102#7#0
+    claim: The company states that individuals under 13 should not use the site.
+  type_guess_top:
+  - - age_restriction
+    - 31
+  - - target_audience_declaration
+    - 11
+  - - age_requirement
+    - 9
+  - - intended_audience
+    - 7
+  - - data_collection_limit
+    - 6
+  heading_top:
+  - - (no heading)
+    - 34
+  - - children
+    - 29
+  - - children s privacy
+    - 22
+  position_mean: 0.62
+- id: c020
+  name: uses_ssl_encryption
+  definition: States that the company uses SSL (Secure Sockets Layer) encryption to secure the transmission of sensitive information,
+    including personally identifiable and credit card information, to prevent unauthorized access.
+  size: 274
+  documents: 164
+  document_share: 0.328
+  cohesion: 0.7256
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:896259#16#4
+    claim: The company uses SSL to encrypt information transmitted over the Internet.
+  - claim_id: privacy_pl:494554#18#3
+    claim: The company uses Secure Sockets Layer (SSL) encryption for sensitive information to prevent unauthorized access.
+  - claim_id: privacy_pl:251629#2#2
+    claim: The company transmits sensitive information via SSL technology and encrypts it.
+  type_guess_top:
+  - - encryption_method
+    - 35
+  - - encryption_use
+    - 26
+  - - encryption_practice
+    - 11
+  - - data_encryption
+    - 11
+  - - encryption_technology
+    - 9
+  heading_top:
+  - - (no heading)
+    - 43
+  - - security
+    - 40
+  - - how do we protect your information
+    - 20
+  position_mean: 0.523
+- id: c021
+  name: registration_information_requirements
+  definition: States that the company requires users to provide specific personal information during the registration process,
+    including details such as name, email address, and unique identifiers.
+  size: 274
+  documents: 175
+  document_share: 0.35
+  cohesion: 0.5321
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:579928#2#2
+    claim: The company asks for specific personal information when users register.
+  - claim_id: privacy_pl:533526#5#0
+    claim: The company requires users to provide personal information during registration.
+  - claim_id: privacy_pl:367501#2#0
+    claim: The company requires users to provide a username, password, and email address during registration.
+  type_guess_top:
+  - - registration_requirement
+    - 25
+  - - identity_verification
+    - 24
+  - - data_collection
+    - 14
+  - - data_request
+    - 12
+  - - required_information
+    - 9
+  heading_top:
+  - - (no heading)
+    - 40
+  - - information collection and use
+    - 9
+  - - what information do we collect
+    - 7
+  position_mean: 0.325
+- id: c022
+  name: user_cookie_control
+  definition: States that users can control cookies through their browser settings, including accepting, declining, disabling,
+    or being notified about cookies.
+  size: 273
+  documents: 192
+  document_share: 0.384
+  cohesion: 0.7148
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.018
+  representative_claims:
+  - claim_id: privacy_pl:562491#3#6
+    claim: The company allows users to disable cookies through their web browser settings.
+  - claim_id: privacy_pl:631928#3#2
+    claim: The company allows users to decline cookies by adjusting their browser settings.
+  - claim_id: opp115:1099#16#2
+    claim: The company allows users to accept or decline cookies by modifying their browser settings.
+  type_guess_top:
+  - - user_control
+    - 68
+  - - granting_right
+    - 16
+  - - cookie_control
+    - 10
+  - - user_cookie_control
+    - 10
+  - - cookie_use
+    - 9
+  heading_top:
+  - - (no heading)
+    - 48
+  - - cookies
+    - 44
+  - - use of cookies
+    - 19
+  position_mean: 0.502
+- id: c023
+  name: disclaims_control_over_third_party_cookies
+  definition: States that the company does not have access to, control over, or responsibility for cookies used by third-party
+    advertisers or other third-party services.
+  size: 263
+  documents: 179
+  document_share: 0.358
+  cohesion: 0.6302
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.004
+  representative_claims:
+  - claim_id: privacy_pl:613984#11#3
+    claim: The company has no access to or control over cookies used by third-party advertisers.
+  - claim_id: privacy_pl:653255#2#2
+    claim: The company does not have access to or control over the cookies used by third-party advertisers.
+  - claim_id: privacy_pl:1052805#3#6
+    claim: The company has no access to or control over cookies used by third-party advertisers.
+  type_guess_top:
+  - - no_control_over_cookies
+    - 18
+  - - third_party_control
+    - 15
+  - - third_party_disclaimer
+    - 12
+  - - third_party_cookies
+    - 7
+  - - non_control_third_party
+    - 6
+  heading_top:
+  - - (no heading)
+    - 34
+  - - cookies
+    - 18
+  - - doubleclick dart cookie
+    - 7
+  position_mean: 0.59
+- id: c024
+  name: shares_personal_information_with_third_parties
+  definition: States that the company shares personal information with third parties for the purpose of performing services,
+    fulfilling orders, or other specific functions on behalf of the company.
+  size: 251
+  documents: 157
+  document_share: 0.314
+  cohesion: 0.65
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:837084#3#1
+    claim: The company may share personal information with third parties hired to perform services, under strict conditions.
+  - claim_id: privacy_pl:53451#4#3
+    claim: The company shares personal information with third parties providing services on their behalf.
+  - claim_id: privacy_pl:239341#6#1
+    claim: The company may share personal information with third parties to perform services on behalf of the user.
+  type_guess_top:
+  - - third_party_sharing
+    - 27
+  - - data_sharing
+    - 20
+  - - third_party_disclosure
+    - 8
+  - - disclosure_to_third_parties
+    - 7
+  - - third_party_access
+    - 7
+  heading_top:
+  - - (no heading)
+    - 48
+  - - information sharing and disclosure
+    - 9
+  - - personal information
+    - 5
+  position_mean: 0.408
+- id: c025
+  name: legal_governance
+  definition: States that the privacy policy and related matters are governed by the laws of a specific jurisdiction, including
+    the resolution of disputes and the authoritative version of the policy.
+  size: 246
+  documents: 111
+  document_share: 0.222
+  cohesion: 0.4748
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:68861#5#1
+    claim: The Privacy Policy is governed by the laws of a specific state.
+  - claim_id: privacy_pl:1015175#4#4
+    claim: The company states that the policy and use of the site are governed by New York law.
+  - claim_id: privacy_pl:484093#8#0
+    claim: The company states that disputes over privacy or the privacy policy will be governed by the law of a specific jurisdiction.
+  type_guess_top:
+  - - term_definition
+    - 12
+  - - legal_governance
+    - 10
+  - - dispute_resolution
+    - 9
+  - - service_location
+    - 4
+  - - third_party_rights
+    - 4
+  heading_top:
+  - - (no heading)
+    - 41
+  - - arbitration
+    - 11
+  - - dispute resolution arbitration
+    - 9
+  position_mean: 0.669
+- id: c026
+  name: data_retention_policy
+  definition: States that the company retains personal information for a specified period, typically as long as necessary
+    for the original purpose or as required by law, and may retain it for archival or legal purposes even after account closure.
+  size: 242
+  documents: 132
+  document_share: 0.264
+  cohesion: 0.5675
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:340562#3#11
+    claim: The company retains personal information as long as necessary for the original purpose or as required by law.
+  - claim_id: privacy_pl:355028#2#6
+    claim: The company retains collected information as long as the user's account is active and as required by legal obligations.
+  - claim_id: opp115:186#26#5
+    claim: The company may retain personal information for a longer period if required or permitted by law.
+  type_guess_top:
+  - - data_retention_policy
+    - 28
+  - - data_retention
+    - 23
+  - - data_retention_period
+    - 18
+  - - data_deletion_policy
+    - 8
+  - - deletion_policy
+    - 6
+  heading_top:
+  - - (no heading)
+    - 28
+  - - data retention
+    - 9
+  - - retention period
+    - 5
+  position_mean: 0.56
+- id: c027
+  name: data_non_linking_policy
+  definition: States that the company does not link collected technical information, such as IP addresses, to personally identifiable
+    information, with some exceptions for compliance or protection.
+  size: 241
+  documents: 177
+  document_share: 0.354
+  cohesion: 0.6535
+  single_kind: false
+  split_note: data_non_linking_policy, non_identification, data_collection_policy
+  flags:
+  - mixed
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:231525#1#1
+    claim: The company does not link collected IP addresses and other information to personally identifiable information.
+  - claim_id: privacy_pl:368571#2#6
+    claim: The company does not normally link IP addresses to personally identifiable information, but may do so to enforce
+      compliance or protect its service.
+  - claim_id: privacy_pl:724676#4#1
+    claim: The company does not link IP addresses to personally identifiable information.
+  type_guess_top:
+  - - data_linking_policy
+    - 23
+  - - non_identification
+    - 11
+  - - data_collection_policy
+    - 8
+  - - data_linking
+    - 6
+  - - data_non_storage
+    - 6
+  heading_top:
+  - - (no heading)
+    - 39
+  - - log files
+    - 27
+  - - privacy policy
+    - 7
+  position_mean: 0.354
+- id: c028
+  name: uses_data_to_improve_website
+  definition: States that the company uses collected information to improve the website, services, and user experience.
+  size: 231
+  documents: 174
+  document_share: 0.348
+  cohesion: 0.7818
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:334614#3#2
+    claim: The company uses collected information to improve the sites and services.
+  - claim_id: privacy_pl:872448#1#7
+    claim: The company uses collected information to improve their website and personalize your experience.
+  - claim_id: privacy_pl:735462#2#1
+    claim: The company uses collected information to improve the website to better serve users.
+  type_guess_top:
+  - - data_use
+    - 53
+  - - website_improvement
+    - 19
+  - - data_collection_purpose
+    - 14
+  - - service_improvement
+    - 14
+  - - customer_service_improvement
+    - 12
+  heading_top:
+  - - (no heading)
+    - 44
+  - - what do we use your information for
+    - 29
+  - - how do we use your information
+    - 10
+  position_mean: 0.287
+- id: c029
+  name: consent_through_use
+  definition: States that using the website or service implies or signifies the user's consent to the privacy policy or the
+    collection and use of their information.
+  size: 230
+  documents: 186
+  document_share: 0.372
+  cohesion: 0.6117
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:952540#6#0
+    claim: The company states that using the site implies consent to the privacy policy.
+  - claim_id: privacy_pl:319768#0#11
+    claim: The company states that by using the site, users signify their acceptance of the privacy policy.
+  - claim_id: privacy_pl:694373#1#2
+    claim: The company states that by using the Services, users consent to the collection and use of their information as
+      outlined in the Privacy Policy.
+  type_guess_top:
+  - - user_consent
+    - 36
+  - - user_agreement
+    - 24
+  - - consent_implied
+    - 12
+  - - consent_through_use
+    - 11
+  - - user_acceptance
+    - 11
+  heading_top:
+  - - (no heading)
+    - 66
+  - - changes to our privacy policy
+    - 10
+  - - privacy policy
+    - 8
+  position_mean: 0.37
+- id: c030
+  name: shares_information_with_affiliates_partners
+  definition: States that the company may share personal information with affiliates, subsidiaries, business partners, or
+    related entities for various business purposes, including fulfilling requests, marketing, and operational needs.
+  size: 228
+  documents: 155
+  document_share: 0.31
+  cohesion: 0.6526
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:800340#6#0
+    claim: The company may share personal information with business partners to fulfill requests for products or services.
+  - claim_id: privacy_pl:52766#1#4
+    claim: The company states that personal information may be shared with partners providing services on their behalf.
+  - claim_id: privacy_pl:885480#5#6
+    claim: The company shares personal information with other entities and affiliates within the family of companies for business
+      and operational purposes.
+  type_guess_top:
+  - - data_sharing
+    - 36
+  - - data_sharing_purpose
+    - 9
+  - - information_sharing
+    - 8
+  - - affiliate_sharing
+    - 6
+  - - disclosure_to_affiliates
+    - 5
+  heading_top:
+  - - (no heading)
+    - 42
+  - - privacy policy
+    - 5
+  - - use of information collected
+    - 4
+  position_mean: 0.388
+- id: c031
+  name: disclose_data_rights
+  definition: States that the company informs users of their rights to access, complain, or request changes to their personal
+    data held by the company.
+  size: 215
+  documents: 95
+  document_share: 0.19
+  cohesion: 0.4998
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:621224#7#10
+    claim: The company allows individuals to complain to a data protection authority about their collection and use of personal
+      information.
+  - claim_id: privacy_pl:25152#10#3
+    claim: The company discloses that individuals have the right to raise a complaint with the data protection regulator.
+  - claim_id: privacy_pl:99120#12#0
+    claim: The company discloses that individuals have the right to request access to, deletion of, or correction of their
+      personal data held by the company.
+  type_guess_top:
+  - - disclose_right
+    - 30
+  - - access_right
+    - 11
+  - - disclose_rights
+    - 11
+  - - complaint_right
+    - 5
+  - - data_access_right
+    - 4
+  heading_top:
+  - - (no heading)
+    - 16
+  - - privacy complaints
+    - 9
+  - - rights of the parties concerned
+    - 9
+  position_mean: 0.692
+- id: c032
+  name: uses_contact_information
+  definition: States that the company uses contact information to communicate with users about products, services, promotions,
+    and administrative matters, but not for marketing unless consent is given.
+  size: 213
+  documents: 152
+  document_share: 0.304
+  cohesion: 0.6598
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:856042#7#11
+    claim: The company uses information to contact users about relevant services and offers.
+  - claim_id: privacy_pl:365864#3#10
+    claim: The company uses personal information to contact users about products, services, upcoming events, and offers from
+      itself and third parties.
+  - claim_id: privacy_pl:515523#1#3
+    claim: The company uses contact information to communicate about administrative notices, new product offerings, and relevant
+      communications.
+  type_guess_top:
+  - - data_use
+    - 30
+  - - contact_use
+    - 13
+  - - disclosing_practice
+    - 7
+  - - data_use_purpose
+    - 7
+  - - communication_purpose
+    - 6
+  heading_top:
+  - - (no heading)
+    - 43
+  - - personal information
+    - 9
+  - - registration
+    - 6
+  position_mean: 0.382
+- id: c033
+  name: business_transfer_data
+  definition: States that the company may transfer personal information to third parties in the event of a business transaction
+    such as a merger, acquisition, sale, or reorganization, but does not include routine data sharing or transfers for operational
+    purposes.
+  size: 206
+  documents: 148
+  document_share: 0.296
+  cohesion: 0.6907
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:533526#14#4
+    claim: The company may transfer personal information to an acquiring or merging party as part of a business transaction.
+  - claim_id: privacy_pl:365864#4#6
+    claim: The company may transfer personal information as part of a merger, acquisition, or sale of assets.
+  - claim_id: privacy_pl:343374#11#0
+    claim: The company may transfer personal information to a third party in the event of a merger, acquisition, reorganization,
+      or sale of assets.
+  type_guess_top:
+  - - business_transfer
+    - 13
+  - - data_transfer
+    - 9
+  - - asset_transfer
+    - 5
+  - - business_transfer_disclosure
+    - 4
+  - - data_transfer_on_acquisition
+    - 4
+  heading_top:
+  - - (no heading)
+    - 27
+  - - business transfers
+    - 11
+  - - sharing information
+    - 5
+  position_mean: 0.502
+- id: c034
+  name: disabling_cookies_consequences
+  definition: Warns that disabling cookies may affect the functionality, access to features, or performance of the website.
+  size: 200
+  documents: 169
+  document_share: 0.338
+  cohesion: 0.7751
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:16957#6#3
+    claim: The company notes that refusing cookies may affect the functionality of the website.
+  - claim_id: privacy_pl:165812#11#2
+    claim: Disabling cookies may prevent some parts of the website from operating correctly and may limit access to some features
+      or services.
+  - claim_id: privacy_pl:528804#1#6
+    claim: You are always free to decline any cookies we use by adjusting the settings of your browser, but some products,
+      services or features might not be available or operate properly if cookies are not enabled.
+  type_guess_top:
+  - - stating_limitation
+    - 13
+  - - user_control
+    - 9
+  - - disabling_consequence
+    - 7
+  - - functionality_warning
+    - 7
+  - - cookie_disabling
+    - 6
+  heading_top:
+  - - (no heading)
+    - 44
+  - - cookies
+    - 32
+  - - use of cookies
+    - 11
+  position_mean: 0.464
+- id: c035
+  name: provides_opt_out_options
+  definition: States that the company provides users with various options to opt out of specific types of data collection
+    or advertising, including links, methods, and instructions for opting out of cookies, interest-based advertising, and
+    mobile tracking.
+  size: 195
+  documents: 124
+  document_share: 0.248
+  cohesion: 0.6993
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:820382#0#6
+    claim: The company provides a way for users to opt out of the DART cookie use.
+  - claim_id: privacy_pl:315743#5#3
+    claim: Users may opt out of the use of the DART cookie by visiting the advertising opt-out page.
+  - claim_id: privacy_pl:215065#23#2
+    claim: The company provides a link for users to opt out of interest-based advertising using the DoubleClick cookie.
+  type_guess_top:
+  - - user_opt_out
+    - 25
+  - - opt_out_provision
+    - 22
+  - - opt_out_link
+    - 18
+  - - dart_cookie_opt_out
+    - 12
+  - - granting_right
+    - 10
+  heading_top:
+  - - (no heading)
+    - 20
+  - - doubleclick dart cookie
+    - 18
+  - - cookies
+    - 10
+  position_mean: 0.566
+- id: c036
+  name: policy_scope_limitation
+  definition: States that the company's privacy policy applies only to its own website and not to other linked, external,
+    or third-party websites or services.
+  size: 193
+  documents: 148
+  document_share: 0.296
+  cohesion: 0.692
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.005
+  representative_claims:
+  - claim_id: privacy_pl:928502#4#6
+    claim: The company's privacy policy applies only to its own website and not to other linked websites.
+  - claim_id: privacy_pl:365864#9#2
+    claim: The company's privacy policy does not apply to external websites.
+  - claim_id: privacy_pl:559103#8#1
+    claim: The company's privacy policy does not apply to third-party websites or services.
+  type_guess_top:
+  - - policy_scope
+    - 49
+  - - policy_exclusion
+    - 23
+  - - policy_non_applicability
+    - 10
+  - - policy_coverage_limitation
+    - 7
+  - - policy_limitation
+    - 6
+  heading_top:
+  - - (no heading)
+    - 42
+  - - links
+    - 11
+  - - online privacy policy only
+    - 11
+  position_mean: 0.449
+- id: c037
+  name: content_and_usage_restrictions
+  definition: States that users must not use the site or its content in certain ways, including reproducing, modifying, or
+    distributing content without permission, and must not use the site if they do not agree to the terms or privacy policy.
+  size: 184
+  documents: 103
+  document_share: 0.206
+  cohesion: 0.4466
+  single_kind: false
+  split_note: content_restriction, disagreement_consequence
+  flags:
+  - mixed
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: opp115:928#23#0
+    claim: The company states that users are not allowed to submit content that violates or infringes the rights of others.
+  - claim_id: privacy_pl:711827#6#1
+    claim: The company states that users may not modify, copy, reproduce, create derivative works, republish, display, upload,
+      post, transmit, or distribute content without prior written consent.
+  - claim_id: privacy_pl:533526#0#7
+    claim: The company states that if users do not agree with the terms, they should not use the site.
+  type_guess_top:
+  - - disagreement_action
+    - 8
+  - - ownership_claim
+    - 8
+  - - content_restriction
+    - 7
+  - - disagreement_consequence
+    - 5
+  - - content_ownership
+    - 4
+  heading_top:
+  - - (no heading)
+    - 54
+  - - terms and services bookplate creator
+    - 6
+  - - social media disclaimer
+    - 5
+  position_mean: 0.589
+- id: c038
+  name: compliance_with_laws_and_standards
+  definition: States that the company complies with specific laws, regulations, or industry standards related to privacy and
+    data protection.
+  size: 180
+  documents: 114
+  document_share: 0.228
+  cohesion: 0.56
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.006
+  representative_claims:
+  - claim_id: privacy_pl:991957#26#0
+    claim: The company participates in and has certified compliance with the EU-U.S. Privacy Shield Framework.
+  - claim_id: privacy_pl:774774#1#6
+    claim: The company complies with the Children's Online Privacy Protection Act and all other applicable laws.
+  - claim_id: privacy_pl:211885#4#0
+    claim: The company operates its website in compliance with the Children's Online Privacy Protection Act (COPPA).
+  type_guess_top:
+  - - compliance_statement
+    - 15
+  - - legal_compliance
+    - 15
+  - - compliance_with_law
+    - 5
+  - - safe_harbor_principles
+    - 5
+  - - third_party_seal
+    - 5
+  heading_top:
+  - - (no heading)
+    - 40
+  - - childrens online privacy protection act compliance
+    - 10
+  - - california online privacy protection act compliance
+    - 7
+  position_mean: 0.497
+- id: c039
+  name: cookie_non_identification
+  definition: States that the company does not use cookies to collect, store, or link to personally identifiable information.
+  size: 180
+  documents: 144
+  document_share: 0.288
+  cohesion: 0.7122
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: opp115:541#5#2
+    claim: The company does not use cookies to collect personally identifiable information.
+  - claim_id: privacy_pl:1058891#3#1
+    claim: The company does not use cookies to collect users' personally identifiable information.
+  - claim_id: privacy_pl:206674#2#5
+    claim: The company states that cookies do not collect personally identifiable information.
+  type_guess_top:
+  - - stating_limitation
+    - 10
+  - - cookie_policy
+    - 10
+  - - cookie_usage
+    - 9
+  - - cookie_use
+    - 9
+  - - cookie_limitation
+    - 7
+  heading_top:
+  - - (no heading)
+    - 38
+  - - cookies
+    - 34
+  - - log files
+    - 8
+  position_mean: 0.42
+- id: c040
+  name: data_transfer_to_us
+  definition: States that personal information may be transferred to, stored, or processed in the United States, often requiring
+    user consent or agreement.
+  size: 176
+  documents: 101
+  document_share: 0.202
+  cohesion: 0.6656
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:171523#6#0
+    claim: The company states that personal information may be transferred to, stored, or processed in the USA.
+  - claim_id: privacy_pl:883060#15#4
+    claim: Personal data provided by users outside the United States will be transferred to the United States.
+  - claim_id: privacy_pl:148630#5#0
+    claim: The company may store and process collected information in any of the countries where it operates.
+  type_guess_top:
+  - - data_transfer
+    - 39
+  - - data_storage_location
+    - 15
+  - - data_location
+    - 11
+  - - data_processing_location
+    - 7
+  - - user_consent
+    - 6
+  heading_top:
+  - - (no heading)
+    - 18
+  - - international transfer
+    - 6
+  - - where we store your personal data
+    - 5
+  position_mean: 0.584
+- id: c041
+  name: no_child_data_collection
+  definition: States that the company does not knowingly collect personal information from children under a certain age, typically
+    13.
+  size: 173
+  documents: 155
+  document_share: 0.31
+  cohesion: 0.847
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:496936#7#1
+    claim: The company does not knowingly collect personal information from children under 13.
+  - claim_id: privacy_pl:799450#6#0
+    claim: The company does not knowingly collect, use, or disclose personal information from children under the age of 13.
+  - claim_id: privacy_pl:896259#9#5
+    claim: The company does not knowingly collect personal information from children under the age of 13.
+  type_guess_top:
+  - - data_collection_policy
+    - 40
+  - - data_collection_restriction
+    - 21
+  - - no_child_data_collection
+    - 19
+  - - no_collection_under_age
+    - 9
+  - - data_collection_limitation
+    - 6
+  heading_top:
+  - - (no heading)
+    - 26
+  - - children s privacy
+    - 18
+  - - children
+    - 15
+  position_mean: 0.59
+- id: c042
+  name: third_party_ad_cookie_use
+  definition: States that third parties, such as Google, use cookies to serve ads based on users' visits to the company's
+    site and other sites.
+  size: 170
+  documents: 105
+  document_share: 0.21
+  cohesion: 0.777
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:1036598#0#3
+    claim: A third party vendor, such as Google, uses cookies to serve ads on the site.
+  - claim_id: privacy_pl:312956#1#3
+    claim: Google uses cookies to serve ads based on users' visits to this and other sites.
+  - claim_id: privacy_pl:134988#2#4
+    claim: The company notes that some ads may be served by Google using the DART cookie.
+  type_guess_top:
+  - - third_party_cookie_use
+    - 24
+  - - disclosing_practice
+    - 18
+  - - cookie_usage
+    - 13
+  - - dart_cookie_use
+    - 11
+  - - cookie_function
+    - 9
+  heading_top:
+  - - doubleclick dart cookie
+    - 29
+  - - cookies
+    - 17
+  - - what information do we collect
+    - 12
+  position_mean: 0.57
+- id: c043
+  name: no_email_sharing_policy
+  definition: States that the company does not sell, share, or rent users' email addresses to third parties, with possible
+    exceptions for legal requirements or user consent.
+  size: 167
+  documents: 123
+  document_share: 0.246
+  cohesion: 0.575
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:637485#3#0
+    claim: The company does not sell, trade, share, or rent the user's email address to anyone.
+  - claim_id: privacy_pl:637479#3#0
+    claim: The company does not sell, trade, share, or rent the email address of its customers.
+  - claim_id: privacy_pl:1035751#3#0
+    claim: The company does not sell or disclose email addresses to third parties.
+  type_guess_top:
+  - - data_sharing_policy
+    - 10
+  - - data_use
+    - 6
+  - - data_sharing
+    - 5
+  - - data_use_limitation
+    - 5
+  - - email_sharing_policy
+    - 4
+  heading_top:
+  - - (no heading)
+    - 32
+  - - privacy policy
+    - 5
+  - - the way we use information
+    - 5
+  position_mean: 0.45
+- id: c044
+  name: shares_aggregated_data
+  definition: States that the company may share aggregated, non-personally identifiable information with third parties, business
+    partners, affiliates, and advertisers for various purposes, including marketing, research, and business analysis.
+  size: 165
+  documents: 130
+  document_share: 0.26
+  cohesion: 0.6305
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:211885#3#4
+    claim: The company may share aggregated non-personally identifiable demographic information with third parties.
+  - claim_id: privacy_pl:539815#6#1
+    claim: The company may share aggregated demographic information not linked to personal identification with business partners,
+      affiliates, and advertisers.
+  - claim_id: privacy_pl:1018282#3#9
+    claim: The company may share aggregated, non-personal information with third parties.
+  type_guess_top:
+  - - data_sharing
+    - 39
+  - - aggregate_data_sharing
+    - 11
+  - - aggregated_data_sharing
+    - 8
+  - - aggregate_sharing
+    - 4
+  - - data_use
+    - 4
+  heading_top:
+  - - (no heading)
+    - 37
+  - - non personal information
+    - 6
+  - - privacy policy
+    - 5
+  position_mean: 0.382
+- id: c045
+  name: data_collection_contests_surveys
+  definition: States that the company collects personal information from users through contests, surveys, and other similar
+    activities on their website.
+  size: 161
+  documents: 104
+  document_share: 0.208
+  cohesion: 0.5919
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: opp115:1070#3#2
+    claim: The company collects information when users participate in contests or promotions.
+  - claim_id: opp115:1099#1#3
+    claim: The company collects personal information when you participate in contests, promotions, or sweepstakes on their
+      websites.
+  - claim_id: privacy_pl:711770#1#6
+    claim: The company collects information from surveys, contests, and sweepstakes.
+  type_guess_top:
+  - - data_collection
+    - 9
+  - - data_use
+    - 7
+  - - data_use_purpose
+    - 6
+  - - survey_conduct
+    - 6
+  - - site_feature_administration
+    - 3
+  heading_top:
+  - - (no heading)
+    - 26
+  - - surveys and contests
+    - 12
+  - - official rules
+    - 7
+  position_mean: 0.374
+- id: c046
+  name: provides_unsubscribe_option
+  definition: States that the company provides users with the option to unsubscribe from receiving emails, newsletters, or
+    promotional communications, often including specific methods or instructions for doing so.
+  size: 148
+  documents: 104
+  document_share: 0.208
+  cohesion: 0.7932
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:836576#1#7
+    claim: The company allows users to unsubscribe from receiving future emails.
+  - claim_id: privacy_pl:438255#6#2
+    claim: The company allows users to unsubscribe from email newsletters at any time via a link in the newsletter.
+  - claim_id: privacy_pl:410269#10#8
+    claim: The company allows users to unsubscribe by using a link at the bottom of each email.
+  type_guess_top:
+  - - unsubscribe_option
+    - 34
+  - - unsubscribe_method
+    - 7
+  - - unsubscribe_instructions
+    - 7
+  - - grant_right
+    - 5
+  - - unsubscribe_provision
+    - 5
+  heading_top:
+  - - (no heading)
+    - 13
+  - - what do we use your information for
+    - 10
+  - - mailing lists
+    - 6
+  position_mean: 0.55
+- id: c047
+  name: company_identification_and_service_definition
+  definition: States that the company identifies itself, its affiliates, or subsidiaries, and defines the services, products,
+    or terms related to its operations.
+  size: 139
+  documents: 75
+  document_share: 0.15
+  cohesion: 0.4994
+  single_kind: false
+  split_note: company_identification, definition_of_terms
+  flags:
+  - mixed
+  example_label_share: 0.007
+  representative_claims:
+  - claim_id: privacy_pl:883060#0#1
+    claim: The company identifies itself as the owner and operator of the website or online service.
+  - claim_id: privacy_pl:53451#0#3
+    claim: The company defines the term 'Services' to include the websites, applications, and community features operated
+      by the company.
+  - claim_id: opp115:1070#0#0
+    claim: The company defines the term 'Affiliates' to include subsidiaries and entities with an ownership interest.
+  type_guess_top:
+  - - service_offering
+    - 13
+  - - company_identification
+    - 7
+  - - data_controller
+    - 6
+  - - service_description
+    - 5
+  - - definition_of_terms
+    - 4
+  heading_top:
+  - - (no heading)
+    - 26
+  - - india
+    - 21
+  - - s definitions
+    - 6
+  position_mean: 0.455
+- id: c048
+  name: provides_contact_information
+  definition: States that the company provides contact information for questions, concerns, or inquiries about the privacy
+    policy, practices, or related matters.
+  size: 137
+  documents: 130
+  document_share: 0.26
+  cohesion: 0.8902
+  single_kind: true
+  split_note: ''
+  flags:
+  - duplicate_name
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: opp115:1673#46#0
+    claim: The company provides contact information for questions about privacy policy or practices.
+  - claim_id: privacy_pl:883060#17#0
+    claim: The company provides contact information for questions or concerns about the privacy policy or information practices.
+  - claim_id: privacy_pl:1042150#7#0
+    claim: The company provides contact details for inquiries about the privacy statement, site practices, or user interactions.
+  type_guess_top:
+  - - contact_information
+    - 124
+  - - contact_information_provision
+    - 5
+  - - contact_details
+    - 3
+  - - contact_information_provided
+    - 2
+  - - complaint_contact
+    - 1
+  heading_top:
+  - - contacting us
+    - 27
+  - - (no heading)
+    - 20
+  - - how to contact us
+    - 9
+  position_mean: 0.827
+- id: c049
+  name: third_party_ad_targeting
+  definition: States that third-party companies use information about website visits to provide targeted advertisements, often
+    specifying that the information is non-personal or non-personally identifiable.
+  size: 130
+  documents: 101
+  document_share: 0.202
+  cohesion: 0.6998
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:577356#3#5
+    claim: Third-party companies may use information about visits to provide targeted advertisements.
+  - claim_id: privacy_pl:317001#2#2
+    claim: Third-party advertising companies may use aggregated information about visits to provide targeted advertisements.
+  - claim_id: privacy_pl:1026011#12#1
+    claim: Third-party companies may use information about visits to the website and other sites to provide targeted advertisements,
+      excluding personal contact information.
+  type_guess_top:
+  - - data_use
+    - 12
+  - - advertising_use
+    - 12
+  - - third_party_advertising
+    - 8
+  - - third_party_data_use
+    - 6
+  - - ad_targeting
+    - 6
+  heading_top:
+  - - (no heading)
+    - 23
+  - - third party advertising
+    - 15
+  - - advertising
+    - 7
+  position_mean: 0.44
+- id: c050
+  name: uses_tracking_technologies
+  definition: States that the company uses cookies, web beacons, and other tracking technologies to collect and store information
+    about user behavior and preferences.
+  size: 126
+  documents: 68
+  document_share: 0.136
+  cohesion: 0.6645
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.016
+  representative_claims:
+  - claim_id: privacy_pl:883619#5#1
+    claim: The company uses cookies and similar tracking technologies to access or store information.
+  - claim_id: privacy_pl:883619#5#0
+    claim: The company uses cookies and other tracking technologies to collect and store information.
+  - claim_id: privacy_pl:621224#8#0
+    claim: The company and its partners use cookies, web beacons, and similar tracking technologies on their websites and
+      mobile applications.
+  type_guess_top:
+  - - technology_use
+    - 13
+  - - data_collection
+    - 10
+  - - data_collection_method
+    - 9
+  - - disclosing_practice
+    - 5
+  - - tracking_technology_use
+    - 5
+  heading_top:
+  - - (no heading)
+    - 16
+  - - aggregated anonymized or statistical information
+    - 7
+  - - cookies and web beacons
+    - 7
+  position_mean: 0.406
+- id: c051
+  name: access_restriction
+  definition: States that the company restricts access to personal information to only those individuals who have a specific
+    business need to know or perform their duties.
+  size: 124
+  documents: 106
+  document_share: 0.212
+  cohesion: 0.7097
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:494554#18#5
+    claim: The company restricts access to personal information to only those personnel who need it for business activities.
+  - claim_id: privacy_pl:533526#13#0
+    claim: The company limits access to personal information to employees, agents, and contractors with a business need to
+      know.
+  - claim_id: privacy_pl:482384#6#4
+    claim: The company limits access to Personal Information to only those employees who need it to perform their duties.
+  type_guess_top:
+  - - access_restriction
+    - 34
+  - - access_limitation
+    - 15
+  - - access_control
+    - 12
+  - - data_access_control
+    - 5
+  - - data_use_limitation
+    - 4
+  heading_top:
+  - - (no heading)
+    - 23
+  - - security
+    - 20
+  - - how do we protect your information
+    - 8
+  position_mean: 0.522
+- id: c052
+  name: web_beacon_data_collection
+  definition: States that the company uses web beacons, pixel tags, or similar technologies to collect data about user interactions,
+    site visits, and email opens for analytics and performance measurement.
+  size: 118
+  documents: 67
+  document_share: 0.134
+  cohesion: 0.6932
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:883060#5#5
+    claim: The company uses web beacons to track user visits and email opens for analytics purposes.
+  - claim_id: privacy_pl:494554#40#0
+    claim: The company uses web beacons to track which visitors interact with specific elements on web pages or emails.
+  - claim_id: privacy_pl:517009#8#5
+    claim: The company uses pixel tags and web beacons to track user actions on the Website and in emails.
+  type_guess_top:
+  - - web_beacon_use
+    - 14
+  - - disclosing_practice
+    - 13
+  - - data_collection_method
+    - 11
+  - - email_tracking
+    - 9
+  - - data_collection
+    - 8
+  heading_top:
+  - - (no heading)
+    - 19
+  - - web beacons
+    - 8
+  - - use of web beacons or gif files
+    - 7
+  position_mean: 0.435
+- id: c053
+  name: discloses_third_party_cookie_use
+  definition: States that third-party advertising partners, services, or companies may use cookies or web beacons on the company's
+    website to collect information or serve advertisements.
+  size: 118
+  documents: 104
+  document_share: 0.208
+  cohesion: 0.7212
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:145691#5#3
+    claim: The company mentions that third-party advertising and marketing partners may use their own cookies.
+  - claim_id: privacy_pl:1054954#10#1
+    claim: Third-party advertising companies may use cookies when serving content and advertisements on the website.
+  - claim_id: privacy_pl:613984#10#3
+    claim: The company mentions that some advertising partners may use cookies and web beacons on the site.
+  type_guess_top:
+  - - partner_cookie_use
+    - 10
+  - - third_party_cookie_use
+    - 8
+  - - advertising_partner
+    - 8
+  - - third_party_data_collection
+    - 7
+  - - disclosing_practice
+    - 7
+  heading_top:
+  - - doubleclick dart cookie
+    - 17
+  - - (no heading)
+    - 14
+  - - cookies
+    - 11
+  position_mean: 0.523
+- id: c054
+  name: data_removal_option
+  definition: States that the company provides users with the option to request the removal or deletion of their personal
+    information from the company's database or systems.
+  size: 114
+  documents: 89
+  document_share: 0.178
+  cohesion: 0.7095
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:661946#5#3
+    claim: The company allows users to request the removal of their personal information at any time.
+  - claim_id: privacy_pl:716997#4#2
+    claim: The company provides options for users to remove their information from its database.
+  - claim_id: privacy_pl:872448#3#1
+    claim: The company provides a method for users to request the removal of their personal information.
+  type_guess_top:
+  - - data_removal_option
+    - 9
+  - - data_removal
+    - 5
+  - - account_deletion
+    - 4
+  - - removal_right
+    - 3
+  - - deletion_request
+    - 3
+  heading_top:
+  - - choice opt out
+    - 15
+  - - (no heading)
+    - 13
+  - - content removal
+    - 3
+  position_mean: 0.634
+- id: c055
+  name: uses_third_party_services
+  definition: States that the company uses third-party service providers to perform various functions, provide services, or
+    process information on its behalf.
+  size: 113
+  documents: 92
+  document_share: 0.184
+  cohesion: 0.6905
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: opp115:652#19#0
+    claim: The company uses third party service providers to perform various functions on its behalf.
+  - claim_id: privacy_pl:150313#3#0
+    claim: The company uses third parties to perform services on its behalf.
+  - claim_id: privacy_pl:362411#15#0
+    claim: The company uses third-party services to support the operation of its service.
+  type_guess_top:
+  - - third_party_use
+    - 25
+  - - third_party_services
+    - 20
+  - - third_party_service
+    - 4
+  - - third_party_processing
+    - 4
+  - - third_party_function
+    - 2
+  heading_top:
+  - - (no heading)
+    - 14
+  - - service providers
+    - 3
+  - - privacy policy
+    - 3
+  position_mean: 0.467
+- id: c056
+  name: notifies_of_policy_changes
+  definition: States that the company will notify users of material changes to the privacy policy, often specifying methods
+    such as email or a notice on the website.
+  size: 111
+  documents: 99
+  document_share: 0.198
+  cohesion: 0.857
+  single_kind: true
+  split_note: ''
+  flags:
+  - example_label_name
+  example_label_share: 0.009
+  representative_claims:
+  - claim_id: privacy_pl:613984#18#2
+    claim: The company will notify users of material changes to the privacy policy.
+  - claim_id: privacy_pl:621224#25#1
+    claim: The company will notify users of material changes to the privacy policy by email or a notice on the site.
+  - claim_id: privacy_pl:987524#8#3
+    claim: The company will notify users of material changes by email or by prominently posting notice on their website.
+  type_guess_top:
+  - - notification_method
+    - 21
+  - - policy_change_notification
+    - 13
+  - - material_change_notification
+    - 12
+  - - notification_of_changes
+    - 12
+  - - notification_commitment
+    - 7
+  heading_top:
+  - - changes to this privacy policy
+    - 22
+  - - (no heading)
+    - 15
+  - - changes to our privacy policy
+    - 6
+  position_mean: 0.761
+- id: c057
+  name: personalization_data_use
+  definition: States that the company uses collected information to personalize the user experience, content, and product
+    offerings.
+  size: 111
+  documents: 98
+  document_share: 0.196
+  cohesion: 0.7407
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:99120#5#2
+    claim: The company uses data to personalize and tailor the user experience and products.
+  - claim_id: privacy_pl:890874#1#0
+    claim: The company uses collected information to personalize the user experience.
+  - claim_id: privacy_pl:836576#1#0
+    claim: The company uses collected information to personalize the user experience.
+  type_guess_top:
+  - - data_use
+    - 27
+  - - personalization_use
+    - 23
+  - - data_use_purpose
+    - 6
+  - - personalization
+    - 5
+  - - information_use
+    - 3
+  heading_top:
+  - - (no heading)
+    - 18
+  - - what do we use your information for
+    - 14
+  - - how do we use your information
+    - 4
+  position_mean: 0.297
+- id: c058
+  name: uses_third_party_advertising
+  definition: States that the company uses third-party advertising companies to serve, display, or present ads on its website
+    or other sites.
+  size: 109
+  documents: 95
+  document_share: 0.19
+  cohesion: 0.7899
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:231461#5#0
+    claim: The company uses third-party advertising companies to serve ads on other websites.
+  - claim_id: privacy_pl:577356#3#4
+    claim: The company uses third-party advertising companies to serve ads on its website.
+  - claim_id: privacy_pl:1060791#2#6
+    claim: The company uses third-party advertising companies to serve ads based on visits to the website and others.
+  type_guess_top:
+  - - third_party_advertising
+    - 29
+  - - third_party_use
+    - 16
+  - - third_party_ads
+    - 12
+  - - disclosing_practice
+    - 3
+  - - third_party_ad_usage
+    - 3
+  heading_top:
+  - - (no heading)
+    - 19
+  - - third party advertising
+    - 12
+  - - cookies
+    - 6
+  position_mean: 0.535
+- id: c059
+  name: user_control_over_information
+  definition: States that the company provides users with choices and control over their personal information, including the
+    ability to decide what information to provide, how it is used, and the ability to modify preferences and settings.
+  size: 108
+  documents: 87
+  document_share: 0.174
+  cohesion: 0.6326
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:352484#1#2
+    claim: The company allows users to choose whether to provide personal information.
+  - claim_id: privacy_pl:271332#9#3
+    claim: The company allows users to control their personal information as they see fit.
+  - claim_id: privacy_pl:890874#5#2
+    claim: The company reports that users can change their information at any time through their control panel.
+  type_guess_top:
+  - - user_control
+    - 17
+  - - choice_explanation
+    - 5
+  - - user_choices
+    - 4
+  - - user_preference_change
+    - 3
+  - - user_choice
+    - 3
+  heading_top:
+  - - (no heading)
+    - 24
+  - - marketing communications
+    - 4
+  - - notification of changes
+    - 3
+  position_mean: 0.413
+- id: c060
+  name: log_file_data_collection
+  definition: States that the company uses log files to collect various types of data for purposes such as analyzing trends,
+    administering the site, tracking user movement, and gathering demographic information.
+  size: 102
+  documents: 89
+  document_share: 0.178
+  cohesion: 0.7603
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.029
+  representative_claims:
+  - claim_id: privacy_pl:613984#8#0
+    claim: The company uses log files to collect various types of data for analyzing trends, administering the site, tracking
+      user movement, and gathering demographic information.
+  - claim_id: privacy_pl:142469#9#0
+    claim: The company uses log files to collect various types of data for analyzing trends and administering the site.
+  - claim_id: privacy_pl:755125#1#0
+    claim: The company uses log files to collect information such as IP addresses, browser type, ISP, date/time stamp, referring/exit
+      pages, and number of clicks.
+  type_guess_top:
+  - - data_collection
+    - 35
+  - - data_collection_purpose
+    - 11
+  - - log_file_collection
+    - 3
+  - - data_collection_method
+    - 3
+  - - data_use
+    - 3
+  heading_top:
+  - - log files
+    - 34
+  - - (no heading)
+    - 6
+  - - information we collect and how we use it
+    - 3
+  position_mean: 0.331
+- id: c061
+  name: policy_change_notification
+  definition: States that the company will post any changes to the privacy policy on their website, often specifying the location
+    such as the homepage or a specific page.
+  size: 97
+  documents: 91
+  document_share: 0.182
+  cohesion: 0.8603
+  single_kind: true
+  split_note: ''
+  flags:
+  - example_label_name
+  example_label_share: 0.01
+  representative_claims:
+  - claim_id: privacy_pl:872448#6#1
+    claim: The company will post any changes to the privacy policy on their website.
+  - claim_id: privacy_pl:724676#11#0
+    claim: The company will post changes to its privacy policy on its Homepage.
+  - claim_id: privacy_pl:364425#7#1
+    claim: The company will post changes to its privacy policy on its website homepage.
+  type_guess_top:
+  - - policy_change_notification
+    - 25
+  - - commitment_to_post_changes
+    - 12
+  - - policy_update_notification
+    - 9
+  - - policy_update_method
+    - 4
+  - - policy_change_announcement
+    - 3
+  heading_top:
+  - - changes to our privacy policy
+    - 16
+  - - changes to this privacy policy
+    - 12
+  - - (no heading)
+    - 12
+  position_mean: 0.804
+- id: c062
+  name: allows_anonymous_visit
+  definition: States that users can visit the site or use its services without providing personal information or registering.
+  size: 97
+  documents: 85
+  document_share: 0.17
+  cohesion: 0.6828
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:952540#0#2
+    claim: The company allows users to visit the site without providing personal information.
+  - claim_id: privacy_pl:883619#2#0
+    claim: The company states that visitors can use the site anonymously without revealing personal data.
+  - claim_id: privacy_pl:66968#4#1
+    claim: The company discloses that users can use the website without providing personal information.
+  type_guess_top:
+  - - anonymous_visit
+    - 23
+  - - no_personal_info_required
+    - 8
+  - - no_information_required
+    - 4
+  - - anonymity_option
+    - 3
+  - - no_disclosure_required
+    - 3
+  heading_top:
+  - - (no heading)
+    - 23
+  - - what information do we collect
+    - 14
+  - - personal information
+    - 4
+  position_mean: 0.208
+- id: c063
+  name: states_policy_update_date
+  definition: States the date when the privacy policy was last updated, revised, or became effective.
+  size: 95
+  documents: 79
+  document_share: 0.158
+  cohesion: 0.8156
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:824339#11#1
+    claim: The company indicates the last update date of the privacy policy.
+  - claim_id: privacy_pl:390211#0#0
+    claim: The company states the date when the privacy policy was last updated.
+  - claim_id: privacy_pl:24102#0#5
+    claim: The company specifies the effective date of the policy.
+  type_guess_top:
+  - - policy_update_date
+    - 22
+  - - policy_effective_date
+    - 22
+  - - update_date
+    - 4
+  - - effective_date
+    - 4
+  - - policy_revision_date
+    - 3
+  heading_top:
+  - - (no heading)
+    - 30
+  - - changes to this policy
+    - 4
+  - - changes to this privacy policy
+    - 4
+  position_mean: 0.537
+- id: c064
+  name: states_third_party_policies
+  definition: States that third-party websites, services, or affiliates have their own privacy policies, which may differ
+    from the company's own policy.
+  size: 95
+  documents: 74
+  document_share: 0.148
+  cohesion: 0.6577
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:111314#9#1
+    claim: The company states that third-party sites have separate and independent privacy policies.
+  - claim_id: privacy_pl:214217#7#2
+    claim: Third-party websites and services may have their own privacy policies.
+  - claim_id: privacy_pl:68861#4#9
+    claim: The company notes that linked websites may have different privacy policies and may collect information differently.
+  type_guess_top:
+  - - third_party_policy
+    - 10
+  - - third_party_policies
+    - 10
+  - - third_party_links
+    - 7
+  - - third_party_privacy_policy
+    - 4
+  - - third_party_terms
+    - 3
+  heading_top:
+  - - (no heading)
+    - 20
+  - - third party websites
+    - 6
+  - - third party links
+    - 5
+  position_mean: 0.505
+- id: c065
+  name: data_storage_security
+  definition: States that the company stores personal information in secure environments, typically using password protection,
+    firewalls, and other security measures.
+  size: 95
+  documents: 80
+  document_share: 0.16
+  cohesion: 0.6902
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:132753#0#3
+    claim: The company stores personal information in secured and password-protected databases.
+  - claim_id: privacy_pl:855719#2#0
+    claim: The company stores information in a database that is secured with a firewall and password protection.
+  - claim_id: privacy_pl:254773#2#6
+    claim: The company stores personal information on secure password and firewall protected servers.
+  type_guess_top:
+  - - data_storage
+    - 15
+  - - data_storage_security
+    - 8
+  - - secure_storage
+    - 7
+  - - password_protection
+    - 7
+  - - data_protection
+    - 6
+  heading_top:
+  - - security
+    - 15
+  - - (no heading)
+    - 10
+  - - confidentiality and security
+    - 4
+  position_mean: 0.556
+- id: c066
+  name: provides_third_party_links
+  definition: States that the company includes or provides links to third-party websites, often advising users to review the
+    privacy policies of those sites.
+  size: 94
+  documents: 80
+  document_share: 0.16
+  cohesion: 0.7501
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:576170#10#0
+    claim: The company includes links to third-party sites on its website.
+  - claim_id: privacy_pl:352484#8#0
+    claim: The company provides links to other websites.
+  - claim_id: privacy_pl:33360#3#7
+    claim: The company provides links to other sites on their web site, and advises users to review privacy policies on those
+      sites.
+  type_guess_top:
+  - - third_party_links
+    - 23
+  - - provides_links
+    - 7
+  - - link_disclosure
+    - 6
+  - - link_inclusion
+    - 6
+  - - provision_of_links
+    - 3
+  heading_top:
+  - - (no heading)
+    - 14
+  - - links
+    - 9
+  - - links to other sites
+    - 7
+  position_mean: 0.629
+- id: c067
+  name: notification_of_changes
+  definition: States that the company will notify users of significant changes to the use or handling of their personal information,
+    typically via email or other prominent means.
+  size: 93
+  documents: 76
+  document_share: 0.152
+  cohesion: 0.62
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:142469#20#6
+    claim: The company will notify users via email if they plan to use personal information in a manner different from the
+      original collection purpose.
+  - claim_id: privacy_pl:667875#8#4
+    claim: The company commits to notifying users via email before making material changes to the use of their personal information.
+  - claim_id: privacy_pl:520633#5#1
+    claim: The company will notify users of substantial changes to the use of their personal information.
+  type_guess_top:
+  - - notification_commitment
+    - 10
+  - - different_use_notification
+    - 5
+  - - notification_policy
+    - 4
+  - - commitment_notification
+    - 4
+  - - data_use_notification
+    - 3
+  heading_top:
+  - - (no heading)
+    - 26
+  - - notification of changes
+    - 7
+  - - changes to this privacy policy
+    - 5
+  position_mean: 0.618
+- id: c068
+  name: child_data_deletion_policy
+  definition: States that the company will delete personal information of children under 13 if it is discovered or collected
+    without parental consent, and may provide a process for parents to request deletion.
+  size: 92
+  documents: 73
+  document_share: 0.146
+  cohesion: 0.7832
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:605963#14#5
+    claim: The company will delete personal information from children under 13 if it is discovered without parental consent.
+  - claim_id: privacy_pl:171523#2#3
+    claim: The company will delete personal information from children under 13 if they learn it was collected without parental
+      consent.
+  - claim_id: privacy_pl:496936#7#3
+    claim: The company states that it takes steps to remove personal information and terminate accounts if it becomes aware
+      that a child under 13 has provided personal information without parental consent.
+  type_guess_top:
+  - - data_deletion_policy
+    - 24
+  - - child_data_deletion
+    - 7
+  - - deletion_policy
+    - 5
+  - - data_removal_policy
+    - 4
+  - - deletion_of_child_data
+    - 3
+  heading_top:
+  - - (no heading)
+    - 19
+  - - children s privacy
+    - 13
+  - - children
+    - 6
+  position_mean: 0.665
+- id: c069
+  name: defines_personal_information
+  definition: States that the company defines personal information as data that can identify an individual, including various
+    types of personally identifiable information.
+  size: 92
+  documents: 69
+  document_share: 0.138
+  cohesion: 0.7052
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:927385#0#8
+    claim: The company defines personal information as personally identifiable information about an individual.
+  - claim_id: privacy_pl:991957#2#0
+    claim: The company defines Personal Information as data that can identify an individual.
+  - claim_id: privacy_pl:231461#1#0
+    claim: The company defines personal information as data that can identify an individual, including contact details, demographic
+      information, and any other information considered personal under applicable law.
+  type_guess_top:
+  - - data_definition
+    - 26
+  - - definition_of_data
+    - 11
+  - - data_classification
+    - 7
+  - - personal_information_definition
+    - 4
+  - - definition_of_pii
+    - 4
+  heading_top:
+  - - (no heading)
+    - 23
+  - - personal information
+    - 8
+  - - information we collect
+    - 4
+  position_mean: 0.232
+- id: c070
+  name: no_credit_card_storage
+  definition: States that the company does not store credit card information on its servers or systems, with some variations
+    on conditions or third-party involvement.
+  size: 91
+  documents: 75
+  document_share: 0.15
+  cohesion: 0.6245
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:820382#3#0
+    claim: The company does not store credit card information on its servers.
+  - claim_id: privacy_pl:966064#1#4
+    claim: The company does not store or save credit card numbers or information.
+  - claim_id: privacy_pl:397276#0#3
+    claim: The company does not store credit card numbers or identifying information on its servers.
+  type_guess_top:
+  - - data_storage_policy
+    - 11
+  - - no_data_storage
+    - 4
+  - - data_use_purpose
+    - 3
+  - - third_party_use
+    - 3
+  - - data_non_storage
+    - 2
+  heading_top:
+  - - (no heading)
+    - 10
+  - - how do we protect your information
+    - 8
+  - - security
+    - 3
+  position_mean: 0.381
+- id: c071
+  name: provides_contact_information
+  definition: States that the company provides contact information for various purposes, including inquiries, customer service,
+    and managing personal information, but not the specific content of the contact information.
+  size: 91
+  documents: 72
+  document_share: 0.144
+  cohesion: 0.7852
+  single_kind: true
+  split_note: ''
+  flags:
+  - duplicate_name
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:239341#12#1
+    claim: The company provides contact details for inquiries.
+  - claim_id: privacy_pl:150313#12#1
+    claim: The company provides contact information for inquiries.
+  - claim_id: privacy_pl:711770#11#0
+    claim: The company provides contact information for reaching a representative.
+  type_guess_top:
+  - - contact_information
+    - 50
+  - - contact_details
+    - 18
+  - - contact_details_provision
+    - 3
+  - - contact_information_provided
+    - 2
+  - - access_to_information
+    - 2
+  heading_top:
+  - - (no heading)
+    - 18
+  - - your california privacy rights
+    - 4
+  - - contacting us
+    - 3
+  position_mean: 0.643
+- id: c072
+  name: confidentiality_requirements
+  definition: States that the company requires its employees, contractors, third parties, and authorized personnel to keep
+    personal information confidential and secure.
+  size: 90
+  documents: 71
+  document_share: 0.142
+  cohesion: 0.6414
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: opp115:1106#3#3
+    claim: The company requires its employees to protect and keep personal information confidential.
+  - claim_id: opp115:928#18#1
+    claim: The company requires contractors to keep information secure and confidential.
+  - claim_id: privacy_pl:193383#2#4
+    claim: The company requires third-party companies to safeguard personal information according to its policies.
+  type_guess_top:
+  - - confidentiality_requirement
+    - 9
+  - - confidentiality_commitment
+    - 9
+  - - data_confidentiality
+    - 6
+  - - confidentiality_obligations
+    - 4
+  - - confidentiality_promise
+    - 4
+  heading_top:
+  - - (no heading)
+    - 20
+  - - how do we protect your information
+    - 5
+  - - privacy policy
+    - 3
+  position_mean: 0.392
+- id: c073
+  name: continued_use_acceptance
+  definition: States that continued use of the website or service after changes to the privacy policy constitutes acceptance
+    of those changes.
+  size: 84
+  documents: 84
+  document_share: 0.168
+  cohesion: 0.8577
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: privacy_pl:343374#1#3
+    claim: The company states that continued use of the Sites after changes to the Privacy Policy constitutes acceptance of
+      the changes.
+  - claim_id: privacy_pl:854286#1#5
+    claim: Continued use of the website after changes to the privacy policy means acceptance of those changes.
+  - claim_id: privacy_pl:603038#8#2
+    claim: The company states that continued use of the service or website after changes to the privacy policy constitutes
+      agreement to the modified terms.
+  type_guess_top:
+  - - continued_use_acceptance
+    - 21
+  - - acceptance_of_changes
+    - 11
+  - - continued_use_agreement
+    - 11
+  - - acceptance_by_continued_use
+    - 7
+  - - user_acceptance
+    - 4
+  heading_top:
+  - - (no heading)
+    - 14
+  - - changes to this privacy policy
+    - 12
+  - - privacy policy changes
+    - 5
+  position_mean: 0.704

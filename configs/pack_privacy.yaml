@@ -1,0 +1,5 @@
+# Genre A pack build: privacy policies (plan §0.2 #2, #18). Corpus fields are filled in Phase 2
+# from the actual files (data/README.md), never guessed.
+inherit: base.yaml
+task: build_pack
+pack: privacy

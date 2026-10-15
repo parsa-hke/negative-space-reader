@@ -1,0 +1,27 @@
+# Local compute overlay (plan §0.6): Apple M5, 24 GB unified memory, MPS, no CUDA. The primary machine of the
+# lean tier: data build, embeddings (0.6B, overnight), presence heads, index, MAM, bench, demo.
+# Teacher = Qwen2.5-7B-Instruct 4-bit under MLX for prompt iteration and coverage checks (measured 24 tok/s on
+# the M5; ~10 s per section). Not for the recorded extraction pass: that is `--overlay gpu` or `--overlay openrouter`.
+
+run:
+  device: mps
+
+models:
+  teacher:
+    backend: mlx
+    id: mlx-community/Qwen2.5-7B-Instruct-4bit
+    quantization: null
+    max_model_len: 8192
+    batch_size: 1
+  embedder:
+    dtype: float32                # MPS: fp16 is not reliably faster and bf16 is unsupported on some ops
+    batch_size: 32
+  late_interaction:
+    batch_size: 64
+  reranker:
+    batch_size: 64
+  student:
+    batch_size: 8
+
+index:
+  backend: faiss

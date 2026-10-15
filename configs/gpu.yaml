@@ -1,0 +1,37 @@
+# GPU-server compute overlay (plan §0.6). Fill in from
+# `python -m experiments.run --device-info` on the server (README "Compute").
+#
+# Teacher size (plan §0.2 #6, decided in Phase 1.3): Qwen2.5-72B-Instruct.
+#   >= 4 x 80 GB             -> Qwen/Qwen2.5-72B-Instruct, bf16, tensor_parallel_size 4 (145 GB of weights:
+#                               2 x 80 GB cannot hold them plus a KV cache)
+#   1 x 80 GB or >= 2 x 48 GB -> Qwen/Qwen2.5-72B-Instruct-AWQ (41.6 GB weights), TP = number of GPUs  [default below]
+# ./lab_session.sh setup applies this rule automatically from --device-info.
+#   < 48 GB total            -> Qwen/Qwen2.5-32B-Instruct-AWQ (19.3 GB weights), the §0.2 #6 fallback
+
+run:
+  device: cuda
+
+models:
+  teacher:
+    backend: vllm
+    id: Qwen/Qwen2.5-72B-Instruct-AWQ
+    quantization: awq
+    dtype: float16                # AWQ kernels run in fp16
+    tensor_parallel_size: 1
+    gpu_memory_utilization: 0.90
+    max_model_len: 8192
+    batch_size: 256
+  embedder:
+    batch_size: 64
+  late_interaction:
+    batch_size: 128
+  reranker:
+    batch_size: 128
+  student:
+    batch_size: 32
+
+index:
+  backend: qdrant
+
+induce:
+  batch_size: 256                 # vLLM schedules the whole batch; one batch is the most work lost on interruption

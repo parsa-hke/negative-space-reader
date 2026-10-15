@@ -1,0 +1,27 @@
+# UOWD lab machine, recorded 2026-10-12: Windows, 4 x NVIDIA RTX 5000 Ada Generation (32 GB each, WDDM),
+# driver 581.42 (CUDA 13.0), 544 GB free on C:, no git. vLLM does not run on native Windows, so the teacher is
+# served by llama.cpp (build b11280, Windows CUDA 12.4): one llama-server per GPU, each holding
+# Qwen2.5-32B-Instruct Q4_K_M (19.9 GB), 8 slots of 6,144 tokens, q8_0 KV cache (decision record 002).
+# Started and stopped by lab_session.py. Usage: --overlay lab
+
+run:
+  device: cuda
+  devices: [cuda:0, cuda:1, cuda:2, cuda:3]
+
+models:
+  teacher:
+    backend: openai
+    id: qwen2.5-32b-instruct-q4_k_m          # llama-server serves whatever model it loaded; the name is a label
+    served_as: llama.cpp-b11280/Qwen/Qwen2.5-32B-Instruct-GGUF/q4_k_m   # the build, recorded in every claim
+    base_url: [http://127.0.0.1:8081/v1, http://127.0.0.1:8082/v1, http://127.0.0.1:8083/v1, http://127.0.0.1:8084/v1]
+    api_key_env: null
+    response_format: json_schema              # llama-server enforces it (checked with the same build, 2026-10-12)
+    concurrency: 32                           # 4 servers x 8 slots
+    request_timeout_s: 900
+    cache: true
+  embedder:
+    dtype: float16
+    batch_size: 64
+
+induce:
+  batch_size: 256                             # prompts handed to the 32 workers at a time

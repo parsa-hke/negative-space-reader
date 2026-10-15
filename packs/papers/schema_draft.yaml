@@ -1,0 +1,3119 @@
+genre: papers
+status: draft
+version: null
+note: 'Plan §3.3 output. Not a schema: the human pass (§3.4) merges, splits and prunes these to 40-60 types and adds examples,
+  near-misses, severity weights, section hints and label sources.'
+induced:
+  date: '2026-10-13'
+  claims_file: runs/extract_32b_papers_s0/claims_papers.jsonl
+  excluded_documents:
+  - unarxive:2110.04947
+  claims: 44367
+  documents: 303
+  extraction_teacher: openai:llama.cpp-b11280/Qwen/Qwen2.5-32B-Instruct-GGUF/q4_k_m
+  extraction_prompt: induce_extract v2:a756e28a41a1
+  embedder: Qwen/Qwen3-Embedding-0.6B
+  reduce:
+    method: umap
+    dims: 10
+    n_neighbors: 15
+    min_dist: 0.0
+  hdbscan:
+    min_cluster_size: 100
+    min_samples: 5
+    selection: eom
+  clusters: 80
+  named: 80
+  noise_rate: 0.4442
+  cluster_run: cluster_v1_s0
+  name_run: name_72b_papers_s0
+  naming_teacher: openai:openrouter.ai:qwen/qwen-2.5-72b-instruct@deepinfra/fp8
+  naming_prompt: induce_name v2:4f63706fe4d1
+types:
+- id: c000
+  name: state_model_or_method_limitation
+  definition: States that the model, method, or approach has specific limitations or challenges, often related to performance,
+    data, or specific application contexts.
+  size: 2669
+  documents: 290
+  document_share: 0.957
+  cohesion: 0.3943
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.006
+  representative_claims:
+  - claim_id: unarxive:2010.08319#1#4
+    claim: The authors discuss the limitations of pre-trained language models due to differences in word distributions between
+      general and financial corpora.
+  - claim_id: unarxive:2011.12380#1#6
+    claim: The authors describe a limitation of BERT in capturing structural information due to the lack of explicit order
+      in its blocks.
+  - claim_id: unarxive:2205.03559#7#2
+    claim: The authors state a limitation of their work related to the model's performance on certain categories.
+  type_guess_top:
+  - - state_limitation
+    - 121
+  - - method_limitation
+    - 114
+  - - model_limitation
+    - 43
+  - - stating_limitation
+    - 42
+  - - performance_limitation
+    - 35
+  heading_top:
+  - - introduction
+    - 330
+  - - abstract
+    - 182
+  - - related work
+    - 90
+  position_mean: 0.447
+- id: c001
+  name: model_architecture_description
+  definition: Describes the detailed structure and components of the neural network or model architecture, including layers,
+    activation functions, and specific operations such as attention mechanisms, pooling, and convolutional layers.
+  size: 1331
+  documents: 227
+  document_share: 0.749
+  cohesion: 0.428
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.002
+  representative_claims:
+  - claim_id: unarxive:2210.12798#6#4
+    claim: The authors describe the process of encoding sequences through a multi-head attention and feed-forward network.
+  - claim_id: unarxive:2210.09439#7#4
+    claim: The authors detail the transformer encoder layers with sub-layers for multi-head self-attention and position-wise
+      feed-forward networks.
+  - claim_id: unarxive:2209.01398#18#1
+    claim: The authors describe the structure of the neural network, including the number of convolutional and fully-connected
+      layers, and the properties of the activation functions and pooling operations.
+  type_guess_top:
+  - - method_description
+    - 211
+  - - model_description
+    - 60
+  - - model_architecture
+    - 48
+  - - architecture_description
+    - 23
+  - - describe_method
+    - 17
+  heading_top:
+  - - introduction
+    - 45
+  - - abstract
+    - 29
+  - - related work
+    - 22
+  position_mean: 0.469
+- id: c002
+  name: describes_evaluation_metrics
+  definition: Describes the specific metrics or methods used to evaluate the performance of models or methods, including precision,
+    recall, F1 score, and other quantitative or qualitative measures.
+  size: 1270
+  documents: 235
+  document_share: 0.776
+  cohesion: 0.4043
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.002
+  representative_claims:
+  - claim_id: unarxive:2205.05468#13#4
+    claim: The authors describe the evaluation method used in their experiments, referring to it as F1 score.
+  - claim_id: unarxive:2109.13192#11#6
+    claim: The authors state that they compute accuracy, macro F1-score, and Cohen's kappa for performance evaluation.
+  - claim_id: unarxive:2211.06168#6#0
+    claim: The authors use F1 score as the primary evaluation metric for their experiments.
+  type_guess_top:
+  - - method_description
+    - 68
+  - - evaluation_method
+    - 54
+  - - evaluation_metrics
+    - 44
+  - - evaluation_metric
+    - 37
+  - - metric_description
+    - 33
+  heading_top:
+  - - evaluation metrics
+    - 54
+  - - introduction
+    - 47
+  - - abstract
+    - 43
+  position_mean: 0.497
+- id: c003
+  name: specifies_hyperparameters
+  definition: Describes the specific hyperparameters, such as learning rate, batch size, and optimizer, used during the training
+    of models.
+  size: 1065
+  documents: 229
+  document_share: 0.756
+  cohesion: 0.5189
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.002
+  representative_claims:
+  - claim_id: unarxive:2010.08319#10#1
+    claim: The authors specify the parameters used during the fine-tuning process, such as the number of epochs, dropout probability,
+      batch size, and learning rates.
+  - claim_id: unarxive:2103.06402#14#1
+    claim: The authors set specific hyper-parameters for the WikiSQL model, including batch size, beam size, and learning
+      rate.
+  - claim_id: unarxive:2210.09439#14#2
+    claim: The authors specify the batch size, learning rate, and optimizer used for training the model.
+  type_guess_top:
+  - - method_description
+    - 67
+  - - hyperparameter_tuning
+    - 23
+  - - training_duration
+    - 22
+  - - parameter_setting
+    - 21
+  - - training_details
+    - 17
+  heading_top:
+  - - implementation details
+    - 47
+  - - experiments
+    - 38
+  - - hyperparameters
+    - 19
+  position_mean: 0.619
+- id: c004
+  name: performance_and_efficiency
+  definition: States that the authors evaluate, compare, or describe the computational efficiency, time complexity, or resource
+    usage of their methods or models, often in comparison to existing approaches.
+  size: 938
+  documents: 191
+  document_share: 0.63
+  cohesion: 0.4501
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.004
+  representative_claims:
+  - claim_id: unarxive:1909.04273#14#8
+    claim: The authors highlight the computational efficiency of their method compared to a variant.
+  - claim_id: unarxive:2202.10032#2#4
+    claim: The authors state that their proposed method has lower computational overhead compared to previous methods.
+  - claim_id: unarxive:2108.03081#5#5
+    claim: The authors highlight the computational efficiency of the Euler kernel compared to traditional kernels.
+  type_guess_top:
+  - - method_description
+    - 22
+  - - performance_comparison
+    - 12
+  - - performance_report
+    - 10
+  - - report_complexity
+    - 10
+  - - training_time
+    - 10
+  heading_top:
+  - - introduction
+    - 56
+  - - abstract
+    - 45
+  - - conclusion
+    - 32
+  position_mean: 0.53
+- id: c005
+  name: describe_datasets
+  definition: Describes the datasets used in the experiments, including their sources, characteristics, and content.
+  size: 848
+  documents: 214
+  document_share: 0.706
+  cohesion: 0.6219
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.006
+  representative_claims:
+  - claim_id: unarxive:2103.02143#7#0
+    claim: The authors describe the dataset they use for their experiments.
+  - claim_id: unarxive:2212.05987#10#0
+    claim: The authors describe the datasets used in their experiments and their characteristics.
+  - claim_id: unarxive:2106.00173#12#0
+    claim: The authors describe the dataset used in their experiments, including its source, content, and annotations.
+  type_guess_top:
+  - - data_description
+    - 133
+  - - dataset_description
+    - 89
+  - - data_source
+    - 29
+  - - data_usage
+    - 25
+  - - describe_method
+    - 23
+  heading_top:
+  - - datasets
+    - 74
+  - - introduction
+    - 35
+  - - dataset
+    - 33
+  position_mean: 0.445
+- id: c006
+  name: assumption_and_distribution
+  definition: States that the authors make assumptions about the distributions of variables, often specifying the type of
+    distribution or the conditions under which these distributions are used.
+  size: 727
+  documents: 151
+  document_share: 0.498
+  cohesion: 0.3597
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.004
+  representative_claims:
+  - claim_id: unarxive:2107.02253#21#0
+    claim: The authors assume a random variable follows a distribution from the exponential family with respect to a base
+      measure.
+  - claim_id: unarxive:2207.03456#11#1
+    claim: The authors assume a known distribution for a variable in the model.
+  - claim_id: unarxive:2202.04104#6#3
+    claim: The authors assume that elements of each set are i.i.d. samples from an underlying distribution.
+  type_guess_top:
+  - - method_description
+    - 56
+  - - assumption_description
+    - 9
+  - - definition
+    - 9
+  - - assumption
+    - 7
+  - - data_assumption
+    - 5
+  heading_top:
+  - - abstract
+    - 20
+  - - related work
+    - 16
+  - - introduction
+    - 13
+  position_mean: 0.446
+- id: c007
+  name: suggests_future_work
+  definition: States that the authors propose or plan future research directions, enhancements, or investigations related
+    to their current work.
+  size: 662
+  documents: 233
+  document_share: 0.769
+  cohesion: 0.5727
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.003
+  representative_claims:
+  - claim_id: unarxive:2106.03837#18#6
+    claim: The authors suggest future work on the framework.
+  - claim_id: unarxive:2211.13327#19#5
+    claim: The authors suggest future work could include expanding the dataset and testing further enhancements.
+  - claim_id: unarxive:2205.06743#36#5
+    claim: The authors suggest a direction for future research to integrate meta-learning and fine-tuning.
+  type_guess_top:
+  - - future_work
+    - 148
+  - - future_research
+    - 39
+  - - future_work_plan
+    - 20
+  - - future_direction
+    - 14
+  - - future_investigation
+    - 10
+  heading_top:
+  - - conclusion
+    - 150
+  - - introduction
+    - 50
+  - - conclusions
+    - 31
+  position_mean: 0.642
+- id: c008
+  name: mdp_component_definition
+  definition: Defines or describes components of a Markov Decision Process (MDP), including states, actions, transition functions,
+    reward functions, and initial state distributions.
+  size: 539
+  documents: 64
+  document_share: 0.211
+  cohesion: 0.4351
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:2110.12081#2#3
+    claim: The authors define the action value function of a policy in terms of a trajectory generated by rolling out in the
+      environment following the policy.
+  - claim_id: unarxive:2210.05922#2#1
+    claim: The authors define the state-action distribution for a policy in an MDP.
+  - claim_id: unarxive:2204.00956#3#1
+    claim: The authors describe the transition function, reward function, initial state distribution, and discount factor
+      as components of the MDP.
+  type_guess_top:
+  - - method_description
+    - 20
+  - - definition
+    - 13
+  - - reward_definition
+    - 8
+  - - reward_function
+    - 8
+  - - mdp_description
+    - 8
+  heading_top:
+  - - preliminaries
+    - 28
+  - - reinforcement learning
+    - 22
+  - - environment
+    - 14
+  position_mean: 0.401
+- id: c009
+  name: provides_lemma_proof
+  definition: States that the authors provide, prove, or use lemmas in the context of proving theorems or other mathematical
+    statements, often detailing the methods and steps involved.
+  size: 531
+  documents: 64
+  document_share: 0.211
+  cohesion: 0.624
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.004
+  representative_claims:
+  - claim_id: unarxive:2103.06828#3#9
+    claim: The authors provide a proof for Theorem [ref] that relies on an auxiliary result.
+  - claim_id: unarxive:2206.14927#33#2
+    claim: The authors prove a lemma by leveraging equations and conditions.
+  - claim_id: unarxive:2107.06226#40#0
+    claim: The authors provide a proof for a lemma.
+  type_guess_top:
+  - - lemma_statement
+    - 25
+  - - proof_method
+    - 23
+  - - proof_conclusion
+    - 20
+  - - proof_completion
+    - 14
+  - - proof_provision
+    - 13
+  heading_top:
+  - - proof of theorem
+    - 59
+  - - proof of lemma
+    - 33
+  - - proof of proposition
+    - 30
+  position_mean: 0.702
+- id: c010
+  name: task_description
+  definition: Describes the specific tasks, subtasks, or objectives of the research, including their nature and scope, but
+    not the methods or results.
+  size: 491
+  documents: 135
+  document_share: 0.446
+  cohesion: 0.3863
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.004
+  representative_claims:
+  - claim_id: unarxive:2210.12846#2#1
+    claim: The authors describe the goal of the task as classifying a term as either literal or euphemistic.
+  - claim_id: unarxive:2101.05593#2#0
+    claim: The authors define the entity linking task as finding a unique identity for each mention in a document.
+  - claim_id: unarxive:2205.05468#13#0
+    claim: The authors describe the main task as a multi-class token classification task.
+  type_guess_top:
+  - - task_description
+    - 65
+  - - method_description
+    - 49
+  - - task_definition
+    - 14
+  - - describe_method
+    - 7
+  - - task_proposal
+    - 6
+  heading_top:
+  - - introduction
+    - 40
+  - - abstract
+    - 17
+  - - conclusion
+    - 11
+  position_mean: 0.383
+- id: c011
+  name: relate_to_prior_work
+  definition: Relates the current work to previous research, methods, or findings in the field, often by citing specific studies
+    or approaches.
+  size: 439
+  documents: 190
+  document_share: 0.627
+  cohesion: 0.5319
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.093
+  representative_claims:
+  - claim_id: unarxive:2104.05467#3#9
+    claim: The authors relate their work to previous attempts found in the literature.
+  - claim_id: unarxive:2105.07246#7#1
+    claim: The authors relate their work to previous methods for solving similar problems.
+  - claim_id: unarxive:2003.02804#5#2
+    claim: The authors relate their work to another study that used a similar augmentation method.
+  type_guess_top:
+  - - external_context
+    - 41
+  - - relate_to_other_work
+    - 23
+  - - relate_to_prior_work
+    - 21
+  - - related_work
+    - 19
+  - - describe_data_method
+    - 8
+  heading_top:
+  - - related work
+    - 57
+  - - introduction
+    - 30
+  - - abstract
+    - 9
+  position_mean: 0.397
+- id: c012
+  name: method_description
+  definition: Describes the methods, algorithms, or techniques used by the authors in their research, including specific approaches
+    to reinforcement learning, policy optimization, and model-based learning.
+  size: 437
+  documents: 62
+  document_share: 0.205
+  cohesion: 0.474
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.009
+  representative_claims:
+  - claim_id: unarxive:2110.15093#0#2
+    claim: The authors develop a version of Q-learning for finite horizon Markov decision processes.
+  - claim_id: unarxive:2107.13790#2#4
+    claim: The authors consider a model-based approach for reinforcement learning in a finite-horizon setting.
+  - claim_id: unarxive:2107.13790#0#4
+    claim: The authors explain that model-based reinforcement learning techniques aim to learn a model of the environment
+      and identify an optimal policy.
+  type_guess_top:
+  - - method_description
+    - 38
+  - - algorithm_description
+    - 10
+  - - goal_description
+    - 7
+  - - method_proposal
+    - 6
+  - - algorithm_choice
+    - 6
+  heading_top:
+  - - introduction
+    - 59
+  - - abstract
+    - 45
+  - - conclusion
+    - 19
+  position_mean: 0.348
+- id: c013
+  name: adversarial_attack_discussion
+  definition: Discusses various aspects of adversarial attacks, including their nature, methods to combat them, and their
+    impact on machine learning models.
+  size: 418
+  documents: 49
+  document_share: 0.162
+  cohesion: 0.4412
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.01
+  representative_claims:
+  - claim_id: unarxive:2207.06196#1#8
+    claim: The authors state that they will discuss adversarial attacks against black-box machine learning models and iML
+      inspired contributions to combat them.
+  - claim_id: unarxive:2207.06196#3#0
+    claim: The authors discuss the vulnerability of deep learning algorithms to adversarial attacks.
+  - claim_id: unarxive:2207.06196#3#4
+    claim: The authors describe various techniques being studied to address the problem of adversarial attacks.
+  type_guess_top:
+  - - method_description
+    - 33
+  - - training_stage_method
+    - 5
+  - - attack_technique
+    - 5
+  - - reported_effect
+    - 5
+  - - performance_report
+    - 4
+  heading_top:
+  - - introduction
+    - 30
+  - - abstract
+    - 23
+  - - robust machine learning
+    - 14
+  position_mean: 0.415
+- id: c014
+  name: reports_experimental_results
+  definition: Reports the results of experiments conducted by the authors to evaluate their methods or models on various datasets,
+    including real-world, synthetic, and benchmark datasets.
+  size: 415
+  documents: 194
+  document_share: 0.64
+  cohesion: 0.5563
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.012
+  representative_claims:
+  - claim_id: unarxive:2007.03545#32#5
+    claim: The authors conduct extensive experiments on real-world datasets to demonstrate the effectiveness of their methods.
+  - claim_id: unarxive:2202.06670#1#5
+    claim: The authors conduct experiments to evaluate the performance of their approach using various datasets.
+  - claim_id: unarxive:2109.13192#12#7
+    claim: The authors demonstrate the effectiveness of their method on specific datasets.
+  type_guess_top:
+  - - report_results
+    - 24
+  - - experiment_description
+    - 14
+  - - evaluation_method
+    - 10
+  - - evaluation_report
+    - 10
+  - - experimental_setup
+    - 10
+  heading_top:
+  - - abstract
+    - 51
+  - - experiments
+    - 36
+  - - introduction
+    - 35
+  position_mean: 0.484
+- id: c015
+  name: appendix_reference
+  definition: Directs the reader to the appendix for additional details, proofs, or discussions.
+  size: 394
+  documents: 164
+  document_share: 0.541
+  cohesion: 0.5465
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.008
+  representative_claims:
+  - claim_id: unarxive:2106.07635#8#4
+    claim: The authors direct the reader to the appendix for more details.
+  - claim_id: unarxive:2205.07833#16#4
+    claim: The authors mention that they provide a further discussion in the appendix for interested readers.
+  - claim_id: unarxive:2210.07485#5#2
+    claim: The authors direct the reader to an appendix for additional information.
+  type_guess_top:
+  - - appendix_reference
+    - 22
+  - - external_reference
+    - 19
+  - - proof_location
+    - 8
+  - - appendix_content
+    - 7
+  - - additional_results
+    - 7
+  heading_top:
+  - - introduction
+    - 45
+  - - abstract
+    - 13
+  - - results
+    - 7
+  position_mean: 0.369
+- id: c016
+  name: review_prior_work
+  definition: Reviews prior work on the problem, its limitations, and related areas, often noting gaps or challenges in existing
+    research.
+  size: 378
+  documents: 203
+  document_share: 0.67
+  cohesion: 0.6469
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.005
+  representative_claims:
+  - claim_id: unarxive:2205.05468#9#0
+    claim: The authors review prior work on the problem and its limitations.
+  - claim_id: unarxive:2207.06196#1#3
+    claim: The authors review prior work on the problem and its limitations, noting that most surveys lack extensiveness and
+      inclusiveness.
+  - claim_id: unarxive:2111.12139#3#0
+    claim: The authors review prior work on geometric deep learning, including problems, solutions, difficulties, applications,
+      and future directions.
+  type_guess_top:
+  - - review_prior_work
+    - 253
+  - - prior_work_review
+    - 28
+  - - literature_review
+    - 7
+  - - background_review
+    - 2
+  - - review_of_prior_work
+    - 2
+  heading_top:
+  - - related work
+    - 111
+  - - introduction
+    - 72
+  - - related works
+    - 19
+  position_mean: 0.259
+- id: c017
+  name: mathematical_derivation
+  definition: Derives, provides, or reformulates mathematical expressions, equations, or conditions, often involving specific
+    conditions or properties.
+  size: 353
+  documents: 103
+  document_share: 0.34
+  cohesion: 0.564
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.003
+  representative_claims:
+  - claim_id: unarxive:2106.02305#25#1
+    claim: The authors derive a mathematical expression for the left hand side of an equation.
+  - claim_id: unarxive:2206.05357#32#9
+    claim: The authors derive a mathematical expression based on previous expressions and conditions.
+  - claim_id: unarxive:1901.04676#15#1
+    claim: The authors use specific mathematical facts to derive a new expression.
+  type_guess_top:
+  - - method_description
+    - 19
+  - - mathematical_derivation
+    - 17
+  - - mathematical_expression
+    - 14
+  - - mathematical_condition
+    - 10
+  - - formula_provision
+    - 9
+  heading_top:
+  - - proof of theorem
+    - 15
+  - - proof of lemma
+    - 13
+  - - proof of proposition
+    - 12
+  position_mean: 0.658
+- id: c018
+  name: code_and_data_availability
+  definition: Discloses the availability of the authors' code, data, or both, often including a specific URL, repository,
+    or platform where they can be accessed.
+  size: 347
+  documents: 162
+  document_share: 0.535
+  cohesion: 0.6613
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:2202.11672#0#5
+    claim: The authors disclose that their code is available at a specified URL.
+  - claim_id: unarxive:2210.07485#0#5
+    claim: The authors disclose that their code is available at a specific GitHub repository.
+  - claim_id: unarxive:2202.06670#39#0
+    claim: The authors disclose the availability of their code.
+  type_guess_top:
+  - - disclose_practice
+    - 43
+  - - code_availability
+    - 36
+  - - data_availability
+    - 19
+  - - data_source_disclosure
+    - 9
+  - - hardware_disclosure
+    - 9
+  heading_top:
+  - - abstract
+    - 31
+  - - introduction
+    - 20
+  - - conclusion
+    - 11
+  position_mean: 0.557
+- id: c019
+  name: describe_update_process
+  definition: Describes the process of updating parameters, weights, or other components of a model using optimization techniques
+    such as gradient descent, SGD, or Adam.
+  size: 330
+  documents: 109
+  document_share: 0.36
+  cohesion: 0.5057
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:2202.11672#21#5
+    claim: The authors describe the update process for the regressor and EMA via SGD.
+  - claim_id: unarxive:2204.03487#8#5
+    claim: The authors describe the process of updating the Q-Function estimate by backpropagating the loss through the Q-Network
+      and updating the weights with gradient descent.
+  - claim_id: unarxive:2110.15456#21#4
+    claim: The authors describe the process of computing the activation gradient during the backward pass using the fMAC.
+  type_guess_top:
+  - - method_description
+    - 44
+  - - optimization_method
+    - 8
+  - - describe_data_or_method
+    - 7
+  - - describe_method
+    - 7
+  - - update_rule
+    - 6
+  heading_top:
+  - - training
+    - 7
+  - - systolic array operations
+    - 7
+  - - problem solution
+    - 6
+  position_mean: 0.473
+- id: c020
+  name: method_proposal
+  definition: Proposes a new method, model, or framework, often with a specific name, to address a particular problem or improve
+    an existing approach.
+  size: 326
+  documents: 158
+  document_share: 0.521
+  cohesion: 0.5564
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.003
+  representative_claims:
+  - claim_id: unarxive:2106.15223#1#3
+    claim: The authors propose a new method called SpliMe to leverage static embedding models for temporal knowledge graphs.
+  - claim_id: unarxive:2202.05694#0#2
+    claim: The authors propose a novel method that combines regularization and generative-based rehearsal approaches.
+  - claim_id: unarxive:2206.05602#1#3
+    claim: The authors propose a novel neural model, RadNet, to address the limitations of existing spatio-temporal models.
+  type_guess_top:
+  - - method_proposal
+    - 42
+  - - method_introduction
+    - 20
+  - - framework_proposal
+    - 18
+  - - method_description
+    - 12
+  - - method_extension
+    - 7
+  heading_top:
+  - - abstract
+    - 58
+  - - introduction
+    - 55
+  - - conclusion
+    - 34
+  position_mean: 0.337
+- id: c021
+  name: provides_regret_bound
+  definition: States that the authors provide, derive, or establish upper or lower bounds on the regret of an algorithm or
+    method, often in the context of specific conditions or settings.
+  size: 313
+  documents: 43
+  document_share: 0.142
+  cohesion: 0.5741
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:2205.06326#9#1
+    claim: The authors provide an upper bound for the expected regret of the BIAS-OFUL algorithm.
+  - claim_id: unarxive:2012.05754#19#1
+    claim: The authors provide an upper bound on the CVaR regret of the proposed algorithm.
+  - claim_id: unarxive:1810.04468#7#7
+    claim: The authors analyze the regret of the DDUCB algorithm and provide an upper bound on it.
+  type_guess_top:
+  - - regret_bound
+    - 27
+  - - method_description
+    - 9
+  - - algorithm_performance
+    - 6
+  - - performance_bound
+    - 5
+  - - generalization_bound
+    - 4
+  heading_top:
+  - - abstract
+    - 30
+  - - introduction
+    - 15
+  - - conclusion
+    - 7
+  position_mean: 0.48
+- id: c022
+  name: implementation_details
+  definition: Describes the specific tools, libraries, or software packages used by the authors for implementing their methods
+    or systems.
+  size: 306
+  documents: 114
+  document_share: 0.376
+  cohesion: 0.4928
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.007
+  representative_claims:
+  - claim_id: unarxive:2210.07485#5#1
+    claim: The authors use a specific software library for their implementation.
+  - claim_id: unarxive:2104.07496#6#2
+    claim: The authors use a specific library for the implementation of the MLMs.
+  - claim_id: unarxive:2211.12584#88#0
+    claim: The authors describe the software package used for implementing the methodology.
+  type_guess_top:
+  - - implementation_details
+    - 13
+  - - method_description
+    - 10
+  - - tool_usage
+    - 10
+  - - implementation_description
+    - 9
+  - - tool_description
+    - 7
+  heading_top:
+  - - abstract
+    - 15
+  - - introduction
+    - 15
+  - - (no heading)
+    - 11
+  position_mean: 0.513
+- id: c023
+  name: performance_comparison
+  definition: Reports that the authors' method, approach, or system outperforms other methods, baselines, or state-of-the-art
+    techniques in terms of various performance metrics or tasks.
+  size: 299
+  documents: 135
+  document_share: 0.446
+  cohesion: 0.6835
+  single_kind: true
+  split_note: ''
+  flags:
+  - duplicate_name
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:2210.07485#12#4
+    claim: The authors report that their method outperforms other methods on the task.
+  - claim_id: unarxive:2104.03642#0#3
+    claim: The authors report that their proposed method outperforms the state-of-the-art baselines in terms of various performance
+      metrics.
+  - claim_id: unarxive:2003.02804#19#3
+    claim: The authors state that their best model outperforms a state-of-the-art model.
+  type_guess_top:
+  - - performance_comparison
+    - 31
+  - - performance_report
+    - 28
+  - - performance_claim
+    - 23
+  - - performance_improvement
+    - 22
+  - - evaluation_result
+    - 16
+  heading_top:
+  - - abstract
+    - 38
+  - - conclusion
+    - 27
+  - - introduction
+    - 27
+  position_mean: 0.531
+- id: c024
+  name: graph_construction_description
+  definition: Describes the construction of graphs, including the definition of nodes, edges, and the methods used to connect
+    them, often in the context of document or data representation.
+  size: 290
+  documents: 81
+  document_share: 0.267
+  cohesion: 0.4259
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:2210.04105#5#1
+    claim: The authors describe the construction of a document graph with nodes representing paragraphs and a fusion node.
+  - claim_id: unarxive:2210.04105#5#2
+    claim: The authors describe how nodes in the document graph are connected based on shared entities.
+  - claim_id: unarxive:1907.10421#2#3
+    claim: The authors describe the construction of a weighted graph using a three parts algorithm and an edge weight scheme.
+  type_guess_top:
+  - - method_description
+    - 40
+  - - graph_description
+    - 10
+  - - data_description
+    - 5
+  - - process_description
+    - 5
+  - - transformation_description
+    - 4
+  heading_top:
+  - - introduction
+    - 19
+  - - network graphs
+    - 10
+  - - abstract
+    - 8
+  position_mean: 0.422
+- id: c025
+  name: data_split_description
+  definition: Describes the division of datasets into training, validation, and test sets, including the proportions or specific
+    numbers of data points used for each set.
+  size: 264
+  documents: 114
+  document_share: 0.376
+  cohesion: 0.5172
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:2205.06898#8#6
+    claim: The authors describe the division of the dataset into training, validation, and test sets.
+  - claim_id: unarxive:2011.06125#35#0
+    claim: The authors divide the data set into training, validation, and testing sets with specified proportions.
+  - claim_id: unarxive:2205.03559#4#7
+    claim: The authors describe the division of the dataset into training, validation, and testing sets.
+  type_guess_top:
+  - - data_split
+    - 23
+  - - data_splitting
+    - 12
+  - - data_division
+    - 8
+  - - data_usage
+    - 8
+  - - method_description
+    - 5
+  heading_top:
+  - - data
+    - 11
+  - - dataset
+    - 11
+  - - datasets
+    - 9
+  position_mean: 0.558
+- id: c026
+  name: defines_predicates_and_relations
+  definition: Describes the logical structure, predicates, and relationships used in the computational model or data representation,
+    including modes, conditions, and categories.
+  size: 264
+  documents: 57
+  document_share: 0.188
+  cohesion: 0.4557
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.008
+  representative_claims:
+  - claim_id: unarxive:2106.13103#30#0
+    claim: The authors declare the mode of a predicate as an identity or inverse relationship with another predicate.
+  - claim_id: unarxive:2106.13103#26#2
+    claim: The authors specify the mode of a predicate that takes a variable and a constant as arguments.
+  - claim_id: unarxive:2106.11417#5#4
+    claim: The authors define a clause as a rule with a head atom and body atoms.
+  type_guess_top:
+  - - mode_declaration
+    - 13
+  - - describing_data_or_method
+    - 10
+  - - definition
+    - 5
+  - - description_of_data
+    - 4
+  - - representation_method
+    - 4
+  heading_top:
+  - - introduction
+    - 17
+  - - mode declarations
+    - 16
+  - - references for functional tests
+    - 11
+  position_mean: 0.441
+- id: c027
+  name: optimization_method_description
+  definition: Describes the methods and techniques used by the authors to solve optimization problems, including specific
+    algorithms, conditions, and mathematical operations.
+  size: 257
+  documents: 82
+  document_share: 0.271
+  cohesion: 0.4792
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:2109.02631#2#3
+    claim: The authors state that the optimization process uses Nesterov's method to iteratively solve for a placement that
+      minimizes both HPWL and density costs.
+  - claim_id: unarxive:2212.05987#7#2
+    claim: The authors aim to solve the bilevel optimization using alternating stochastic gradient descent updates.
+  - claim_id: unarxive:2203.05369#3#5
+    claim: The authors use the primal-dual decomposition method to solve the optimization problem.
+  type_guess_top:
+  - - method_description
+    - 21
+  - - optimization_problem
+    - 11
+  - - problem_description
+    - 6
+  - - approximation_method
+    - 6
+  - - describe_data_or_method
+    - 5
+  heading_top:
+  - - abstract
+    - 8
+  - - discussion on the choice of test function for miw
+    - 6
+  - - conclusion
+    - 5
+  position_mean: 0.463
+- id: c028
+  name: clustering_method_description
+  definition: Describes the specific clustering methods or algorithms used by the authors, including details such as k-means,
+    hierarchical clustering, and the criteria or parameters for clustering.
+  size: 255
+  documents: 51
+  document_share: 0.168
+  cohesion: 0.5018
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:2202.06670#17#1
+    claim: The authors construct unsupervised clusters using k-means clustering for Cl-InfoNCE.
+  - claim_id: unarxive:2207.11597#8#5
+    claim: The authors describe a pairwise clustering procedure with a threshold that determines whether two estimates belong
+      to the same cluster.
+  - claim_id: unarxive:1807.10543#6#3
+    claim: The authors use k-means clustering to group student answers into clusters.
+  type_guess_top:
+  - - method_description
+    - 32
+  - - clustering_method
+    - 7
+  - - method_proposal
+    - 7
+  - - method_detail
+    - 5
+  - - method_application
+    - 4
+  heading_top:
+  - - abstract
+    - 9
+  - - introduction
+    - 8
+  - - hierarchical clustering
+    - 7
+  position_mean: 0.496
+- id: c029
+  name: visualize_results
+  definition: Describes that the authors use various visualization techniques, such as graphs, heat maps, and figures, to
+    illustrate the results, performance, or effectiveness of their methods or models.
+  size: 246
+  documents: 109
+  document_share: 0.36
+  cohesion: 0.5454
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.008
+  representative_claims:
+  - claim_id: unarxive:2205.05468#32#0
+    claim: The authors visualize results using bar graphs.
+  - claim_id: unarxive:2202.10032#15#0
+    claim: The authors use a visualization technique to show the effectiveness of their method.
+  - claim_id: unarxive:2212.12474#27#6
+    claim: The authors visualize the result of their method in a figure.
+  type_guess_top:
+  - - data_visualization
+    - 15
+  - - figure_reference
+    - 10
+  - - method_description
+    - 10
+  - - visualization_description
+    - 6
+  - - visualization_method
+    - 6
+  heading_top:
+  - - results
+    - 10
+  - - introduction
+    - 6
+  - - abstract
+    - 6
+  position_mean: 0.611
+- id: c030
+  name: defines_notation
+  definition: Defines specific mathematical or symbolic notation used in the paper, including explanations of symbols, mathematical
+    concepts, and conventions.
+  size: 239
+  documents: 88
+  document_share: 0.29
+  cohesion: 0.617
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.004
+  representative_claims:
+  - claim_id: unarxive:2205.07833#4#3
+    claim: The authors define and use specific notation throughout the paper.
+  - claim_id: unarxive:2202.10815#17#0
+    claim: The authors define mathematical notations and concepts used in the paper.
+  - claim_id: unarxive:2102.00451#7#0
+    claim: The authors introduce notation and definitions used throughout the text.
+  type_guess_top:
+  - - notation_definition
+    - 32
+  - - notation_simplification
+    - 13
+  - - notation_description
+    - 12
+  - - notation_introduction
+    - 9
+  - - notation_convention
+    - 9
+  heading_top:
+  - - preliminaries
+    - 13
+  - - proof of lemma
+    - 8
+  - - notation
+    - 7
+  position_mean: 0.483
+- id: c031
+  name: describes_method_and_data
+  definition: Describes the methods, data, and environmental factors used in the research, including the importance of specific
+    measurements and their applications in agricultural management and monitoring.
+  size: 226
+  documents: 5
+  document_share: 0.017
+  cohesion: 0.3731
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.018
+  representative_claims:
+  - claim_id: unarxive:2211.12584#124#3
+    claim: The authors highlight the use of remote sensing for monitoring crop phenology over large areas.
+  - claim_id: unarxive:2211.12584#91#5
+    claim: The authors describe the different phases of crop growth and their relation to the NDVI time-series.
+  - claim_id: unarxive:2211.12584#124#6
+    claim: The authors explain the classification and regression approaches to phenology estimation in the literature.
+  type_guess_top:
+  - - method_description
+    - 10
+  - - finding_description
+    - 8
+  - - describing_data
+    - 5
+  - - metric_explanation
+    - 5
+  - - data_analysis
+    - 4
+  heading_top:
+  - - literature review
+    - 33
+  - - introduction
+    - 9
+  - - timesat implementation
+    - 8
+  position_mean: 0.545
+- id: c032
+  name: matrix_and_tensor_operations
+  definition: Describes the use of matrix and tensor operations, including decompositions, eigenvectors, and other linear
+    algebra techniques, often for dimensionality reduction or data analysis.
+  size: 220
+  documents: 44
+  document_share: 0.145
+  cohesion: 0.4785
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.005
+  representative_claims:
+  - claim_id: unarxive:1805.03504#7#4
+    claim: SVD factorizes the normalized matrix into a diagonal matrix of singular values and two orthogonal matrices of singular
+      vectors.
+  - claim_id: unarxive:2107.06226#39#7
+    claim: The authors use the singular value decomposition (SVD) to analyze a matrix term in their derivation.
+  - claim_id: unarxive:2205.00832#55#2
+    claim: The authors define a vector using the spectral decomposition of the Hessian matrix.
+  type_guess_top:
+  - - method_description
+    - 16
+  - - notation_definition
+    - 9
+  - - matrix_definition
+    - 6
+  - - describe_data_or_method
+    - 5
+  - - dimensionality_reduction
+    - 3
+  heading_top:
+  - - notation
+    - 8
+  - - matrix algebra and eigendecomposition
+    - 8
+  - - step subspace estimation via a spectral method
+    - 6
+  position_mean: 0.472
+- id: c033
+  name: estimator_properties
+  definition: States that the authors describe, prove, or verify properties of estimators, such as unbiasedness, variance
+    reduction, and optimality.
+  size: 202
+  documents: 47
+  document_share: 0.155
+  cohesion: 0.4769
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.005
+  representative_claims:
+  - claim_id: unarxive:1807.02202#13#0
+    claim: The authors report that the control variates estimator is unbiased and has the least variance among other unbiased
+      estimators.
+  - claim_id: unarxive:2106.01969#14#2
+    claim: The authors prove that the estimator is unbiased and has bounded variance for all agents.
+  - claim_id: unarxive:2110.10081#8#9
+    claim: The authors introduce a proposition that the single-time-step doubly robust estimator of transitions in the marginal
+      MDP is unbiased under certain conditions.
+  type_guess_top:
+  - - method_description
+    - 8
+  - - variance_reduction
+    - 4
+  - - reporting_results
+    - 3
+  - - estimator_definition
+    - 3
+  - - describing_data_or_method
+    - 3
+  heading_top:
+  - - introduction
+    - 13
+  - - abstract
+    - 12
+  - - inverse probability weighting
+    - 7
+  position_mean: 0.491
+- id: c034
+  name: data_generation_method
+  definition: Describes the method used by the authors to generate synthetic datasets, including the specific procedures,
+    assumptions, and properties of the generated data.
+  size: 198
+  documents: 88
+  document_share: 0.29
+  cohesion: 0.4546
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.005
+  representative_claims:
+  - claim_id: unarxive:2106.07635#13#1
+    claim: The authors use a specific procedure to generate synthetic data.
+  - claim_id: unarxive:2202.11672#22#0
+    claim: The authors describe the method used to generate synthetic data.
+  - claim_id: unarxive:1901.04676#9#1
+    claim: The authors describe the synthetic dataset generation process and its properties.
+  type_guess_top:
+  - - method_description
+    - 34
+  - - data_description
+    - 18
+  - - data_generation
+    - 5
+  - - data_creation
+    - 5
+  - - type_explanation
+    - 4
+  heading_top:
+  - - synthetic datasets
+    - 12
+  - - introduction
+    - 9
+  - - abstract
+    - 6
+  position_mean: 0.526
+- id: c035
+  name: describes_preprocessing_steps
+  definition: Describes the specific preprocessing steps applied to data, including transformations, corrections, and other
+    methods used to prepare the data for analysis or modeling.
+  size: 196
+  documents: 82
+  document_share: 0.271
+  cohesion: 0.5356
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.005
+  representative_claims:
+  - claim_id: unarxive:2211.12584#21#0
+    claim: The authors describe the pre-processing steps applied to Sentinel-2A data, including downloading, transformation,
+      and resampling.
+  - claim_id: unarxive:2211.12584#105#6
+    claim: The authors pre-processed Sentinel-1 data using several steps including clipping, radiometric calibration, speckle
+      filtering, terrain correction, and conversion of backscatter coefficient into decibels.
+  - claim_id: unarxive:2211.12584#76#3
+    claim: The authors describe the method for processing ground-level data, including splitting into training and test data
+      and storing in directories.
+  type_guess_top:
+  - - data_preprocessing
+    - 37
+  - - method_description
+    - 15
+  - - preprocessing_steps
+    - 9
+  - - data_processing
+    - 8
+  - - preprocessing_description
+    - 6
+  heading_top:
+  - - data
+    - 10
+  - - change detection land cover map update
+    - 9
+  - - methodology
+    - 6
+  position_mean: 0.51
+- id: c036
+  name: performance_comparison
+  definition: Reports that the authors' model or method outperforms other models or baselines on specific datasets or metrics.
+  size: 193
+  documents: 99
+  document_share: 0.327
+  cohesion: 0.666
+  single_kind: true
+  split_note: ''
+  flags:
+  - duplicate_name
+  example_label_share: 0.01
+  representative_claims:
+  - claim_id: unarxive:2206.05602#8#0
+    claim: The authors report that RadNet outperforms benchmark models across all metrics for the RadSet dataset.
+  - claim_id: unarxive:2206.05602#8#2
+    claim: The authors report that RadNet outperforms benchmark models for the METR-LA dataset, with an average F1 score of
+      0.651, which is 14.0% higher than the next best average F1 of the DKFN model.
+  - claim_id: unarxive:2105.07246#1#8
+    claim: The authors report that ConfVAE outperforms existing state-of-the-art approaches on several benchmarks.
+  type_guess_top:
+  - - performance_comparison
+    - 34
+  - - performance_report
+    - 13
+  - - specific_performance
+    - 8
+  - - performance_improvement
+    - 8
+  - - model_performance
+    - 7
+  heading_top:
+  - - results
+    - 15
+  - - conclusion
+    - 9
+  - - introduction
+    - 8
+  position_mean: 0.605
+- id: c037
+  name: loss_function_description
+  definition: Describes the components, structure, and specific types of loss functions used in the model, including terms
+    like cross-entropy, mean squared error, and regularization losses.
+  size: 184
+  documents: 83
+  document_share: 0.274
+  cohesion: 0.5975
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:2007.03545#18#4
+    claim: 'The authors describe their loss function, which consists of two parts: a prediction loss and a graph structure
+      preserving loss.'
+  - claim_id: unarxive:2210.15000#9#3
+    claim: The authors describe the loss function with terms for empirical risk, domain discrepancy, and reconstruction loss.
+  - claim_id: unarxive:2202.10032#6#5
+    claim: The authors specify the components of the loss function, including cross-entropy loss and score ranking regularization
+      loss.
+  type_guess_top:
+  - - loss_function
+    - 27
+  - - method_description
+    - 18
+  - - loss_definition
+    - 10
+  - - loss_function_description
+    - 9
+  - - training_objective
+    - 5
+  heading_top:
+  - - some notations
+    - 6
+  - - loss function
+    - 5
+  - - writing relevance training
+    - 5
+  position_mean: 0.449
+- id: c038
+  name: method_comparison
+  definition: Compares the authors' method with other existing methods, algorithms, or baselines to evaluate performance.
+  size: 183
+  documents: 109
+  document_share: 0.36
+  cohesion: 0.658
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:2105.08179#21#0
+    claim: The authors compare their method with several existing methods.
+  - claim_id: unarxive:2202.10032#11#1
+    claim: The authors compare their method with state-of-the-art baselines.
+  - claim_id: unarxive:2104.08420#7#9
+    claim: The authors compare their method against several baselines.
+  type_guess_top:
+  - - method_comparison
+    - 40
+  - - performance_comparison
+    - 16
+  - - algorithm_comparison
+    - 8
+  - - baseline_comparison
+    - 8
+  - - comparison_method
+    - 7
+  heading_top:
+  - - abstract
+    - 15
+  - - baselines
+    - 12
+  - - experiments
+    - 9
+  position_mean: 0.514
+- id: c039
+  name: forecasting_method_description
+  definition: Describes the methods, models, and processes used by the authors for forecasting, including the specific techniques
+    and data used for prediction.
+  size: 177
+  documents: 48
+  document_share: 0.158
+  cohesion: 0.4967
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:2106.12739#10#5
+    claim: The authors describe the use of ML models for forecasting future trends according to previously collected data.
+  - claim_id: unarxive:2202.11672#3#3
+    claim: The authors describe their approach for multiple-step forecasting using a linear regressor.
+  - claim_id: unarxive:2202.11672#1#6
+    claim: The authors develop an online time series forecasting framework inspired by the Complementary Learning Systems
+      theory.
+  type_guess_top:
+  - - method_description
+    - 19
+  - - problem_description
+    - 3
+  - - data_usage
+    - 3
+  - - model_description
+    - 3
+  - - method_proposal
+    - 3
+  heading_top:
+  - - introduction
+    - 15
+  - - abstract
+    - 11
+  - - conclusion
+    - 10
+  position_mean: 0.443
+- id: c040
+  name: compare_to_prior_work
+  definition: States that the authors' work differs from or contrasts with prior research, highlighting specific aspects or
+    methods that set their approach apart.
+  size: 172
+  documents: 104
+  document_share: 0.343
+  cohesion: 0.5442
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.006
+  representative_claims:
+  - claim_id: unarxive:2110.12081#7#7
+    claim: The authors state that their method differs from existing works in adopting a separate exploration policy.
+  - claim_id: unarxive:2109.02631#4#1
+    claim: The authors describe how their work differs from previous work.
+  - claim_id: unarxive:2104.03642#3#1
+    claim: The authors describe their method and how it differs from previous work.
+  type_guess_top:
+  - - state_difference
+    - 7
+  - - compare_to_other_work
+    - 7
+  - - novelty_claim
+    - 7
+  - - method_comparison
+    - 5
+  - - first_of_its_kind
+    - 5
+  heading_top:
+  - - related work
+    - 31
+  - - introduction
+    - 11
+  - - conclusion
+    - 7
+  position_mean: 0.368
+- id: c041
+  name: hyperparameter_and_method_consistency
+  definition: States that the authors use the same or similar hyperparameters, methods, or configurations as those used in
+    other works or sections of their own work for consistency and fair comparison.
+  size: 168
+  documents: 102
+  document_share: 0.337
+  cohesion: 0.5069
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:2103.06402#14#0
+    claim: The authors train and evaluate the models using the same hyper-parameters as described in the original works.
+  - claim_id: unarxive:2203.09962#14#1
+    claim: The authors use the same training hyperparameters as in the previous sections.
+  - claim_id: unarxive:2212.10505#10#1
+    claim: The authors state that the hyperparameters used for training are the same as those used in a previously introduced
+      model.
+  type_guess_top:
+  - - fair_comparison
+    - 9
+  - - method_description
+    - 6
+  - - hyperparameter_consistency
+    - 3
+  - - method_consistency
+    - 3
+  - - unchanged_elements
+    - 3
+  heading_top:
+  - - experimental setup
+    - 4
+  - - experiments
+    - 4
+  - - network design and optimization
+    - 4
+  position_mean: 0.66
+- id: c042
+  name: reports_recent_advancements
+  definition: Reports that recent advancements in deep learning or machine learning have improved performance or achieved
+    significant success in various tasks.
+  size: 167
+  documents: 93
+  document_share: 0.307
+  cohesion: 0.5223
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.006
+  representative_claims:
+  - claim_id: unarxive:2201.11950#1#2
+    claim: The authors report recent advancements in deep learning approaches for time-series anomaly detection.
+  - claim_id: unarxive:2201.11950#3#3
+    claim: The authors report that recent unsupervised deep learning-based approaches have improved performance in complex
+      multivariate time-series anomaly detection tasks.
+  - claim_id: unarxive:2111.12139#1#1
+    claim: The authors report that deep learning has revolutionized many machine learning tasks.
+  type_guess_top:
+  - - method_description
+    - 6
+  - - method_proposal
+    - 5
+  - - key_advances
+    - 4
+  - - describing_data_or_method
+    - 4
+  - - progress_report
+    - 3
+  heading_top:
+  - - introduction
+    - 55
+  - - abstract
+    - 20
+  - - related work
+    - 12
+  position_mean: 0.255
+- id: c043
+  name: convergence_analysis
+  definition: States that the authors prove, establish, or provide bounds for the convergence properties of algorithms under
+    specific conditions.
+  size: 161
+  documents: 42
+  document_share: 0.139
+  cohesion: 0.5622
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:2210.05922#6#2
+    claim: The authors prove a convergence property for the update iterate defined by the derived method under certain conditions.
+  - claim_id: unarxive:2206.05357#5#3
+    claim: The authors establish convergence of the algorithms using a fundamental inequality.
+  - claim_id: unarxive:2206.14927#25#0
+    claim: The authors prove a main result about the convergence rate of the AFAFed algorithm under certain assumptions.
+  type_guess_top:
+  - - convergence_rate
+    - 12
+  - - convergence_proof
+    - 5
+  - - convergence_condition
+    - 5
+  - - report_what_authors_did_or_found
+    - 4
+  - - describe_data_or_method
+    - 3
+  heading_top:
+  - - abstract
+    - 9
+  - - the
+    - 6
+  - - convergence analysis for symmetric positive definite quadratic
+    - 4
+  position_mean: 0.463
+- id: c044
+  name: algorithm_description
+  definition: Describes the detailed steps, initialization, and operation of a specific algorithm or method.
+  size: 155
+  documents: 79
+  document_share: 0.261
+  cohesion: 0.5858
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:2203.11176#5#9
+    claim: The authors describe the algorithm for discovering incremental skills, including the initialization and update
+      steps.
+  - claim_id: unarxive:2106.07635#9#2
+    claim: The authors describe a detailed algorithm for their method.
+  - claim_id: unarxive:1901.04676#6#4
+    claim: The authors provide a pseudo code for their algorithm, USS-UCB, detailing its operation and input requirements.
+  type_guess_top:
+  - - algorithm_description
+    - 24
+  - - method_description
+    - 24
+  - - algorithm_provision
+    - 6
+  - - algorithm_steps
+    - 4
+  - - algorithm_summary
+    - 4
+  heading_top:
+  - - (no heading)
+    - 8
+  - - fsnet pseudo alorithm
+    - 5
+  - - algorithms
+    - 5
+  position_mean: 0.49
+- id: c045
+  name: data_filtering_and_cleaning
+  definition: Describes the methods and criteria used by the authors to filter, clean, and preprocess data, including the
+    removal of irrelevant, noisy, or low-quality elements.
+  size: 153
+  documents: 79
+  document_share: 0.261
+  cohesion: 0.5544
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:2010.08319#6#4
+    claim: The authors describe the filtering process applied to the Reuters News Archive to ensure only relevant articles
+      are retained.
+  - claim_id: unarxive:2109.04708#3#4
+    claim: The authors describe the filtering process they performed to reduce noise in the term collections.
+  - claim_id: unarxive:2201.03035#6#2
+    claim: The authors clean the extracted data by removing certain elements and correcting abbreviations.
+  type_guess_top:
+  - - data_filtering
+    - 12
+  - - method_description
+    - 12
+  - - data_cleaning
+    - 9
+  - - exclusion_criteria
+    - 5
+  - - data_preprocessing
+    - 5
+  heading_top:
+  - - eeg preprocessing pipeline
+    - 6
+  - - smr requirement
+    - 6
+  - - data
+    - 4
+  position_mean: 0.506
+- id: c046
+  name: describe_annotation_process
+  definition: Describes the process, methods, and guidelines used by the authors or their team for annotating data, including
+    the recruitment of annotators, instructions given, and quality control measures.
+  size: 150
+  documents: 43
+  document_share: 0.142
+  cohesion: 0.4962
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:2203.09679#9#0
+    claim: The authors recruited expert annotators following institutional guidelines.
+  - claim_id: unarxive:2012.15606#40#11
+    claim: The authors describe the process of having the annotators perform the annotation task.
+  - claim_id: unarxive:2204.04541#10#0
+    claim: The authors instruct annotators to build the data following specific guidelines.
+  type_guess_top:
+  - - method_description
+    - 6
+  - - describe_data_method
+    - 4
+  - - data_annotation
+    - 4
+  - - annotation_process
+    - 3
+  - - data_collection_method
+    - 3
+  heading_top:
+  - - interface design choices
+    - 9
+  - - who is measuring
+    - 8
+  - - dataset collection
+    - 7
+  position_mean: 0.459
+- id: c047
+  name: baseline_usage
+  definition: Describes the use of one or more baseline methods or models for comparison in the experiments.
+  size: 150
+  documents: 73
+  document_share: 0.241
+  cohesion: 0.598
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:2104.10454#9#2
+    claim: The authors use five baselines introduced by other researchers.
+  - claim_id: unarxive:2104.05467#21#0
+    claim: The authors provide results of a baseline method for comparison.
+  - claim_id: unarxive:2112.13237#16#0
+    claim: The authors use a specific model as a baseline in their experiments.
+  type_guess_top:
+  - - baseline_description
+    - 23
+  - - baseline_model
+    - 8
+  - - baseline_method
+    - 6
+  - - method_description
+    - 5
+  - - baseline_establishment
+    - 3
+  heading_top:
+  - - baselines
+    - 18
+  - - experiments
+    - 8
+  - - baseline details
+    - 5
+  position_mean: 0.571
+- id: c048
+  name: reports_study_findings
+  definition: Reports the results and observations from empirical studies, including participants' responses, trust, and perceptions,
+    but not methodological details or specific error patterns.
+  size: 149
+  documents: 28
+  document_share: 0.092
+  cohesion: 0.43
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.007
+  representative_claims:
+  - claim_id: unarxive:2202.01875#4#2
+    claim: The authors report that respondents expressed a strong desire for interactive explanations.
+  - claim_id: unarxive:2103.00747#13#4
+    claim: The authors report an investigation into participants' trust in model predictions and willingness to share predictions
+      under different conditions.
+  - claim_id: unarxive:2103.00747#12#0
+    claim: The authors report that adding SHAP explanations significantly enhanced participants' trust and willingness to
+      share compared to the control condition.
+  type_guess_top:
+  - - report_finding
+    - 6
+  - - specific_error_pattern
+    - 4
+  - - method_description
+    - 4
+  - - reporting_results
+    - 3
+  - - learning_effect
+    - 2
+  heading_top:
+  - - introduction
+    - 16
+  - - abstract
+    - 9
+  - - evaluation
+    - 8
+  position_mean: 0.496
+- id: c049
+  name: method_requirements_and_advantages
+  definition: States that the proposed method or system does not require certain data, training, or changes, and highlights
+    its advantages in terms of efficiency, adaptability, or performance.
+  size: 147
+  documents: 71
+  document_share: 0.234
+  cohesion: 0.3951
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:1910.04112#6#5
+    claim: The authors state that CBLN can learn new tasks without forgetting previously learned ones.
+  - claim_id: unarxive:2211.14858#13#0
+    claim: The authors state that their proposed method does not require access to model internals or retraining.
+  - claim_id: unarxive:1910.04112#0#2
+    claim: The authors state that catastrophic forgetting is an inevitable issue in continual learning models for dynamic
+      environments.
+  type_guess_top:
+  - - forgetting_mechanism
+    - 5
+  - - data_requirement
+    - 4
+  - - method_description
+    - 4
+  - - training_requirement
+    - 2
+  - - method_advantage
+    - 2
+  heading_top:
+  - - abstract
+    - 16
+  - - introduction
+    - 16
+  - - conclusion
+    - 7
+  position_mean: 0.423
+- id: c050
+  name: algorithm_innovation
+  definition: Proposes, introduces, or describes new algorithms, modifications to existing algorithms, or algorithmic innovations
+    to solve specific problems or extend existing methods.
+  size: 147
+  documents: 65
+  document_share: 0.215
+  cohesion: 0.5099
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.007
+  representative_claims:
+  - claim_id: unarxive:2106.05165#0#1
+    claim: The authors propose a novel algorithm named ${\tt LyOn}$ for solving constrained bandit optimization problems.
+  - claim_id: unarxive:2211.15931#6#0
+    claim: The authors present an algorithm that extends a previous algorithm to a new setting.
+  - claim_id: unarxive:2102.00451#9#0
+    claim: The authors introduce a mid-point algorithm inspired by previous aggregation algorithms.
+  type_guess_top:
+  - - algorithm_proposal
+    - 7
+  - - algorithm_description
+    - 7
+  - - algorithm_modification
+    - 5
+  - - method_description
+    - 4
+  - - algorithm_introduction
+    - 3
+  heading_top:
+  - - conclusion
+    - 16
+  - - abstract
+    - 11
+  - - introduction
+    - 6
+  position_mean: 0.474
+- id: c051
+  name: training_process_description
+  definition: Describes the detailed steps, methods, and parameters used in the training process of a model, including initialization,
+    data preparation, loss computation, and parameter updates.
+  size: 145
+  documents: 85
+  document_share: 0.281
+  cohesion: 0.6146
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.007
+  representative_claims:
+  - claim_id: unarxive:2103.02143#20#1
+    claim: The authors specify the training process for their models.
+  - claim_id: unarxive:1904.08050#6#6
+    claim: The authors describe the training process, including the use of stochastic gradient descent and learning rate annealing.
+  - claim_id: unarxive:2210.09439#6#1
+    claim: The authors describe the components and training method of their proposed model.
+  type_guess_top:
+  - - training_process
+    - 24
+  - - method_description
+    - 21
+  - - training_method
+    - 6
+  - - describe_data_method
+    - 5
+  - - training_procedure
+    - 4
+  heading_top:
+  - - training
+    - 5
+  - - machine translation
+    - 3
+  - - training protocol
+    - 3
+  position_mean: 0.5
+- id: c052
+  name: disclose_funding_sources
+  definition: States that the authors disclose the sources of funding, financial support, or specific projects that supported
+    their research, including individual or partial support.
+  size: 144
+  documents: 109
+  document_share: 0.36
+  cohesion: 0.8748
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:2007.03545#33#0
+    claim: The authors disclose the sources of funding that support their work.
+  - claim_id: unarxive:2210.12798#19#0
+    claim: The authors disclose the funding sources for their research.
+  - claim_id: unarxive:2107.09950#10#0
+    claim: The authors disclose the funding sources that supported their work.
+  type_guess_top:
+  - - funding_disclosure
+    - 36
+  - - disclose_funding
+    - 29
+  - - acknowledge_funding
+    - 10
+  - - financial_disclosure
+    - 7
+  - - disclose_support
+    - 6
+  heading_top:
+  - - acknowledgments
+    - 45
+  - - acknowledgements
+    - 40
+  - - acknowledgment
+    - 18
+  position_mean: 0.809
+- id: c053
+  name: risk_and_problem_statement
+  definition: States that the authors identify, describe, or discuss significant risks, problems, or negative impacts associated
+    with various aspects of computational linguistics, machine learning, or related technologies.
+  size: 142
+  documents: 46
+  document_share: 0.152
+  cohesion: 0.5171
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:2103.00747#13#0
+    claim: The authors describe the risks associated with false and misleading information about a topic.
+  - claim_id: unarxive:2103.00747#0#0
+    claim: The authors state that misinformation about a topic is prevalent and poses high risks.
+  - claim_id: unarxive:2204.06745#24#3
+    claim: The authors state that misalignments in powerful AI systems can result in existential risks to humanity.
+  type_guess_top:
+  - - problem_description
+    - 5
+  - - importance_statement
+    - 3
+  - - problem_statement
+    - 2
+  - - risk_statement
+    - 2
+  - - negative_impact
+    - 2
+  heading_top:
+  - - introduction
+    - 33
+  - - abstract
+    - 14
+  - - discussion
+    - 6
+  position_mean: 0.388
+- id: c054
+  name: reports_dataset_statistics
+  definition: Reports the size, number of data points, or other statistical measures of the datasets used in the experiments,
+    often presented in a table or summarized in text.
+  size: 140
+  documents: 86
+  document_share: 0.284
+  cohesion: 0.632
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:2106.04060#8#1
+    claim: The authors report the size of the datasets used in their experiments.
+  - claim_id: unarxive:2109.12814#13#2
+    claim: The authors report the statistics of datasets in a table.
+  - claim_id: unarxive:1911.11161#3#5
+    claim: The authors provide basic statistics of the dataset in a table.
+  type_guess_top:
+  - - data_statistics
+    - 12
+  - - data_description
+    - 7
+  - - dataset_size
+    - 6
+  - - data_summary
+    - 6
+  - - data_size
+    - 5
+  heading_top:
+  - - dataset
+    - 13
+  - - datasets
+    - 9
+  - - data
+    - 5
+  position_mean: 0.521
+- id: c055
+  name: acknowledge_contributions_and_feedback
+  definition: States that the authors express gratitude to specific individuals, reviewers, and team members for their contributions,
+    feedback, and discussions related to the research and the paper.
+  size: 136
+  documents: 91
+  document_share: 0.3
+  cohesion: 0.8254
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:2210.12437#20#0
+    claim: The authors thank specific individuals for their assistance and feedback.
+  - claim_id: unarxive:2011.06125#53#8
+    claim: The authors thank the review team and individuals for their contributions to the paper.
+  - claim_id: unarxive:2103.11151#23#2
+    claim: The authors thank individuals for their suggestions and comments.
+  type_guess_top:
+  - - acknowledge_contributions
+    - 26
+  - - acknowledge_reviewers
+    - 13
+  - - acknowledge_contribution
+    - 7
+  - - acknowledgment
+    - 6
+  - - acknowledge_feedback
+    - 6
+  heading_top:
+  - - acknowledgements
+    - 53
+  - - acknowledgments
+    - 43
+  - - conclusion
+    - 9
+  position_mean: 0.788
+- id: c056
+  name: classifier_training_and_description
+  definition: Describes the training, use, or specific details of classifiers, including the type of classifier, features,
+    and methods used for classification tasks.
+  size: 135
+  documents: 50
+  document_share: 0.165
+  cohesion: 0.5513
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:2007.03545#25#8
+    claim: The authors train a linear SVM classifier based on the learned representations and original label information.
+  - claim_id: unarxive:2211.12584#24#4
+    claim: The authors used Support Vector Machines with a quadratic kernel for classification.
+  - claim_id: unarxive:2107.09728#4#4
+    claim: The authors state that the XGBoost classifier will be the focus of further analysis due to its superior performance.
+  type_guess_top:
+  - - method_description
+    - 32
+  - - classifier_training
+    - 5
+  - - classifier_description
+    - 4
+  - - feature_description
+    - 4
+  - - report_implementation
+    - 3
+  heading_top:
+  - - introduction
+    - 9
+  - - classifiers with acoustic features
+    - 6
+  - - abstract
+    - 5
+  position_mean: 0.485
+- id: c057
+  name: disclaimer_of_views
+  definition: States that the authors' opinions, findings, or conclusions do not necessarily reflect the views of funding
+    bodies, sponsors, or other external entities.
+  size: 134
+  documents: 64
+  document_share: 0.211
+  cohesion: 0.5355
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.007
+  representative_claims:
+  - claim_id: unarxive:2212.10400#24#1
+    claim: The authors state that the content of their work represents their own opinion and not necessarily that of their
+      employers or sponsors.
+  - claim_id: unarxive:2210.12798#19#1
+    claim: The authors state that their opinions and findings do not reflect the views of the funding body.
+  - claim_id: unarxive:1912.05699#35#1
+    claim: The authors state that their opinions and conclusions do not reflect the views of the funding sources.
+  type_guess_top:
+  - - demographic_distribution
+    - 9
+  - - describe_normative_grounds
+    - 5
+  - - view_disclaimer
+    - 3
+  - - disclose_practice
+    - 3
+  - - data_limitation
+    - 3
+  heading_top:
+  - - ethics statement
+    - 9
+  - - d annotator demographics
+    - 9
+  - - acknowledgments
+    - 7
+  position_mean: 0.56
+- id: c058
+  name: framework_applicability
+  definition: States that the proposed framework, method, or approach can be applied or generalized to various domains, technologies,
+    or problems.
+  size: 134
+  documents: 83
+  document_share: 0.274
+  cohesion: 0.5177
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:2206.05357#13#3
+    claim: The authors suggest that the framework has potential applications in other scenarios.
+  - claim_id: unarxive:2106.05165#15#3
+    claim: The authors state that the methodology and algorithms can be applied in various domains.
+  - claim_id: unarxive:2207.03456#14#5
+    claim: The authors state that similar techniques could be applied to other simulation-based applications if certain assumptions
+      are met.
+  type_guess_top:
+  - - framework_applicability
+    - 6
+  - - application_description
+    - 6
+  - - application_context
+    - 4
+  - - generalization_claim
+    - 3
+  - - application_scope
+    - 3
+  heading_top:
+  - - introduction
+    - 18
+  - - conclusion
+    - 14
+  - - abstract
+    - 11
+  position_mean: 0.392
+- id: c059
+  name: describe_sampling_method
+  definition: Describes the specific sampling method or algorithm used in the research, including techniques for random selection,
+    uniform distribution, or perturbation.
+  size: 128
+  documents: 73
+  document_share: 0.241
+  cohesion: 0.5302
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:2111.12139#6#0
+    claim: The authors describe the method for sampling elements on the group uniformly or as uniformly as possible.
+  - claim_id: unarxive:2203.05793#3#1
+    claim: The authors describe the sampling algorithm used in their method.
+  - claim_id: unarxive:2203.05793#4#1
+    claim: The authors use a random sampling algorithm based on random walk to generate path sequences.
+  type_guess_top:
+  - - method_description
+    - 17
+  - - sampling_method
+    - 7
+  - - describe_methods
+    - 4
+  - - sample_selection
+    - 3
+  - - sampling_process
+    - 2
+  heading_top:
+  - - related work
+    - 4
+  - - pseudo utterance sampling
+    - 4
+  - - introduction
+    - 4
+  position_mean: 0.501
+- id: c060
+  name: derives_mathematical_bounds
+  definition: Derives mathematical bounds or inequalities using lemmas, properties, and theorems.
+  size: 128
+  documents: 37
+  document_share: 0.122
+  cohesion: 0.6503
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:2106.03837#23#1
+    claim: The authors use mathematical inequalities and properties to derive bounds.
+  - claim_id: unarxive:2107.06226#28#4
+    claim: The authors apply a mathematical inequality (Bernstein's inequality) to derive a bound.
+  - claim_id: unarxive:1911.04436#33#0
+    claim: The authors use mathematical inequalities and theorems to derive bounds on certain expressions.
+  type_guess_top:
+  - - mathematical_bound
+    - 5
+  - - lemma_application
+    - 4
+  - - mathematical_derivation
+    - 3
+  - - combined_bound
+    - 3
+  - - mathematical_expression
+    - 3
+  heading_top:
+  - - proof of lemma
+    - 9
+  - - proof of proposition
+    - 8
+  - - bounding math
+    - 7
+  position_mean: 0.676
+- id: c061
+  name: provides_illustrative_example
+  definition: Provides an illustrative example or scenario to clarify, demonstrate, or support a concept, method, or finding
+    discussed in the document.
+  size: 127
+  documents: 77
+  document_share: 0.254
+  cohesion: 0.5925
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:2205.07833#20#0
+    claim: The authors provide an example to illustrate the method.
+  - claim_id: unarxive:2205.00832#13#4
+    claim: The authors present a concrete example to illustrate the concepts discussed.
+  - claim_id: unarxive:2110.10081#1#3
+    claim: The authors provide examples to illustrate the structure of the problems they study.
+  type_guess_top:
+  - - example_provision
+    - 15
+  - - example_provided
+    - 7
+  - - example_illustration
+    - 6
+  - - example_usage
+    - 5
+  - - present_conversation_samples
+    - 5
+  heading_top:
+  - - introduction
+    - 6
+  - - appendix
+    - 5
+  - - case study
+    - 3
+  position_mean: 0.474
+- id: c062
+  name: report_model_performance
+  definition: Reports the performance of models or specific configurations on test sets, datasets, or specific tasks, but
+    does not include detailed methodological descriptions or theoretical discussions.
+  size: 127
+  documents: 76
+  document_share: 0.251
+  cohesion: 0.6397
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.008
+  representative_claims:
+  - claim_id: unarxive:2201.03035#8#2
+    claim: The authors report the performance of the models on the test set for text input.
+  - claim_id: unarxive:2211.12584#78#3
+    claim: The authors report the performance of the models on the test dataset.
+  - claim_id: unarxive:2112.09266#16#0
+    claim: The authors report the performance of their model compared to baseline methods on real-world datasets.
+  type_guess_top:
+  - - performance_report
+    - 17
+  - - report_performance
+    - 7
+  - - model_performance
+    - 7
+  - - evaluation_method
+    - 6
+  - - evaluation_description
+    - 4
+  heading_top:
+  - - abstract
+    - 6
+  - - introduction
+    - 6
+  - - experiments
+    - 5
+  position_mean: 0.573
+- id: c063
+  name: model_fine_tuning
+  definition: Describes the process of fine-tuning pre-trained models on specific datasets or tasks, including details about
+    the models, datasets, and parameters used.
+  size: 121
+  documents: 63
+  document_share: 0.208
+  cohesion: 0.6247
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:2212.10505#7#2
+    claim: The authors initialize their model with the architecture and weights of a pre-existing visual language model and
+      then finetune it for a specific task.
+  - claim_id: unarxive:2210.07485#25#1
+    claim: The authors fine-tune the model on the ID training data with specified hyperparameters.
+  - claim_id: unarxive:2103.00747#3#5
+    claim: The authors fine-tuned the BERT model with their labeled data.
+  type_guess_top:
+  - - method_description
+    - 22
+  - - model_fine_tuning
+    - 8
+  - - model_description
+    - 4
+  - - fine_tuning_details
+    - 3
+  - - finetuning_process
+    - 3
+  heading_top:
+  - - acknowledgements
+    - 5
+  - - setup
+    - 4
+  - - introduction
+    - 3
+  position_mean: 0.494
+- id: c064
+  name: benchmark_introduction_and_description
+  definition: Describes the introduction, design, and purpose of a benchmark or dataset, often emphasizing its novelty, representativeness,
+    and evaluation criteria.
+  size: 120
+  documents: 41
+  document_share: 0.135
+  cohesion: 0.5434
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:2106.00676#1#9
+    claim: The authors introduce a new benchmark suite, S2-VLUE, to evaluate their proposed methods.
+  - claim_id: unarxive:2105.08179#19#0
+    claim: The authors introduce benchmark datasets and baselines in this section.
+  - claim_id: unarxive:2110.08542#27#2
+    claim: The authors present a new benchmark dataset called CommaQA that involves multi-hop questions and reasoning challenges.
+  type_guess_top:
+  - - benchmark_description
+    - 6
+  - - benchmark_introduction
+    - 3
+  - - dataset_description
+    - 3
+  - - data_usage
+    - 3
+  - - evaluation_method
+    - 3
+  heading_top:
+  - - introduction
+    - 13
+  - - conclusion
+    - 13
+  - - benchmarks vs use cases
+    - 10
+  position_mean: 0.497
+- id: c065
+  name: method_and_concept_description
+  definition: Describes the methods, concepts, and frameworks used in federated learning and continual learning, including
+    their typical procedures, challenges, and proposed solutions, but does not focus on experimental results or specific application
+    outcomes.
+  size: 120
+  documents: 31
+  document_share: 0.102
+  cohesion: 0.4944
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:2206.02468#0#0
+    claim: The authors describe federated learning as a distributed machine learning paradigm.
+  - claim_id: unarxive:2106.02305#1#0
+    claim: The authors describe the federated learning (FL) paradigm and its typical training procedure.
+  - claim_id: unarxive:2112.05559#17#3
+    claim: 'The authors describe the three main steps of federated learning: device sampling/selection, local computation,
+      and consensus/aggregation.'
+  type_guess_top:
+  - - method_description
+    - 18
+  - - concept_description
+    - 4
+  - - solution_proposal
+    - 3
+  - - method_introduction
+    - 3
+  - - state_continual_learning_goal
+    - 3
+  heading_top:
+  - - introduction
+    - 21
+  - - abstract
+    - 14
+  - - conclusion
+    - 7
+  position_mean: 0.333
+- id: c066
+  name: theoretical_and_methodological_explanations
+  definition: Describes theories, hypotheses, and methodological approaches that explain or underpin the research, including
+    cognitive processes, decision-making, and computational models.
+  size: 119
+  documents: 59
+  document_share: 0.195
+  cohesion: 0.5063
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.017
+  representative_claims:
+  - claim_id: unarxive:2202.11672#19#0
+    claim: The authors describe a theory that decomposes human learning into fast and slow processes.
+  - claim_id: unarxive:1803.00781#1#4
+    claim: The authors explain the concept of intrinsically motivated exploration and its computational models.
+  - claim_id: unarxive:2202.13341#16#5
+    claim: The authors hypothesize about the cause of certain observations in the latent space.
+  type_guess_top:
+  - - method_description
+    - 4
+  - - theory_description
+    - 3
+  - - hypothesis
+    - 3
+  - - method_proposal
+    - 3
+  - - process_description
+    - 2
+  heading_top:
+  - - introduction
+    - 23
+  - - related work
+    - 5
+  - - basic emotion theory
+    - 4
+  position_mean: 0.334
+- id: c067
+  name: transfer_learning_description
+  definition: Describes various aspects of transfer learning, including zero-shot, few-shot, and multi-task learning, and
+    their applications in computational linguistics and machine learning.
+  size: 119
+  documents: 36
+  document_share: 0.119
+  cohesion: 0.4728
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:2205.10475#12#3
+    claim: The authors enable both zero-shot and multi-task transfer learning.
+  - claim_id: unarxive:2205.06743#6#4
+    claim: The authors explain that few-shot learning can be considered a type of transfer learning if prior knowledge is
+      obtained from other tasks or domains by pre-training.
+  - claim_id: unarxive:2205.06743#16#2
+    claim: The authors explain that the basic operation of transfer learning involves pre-training on an extensive dataset
+      and fine-tuning on a limited support set.
+  type_guess_top:
+  - - method_description
+    - 6
+  - - research_scope
+    - 2
+  - - methodology
+    - 2
+  - - describe_method
+    - 2
+  - - domain_adaptation
+    - 2
+  heading_top:
+  - - introduction
+    - 12
+  - - zero shot learning
+    - 9
+  - - abstract
+    - 9
+  position_mean: 0.384
+- id: c068
+  name: method_and_approach_proposal
+  definition: Proposes or describes methods and approaches for text summarization, including both abstractive and extractive
+    techniques, and may include the evaluation of these methods.
+  size: 115
+  documents: 13
+  document_share: 0.043
+  cohesion: 0.5701
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.017
+  representative_claims:
+  - claim_id: unarxive:2102.00176#43#2
+    claim: The authors argue that abstractive summarization is necessary to generate reviews that are close in meaning and
+      language use to human reviews.
+  - claim_id: unarxive:2104.10454#9#4
+    claim: The authors propose two abstractive approaches for text summarization.
+  - claim_id: unarxive:2104.10454#17#7
+    claim: The authors propose abstractive approaches for summarization.
+  type_guess_top:
+  - - method_proposal
+    - 6
+  - - method_description
+    - 6
+  - - prior_work_report
+    - 6
+  - - task_description
+    - 3
+  - - evaluation_method
+    - 3
+  heading_top:
+  - - introduction
+    - 14
+  - - extractive summarization
+    - 11
+  - - abstract
+    - 8
+  position_mean: 0.406
+- id: c069
+  name: framework_components_description
+  definition: Describes the components, modules, or major parts of a proposed or existing framework, system, or model, including
+    their roles and functionalities.
+  size: 115
+  documents: 51
+  document_share: 0.168
+  cohesion: 0.5168
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:1808.09637#1#5
+    claim: 'The authors describe their framework consisting of three components: parser, dialogue manager, and generator.'
+  - claim_id: unarxive:2106.03837#18#1
+    claim: The authors describe the components of the proposed framework.
+  - claim_id: unarxive:2107.08124#0#1
+    claim: The authors describe the components of the proposed framework.
+  type_guess_top:
+  - - framework_description
+    - 19
+  - - method_description
+    - 11
+  - - framework_proposal
+    - 6
+  - - module_description
+    - 4
+  - - framework_introduction
+    - 4
+  heading_top:
+  - - introduction
+    - 16
+  - - abstract
+    - 9
+  - - conclusion
+    - 8
+  position_mean: 0.39
+- id: c070
+  name: introduces_regularization
+  definition: Introduces or describes the use of regularization techniques in the loss function or model formulation to improve
+    performance or prevent overfitting.
+  size: 115
+  documents: 48
+  document_share: 0.158
+  cohesion: 0.5464
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:2109.12814#6#1
+    claim: The authors propose a regularization loss to explicitly model the non-local dependencies among constituents that
+      belong to the same pattern.
+  - claim_id: unarxive:2112.13237#10#5
+    claim: The authors introduce a max term to the loss function to ensure the model learns more from high-loss predictions.
+  - claim_id: unarxive:2105.14772#4#1
+    claim: The authors incorporate regularization into the problem formulation to enable appropriate learning in the inner
+      level and prevent over-fitting.
+  type_guess_top:
+  - - method_description
+    - 17
+  - - training_method
+    - 3
+  - - method_proposal
+    - 3
+  - - method_detail
+    - 2
+  - - regularization_effect
+    - 2
+  heading_top:
+  - - introduction
+    - 6
+  - - abstract
+    - 5
+  - - regularization
+    - 4
+  position_mean: 0.443
+- id: c071
+  name: hardware_and_software_specification
+  definition: Describes the hardware and software used for experiments, simulations, or training, including specific configurations
+    and environments.
+  size: 113
+  documents: 66
+  document_share: 0.218
+  cohesion: 0.5665
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:2108.01220#19#0
+    claim: The authors describe the hardware and software environment used for the simulations.
+  - claim_id: unarxive:2106.03837#22#0
+    claim: The authors describe the hardware and software environment used for the experiments.
+  - claim_id: unarxive:2203.11176#30#0
+    claim: The authors describe the hardware and software environment used for their experiments.
+  type_guess_top:
+  - - method_description
+    - 6
+  - - hardware_specification
+    - 6
+  - - environment_description
+    - 5
+  - - hardware_description
+    - 5
+  - - hardware_usage
+    - 5
+  heading_top:
+  - - experiments
+    - 9
+  - - the simulator
+    - 8
+  - - sasiml the spatial architecture simulator
+    - 5
+  position_mean: 0.602
+- id: c072
+  name: reports_observed_trends
+  definition: Reports observed trends or differences in data, such as changes over time, frequency differences, or preferences
+    in language use.
+  size: 113
+  documents: 34
+  document_share: 0.112
+  cohesion: 0.4149
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:2210.12846#7#1
+    claim: The authors report that euphemistic and non-euphemistic terms tend to be used in slightly different contexts.
+  - claim_id: unarxive:2108.07593#12#3
+    claim: The authors observe that the topic of migration is less popular from 2016 to 2018, but there is a sharp increase
+      in tweets about migration from 2018 to 2020.
+  - claim_id: unarxive:2107.08124#11#0
+    claim: The authors report an observed trend of an increasing number of unique collocations over the years.
+  type_guess_top:
+  - - frequency_difference
+    - 5
+  - - language_property
+    - 4
+  - - finding_report
+    - 4
+  - - finding_description
+    - 4
+  - - reporting_of_findings
+    - 3
+  heading_top:
+  - - introduction
+    - 10
+  - - collocations
+    - 7
+  - - hagar
+    - 7
+  position_mean: 0.584
+- id: c073
+  name: describes_data_augmentation_method
+  definition: Describes the methods, techniques, or strategies used for data augmentation in computational linguistics or
+    machine learning, including specific approaches like back-translation, mix-up strategies, and lexical substitution.
+  size: 112
+  documents: 44
+  document_share: 0.145
+  cohesion: 0.6277
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.009
+  representative_claims:
+  - claim_id: unarxive:2205.05468#4#0
+    claim: The authors describe data augmentation as a method for creating variations of existing data.
+  - claim_id: unarxive:2010.08319#9#0
+    claim: The authors describe the method they used for data augmentation, which involves back-translation.
+  - claim_id: unarxive:2205.06743#12#0
+    claim: The authors describe data augmentation techniques that transform input data to increase diversity.
+  type_guess_top:
+  - - method_description
+    - 16
+  - - data_augmentation
+    - 13
+  - - describe_method
+    - 4
+  - - augmentation_method
+    - 2
+  - - data_augmentation_method
+    - 2
+  heading_top:
+  - - data augmentation
+    - 13
+  - - abstract
+    - 4
+  - - learning data processing
+    - 3
+  position_mean: 0.437
+- id: c074
+  name: presents_theorem
+  definition: States that the authors present, provide, or state a theorem, often including conditions, bounds, or specific
+    mathematical results.
+  size: 107
+  documents: 47
+  document_share: 0.155
+  cohesion: 0.7264
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:2210.12798#23#1
+    claim: The authors present a theorem that describes a condition for the optimal transport plan.
+  - claim_id: unarxive:2105.15069#7#3
+    claim: The authors provide a theorem that states the consistency of the Restricted-Max-Margin loss under certain conditions.
+  - claim_id: unarxive:2101.09603#9#6
+    claim: The authors provide a theorem that guarantees a bound on a term under certain conditions.
+  type_guess_top:
+  - - theorem_statement
+    - 13
+  - - theorem_presentation
+    - 6
+  - - theorem_description
+    - 4
+  - - consistency_theorem
+    - 3
+  - - state_theorem
+    - 3
+  heading_top:
+  - - proof of theorem
+    - 5
+  - - utility results
+    - 3
+  - - reparameterization
+    - 3
+  position_mean: 0.548
+- id: c075
+  name: result_reporting_with_repetition
+  definition: Reports the results of experiments, including the repetition of experiments with different random seeds and
+    the reporting of averaged results, standard deviations, or medians.
+  size: 104
+  documents: 67
+  document_share: 0.221
+  cohesion: 0.6009
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.019
+  representative_claims:
+  - claim_id: unarxive:2206.05530#10#10
+    claim: The authors repeated each run multiple times with different seeds and reported averaged results including standard
+      deviations.
+  - claim_id: unarxive:2105.03791#11#1
+    claim: The authors repeat each experiment multiple times with different random seeds.
+  - claim_id: unarxive:2210.04105#33#2
+    claim: The authors run each method five times with different random seeds for pre-trained LMs and task-agnostic baselines.
+  type_guess_top:
+  - - result_reporting
+    - 11
+  - - experiment_repetition
+    - 7
+  - - result_averaging
+    - 3
+  - - reproducibility_measure
+    - 3
+  - - evaluation_evidence
+    - 2
+  heading_top:
+  - - results
+    - 8
+  - - experiments
+    - 6
+  - - implementation details
+    - 5
+  position_mean: 0.613
+- id: c076
+  name: data_transformation_and_querying
+  definition: Describes the methods and tools used for transforming data into RDF format, storing it in triplestores, and
+    querying it using SPARQL or geospatial extensions.
+  size: 104
+  documents: 19
+  document_share: 0.063
+  cohesion: 0.4987
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.0
+  representative_claims:
+  - claim_id: unarxive:2211.12584#65#3
+    claim: The data are converted into RDF format and stored in a triplestore, and semantic queries are used to enrich the
+      data.
+  - claim_id: unarxive:2211.12584#41#2
+    claim: The authors describe SPARQL as the most popular querying language for the retrieval and manipulation of data in
+      RDF format.
+  - claim_id: unarxive:2211.12584#49#8
+    claim: The authors use GeoTriples to convert shapefile data into RDF format.
+  type_guess_top:
+  - - method_description
+    - 10
+  - - ontology_description
+    - 6
+  - - describing_data_or_method
+    - 5
+  - - tool_usage
+    - 4
+  - - query_example
+    - 4
+  heading_top:
+  - - (no heading)
+    - 9
+  - - storage and querying
+    - 8
+  - - semantic annotation under the earth observation and agriculture domains
+    - 8
+  position_mean: 0.366
+- id: c077
+  name: reports_performance_improvement
+  definition: Reports that specific modifications or techniques applied by the authors improve the performance of models or
+    systems, often quantifying the improvement.
+  size: 102
+  documents: 62
+  document_share: 0.205
+  cohesion: 0.6056
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.029
+  representative_claims:
+  - claim_id: unarxive:2210.07485#8#3
+    claim: The authors report that combining token averaging and layer combination further improves performance, surpassing
+      a previous state-of-the-art method.
+  - claim_id: unarxive:2104.03642#14#2
+    claim: The authors found that the inclusion of transformer elements significantly improved the performance of their model
+      on a specific dataset.
+  - claim_id: unarxive:2011.15007#18#3
+    claim: The authors find that weight trimming significantly improves the performance of the estimators.
+  type_guess_top:
+  - - performance_improvement
+    - 10
+  - - report_findings
+    - 4
+  - - reporting_improvement
+    - 3
+  - - evaluation_evidence
+    - 3
+  - - report_performance
+    - 2
+  heading_top:
+  - - abstract
+    - 8
+  - - results
+    - 4
+  - - cloze style qa
+    - 4
+  position_mean: 0.557
+- id: c078
+  name: discusses_interpretability_methods
+  definition: Discusses methods, approaches, and tools for improving the interpretability and explainability of machine learning
+    models, including their benefits and challenges.
+  size: 101
+  documents: 29
+  document_share: 0.096
+  cohesion: 0.4952
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.01
+  representative_claims:
+  - claim_id: unarxive:2204.06745#26#0
+    claim: The authors consider mechanistic interpretability as a promising approach for understanding how models accomplish
+      tasks.
+  - claim_id: unarxive:2207.06196#1#9
+    claim: The authors state that they will present researches conducted to increase the explainability and interpretability
+      as a way to achieve trustworthy machine learning.
+  - claim_id: unarxive:2103.00747#2#10
+    claim: The authors propose to use SHAP for local interpretability.
+  type_guess_top:
+  - - method_description
+    - 4
+  - - interpretability_method
+    - 2
+  - - importance_of_explainability
+    - 2
+  - - interpretability_importance
+    - 2
+  - - comparison_with_other_tools
+    - 2
+  heading_top:
+  - - introduction
+    - 16
+  - - trustworthy machine learning
+    - 11
+  - - abstract
+    - 9
+  position_mean: 0.449
+- id: c079
+  name: mathematical_function_properties
+  definition: States that the authors prove, describe, or define properties of mathematical functions, including continuity,
+    contraction, monotonicity, and Lipschitz conditions, but not detailed descriptions of figures or specific data.
+  size: 100
+  documents: 35
+  document_share: 0.116
+  cohesion: 0.5492
+  single_kind: true
+  split_note: ''
+  flags: []
+  example_label_share: 0.01
+  representative_claims:
+  - claim_id: unarxive:2110.15093#4#6
+    claim: The authors prove that certain functions are Lipschitz continuous.
+  - claim_id: unarxive:2210.05922#18#0
+    claim: The authors prove that a certain mathematical function is a contraction mapping under specific conditions.
+  - claim_id: unarxive:2107.02253#22#4
+    claim: The authors define a function as [math] Lipschitz if it satisfies certain conditions.
+  type_guess_top:
+  - - mathematical_property
+    - 6
+  - - function_property
+    - 5
+  - - figure_description
+    - 3
+  - - function_definition
+    - 2
+  - - definition_closure
+    - 2
+  heading_top:
+  - - proof of lemma
+    - 6
+  - - weak derivatives and sobolev spaces
+    - 6
+  - - proof of proposition
+    - 5
+  position_mean: 0.679

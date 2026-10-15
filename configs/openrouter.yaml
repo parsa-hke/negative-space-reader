@@ -1,0 +1,20 @@
+# Teacher via OpenRouter (plan §0.2 #6 route iii): the same Qwen2.5-72B-Instruct through an OpenAI-compatible
+# API. Key from the OPENROUTER_API_KEY environment variable, never from a file. Provider and quantisation are
+# pinned and fallbacks disabled so every label comes from one model build; the served provider is recorded per
+# call. Checked 2026-10-12: one endpoint, DeepInfra fp8, 32k context, $0.36 / $0.40 per 1M tokens in / out.
+# Usage: python -m experiments.run --config configs/induce.yaml --overlay openrouter
+
+models:
+  teacher:
+    backend: openai
+    id: qwen/qwen-2.5-72b-instruct
+    base_url: https://openrouter.ai/api/v1
+    api_key_env: OPENROUTER_API_KEY
+    response_format: json_schema
+    max_model_len: 32768
+    concurrency: 8
+    cache: true
+    provider:                     # OpenRouter `provider` routing object, sent as extra_body
+      order: [deepinfra/fp8]
+      allow_fallbacks: false
+      data_collection: deny

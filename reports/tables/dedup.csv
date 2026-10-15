@@ -1,0 +1,3 @@
+genre,input,exact_duplicates_dropped,near_documents,near_clusters,near_in_multi_member_clusters,near_near_duplicate_rate,cross_split_dropped,train_cluster_cap_dropped,output,papers_seen,papers_kept,files_skipped_by_year
+privacy,31364,799,30565,24892,9097,0.1856044495337804,1949,176,28440,,,
+papers,17687,0,17687,17636,65,0.0028834737377735342,37,6,17644,,,

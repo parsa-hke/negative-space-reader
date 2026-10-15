@@ -1,0 +1,6 @@
+# Phase 2 data build (plan §2.8): raw corpora -> data/processed/<genre>/, splits, stats, previews.
+# python -m experiments.run --config configs/data.yaml --overlay local [--overlay smoke] [--set genres=[privacy]]
+inherit: base.yaml
+task: build_data
+run:
+  seeds: [0]                      # the build is seeded by splits.seed, not by the run seed

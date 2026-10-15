@@ -1,0 +1,3 @@
+# OmitBench runs (plan §6.3, §9.3).
+inherit: base.yaml
+task: bench

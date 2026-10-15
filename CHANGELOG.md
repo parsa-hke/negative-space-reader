@@ -1,0 +1,550 @@
+# Changelog
+
+Date, what was done, what was found (negative findings included). Newest first.
+
+## 2026-10-15 — Phase 3 closed: human pass, coverage check, both schemas frozen (GATE 3.6 passed)
+
+**Task 3.4 (human pass), Parsa.** Done on a guided review page (private artifact
+https://claude.ai/artifact/BXtRWoATairWDT6uvZiweU; source `reports/schema_review/page/`, data from
+`analysis/schema_review_page.py`; one group per screen with plain-language readings, Claude's recommendation and
+Parsa's decision, stored in the page's database). Raw answers: `reports/schema_review/decisions/page_answers_2026-10-15.json`
+(154 groups, 125 item records, 44 checklist rows). Of 154 groups: 127 recommendations accepted, 17 kept as their own
+item, 10 split. Read back by Claude, four problems were reported and Parsa resolved them in chat
+(`decisions/resolutions_2026-10-15.yaml`):
+- 9 splits had been saved with placeholder halves (`…_a`/`…_b`, identical definitions): **kept as one item each**.
+  (The page let a split be saved without naming the halves, and let new items be marked checked with empty fields:
+  page design faults of mine.)
+- privacy had 68 items (> 60): **merged** the three contact items, cookie non-identification into
+  `tracking_data_not_linked_to_identity`, log files into `collects_usage_data_automatically`, access restriction and
+  confidentiality into `limits_internal_access`.
+- items kept under the group's own name **inherit the severity weight and OPP-115 label source** of the proposed
+  item they replace (5 privacy items back at 1.5).
+- papers c051 (its item removed on the page, so orphaned): **folded into** `describes_training_procedure`.
+Applied by `analysis/apply_review_decisions.py` → `reports/schema_review/final_<genre>.yaml` → workbooks
+(`review_final_v3_s0`) → `packs/<genre>/schema_candidate.yaml` (`candidate_v3_s0`): 0 gate problems.
+
+**Task 3.5 (coverage check).** Held-out sections = dev documents outside the extraction sample; teacher = the 72B.
+
+| Run | Prompt | Privacy sections with an unmapped statement | Papers |
+|---|---|---|---|
+| `coverage_7b_iter1_s0` (10+10, 7B) | v1 | 40% | 50% (the 7B misses existing types; not used further) |
+| `coverage_72b_iter1_s0` (10+10) | v1 | 10% | 0% |
+| `coverage_72b_s0` (100+100, seed 0) | v1 | **18%** (fail) | 3% |
+| `coverage_72b_v2_s1` (fresh, after widening 11 definitions) | v1 | **17%** (fail) | 1% |
+| `coverage_72b_v3_s2` (fresh, + 5 widenings) | v2 (`background_or_filler` label) | **14%** (fail); 25% counting filler | 4%; **31%** counting filler |
+| **`coverage_72b_v4_s3`** (fresh, recorded) | **v3 + second look** | first pass 9%, **after second look 2%** | first pass 2%, **0%** |
+
+**Found**
+- **Negative:** each round of widening fixed the misses of its own sample and a fresh sample showed a new tail:
+  definition-only fixes do not converge on privacy's long tail. Evaluating on a fresh sample after each change
+  (seeds 1, 2, 3) kept the reported number honest.
+- **Negative (withdrawn the same day):** a `background_or_filler` label for textbook explanations and promotional
+  filler (prompt v2, plan wording briefly changed and then rewritten) absorbed real introduction and related-work
+  statements in papers (31% of sections). Background is a genre move in papers; the label was not genre-neutral.
+- Most remaining privacy "none" answers were **classifier misses, not schema gaps**: about 10 of 14 sections in run
+  v3 held statements that a definition already covered, some verbatim ("does not create any contractual rights",
+  "fees for access requests"). With 58 definitions in one prompt, the 72B misses about one statement in 30.
+- **Method adopted (plan 3.5/3.6 wording edited first):** every "none" gets a second look: the teacher sees only the
+  6 types most similar to the statement (embedding of type cards: definition + examples) and decides again
+  (prompt `induce_coverage_verify` v1 `b8acf18cc1e5`; first pass `induce_coverage` v3 `ac266c25ad29`). In the recorded
+  run, 14 of 19 privacy and 2 of 2 papers second looks found a type. Reading all 16: about 3 are stretches ("does not
+  use spyware" → `does_not_sell_or_share`); counting them as failures, privacy is at **3%**, still under the bar.
+  Remaining privacy gaps: a "you must have permission to share other people's data" section and a
+  terms-and-conditions block (refund, assignment), both one-offs.
+- 15 definitions widened in total (privacy 14, papers 1), each approved by Parsa; listed in the resolutions file.
+- The coverage stage now keeps a copy of the checked candidate and a content fingerprint (types, seed mapping,
+  pruned groups); `freeze` refuses a candidate whose content changed since its coverage run (a rebuild that only
+  changes provenance is accepted). Cost of all coverage runs ≈ $0.70.
+
+**Task 3.6 GATE passed.** `packs/privacy/schema.yaml` and `packs/papers/schema.yaml`, **version 1**, frozen
+2026-10-15, signed off by Parsa Hosseini, coverage run `coverage_72b_v4_s3`, run `freeze_v1_s0`. Changes from now on
+are new pack versions. (Minor: the reason stored for papers' two pruned groups reads "reviewed on the page; see
+decisions/…"; the actual reason, item removed by the reviewer, is in those files.)
+
+*Privacy, 58 types* (1.5 = GDPR Art. 13/14 or CCPA): `states_information_required_to_register` (1.5),
+`collects_usage_data_automatically` (1.5), `uses_cookies`, `uses_web_beacons`, `tracking_data_not_linked_to_identity`,
+`defines_personal_information`, `uses_data_to_improve_services`, `uses_data_to_personalize`,
+`sends_marketing_communications`, `does_not_sell_or_share` (1.5), `shares_with_service_providers` (1.5),
+`shares_with_affiliates_and_partners` (1.5), `shares_aggregated_data`, `discloses_when_legally_required`,
+`transfers_data_in_business_transfer`, `transfers_data_internationally` (1.5), `third_party_advertising_and_cookies`,
+`disclaims_control_of_third_party_cookies`, `states_security_measures`, `encrypts_data_in_transit`,
+`stores_data_securely`, `limits_internal_access`, `does_not_store_payment_cards`, `security_not_guaranteed`,
+`advises_users_on_security`, `opt_out_of_communications` (1.5), `opt_out_of_tracking_or_ads`,
+`browser_cookie_controls`, `warns_disabling_cookies_limits_site`, `information_provision_is_optional`,
+`deletion_on_request` (1.5), `states_retention_period` (1.5), `no_knowing_collection_from_children`,
+`states_minimum_age`, `deletes_children_data_if_found`, `reserves_right_to_change_policy`,
+`states_how_changes_are_notified`, `continued_use_means_acceptance`, `states_last_updated_date`,
+`states_policy_scope_and_commitment`, `scope_excludes_third_party_sites`, `third_party_sites_and_their_policies`,
+`consent_by_use`, `complies_with_laws_and_programs`, `governing_law_and_disputes`, `provides_privacy_contact` (1.5),
+`do_not_track_response`, `california_disclosure_rights`, `data_collection_methods` (1.5), `data_use_for_services`
+(1.5), `policy_coverage`, `user_data_control` (1.5), `discloses_public_areas`, `disclose_data_rights` (1.5),
+`content_and_usage_restrictions`, `data_collection_contests_surveys` (1.5),
+`company_identification_and_service_definition` (1.5), `provides_third_party_links`.
+
+*Papers, 50 types:* `motivates_problem`, `reviews_prior_work`, `proposes_method`, `states_method_advantages`,
+`claims_broader_applicability`, `defines_notation`, `states_theoretical_result`, `proves_or_derives`,
+`describes_model_architecture`, `describes_training_objective`, `describes_training_procedure`,
+`describes_algorithm_steps`, `describes_method_details`, `fine_tunes_pretrained_model`, `describes_data_augmentation`,
+`gives_illustrative_example`, `describes_datasets`, `reports_dataset_statistics`, `describes_data_split`,
+`describes_preprocessing`, `generates_synthetic_data`, `describes_annotation_process`, `describes_evaluation_metrics`,
+`specifies_hyperparameters`, `uses_baselines`, `specifies_compute_resources`, `names_software_and_libraries`,
+`reports_computational_cost`, `reports_variance_or_significance`, `reports_experimental_results`,
+`reports_ablation_or_improvement`, `visualizes_results`, `reports_observations`, `refers_to_appendix`,
+`states_own_limitations`, `states_limitations_of_existing_approaches`, `suggests_future_work`,
+`code_and_data_availability`, `discloses_funding`, `acknowledges_contributors`, `ethics_and_declarations`,
+`discusses_societal_impact_or_misuse`, `assumption_and_distribution`, `mdp_component_definition`, `task_description`,
+`method_proposal`, `performance_comparison_across_other_works`, `performance_comparison`, `method_comparison`,
+`introduces_regularization`. Excluded checklist items: NeurIPS 16 and ACL E1 (LLM / AI-assistant declarations
+post-date the 2018–2022 corpus). Pruned groups: c040 (difference from prior work), c064 (new dataset or benchmark).
+
+**Watch in Phase 4 (risks, not changes):** some kept-apart items are close neighbours and may be hard for the
+presence detector to separate: papers `performance_comparison`, `performance_comparison_across_other_works`,
+`method_comparison` and `reports_experimental_results`; `proposes_method` and `method_proposal`;
+`describes_training_procedure` and `introduces_regularization` / `describes_training_objective`; privacy
+`policy_coverage` and `states_policy_scope_and_commitment`, `provides_third_party_links` and
+`third_party_sites_and_their_policies`, `data_collection_methods` and `data_collection_contests_surveys`. Per-type F1
+in 4.3 will show whether any pair needs merging in a version 2 of a pack.
+
+**Tests:** 248 pass (new: `tests/test_schema_review.py`, `tests/test_induce_schema_gate.py`,
+`tests/test_induce_cluster.py`). Nothing committed.
+
+## 2026-10-13 — Phase 3 session: tasks 3.1 and 3.2 closed, decisions for 3.3–3.5
+
+**Checks at start:** 232 tests pass; claims 21,046 (privacy) and 44,579 (papers), as in HANDOFF.md.
+
+**Decisions (Parsa, 2026-10-13)**
+- **3.2:** the 303 complete papers are accepted as the genre-B extraction sample (one teacher, the 32B, for every
+  claim). The partial paper `unarxive:2110.04947` (35 of 47 sections, 212 claims) is **dropped** at load time; the
+  claims file is not edited. Genre-B claims used from here on: 44,367 from 303 documents.
+- **Teacher for 3.3 naming and the recorded 3.5 run:** Qwen2.5-72B-Instruct via OpenRouter (`--overlay openrouter`);
+  prompts are iterated on the local 7B first.
+- **3.5 method:** as planned: the teacher classifies 100 random held-out sections per genre against the schema.
+
+**Task 3.1 ticked** after a full by-eye review of `runs/eye_v2_32b_s0/eye_test.html` (all 40 sections, 213 claims)
+against plan Appendix D. Every criterion passes except "related work in a few claims", which is weak. Found:
+- 5 of 213 claims misstate their section (no invented content): one Related Work section (A2) credits the cited
+  works' findings to "the authors" (4 claims) and calls a cited paper's setup "their approach"; one privacy claim
+  inverts who grants a content licence; one paper claim misdefines a metric; one privacy claim says "communications
+  from third parties" for "on behalf of third parties".
+- **Residuals carried into 3.3/3.4 as watch items:** (a) prior-work results phrased like the paper's own results
+  ("The authors report that X outperforms Y"), so a "report results" cluster may mix both; (b) off-genre boilerplate
+  extracted faithfully (an FDA disclaimer and a copyright notice in a policy footer), expected to form small
+  prunable clusters; (c) proofs split into one claim per step (12 claims in one section).
+- The papers `first_person_claim_rate` of 0.007 is a single false positive ("we necessarily have" inside a quoted
+  mathematical statement); the true rate is 0.
+- Example-label reuse in the full extraction: `policy_change` 48 and `external_context` 23 claims (privacy),
+  `external_context` 130 and `evaluation_evidence` 132 (papers), 0.5% of claims; a sample of 25 is almost all related
+  content (real policy changes, relating to prior work, results), a few unrelated (an appendix pointer). Clustering
+  uses claim text, so this matters only if those labels surface as cluster names.
+
+**Task 3.2 ticked** with the decision above.
+
+**Task 3.3 implemented** (`experiments/induce.py` stages `cluster` and `name`, `packs/schema_induction.py` step 2,
+`tests/test_induce_cluster.py`, fake embedder and fake teacher, ~2 s):
+- `cluster`: claims (minus excluded documents) → Qwen3-Embedding-0.6B under an instruction prompt → minus each
+  document's mean claim vector → UMAP-10 → HDBSCAN swept over min cluster size × min samples; the eligible setting
+  (60–120 clusters, no cluster above 10% of claims) with the least noise is kept, and every setting is recorded.
+  Claim vectors are stored per instruction version under `data/embeddings/<model>/<genre>/claims__…/` and reused.
+  Summaries order members by centrality and record document count, extraction labels, headings, position.
+- `name`: `prompts/induce_name.md` (no few-shot examples) gives each cluster a name, definition, 3 representative
+  claims and a mixed-cluster flag; the draft flags names that copy an extraction-prompt example label (read from
+  the prompt file itself) and duplicate names (merge candidates). A `limit`ed run never writes the pack.
+- New prompts: `induce_cluster_embed` v1 `2dd14db565c5` (embedding instruction), `induce_name` v1 `ec100a0631e8` →
+  v2 `4f63706fe4d1` (after 10 privacy clusters on the 7B: names must tell neighbours apart; definitions start with
+  a verb; `prompts/history/README.md`).
+- New pinned dependencies: `umap-learn` 0.5.12 (+ `pynndescent`, `numba`, `llvmlite`), `openpyxl` 3.1.5.
+- Smoke (`--overlay smoke`, bge-small, 50 documents) passed for both stages before the full runs.
+
+**Found (clustering; decision record `reports/decisions/003-claim-representation-for-clustering.md`)**
+- **Negative: PCA-32 + HDBSCAN** (`cluster_pca32_s0`, 24 settings per genre) left 68–80% (privacy) and 92–95%
+  (papers) of claims as noise; papers never reached 60 clusters.
+- UMAP-10 (`cluster_umap10_s0`) cut noise to 17% / 39%; privacy clusters read as genre types.
+- **Negative: paper clusters were research topics** (crop phenology from remote sensing: 763 claims from 4 papers;
+  federated learning; EEG), although the claims are phrased as moves. The plan's Phase 3 risk, at the clustering
+  step rather than the extraction step.
+- Probe on the stored vectors (UMAP-10, min cluster size 120, papers): claim-weighted document spread 0.19 (plain)
+  → 0.30 (document centring) → 0.42 (instruction) → **0.58 (both)**; clusters drawn from < 5% of documents 23 → 1.
+  Centring changed nothing measurable on privacy (noise 17.7% vs 17.8%). Both are generic (no genre code), so both
+  genres use them.
+- Recorded run `cluster_v1_s0`: privacy chose min cluster size 80, min samples 10: **74 clusters, 15.5% noise**.
+- Embedding speed on MPS varies 3× with memory pressure (2–14 s per batch of 128); running the 7B under MLX at the
+  same time slows both.
+
+- Recorded run `cluster_v1_s0`, papers: min cluster size 100, min samples 5: **80 clusters, 44.4% noise**, sizes
+  100–2,669 (median 177), 2 clusters drawn from < 5% of papers (c031: 5 papers, remote sensing; c068: 13,
+  summarisation). Papers noise stays high: method sections are topic-specific even after centring.
+- **Naming (task 3.3 ticked)**: the 72B via OpenRouter (provider pinned, DeepInfra fp8; first live use of this route,
+  one test call first), `name_72b_privacy_s0` (74 calls) and `name_72b_papers_s0` (80 calls), 0 failures,
+  ≈ 133k input + 11k output tokens (≈ $0.05). Note: Parsa's `.env` names the key `OPEN_ROUTER_KEY`; commands map it
+  to `OPENROUTER_API_KEY` (the config's name) without editing the file.
+- Draft quality: privacy clusters are genre types throughout (3 flagged mixed, one duplicate-name pair: two contact
+  clusters). Papers: ~50 reviewer-facing moves (hyperparameters in 229 of 303 papers, datasets, splits, metrics, code
+  availability, funding, hardware, seeds, ablations, limitations, future work) and ~16 topic-flavoured method
+  clusters. c000 ("limitations", 2,669 claims, cohesion 0.39) mixes own and prior-work limitations; c057 (named
+  "disclaimer of views") is really ethics statements, consent, competing interests and annotator pay.
+- **Example-label leakage**: privacy names flagged `policy_change_right`, `notifies_of_policy_changes`,
+  `policy_change_notification`, a false alarm of the substring rule ("Policy Change" is an OPP-115 category); no
+  papers name copies an example label. Members carrying an example label: at most 13% of a cluster (privacy c015, the
+  policy-change cluster) and 9% (papers c011, relate to prior work), i.e. on semantically matching clusters.
+- **Statements too rare for a cluster** (found by keyword search of all claims, most of them HDBSCAN noise): Do Not
+  Track (35 claims, 29 policies), California disclosure rights (89 claims, 45 policies), significance tests and
+  standard deviations (147 claims, 60 papers), societal impact or misuse (17 claims, 13 papers). Proposed as types
+  sourced from noise claims; LLM-use declarations (4 papers) proposed as excluded seeds (they post-date the corpus).
+- **Proposals for the human pass** (`reports/schema_review/proposals_<genre>.yaml`, Claude's, not decisions):
+  privacy 74 clusters → 54 types (1 pruned: terms-of-use rules; 15 types at severity 1.5 with the GDPR/CCPA
+  article noted), papers 80 clusters → 46 types (16 topical method clusters folded into one generic method type).
+  Every cluster assigned exactly once; every OPP-115 category and NeurIPS/ACL item mapped or excluded with a reason.
+  Missing examples, near-misses and section hints are auto-filled from the clusters and marked "auto-filled, check".
+- Review workbooks `reports/schema_review/schema_review_<genre>.xlsx` (run `review_v2_s0`). Formula cells were
+  checked by reference, not recalculated (LibreOffice is not installed); Excel/Numbers compute them on open.
+
+- **Bug (mine), fixed 2026-10-15:** 14 of the 34 titles in `packs/papers/seeds.yaml` were cut at their first comma
+  (unquoted values inside YAML flow mappings; the rest became stray keys). Ids and mappings were unaffected; titles
+  are now quoted and the review page's data rebuilt. Found by Parsa on the review page.
+- Guided review page for the human pass (`reports/schema_review/page/`, built by `analysis/schema_review_page.py`,
+  published as a private artifact with a database for decisions); papers proposals now split c000 into own vs
+  existing-approach limitations (47 proposed types).
+
+**Tasks 3.4–3.6 tooling** (`packs/schema_review.py`, stages `review`, `candidate`, `coverage`, `freeze`;
+`tests/test_schema_review.py`, `tests/test_induce_schema_gate.py`): the review workbook (yellow columns are the
+reviewer's, nothing pre-accepted, formulas in a Summary sheet), read-back to `schema_candidate.yaml` with the gate's
+field checks, the coverage check on held-out dev sections (dev documents outside the extraction sample; output
+constrained to the schema's ids or "none"; prompt `induce_coverage` v1), and the freeze (needs
+`induce.freeze.signed_off_by`, a passing coverage run on the same candidate, and never overwrites `schema.yaml`).
+Seeds recorded as data: `packs/privacy/seeds.yaml` (OPP-115's 10 categories), `packs/papers/seeds.yaml` (NeurIPS
+2026 checklist, 16 items; ACL ARR checklist of Oct 2024, 18 items; read 2026-10-13, URLs in `data/README.md`).
+
+## 2026-10-13 — Handoff for the Phase 3 session
+
+- `HANDOFF.md` written: state of tasks 3.1–3.6, artefact locations and formats (claims, sections, embeddings, cache),
+  tools available at home (7B via MLX, 72B via OpenRouter untested live, no UMAP installed), three open decisions for
+  the user (accept 303 papers for 3.2; teacher for 3.3 naming and 3.5; 3.5 method), known issues (oversized paper
+  sections, example-label leakage to watch for, nothing committed yet). README points to it.
+- Plan: 3.1 and 3.2 status notes updated (not ticked: 3.1 awaits the full eye review, 3.2 awaits the user's
+  acceptance of 303 papers); §0.6 Colab entry rewritten (free tier, optional, two possible uses; no Pro units planned).
+
+## 2026-10-12 (night) — Lab session results, merged and verified
+
+**Lab machine (`--device-info`):** DESKTOP-AIPC-03, Windows Server 2022 (10.0.20348), 4 × NVIDIA RTX 5000 Ada Generation
+(32 GiB each, sm_8.9), 112 CPU cores, 1023 GiB RAM, torch 2.13.0+cu126, CUDA 12.6, driver 581.42. Raw report and the
+four llama-server logs in `runs/lab_session_2026-10-12/`.
+
+**Runs** (all logged in `runs/log.csv`; teacher `llama.cpp-b11280/Qwen/Qwen2.5-32B-Instruct-GGUF/q4_k_m`, prompt
+`induce_extract v2:a756e28a41a1`):
+
+| Run | Status | Result |
+|---|---|---|
+| `eye_v2_32b_s0` (task 3.1) | ok, 2.2 min | spans verbatim 95.3% / 97.8%, 0 failed, 0 empty; quick visual skim by Parsa passed |
+| `extract_32b_privacy_s0` (task 3.2) | ok, 107 min | 500/500 documents, 4,606 sections, **21,046 claims**, 97.8% grounded, 40 empty, 0 failed |
+| `extract_32b_papers_s0` (task 3.2) | interrupted on purpose at the session deadline, 179 min | **303 complete papers** + 1 partial, 6,912 / 10,782 sections, **44,579 claims**, 97.7% grounded, 5 failed |
+| `embed_0.6b_s0` (task 5.1) | ok, 28.8 min | Qwen3-Embedding-0.6B, all 248,181 + 373,478 sections and 27,772 + 17,644 titles, 1024-d, 586 / 345 sections/s |
+
+**Verification at home** (staging folder first, nothing overwritten): zip CRC check passed (11,486 files); every claim
+line parses and points to a processed section of a sampled document; all embeddings finite, unit-norm, and aligned
+with the local corpus by id **and** text sha1; the lab's 11,451 cache entries are all from the 32B and clash with none
+of the 202 local ones; the lab `log.csv` is the local log plus exactly the 4 new rows (old local log kept as
+`runs/log.csv.pre_lab_backup`). Merged files are byte-identical to the zip. 232 tests pass.
+
+**Found**
+- Throughput of the 32B on 4 × RTX 5000 Ada with llama.cpp: about 390 claims/min with both genres running (GPUs at
+  93–97%), ~52 paper sections/min alone. One process with batches of 256 leaves slots idle at batch ends;
+  `concurrency=64, batch_size=512` would have filled them (not used).
+- **Bug from Phase 2 (mine):** the unarXive loader never split long sections; 2,462 paper sections (0.7%) exceed
+  8,000 characters and 127 exceed 24,000 (one had 25,247 tokens and was rejected by the server; handled as a failed
+  item). To fix before Phase 4: split them like policy sections, re-link claims to the new sections by their
+  verbatim spans, re-embed only the changed sections (the store is keyed by text sha1, so the rest is reused).
+- In `extract(skip_failures=True)`, a batch that fails is retried item by item; the 1,045 cache hits in the papers
+  run are those replays (4 failing batches), not duplicate work by the server.
+- Not done in the lab (by choice): 197 of 500 papers, the 100-paper presence-label pool, the 8B embedding ablation.
+
+## 2026-10-12 — Lab session, Windows: llama.cpp teacher, corpus embedding job (decision record 002)
+
+**Found in the lab:** Windows, 4 × RTX 5000 Ada 32 GB, driver 581.42 (CUDA 13.0), no git, no admin. vLLM cannot run;
+a 72B split across consumer GPUs would take 10+ hours for task 3.2.
+
+**Done**
+- Plan §0.2 #6 edited first: the recorded schema-induction pass uses the named fallback, Qwen2.5-32B-Instruct Q4_K_M,
+  served by llama.cpp b11280 (Windows CUDA 12.4), one server per GPU; prompt confirmed on that model; the 72B via
+  OpenRouter stays the fallback. Decision record `reports/decisions/002-lab-teacher-on-windows.md`.
+- `lab_session.py` (Windows driver: check, serve, status, eye, extract, pool, stop, embed, pack), `configs/lab.yaml`,
+  `configs/embed.yaml`, `requirements-lab.txt` (torch 2.13.0 from the cu126 index; cu128 has no 2.13.0 wheel).
+- `OpenAITeacher`: several servers round-robin; `served_as` labels the build in the route and cache key (so a
+  resumed run hits the cache whichever port answers); a rejected request is a failed item, not a crash; retries
+  double the token budget once only.
+- `engine/embed.py` (Embedder over one or several devices, EmbeddingStore keyed by text sha1) and task `embed`
+  (`experiments/embed.py`): every section and title of both genres.
+- Extraction processes documents in a fixed pseudo-random order and prints an ETA; the eye test now survives and
+  shows failed sections.
+- Explicit UTF-8 on every file read/write that lacked it (Windows defaults to cp1252).
+
+**Verified on the laptop before the session** with the same llama.cpp build (macOS) and Qwen2.5-0.5B as a stand-in:
+llama-server accepts our `response_format` and **enforces** the schema (asked to "say hello", it returned the
+required fields); four servers started and stopped by `lab_session.py`; eye test, extraction (two genres, failures
+skipped and counted), embedding with a two-worker pool, and pack all ran. 232 tests pass.
+
+**Found**
+- The rehearsal exposed two crash paths that the 32B could also hit in a long run: one looping output aborted the
+  whole eye test, and retry budgets could exceed a slot's context (fixed above).
+- The rehearsal itself wrote 0.5B answers into the teacher cache under the lab's 32B label. They were purged (135
+  entries), the rehearsal runs deleted, and the two mislabelled `eye_v2_32b` rows removed from `runs/log.csv`;
+  later rehearsals use a distinct `served_as` label. The lab bundle never carries the cache.
+- Embedding on the laptop CPU ran at ~1.5 sections/s for the 0.6B model: the full corpus (≈ 620k sections) is a
+  GPU job, as planned.
+
+## 2026-10-12 — Lab preparation: task 3.2 implemented, session script, transfer bundle
+
+**Done**
+- Task 3.2 code: `induce.stage: extract` (`experiments/induce.py`). Stratified (year × category) sample of 500 dev
+  documents per genre, every section ≥ 40 chars: 4,606 privacy and 10,782 paper sections (15,388 teacher calls,
+  ≈ 5.4M output tokens). Claims stream to `claims_<genre>.jsonl` per batch with source section, prompt version and
+  teacher build; `extract(skip_failures=True)` retries a failing batch item by item instead of aborting a long run;
+  reruns replay finished batches from the response cache. vLLM batches of 256 in `configs/gpu.yaml`.
+- `lab_session.sh`: setup → download → vllm-check → eye → extract → pack. `setup` reads `--device-info` and picks
+  the teacher build from the VRAM rule; `pack` collects everything to take home.
+- `lab_bundle/negspace_lab.tar.gz` (240 MB, gitignored; sha256 in `.sha256`): code, processed documents and sections,
+  split manifests, the 7B reference eye test, `runs/log.csv`. Verified by unpacking into an empty folder: 218 tests
+  pass, both eye-test selections match their text hashes, both 500-document samples resolve.
+- Tests: extract stage end to end and failure skipping (`tests/test_induce.py`).
+
+**Found**
+- **Correction to my own plan text (§0.2 #6, §0.6, `gpu.yaml`):** the 72B in bf16 is 145 GB of weights; vLLM's 90%
+  memory budget on 2×80 GB is 144 GB, so "bf16 on ≥ 2×80 GB" could not even load. Corrected to ≥ 4×80 GB; AWQ
+  otherwise, tensor-parallel over every GPU available.
+- **Fresh-clone bug:** `tests/test_skeleton.py` required `data/raw/` and `data/processed/`, which are gitignored and
+  so absent from any clean checkout. Found by testing the unpacked bundle; the test now requires tracked folders only.
+- Real-model smoke of the extract stage (1.5B, smoke corpus): privacy half completed (74 sections streamed); the
+  papers half was interrupted on purpose (the 1.5B is slow on long sections) and logged as `interrupted`.
+
+## 2026-10-12 — Task 3.1: the extraction prompt (local iteration done, 72B confirmation pending)
+
+**Done**
+- `prompts/induce_extract.md`: given one section, return `{"assertions": [{claim, type_guess, span}]}`. Genre enters
+  only through placeholders filled from `genre_info.<genre>` in the config (document kind, author role); format
+  examples come from an unrelated genre (a library's rules) so they cannot prime the schema's type labels.
+- `packs/schema_induction.py` step 1: output models, prompt rendering, batched extraction, eye-test selection, and
+  automatic checks (span is a verbatim quote, snake_case labels, no first-person claims, duplicates, share of the
+  section's sentences covered by a span).
+- `experiments/induce.py`, stage `eye_test`: a fixed selection of 20 dev sections per genre from 20 different
+  documents, balanced over the first/middle/last third (ids and text hashes in
+  `prompts/eval/induce_extract_eye_test.json`; a changed corpus is refused), per-genre jsonl, metrics, and a review
+  page with spans highlighted in the text, side by side with an earlier run (`induce.eye_test.compare_with`).
+- `tests/test_induce.py` (fake teacher, < 1 s). Plan Appendix D: lab runbook for the 72B confirmation.
+
+**Iteration on the local teacher** (`mlx-community/Qwen2.5-7B-Instruct-4bit`, 40 sections, 6–10 min per version):
+
+| Version | Hash | Spans verbatim (privacy / papers) | Verdict |
+|---|---|---|---|
+| v1 | `e7457d8b7f02` | 95.7% / 89.9% | faithful, but paper claims restate subject matter |
+| **v2** | **`a756e28a41a1`** | 94.0% / 93.6% | **candidate**: claims are moves; residuals below |
+| v3 | `9c3ede541a2a` | 96.4% / 93.7% | rejected: fixed neither residual, introduced example-label leakage |
+
+**Found**
+- **Negative finding (v1):** an assertion-extraction prompt that works for privacy policies fails for papers in a
+  way no automatic check catches: every claim was faithful and grounded, but about the paper's *topic* ("MAML is used
+  for cross-lingual NER"). Clustering those would have induced topic clusters, not genre types, and quietly broken
+  schema induction for genre B. The fix (v2) asks for the *move* the document makes, keeping what defines the kind
+  of point (party, data, purpose, duration, evidence) and dropping subject matter.
+- **Residuals in v2 on the 7B:** a list of different recipient kinds (suppliers … government … "required by law")
+  merged into one claim; one long related-work section still listed 12 cited works. v3's targeted fixes did not
+  change the 7B's behaviour, so these look like the small model's ceiling. They are explicit pass criteria for the
+  72B (Appendix D).
+- **Example leakage is real:** in v3 the 7B copied the example labels onto unrelated claims. Few-shot examples for
+  schema induction must stay off-genre and few; the v2 examples showed no leakage.
+- About 6% of spans are not verbatim (mostly in sections with `[math]` placeholders). Spans are evidence, not the
+  claim, so 3.2 can repair them by fuzzy matching; the 72B is expected to do better (pass bar ≥ 95%).
+
+**Open**
+- Confirm v2 on the 72B in the lab (one command, Appendix D), or iterate there. Then tick 3.1.
+- Task 3.2's extraction pass is not implemented yet; it should exist before the lab so the session can run it
+  straight after the confirmation.
+
+## 2026-10-12 — Phase 2: corpora and the unified schema
+
+**Done**
+- 2.1 Corpora downloaded and recorded in `data/README.md` (URL, licence, version, size, citation): Princeton–Leuven
+  SQLite release (3.29 GB `.xz` → 48.2 GB), OPP-115 v1.0 (99 MB), unarXive open subset 230324 (4.84 GB, Zenodo;
+  a stalled transfer was resumed by a watchdog loop). arXiv per-version e-prints confirmed obtainable
+  (`export.arxiv.org/e-print/<id>v<N>`), so OmitBench-revision is feasible for papers.
+- 2.2 Every corpus inspected by hand; real schema, field names, flags and formats written into `data/README.md`.
+- 2.3 `data/schema.py`: Document / Section / Sentence / Assertion / RevisionPair, char spans, jsonl(.gz) I/O.
+- 2.4 Loaders: `privacy_pl` (metadata index first, texts fetched only for the sample), `opp115` (native segments,
+  `Section.idx` = segment ID, consolidated labels at threshold 0.75), `unarxive` (one streaming pass through
+  parallel `xz`, byte-level category prefilter, two-pass sampling), and `arxiv_versions` (cached, rate-limited e-print
+  fetch + LaTeX → sections). Previews in `reports/figures/loader_check_<source>.html`.
+- 2.5 `data/segment.py`: heading-aware segmentation (ATX, bold-line, numbered, ALL-CAPS, and plain title lines
+  accepted only when a paragraph follows), table-of-contents removal, boilerplate removal (navigation, copyright,
+  cookie banners near the document edges only), paragraph-chunk fallback, size normalisation, and a rule-based
+  sentence splitter.
+- 2.6 `data/dedup.py` (MinHash, LSH clusters, version-chain collapsing) and stratified sampling (year × category)
+  in `data/build.py`; 2.6b `data/revisions.py`; 2.7 `data/splits.py` (hash-based, entity-disjoint, forced splits,
+  cross-split near-duplicate resolution); 2.8 `data/build.py` as task `build_data` (`configs/data.yaml`).
+- Tests: `test_data_schema.py`, `test_data_segment.py` (five documents per genre reproducing the real formats),
+  `test_data_dedup_splits.py`, `test_data_loaders.py` (fixtures in the real formats, end-to-end builds of both
+  genres). Smoke runs write to `data/processed_smoke/`, never over the real corpus. Loader previews are gitignored:
+  they contain full third-party texts and the build regenerates them.
+
+**Corpus (full build, seed 1234)**
+
+| | privacy | papers |
+|---|---|---|
+| documents (train / dev / test) | 28,440 (22,300 / 3,043 / 3,097) | 17,644 (14,114 / 1,784 / 1,746) |
+| sections / sentences | 248,181 / 1,697,753 | 373,478 / 4,981,129 |
+| sections per doc (median) | 7 | 19 |
+| dates | 1998-07 – 2019-12 | 2018-01 – 2022-12 |
+| near-duplicate rate in the sample | 18.6% | 0.3% |
+| dropped as cross-split twins | 1,949 | 37 |
+| revision pairs (test entities) | 4,029 | 343 (v1 → last version) |
+| build time on the M5 | 3.2 min | 4.0 min (+ 92 min one-off e-print fetch, now cached) |
+
+**Sealed test splits** (sha256 of the sorted test doc ids, `data/processed/splits/<genre>.json`):
+- privacy `23875735421b73d550af81c5cb49a39471c57c9bd6f2bc8a81c067e16b196c03` (identical across two rebuilds)
+- papers `12bc037dec4506f0d082c87e11f55fabad963e1068f45b1345d58f1817207e22` (identical across three rebuilds)
+
+**Found**
+- **Sentence splitting:** pysbd measured at 333 sentences/s on the M5 (≈ 4 h for the corpus); spaCy's
+  sentencizer at 50k/s but it splits after "Sec.", "Fig.", "et al.,". Replaced by a rule-based splitter with an
+  abbreviation list: 425k sentences/s, correct on those cases. Plan 2.5 text updated.
+- **Princeton–Leuven:** categories are Webshrinker lists in *alphabetical* order, so there is no primary category;
+  we use the rarest listed one. 1,071,487 snapshots share 333,986 texts. After filters (analysis subcorpus, HTML,
+  not parked) and one snapshot per site and year: 545,463 candidates over 103,020 sites.
+- **Templates:** 18.6% of sampled policies are near-duplicates (Jaccard ≥ 0.85) of another sampled policy, i.e. many
+  sites reuse one template. The cross-split guard drops near-copies of test documents from train/dev (1,949), and
+  train keeps one document per cluster and year across different sites (176 dropped). This is why train is 22.3k,
+  not 25k (still within the 20–30k scope).
+- **OPP-115 protection:** a first build silently lost 10 of the 115 OPP-115 policies as near-twins of test documents.
+  Human-labelled documents are now protected; their twins are dropped instead. All 115 are in dev.
+- **Negative finding, papers:** the open subset (permissively licensed papers only) holds just 17,995 cs.CL/cs.LG
+  papers from 2018 on, and 86% are from 2021–2022 (licence uptake). Genre B is therefore 17.6k documents, below the
+  20–30k scope, and too thin before 2021 for time-window cohorts. The 2022 ACL-limitations drift analysis (Phase 10)
+  cannot be done on this release (sources end 2022-12-31); unarXive 2024 (105 GB) is the recorded upgrade.
+- **Residue:** after cleaning, archive URLs, Markdown links and HTML tags occur in 0.006% of privacy sentences.
+  unarXive renders `\ref{}` as a bare `REF`, also glued ("TableREF", from `Table~\ref`); both now become `[ref]`
+  (761 → 81 sentences with residue; "HREF" becomes "H [ref]", accepted). Run-in headings ("Acceptance of Terms. Welcome
+  …") are not detected; such policies (9.4% have no detected heading) fall back to ~1,500-character chunks.
+- **Paper revisions:** 607 of 1,746 test papers have more than one version up to 2022-12-31; 1,207 e-prints fetched
+  (one request per 3 s, 92 min). Outcome per candidate: 342 pairs, 208 cosmetic only (< 5% change), 32 rewritten
+  beyond the same-document bound (> 90%), 16 unparseable (PDF-only and similar), 9 fetch errors (343 pairs after the
+  final text cleanup). arXiv 404s are cached as `.missing` markers so rebuilds never re-ask. Median change per pair
+  0.29–0.64 by year versus 0.16–0.35 for policies: papers are revised far more heavily than policies.
+- **Cohorts must exclude the query's own entity** (one snapshot per site *per year* means a site's other years are
+  near-copies): added to plan 5.3.
+- **Licence:** OPP-115 annotations are non-commercial; presence heads trained on them inherit that (recorded in
+  `data/README.md`; blocks only the Phase 12 product).
+- One request in testing carried the user's email in its User-Agent; the fetcher now sends a plain project UA
+  (tested).
+
+**Open**
+- Disk: the 48 GB Princeton SQLite plus its 3.3 GB `.xz` stay in `data/raw/`; the `.xz` can be deleted to save
+  space once nobody needs to re-verify the download.
+
+## 2026-10-12 — Architecture revision: the lean/full tier design (decision 001)
+
+**Decision (plan §0.2 edited first; full record in `reports/decisions/001-lean-architecture.md`, written for the report).**
+Every swappable component now has a lean default that runs on the Mac and a full alternative behind one overlay
+(`configs/full.yaml`). Changed: §0.2 #6 (teacher reached three ways: 7B MLX proxy locally, 72B vLLM on the server,
+72B via OpenRouter), #7 (presence = logistic heads on frozen embeddings trained on OPP-115 + ~2k teacher labels;
+ModernBERT-large becomes the full tier), #8 (lean late-interaction model answerai-colbert-small-v1), #9 (embedder
+Qwen3-Embedding-0.6B; 8B is the full-tier ablation), #14 (template explanations from evidence; teacher rationale
+opt-in), #16 (OmitBench-revision from version chains, validated on 50 docs/genre; blind 150×2 annotation is the
+full tier), #18 (scope 20–30k documents per genre, one snapshot per entity per year, chains kept), #24, new #25
+(tiers and upgrade path). §0.4 gains `data/revisions.py`, `bench/revision.py`, `configs/{full,openrouter}.yaml`,
+`reports/decisions/`. §0.6 and Phases 2–12 rewritten for the new scope (what runs where; gate 5.9 now on the Mac;
+Phase 9 validates the revision labels instead of annotating from scratch).
+
+**Why.** Lab GPU access is session-based, so every teacher-in-the-loop step was a week of latency; API-only would
+have cost $60–100 (class) and $300–750 (paper baselines); an 8B embedder needs a rented GPU to keep a demo online.
+None of the contributions (task formalisation, OmitBench, MAM, packs, LLM gap) depends on model size. The revision
+benchmark is cheaper *and* a stronger experiment (authors' own later additions as ground truth).
+
+**Done**
+- `configs/base.yaml` holds the lean defaults (`tier: lean`, `presence.head`, `presence.label_sources`,
+  `explain.mode`, `bench.real.*`, `baselines.rag_peers`, `corpus.snapshots_per_entity_per_year`, teacher cache);
+  `configs/full.yaml` flips all of them; `configs/openrouter.yaml` pins `deepinfra/fp8`, disables fallbacks,
+  denies data collection, reads `OPENROUTER_API_KEY`; `configs/local.yaml` uses the MLX teacher.
+- `models/teacher.py`: `MLXTeacher` (mlx-lm + Outlines structured output); on-disk response cache keyed by model
+  build, messages, schema and sampling (all backends); `TEACHER_STATS` (calls, cache hits, tokens, served_by);
+  `OpenAITeacher` sends OpenRouter `provider` routing and records the provider that served each call.
+- `experiments/run.py` records `tier`, teacher stats and `teacher_calls` per run (metrics.json and log.csv).
+- Stubs `data/revisions.py`, `bench/revision.py`; `pyproject.toml` extra `mac` (mlx 0.32.3, mlx-lm 0.32.0).
+- Tests: every config × overlay combination resolves to the expected tier; no key-like strings in configs;
+  OpenRouter provider pin and served provider; cache makes reruns free; MLX structured round trip (skipped if the
+  model is not cached). `pytest` green.
+
+**Found**
+- Qwen2.5-7B-Instruct 4-bit under MLX on the M5: **24 tokens/s**, 1.3–3.9 s load, 2 s per structured call.
+  Good for iteration; the 10k-section extraction pass would take ~30 h, so it stays on the 72B.
+- OpenRouter (2026-10-12): `qwen/qwen-2.5-72b-instruct` has **one** provider (DeepInfra, fp8, 32k context,
+  $0.36 / $0.40 per 1M tokens, structured outputs supported). Single-provider risk; the vLLM route is the backup.
+  `meta-llama/llama-3.3-70b-instruct` has ten providers from $0.10 / $0.32. Frontier tiers: Claude Sonnet 5.5 and
+  GPT-6.1-sol at $2 / $10, half price on `:batch`; Claude Haiku 5.5 at $0.10 / $0.50.
+- Cost estimate (assumed section counts; Phase 2 will measure): class ≈ $10 lean (frontier baseline only) vs
+  $60–100 original; paper baselines $100–250 with batch pricing and `rag_peers: 5` vs $300–750.
+- Outlines' MLX adapter accepts `sampler=` and `max_tokens=` as mlx-lm kwargs; greedy = `make_sampler(temp=0)`.
+- Overlay order matters: `--overlay local --overlay smoke` (compute first, mode last) so smoke's 1.5B teacher wins
+  over local's MLX 7B. Documented in `smoke.yaml` and README.
+
+**Open**
+- Phase 2 must confirm arXiv v1/v2 full texts are obtainable (OmitBench-revision for genre B depends on it).
+- Measure the 0.6B embedder's sections/second on the Mac in 5.1; it sets the overnight budget.
+- University server `--device-info` still pending.
+
+## 2026-10-12 — Phase 1: environment and skeleton
+
+**Done**
+- 1.1 Repository layout per plan §0.4, with a `.gitignore` for `data/raw`, `data/processed`, pack artefacts
+  (`packs/*/{prototypes,classifier,index}`), `runs/*` except `log.csv`, checkpoints, `.venv`, `.env`. The repo root is
+  this directory (`negative-space-reader/`) rather than a nested `negspace/` folder; the package/project name is `negspace`.
+  `git init` done on branch `main`, nothing committed. Added `experiments/config.py` (config loading, not in §0.4).
+- 1.2 Python 3.11.17 venv. Direct dependencies pinned in `pyproject.toml`; full freeze in `requirements.txt`. vLLM is the
+  `gpu` extra, wandb the `tracking` extra.
+- 1.3 `python -m experiments.run --device-info`. Local machine recorded in README and plan §0.6. Teacher size decided
+  (below). University server still to be recorded.
+- 1.4 `configs/base.yaml` with every tunable (band thresholds, presence threshold, HDBSCAN sizes, on-the-fly threshold
+  left null until their phase); overlays `smoke`, `local`, `gpu`; one config per task (`pack_privacy`, `pack_papers`,
+  `induce`, `distil`, `mam`, `bench`, `baselines`, plus `drift` and `serve` so every dispatch target has a config).
+- 1.5 `experiments/run.py`: `inherit:` chains, `--overlay`, `--set` (unknown keys rejected, `+key` to add), seeds for
+  python/numpy/torch, dispatch to the eight tasks, `runs/<name>_s<seed>/{config.yaml,metrics.json}` and a `runs/log.csv`
+  line per run including failed and interrupted runs (with config hash, git commit, device, prompt hashes). An existing
+  run directory is never overwritten (a timestamp suffix is added).
+- 1.6 `models/teacher.py`: `Teacher` interface with `generate_structured(prompt, pydantic_model)` (+ batch and
+  free-text variants); backends `VLLMTeacher` (in-process, xgrammar), `OpenAITeacher` (`vllm serve` or API models; key
+  from an env var), `TransformersTeacher` (local stand-in; xgrammar HF logits processor, Outlines fallback). Failed
+  validations retry with a doubled token budget. Prompt registry over `prompts/*.md` (YAML header `id`/`version`, sha256
+  of the whole file); every rendered prompt's `v<version>:<hash>` is recorded per run. First prompt:
+  `prompts/smoke_structured.md` v1.
+- 1.7 `tests/test_skeleton.py`, `tests/test_run.py`, `tests/test_teacher.py`. **GATE: `pytest` green: 121 passed in
+  8.2 s** on the M5, including the structured round trip on `Qwen/Qwen2.5-1.5B-Instruct` (MPS, xgrammar; ~3 s load,
+  ~2 s generation).
+
+**Decision recorded (plan §0.2 #6, edited in the plan first):** teacher = **Qwen2.5-72B-Instruct**, not
+Llama-3.3-70B-Instruct. Reasons: ungated on the hub (Llama 3.3 is manually gated); the publisher ships an AWQ build
+(`Qwen/Qwen2.5-72B-Instruct-AWQ`, 41.6 GB) that fits one 80 GB card; same family, tokenizer and chat template as the
+1.5B smoke stand-in, so prompts iterated locally transfer. Precision follows the server: bf16 + tensor parallelism on
+≥ 2×80 GB, AWQ on 1×80 GB / 2×48 GB (current `gpu.yaml` default), `Qwen2.5-32B-Instruct-AWQ` below 48 GB. Within the
+options §0.2 #6 and §0.6 already allow; to be confirmed against the server's `--device-info`.
+
+**Found**
+- vLLM 0.31.0 (latest, 2026-10-05) pins `torch==2.13.0`, `xgrammar==0.2.7`, `transformers<5.18`. An unpinned install
+  pulled torch 2.14.1 / xgrammar 0.2.8 / transformers 5.19.0, which would make `pip install .[gpu]` unresolvable; pins
+  lowered to match vLLM so local and server share one dependency set.
+- vLLM's structured-output API changed: 0.31.0 uses `structured_outputs_config={"backend": ...}` on the engine and
+  `SamplingParams(structured_outputs=StructuredOutputsParams(json=...))` (no per-request backend; older
+  `guided_decoding` is gone). Checked against the v0.31.0 source; vLLM cannot be installed on macOS, so
+  `VLLMTeacher` is covered by a test against a fake with the same signatures. **It has not run on a GPU yet.**
+- Hub check of every model id in the configs (all exist). **Negative finding:** `jinaai/jina-colbert-v2` (§0.2 #8) and
+  `nvidia/NV-Embed-v2` (§0.2 #9 fallback) are **CC-BY-NC-4.0**: fine for the class and the paper, not for the product
+  layer (Phase 12) without a commercial licence or a swap (e.g. `answerdotai/answerai-colbert-small-v1`, Apache-2.0,
+  or bge-m3 dense for late interaction). `Qwen2.5-72B-Instruct` is under the Qwen licence (not Apache), the 32B
+  fallback is Apache-2.0.
+- Outlines 1.3.3 on transformers fails mid-generation ("No next state found") when the checkpoint's default sampling
+  config is active (Qwen2.5 samples by default). Fixed by always passing explicit greedy settings at temperature 0;
+  both xgrammar and Outlines then round-trip on MPS and CPU.
+- The 1.5B stand-in is faithful on the easy field (retention_days = 90) but sloppy on judgement: it marked a
+  cookies-only passage as `mentions_retention: true`. Fine for smoke; a reminder that 3.1's 20-section eye test must
+  use the full teacher.
+- xgrammar's HF logits processor masks on CPU for non-CUDA devices; it works on MPS with that copy overhead.
+
+**Open**
+- Run `python -m experiments.run --device-info` on the university GPU server; record it in README + §0.6 and confirm
+  the teacher precision in `configs/gpu.yaml`.
+- First GPU session: install `.[gpu]`, run `tests/test_teacher.py` with a vLLM round trip on the real teacher.

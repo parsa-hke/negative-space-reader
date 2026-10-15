@@ -1,0 +1,6 @@
+# Genre B pack build: research papers, arXiv cs.CL and cs.LG, 2018 onward (plan §0.2 #2, #18).
+inherit: base.yaml
+task: build_pack
+pack: papers
+corpus:
+  min_date: "2018-01-01"

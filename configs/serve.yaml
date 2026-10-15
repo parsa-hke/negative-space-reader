@@ -1,0 +1,5 @@
+# Gradio class demo (plan §7.1).
+inherit: base.yaml
+task: serve
+run:
+  seeds: [0]

@@ -1,0 +1,420 @@
+# Claude's proposals for the privacy schema (plan task 3.4), written 2026-10-13 after reading the 74 clusters of
+# runs/cluster_v1_s0 named by the 72B (runs/name_72b_privacy_s0) and the noise claims. Parsa decides: these are
+# inputs to the review workbook, not decisions. Positive examples, near-misses and section hints left out here are
+# auto-filled from the clusters (marked in the workbook's Notes column).
+# Label source: OPP-115 values (categories-july30.xml) that count as a positive; entries are alternatives (OR), and
+# '&' inside an entry means all attribute values must hold (AND). 'teacher' = no OPP-115 value maps; the type gets
+# teacher labels in Phase 4.
+# Severity 1.5 = the disclosure is required by GDPR Art. 13/14 or CCPA (article in notes); everything else 1.0.
+
+types:
+  # ---------------------------------------------------------------- collection
+  - id: collects_information_users_provide
+    name: collects_information_users_provide
+    definition: States that the company collects personal information that users provide themselves (for example when registering, ordering, contacting it, or entering contests and surveys), and in which situations.
+    clusters: [c002, c045]
+    severity_weight: 1.5
+    label_source: ["First Party Collection/Use :: Collection Mode = Explicit & Does/Does Not = Does"]
+    seeds: [first_party_collection_use]
+    notes: "GDPR Art. 13(1)(c)/14(1)(d), CCPA 1798.100(b): categories collected"
+  - id: states_information_required_to_register
+    name: states_information_required_to_register
+    definition: States which personal information users must provide to register or use a service (mandatory fields), as opposed to information they may choose to give.
+    clusters: [c021]
+    severity_weight: 1.5
+    label_source: ["First Party Collection/Use :: Collection Mode = Explicit & User Type = User with account"]
+    seeds: [first_party_collection_use]
+    notes: "GDPR Art. 13(2)(e): whether providing the data is a requirement"
+  - id: collects_usage_data_automatically
+    name: collects_usage_data_automatically
+    definition: States that the company automatically collects technical or usage data about visits (IP address, browser, pages viewed, log files) without the user entering it.
+    clusters: [c001, c060]
+    severity_weight: 1.5
+    label_source:
+      - "First Party Collection/Use :: Collection Mode = Implicit & Personal Information Type = User online activities"
+      - "First Party Collection/Use :: Collection Mode = Implicit & Personal Information Type = IP address and device IDs"
+      - "First Party Collection/Use :: Collection Mode = Implicit & Personal Information Type = Computer information"
+    seeds: [first_party_collection_use]
+    notes: "CCPA 1798.100(b): categories collected"
+  - id: uses_cookies
+    name: uses_cookies
+    definition: States that the company sets cookies or similar tracking technologies and what it uses them for (recognising users, remembering preferences, tracking visits).
+    clusters: [c000, c050]
+    label_source: ["First Party Collection/Use :: Personal Information Type = Cookies and tracking elements"]
+    seeds: [first_party_collection_use]
+  - id: uses_web_beacons
+    name: uses_web_beacons
+    definition: States that the company uses web beacons, pixel tags or clear GIFs (on pages or in emails) to collect information about visits or email opens; plain cookie statements are uses_cookies.
+    clusters: [c052]
+    label_source: [teacher]
+    seeds: [first_party_collection_use]
+  - id: tracking_data_not_linked_to_identity
+    name: tracking_data_not_linked_to_identity
+    definition: States that cookies, IP addresses or other technical data are not linked to, or not used to identify, the person (except where stated).
+    clusters: [c027, c039]
+    label_source: [teacher]
+    seeds: [first_party_collection_use]
+    notes: "c027 was flagged mixed by the teacher (non-linking vs non-identification); both are the same promise"
+  - id: defines_personal_information
+    name: defines_personal_information
+    definition: Defines what the policy means by personal (personally identifiable) information, usually by listing examples.
+    clusters: [c069]
+    label_source: [teacher]
+    seeds: [other]
+  # ---------------------------------------------------------------- use
+  - id: uses_data_to_provide_services
+    name: uses_data_to_provide_services
+    definition: States that personal information is used to provide the service itself (process orders, deliver products, answer requests, customer support).
+    clusters: [c008]
+    severity_weight: 1.5
+    label_source: ["First Party Collection/Use :: Purpose = Basic service/feature"]
+    seeds: [first_party_collection_use]
+    notes: "GDPR Art. 13(1)(c): purposes of processing"
+  - id: uses_data_to_improve_services
+    name: uses_data_to_improve_services
+    definition: States that collected information is used to analyse, maintain or improve the website, services or user experience.
+    clusters: [c028]
+    label_source: ["First Party Collection/Use :: Purpose = Analytics/Research"]
+    seeds: [first_party_collection_use]
+  - id: uses_data_to_personalize
+    name: uses_data_to_personalize
+    definition: States that collected information is used to personalise or customise content, offers or the user's experience.
+    clusters: [c057]
+    label_source: ["First Party Collection/Use :: Purpose = Personalization/Customization"]
+    seeds: [first_party_collection_use]
+  - id: sends_marketing_communications
+    name: sends_marketing_communications
+    definition: States that the company uses contact details (mainly email) to send newsletters, promotions or other marketing communications about its own products and services.
+    clusters: [c006, c032]
+    label_source: ["First Party Collection/Use :: Purpose = Marketing"]
+    seeds: [first_party_collection_use]
+  # ---------------------------------------------------------------- sharing
+  - id: does_not_sell_or_share
+    name: does_not_sell_or_share
+    definition: States that the company does not sell, rent, trade or share personal information (or email addresses) with third parties, apart from any stated exceptions.
+    clusters: [c004, c043]
+    severity_weight: 1.5
+    label_source: ["Third Party Sharing/Collection :: Does/Does Not = Does Not"]
+    seeds: [third_party_sharing_collection]
+    notes: "CCPA 1798.115/1798.120: disclosure of sale; the negative form is the common one in this pre-2020 corpus"
+  - id: shares_with_service_providers
+    name: shares_with_service_providers
+    definition: States that personal information is shared with, or processed by, third-party service providers acting on the company's behalf (payment, delivery, hosting, mailing).
+    clusters: [c024, c055]
+    severity_weight: 1.5
+    label_source:
+      - "Third Party Sharing/Collection :: Purpose = Basic service/feature & Does/Does Not = Does"
+      - "Third Party Sharing/Collection :: Purpose = Service operation and security & Does/Does Not = Does"
+    seeds: [third_party_sharing_collection]
+    notes: "GDPR Art. 13(1)(e): recipients or categories of recipients"
+  - id: shares_with_affiliates_and_partners
+    name: shares_with_affiliates_and_partners
+    definition: States that personal information may be shared with affiliates, subsidiaries or business partners, and for what purposes.
+    clusters: [c030]
+    severity_weight: 1.5
+    label_source: ["Third Party Sharing/Collection :: Third Party Entity = Other part of company/affiliate"]
+    seeds: [third_party_sharing_collection]
+    notes: "GDPR Art. 13(1)(e): recipients"
+  - id: shares_aggregated_data
+    name: shares_aggregated_data
+    definition: States that aggregated, anonymised or non-identifying information may be shared with third parties such as advertisers or partners.
+    clusters: [c044]
+    label_source: ["Third Party Sharing/Collection :: Identifiability = Aggregated or anonymized"]
+    seeds: [third_party_sharing_collection]
+  - id: discloses_when_legally_required
+    name: discloses_when_legally_required
+    definition: States that personal information may be disclosed when required by law or legal process, or to protect the rights, property or safety of the company or others.
+    clusters: [c003]
+    label_source: ["Third Party Sharing/Collection :: Purpose = Legal requirement"]
+    seeds: [third_party_sharing_collection]
+  - id: transfers_data_in_business_transfer
+    name: transfers_data_in_business_transfer
+    definition: States that personal information may be transferred to another party if the company is merged, acquired, sold or goes bankrupt.
+    clusters: [c033]
+    label_source: ["Third Party Sharing/Collection :: Purpose = Merger/Acquisition"]
+    seeds: [third_party_sharing_collection]
+  - id: transfers_data_internationally
+    name: transfers_data_internationally
+    definition: States that personal information may be transferred to, stored or processed in another country (typically the United States), sometimes with the safeguard or consent relied on.
+    clusters: [c040]
+    severity_weight: 1.5
+    label_source: [teacher]
+    seeds: [international_specific_audiences]
+    notes: "GDPR Art. 13(1)(f): transfers to third countries; OPP-115 has no transfer attribute"
+  - id: third_party_advertising_and_cookies
+    name: third_party_advertising_and_cookies
+    definition: States that third-party advertisers or ad networks serve ads on the site and may set cookies or web beacons to collect information about visits for targeted advertising.
+    clusters: [c058, c049, c042, c053]
+    label_source:
+      - "Third Party Sharing/Collection :: Purpose = Advertising"
+      - "Third Party Sharing/Collection :: Action Third Party = Track on first party website/app"
+      - "Third Party Sharing/Collection :: Action Third Party = Collect on first party website/app"
+    seeds: [third_party_sharing_collection]
+    notes: "four clusters (ad serving, ad targeting, Google-style ad cookies, partner cookies) proposed as one type; split back into 'ad serving' and 'third-party cookies' if you want finer types"
+  - id: disclaims_control_of_third_party_cookies
+    name: disclaims_control_of_third_party_cookies
+    definition: States that the company has no access to or control over cookies and tracking used by third-party advertisers, and that their use is governed by the third parties' own policies.
+    clusters: [c023]
+    label_source: [teacher]
+    seeds: [third_party_sharing_collection]
+  - id: warns_about_public_areas
+    name: warns_about_public_areas
+    definition: States that information users post in public areas (forums, reviews, profiles) can be seen and used by others, often with a warning to be careful.
+    clusters: [c013]
+    label_source:
+      - "Third Party Sharing/Collection :: Third Party Entity = Public"
+      - "Third Party Sharing/Collection :: Third Party Entity = Other users"
+    seeds: [third_party_sharing_collection]
+  # ---------------------------------------------------------------- security
+  - id: states_security_measures
+    name: states_security_measures
+    definition: States in general terms that the company takes technical, physical or administrative measures to protect personal information against loss, misuse or unauthorised access.
+    clusters: [c007]
+    label_source:
+      - "Data Security :: Security Measure = Generic"
+      - "Data Security :: Security Measure = Privacy/Security program"
+    seeds: [data_security]
+  - id: encrypts_data_in_transit
+    name: encrypts_data_in_transit
+    definition: States that sensitive information is encrypted in transmission (for example with SSL/TLS).
+    clusters: [c020]
+    label_source: ["Data Security :: Security Measure = Secure data transfer"]
+    seeds: [data_security]
+  - id: stores_data_securely
+    name: stores_data_securely
+    definition: States how personal information is stored securely (secure servers, firewalls, password-protected systems).
+    clusters: [c065]
+    label_source: ["Data Security :: Security Measure = Secure data storage"]
+    seeds: [data_security]
+  - id: limits_internal_access
+    name: limits_internal_access
+    definition: States that access to personal information is limited to staff or contractors who need it, and that they are bound to keep it confidential.
+    clusters: [c051, c072]
+    label_source:
+      - "Data Security :: Security Measure = Data access limitation"
+      - "Data Security :: Security Measure = Privacy training"
+    seeds: [data_security]
+  - id: does_not_store_payment_cards
+    name: does_not_store_payment_cards
+    definition: States that credit card or payment details are not stored by the company (often because a third-party processor handles them).
+    clusters: [c070]
+    label_source: [teacher]
+    seeds: [data_security]
+  - id: security_not_guaranteed
+    name: security_not_guaranteed
+    definition: States that no transmission over the internet or method of storage is completely secure, so the company cannot guarantee security.
+    clusters: [c016]
+    label_source: [teacher]
+    seeds: [data_security]
+  - id: advises_users_on_security
+    name: advises_users_on_security
+    definition: Advises users on what they should do to protect their own information (keep passwords secret, log out, be careful what they share).
+    clusters: [c018]
+    label_source: [teacher]
+    seeds: [data_security]
+  # ---------------------------------------------------------------- choice and control
+  - id: opt_out_of_communications
+    name: opt_out_of_communications
+    definition: States that users can opt out of or unsubscribe from marketing emails or other communications, and how.
+    clusters: [c005, c046]
+    severity_weight: 1.5
+    label_source:
+      - "User Choice/Control :: Purpose = Marketing & Choice Type = Opt-out link"
+      - "User Choice/Control :: Purpose = Marketing & Choice Type = Opt-out via contacting company"
+    seeds: [user_choice_control]
+    notes: "GDPR Art. 21(2)-(4): right to object to direct marketing, to be brought to the user's attention"
+  - id: opt_out_of_tracking_or_ads
+    name: opt_out_of_tracking_or_ads
+    definition: States that users can opt out of targeted advertising, ad-network cookies or similar data collection, and points to how (opt-out pages, industry tools).
+    clusters: [c035]
+    label_source:
+      - "User Choice/Control :: Purpose = Advertising"
+      - "User Choice/Control :: Choice Type = Third-party privacy controls"
+    seeds: [user_choice_control]
+  - id: browser_cookie_controls
+    name: browser_cookie_controls
+    definition: States that users can refuse, delete or be warned about cookies through their browser settings.
+    clusters: [c022]
+    label_source: ["User Choice/Control :: Choice Type = Browser/device privacy controls"]
+    seeds: [user_choice_control]
+  - id: warns_disabling_cookies_limits_site
+    name: warns_disabling_cookies_limits_site
+    definition: Warns that refusing or disabling cookies may stop parts of the website from working.
+    clusters: [c034]
+    label_source: [teacher]
+    seeds: [user_choice_control]
+  - id: information_provision_is_optional
+    name: information_provision_is_optional
+    definition: States that users may visit the site or use parts of it without giving personal information, or may choose what to provide (sometimes at the cost of some features).
+    clusters: [c062, c059]
+    label_source: ["User Choice/Control :: Choice Type = Dont use service/feature"]
+    seeds: [user_choice_control]
+  # ---------------------------------------------------------------- access, deletion, rights
+  - id: access_and_correct_information
+    name: access_and_correct_information
+    definition: States that users can review, update or correct their personal information, and how (account settings, contacting the company).
+    clusters: [c012]
+    severity_weight: 1.5
+    label_source:
+      - "User Access, Edit and Deletion :: Access Type = Edit information"
+      - "User Access, Edit and Deletion :: Access Type = View"
+    seeds: [user_access_edit_deletion]
+    notes: "GDPR Art. 13(2)(b): rights of access and rectification"
+  - id: deletion_on_request
+    name: deletion_on_request
+    definition: States that users can ask for their personal information or account to be deleted or removed from the company's records.
+    clusters: [c054]
+    severity_weight: 1.5
+    label_source:
+      - "User Access, Edit and Deletion :: Access Type = Delete account (full)"
+      - "User Access, Edit and Deletion :: Access Type = Delete account (partial)"
+    seeds: [user_access_edit_deletion]
+    notes: "GDPR Art. 13(2)(b): right to erasure; CCPA 1798.105"
+  - id: states_data_subject_rights
+    name: states_data_subject_rights
+    definition: States the user's legal rights over their data as rights (access, objection, portability, withdrawing consent, complaining to a data protection authority).
+    clusters: [c031]
+    severity_weight: 1.5
+    label_source: [teacher]
+    seeds: [user_access_edit_deletion]
+    notes: "GDPR Art. 13(2)(b)-(d): rights, withdrawal of consent, complaint to a supervisory authority"
+  # ---------------------------------------------------------------- retention
+  - id: states_retention_period
+    name: states_retention_period
+    definition: States how long personal information is kept (a period, 'as long as necessary for the purpose', or as long as the law requires).
+    clusters: [c026]
+    severity_weight: 1.5
+    label_source: ["Data Retention"]
+    seeds: [data_retention]
+    notes: "GDPR Art. 13(2)(a): storage period or the criteria for it"
+  # ---------------------------------------------------------------- children
+  - id: no_knowing_collection_from_children
+    name: no_knowing_collection_from_children
+    definition: States that the company does not knowingly collect personal information from children under a stated age (usually 13).
+    clusters: [c041]
+    label_source: ["International and Specific Audiences :: Audience Type = Children"]
+    seeds: [international_specific_audiences]
+  - id: states_minimum_age
+    name: states_minimum_age
+    definition: States that the site or service is not meant for, or may not be used by, people below a minimum age, or requires parental consent below it.
+    clusters: [c019]
+    label_source: [teacher]
+    seeds: [international_specific_audiences]
+  - id: deletes_children_data_if_found
+    name: deletes_children_data_if_found
+    definition: States what the company does if it learns it has collected a child's information (deletes it, lets parents ask for deletion).
+    clusters: [c068]
+    label_source: [teacher]
+    seeds: [international_specific_audiences]
+  # ---------------------------------------------------------------- policy changes
+  - id: reserves_right_to_change_policy
+    name: reserves_right_to_change_policy
+    definition: States that the company may change or update the policy at any time, with or without notice.
+    clusters: [c015]
+    label_source: ["Policy Change"]
+    seeds: [policy_change]
+    notes: "flagged example_label_name: 'policy_change' is also an OPP-115 category, so the flag is a false alarm here"
+  - id: states_how_changes_are_notified
+    name: states_how_changes_are_notified
+    definition: States how users will learn about changes to the policy (posting on the site or this page, email or other notice for material changes).
+    clusters: [c061, c056, c067]
+    label_source:
+      - "Policy Change :: Notification Type = General notice in privacy policy"
+      - "Policy Change :: Notification Type = General notice on website"
+      - "Policy Change :: Notification Type = Personal notice"
+    seeds: [policy_change]
+    notes: "c061 (posting) and c056/c067 (notice of material changes) proposed as one type; split if you want 'posted' vs 'notified personally'. Same false-alarm leakage flag as above"
+  - id: continued_use_means_acceptance
+    name: continued_use_means_acceptance
+    definition: States that continuing to use the site after the policy changes means accepting the changes.
+    clusters: [c073]
+    label_source: [teacher]
+    seeds: [policy_change]
+  - id: states_last_updated_date
+    name: states_last_updated_date
+    definition: States the date on which the policy was last updated or took effect.
+    clusters: [c063]
+    label_source: [teacher]
+    seeds: [policy_change]
+  # ---------------------------------------------------------------- scope, framing, legal
+  - id: identifies_operator
+    name: identifies_operator
+    definition: Identifies the company that operates the site and is responsible for the information (name, affiliates), sometimes with definitions of terms used in the policy.
+    clusters: [c047]
+    severity_weight: 1.5
+    label_source: [teacher]
+    seeds: [other]
+    notes: "GDPR Art. 13(1)(a): identity of the controller. Teacher flagged mixed (identification vs definitions of terms)"
+  - id: states_policy_scope_and_commitment
+    name: states_policy_scope_and_commitment
+    definition: Introduces the policy, stating what it covers and/or the company's commitment to protecting privacy.
+    clusters: [c011, c017]
+    label_source: ["Other :: Other Type = Introductory/Generic"]
+    seeds: [other]
+  - id: scope_excludes_third_party_sites
+    name: scope_excludes_third_party_sites
+    definition: States that the policy applies only to the company's own sites and not to other websites or services, even linked ones.
+    clusters: [c036]
+    label_source: [teacher]
+    seeds: [other]
+  - id: third_party_sites_and_their_policies
+    name: third_party_sites_and_their_policies
+    definition: States that the site links to third-party websites, that the company is not responsible for their content or practices, and/or advises users to read their privacy policies.
+    clusters: [c009, c066, c010, c064]
+    label_source: [teacher]
+    seeds: [third_party_sharing_collection]
+    notes: "four clusters proposed as one type (links, disclaimer, 'they have their own policies', 'read them'); split into 'disclaims responsibility' and 'advises reading their policies' if you want finer types"
+  - id: consent_by_use
+    name: consent_by_use
+    definition: States that using the site or giving information means consenting to the policy or to the collection and use it describes.
+    clusters: [c029]
+    label_source: [teacher]
+    seeds: [other]
+  - id: complies_with_laws_and_programs
+    name: complies_with_laws_and_programs
+    definition: States that the company complies with named privacy laws, frameworks or self-regulatory programs (e.g. COPPA, Safe Harbor/Privacy Shield, TRUSTe).
+    clusters: [c038]
+    label_source: [teacher]
+    seeds: [other]
+  - id: governing_law_and_disputes
+    name: governing_law_and_disputes
+    definition: States which jurisdiction's law governs the policy or site and how disputes are resolved.
+    clusters: [c025]
+    label_source: [teacher]
+    seeds: [other]
+  - id: provides_privacy_contact
+    name: provides_privacy_contact
+    definition: Tells readers how to contact the company about the policy or their information (email, address, phone, form, named contact person).
+    clusters: [c014, c048, c071]
+    severity_weight: 1.5
+    label_source: ["Other :: Other Type = Privacy contact information"]
+    seeds: [other]
+    notes: "GDPR Art. 13(1)(a)-(b): contact details of the controller (and DPO). c048 and c071 had the same teacher name"
+  # ---------------------------------------------------------------- from noise (no cluster reached min size 80)
+  - id: do_not_track_response
+    name: do_not_track_response
+    definition: States whether and how the company responds to browser Do Not Track signals (most often that it does not).
+    clusters: []
+    positive_examples: ["privacy_pl:829186#1#8", "opp115:807#24#0"]
+    near_miss: "privacy_pl:562491#3#6"
+    section_hint: in or next to the cookies and tracking section, in the second half of the document
+    label_source: ["Do Not Track"]
+    seeds: [do_not_track]
+    notes: "35 claims from 29 of 500 documents, 31 of them HDBSCAN noise (too few for min cluster size 80); CalOPPA requires it for California, not GDPR/CCPA, so severity 1.0"
+  - id: california_disclosure_rights
+    name: california_disclosure_rights
+    definition: States the rights of California residents to learn which third parties received their information for direct marketing, and how to make the request.
+    clusters: []
+    positive_examples: ["privacy_pl:940252#18#0", "privacy_pl:25490#7#0"]
+    near_miss: "privacy_pl:621224#7#10"
+    section_hint: near the end, under a heading like 'Your California Privacy Rights'
+    label_source: ["International and Specific Audiences :: Audience Type = Californians"]
+    seeds: [international_specific_audiences]
+    notes: "89 claims from 45 documents, 64 of them noise; California 'Shine the Light' (Civ. Code 1798.83), not CCPA, so severity 1.0"
+
+clusters:
+  c037:
+    action: prune
+    reason: "terms-of-use rules for the site's content (no copying, no unlawful postings), not a statement about personal information; teacher flagged it mixed"
+
+seeds: {}
