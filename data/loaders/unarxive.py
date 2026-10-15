@@ -7,7 +7,8 @@ abstract, body_text (paragraphs with section, sec_number, sec_type, content_type
 Two steps, because the archive is 4.8 GB of xz:
   extract(tar_path, out_path, ...)   one streaming pass; keeps papers whose primary category is in `categories` and
                                      whose v1 is on/after `min_date`; drops bib/ref entries; gzip jsonl
-  iter_documents(extract_path)       Document + Sections (consecutive paragraphs of one section form a Section)
+  iter_documents(extract_path)       Document + Sections (consecutive paragraphs of one section form a Section;
+                                     a section longer than max_section_chars is split at paragraph breaks)
 """
 
 from __future__ import annotations
@@ -24,7 +25,7 @@ from pathlib import Path
 from typing import Any, Iterator
 
 from data.schema import Document, ParsedDocument, Section, with_char_spans
-from data.segment import clean_inline
+from data.segment import RawSection, clean_inline, split_oversized
 
 SOURCE = "unarxive"
 KEEP_CONTENT = {"paragraph", "listing"}
@@ -127,16 +128,17 @@ def _abstract_text(abstract: Any) -> str:
     return abstract or ""
 
 
-def paper_to_document(paper: dict[str, Any], *, genre: str = "papers", cutoff: str = "2022-12-31") -> ParsedDocument:
+def paper_to_document(paper: dict[str, Any], *, genre: str = "papers", cutoff: str = "2022-12-31",
+                      max_section_chars: int | None = None) -> ParsedDocument:
     meta = paper.get("metadata") or {}
     pid = paper["paper_id"]
     vs = [(label, d) for label, d in versions(meta) if d is None or d <= cutoff]
     label, date = vs[-1] if vs else (None, None)
     doc_id = f"{SOURCE}:{pid}"
-    sections: list[Section] = []
+    raw: list[RawSection] = []
     abstract = _clean(_abstract_text(paper.get("abstract")))
     if abstract:
-        sections.append(Section(doc_id=doc_id, idx=0, heading="Abstract", text=abstract))
+        raw.append(RawSection(heading="Abstract", paragraphs=[abstract]))
     current_heading, buf = None, []
     for p in paper.get("body_text") or []:
         if p.get("content_type", "paragraph") not in KEEP_CONTENT:
@@ -146,12 +148,14 @@ def paper_to_document(paper: dict[str, Any], *, genre: str = "papers", cutoff: s
             continue
         heading = clean_inline(p.get("section") or "") or None
         if buf and heading != current_heading:
-            sections.append(Section(doc_id=doc_id, idx=0, heading=current_heading, text="\n".join(buf)))
+            raw.append(RawSection(heading=current_heading, paragraphs=buf))
             buf = []
         current_heading = heading
         buf.append(text)
     if buf:
-        sections.append(Section(doc_id=doc_id, idx=0, heading=current_heading, text="\n".join(buf)))
+        raw.append(RawSection(heading=current_heading, paragraphs=buf))
+    sections = [Section(doc_id=doc_id, idx=0, heading=r.heading, text=r.text)
+                for r in split_oversized(raw, max_chars=max_section_chars)]
     doc = Document(
         id=doc_id, genre=genre, source=SOURCE, entity_id=pid, version=label, date=date,
         category=primary_category(meta), title=(meta.get("title") or "").strip() or None,
@@ -163,7 +167,8 @@ def paper_to_document(paper: dict[str, Any], *, genre: str = "papers", cutoff: s
 
 
 def iter_documents(extract_path: str | Path, *, limit: int | None = None, genre: str = "papers",
-                   ids: set[str] | None = None, cutoff: str = "2022-12-31") -> Iterator[ParsedDocument]:
+                   ids: set[str] | None = None, cutoff: str = "2022-12-31",
+                   max_section_chars: int | None = None) -> Iterator[ParsedDocument]:
     with gzip.open(extract_path, "rt", encoding="utf-8") as f:
         for i, line in enumerate(f):
             if limit is not None and i >= limit:
@@ -171,7 +176,7 @@ def iter_documents(extract_path: str | Path, *, limit: int | None = None, genre:
             paper = json.loads(line)
             if ids is not None and paper["paper_id"] not in ids:
                 continue
-            yield paper_to_document(paper, genre=genre, cutoff=cutoff)
+            yield paper_to_document(paper, genre=genre, cutoff=cutoff, max_section_chars=max_section_chars)
 
 
 def iter_metadata(extract_path: str | Path, *, cutoff: str = "2022-12-31") -> Iterator[dict[str, Any]]:

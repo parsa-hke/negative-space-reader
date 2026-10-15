@@ -24,6 +24,7 @@ import time
 from pathlib import Path
 
 from data.schema import Document, ParsedDocument, Section, with_char_spans
+from data.segment import RawSection, split_oversized
 
 SOURCE = "arxiv_eprint"
 USER_AGENT = "negspace-research/0.1 (academic project; github.com)"
@@ -117,6 +118,8 @@ def _to_text(latex: str) -> str:
         MacroTextSpec("citet", simplify_repl="[cite]"), MacroTextSpec("ref", simplify_repl="[ref]"),
         MacroTextSpec("cref", simplify_repl="[ref]"), MacroTextSpec("label", simplify_repl=""),
         MacroTextSpec("footnote", simplify_repl=""), MacroTextSpec("url", simplify_repl="%s"),
+        # pylatexenc renders these as "[NO \\title GIVEN] ... <today's date>": the build date would leak into the text
+        MacroTextSpec("maketitle", simplify_repl=""), MacroTextSpec("today", simplify_repl=""),
     ])
     latex = re.sub(r"\$[^$]+\$|\\\(.*?\\\)", " [math] ", latex, flags=re.S)
     latex = re.sub(r"\\begin\{(equation|align|eqnarray|gather|multline)\*?\}.*?\\end\{\1\*?\}", " [math] ", latex, flags=re.S)
@@ -174,10 +177,11 @@ def latex_sections(files: dict[str, str]) -> tuple[str | None, list[tuple[str | 
 
 
 def eprint_to_document(path: str | Path, *, arxiv_id: str, version: str, date: str | None, category: str | None,
-                       genre: str = "papers") -> ParsedDocument:
+                       genre: str = "papers", max_section_chars: int | None = None) -> ParsedDocument:
     title, secs = latex_sections(_read_sources(Path(path)))
     doc_id = f"{SOURCE}:{arxiv_id}{version}"
-    sections = [Section(doc_id=doc_id, idx=0, heading=h, text=t) for h, t in secs]
+    raw = split_oversized([RawSection(heading=h, paragraphs=t.split("\n")) for h, t in secs], max_chars=max_section_chars)
+    sections = [Section(doc_id=doc_id, idx=0, heading=r.heading, text=r.text) for r in raw]
     doc = Document(id=doc_id, genre=genre, source=SOURCE, entity_id=arxiv_id, version=version, date=date,
                    category=category, title=title, meta={"eprint": Path(path).name})
     return ParsedDocument(doc, with_char_spans(sections))

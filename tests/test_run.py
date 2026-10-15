@@ -169,10 +169,10 @@ def test_failed_run_is_logged(tmp_path, fake_task):
 
 def test_unimplemented_stub_is_logged_as_failed(tmp_path):
     runs_dir = tmp_path / "runs"
-    assert runner.main(["--config", "configs/distil.yaml", "--seed", "0", "--set", "run.device=cpu",
+    assert runner.main(["--config", "configs/mam.yaml", "--seed", "0", "--set", "run.device=cpu",
                         "--runs-dir", str(runs_dir)]) == 1
     row = read_log(runs_dir)[0]
-    assert row["task"] == "distil" and row["status"] == "failed" and "Phase 4" in row["error"]
+    assert row["task"] == "train_mam" and row["status"] == "failed" and "Phase 8" in row["error"]
 
 
 def test_device_info(capsys):

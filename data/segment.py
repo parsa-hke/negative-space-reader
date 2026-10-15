@@ -6,7 +6,8 @@ Three entry points, all genre-agnostic (they look at text format, not at what th
                                 numbered and ALL-CAPS heading lines; runs of headings with no body (tables of
                                 contents) are dropped; no headings at all -> paragraph chunks.
   normalise_sections(...)       merge sections below min_section_chars, split those above max_section_chars
-                                at paragraph breaks.
+                                at paragraph breaks (split_oversized, the split step alone, is used by the
+                                loaders whose sources already mark sections: unarXive, arXiv e-prints).
   split_sentences(text)         rule-based splitter with an abbreviation list. Chosen over pysbd (accurate but
                                 333 sentences/s on the M5, ~4 h for the corpus) and spaCy's sentencizer
                                 (50k/s but splits after "Sec.", "Fig.", "et al.,"); see CHANGELOG 2026-10-12.
@@ -227,18 +228,50 @@ def normalise_sections(sections: list[RawSection], *, min_chars: int = 80, max_c
             out[-1] = RawSection(heading=out[-1].heading, paragraphs=out[-1].paragraphs + carry.paragraphs)
         else:
             out.append(carry)
+    return split_oversized(out, max_chars=max_chars)
+
+
+def _wrap(text: str, width: int) -> list[str]:
+    """Cut a string with no usable sentence boundary (a table, a listing) at spaces into pieces of at most width."""
+    pieces, buf = [], ""
+    for word in text.split(" "):
+        while len(word) > width:  # a single token longer than width: cut it hard
+            if buf:
+                pieces.append(buf)
+                buf = ""
+            pieces.append(word[:width])
+            word = word[width:]
+        if buf and len(buf) + 1 + len(word) > width:
+            pieces.append(buf)
+            buf = ""
+        buf = f"{buf} {word}" if buf else word
+    if buf:
+        pieces.append(buf)
+    return pieces
+
+
+def split_oversized(sections: list[RawSection], *, max_chars: int | None) -> list[RawSection]:
+    """Split every section longer than max_chars at paragraph breaks into chunks of about max_chars / 2, keeping its
+    heading; a paragraph longer than max_chars is split at sentence boundaries first (and a sentence longer than
+    max_chars at spaces). Shorter sections are returned unchanged; max_chars None disables the step. Shared by every
+    loader, so long documents become more rows in every genre (plan §0.2 #4)."""
+    if not max_chars:
+        return sections
+    target = max_chars // 2
     final: list[RawSection] = []
-    for s in out:
+    for s in sections:
         if len(s.text) <= max_chars:
             final.append(s)
             continue
         paragraphs = []
-        for p in s.paragraphs:  # a single paragraph longer than max_chars is split at sentence boundaries
+        for p in s.paragraphs:
             if len(p) <= max_chars:
                 paragraphs.append(p)
-            else:
-                paragraphs += [c.text for c in chunk_paragraphs(split_sentences(p), target_chars=max_chars // 2)]
-        final += chunk_paragraphs(paragraphs, target_chars=max_chars // 2, heading=s.heading)
+                continue
+            sentences = [piece for x in split_sentences(p)
+                         for piece in (_wrap(x, target) if len(x) > max_chars else [x])]
+            paragraphs += [c.text for c in chunk_paragraphs(sentences, target_chars=target)]
+        final += chunk_paragraphs(paragraphs, target_chars=target, heading=s.heading)
     return final
 
 

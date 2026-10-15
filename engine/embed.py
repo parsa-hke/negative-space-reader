@@ -96,12 +96,29 @@ class EmbeddingStore:
 
 
 def embed_and_store(embedder: Embedder, ids: list[Any], texts: list[str], path: str | Path,
-                    extra_meta: dict[str, Any] | None = None) -> dict[str, Any]:
+                    extra_meta: dict[str, Any] | None = None, *, reuse: bool = False) -> dict[str, Any]:
+    """Encode texts and save them as an EmbeddingStore at path. reuse=True first loads the store already at path and
+    encodes only texts whose sha1 it does not hold (after a rebuild that split some sections, only the new chunks)."""
     t0 = time.perf_counter()
-    vectors = embedder.encode(texts, show_progress=True)
+    old = EmbeddingStore.load(path) if reuse and (Path(path) / "rows.jsonl").exists() else None
+    found = old.lookup(texts) if old is not None else [None] * len(texts)
+    missing = [i for i, v in enumerate(found) if v is None]
+    fresh = embedder.encode([texts[i] for i in missing], show_progress=True)
     seconds = round(time.perf_counter() - t0, 1)
+    if old is not None:
+        vectors = np.zeros((len(texts), fresh.shape[1] if len(missing) else old.vectors.shape[1]), dtype=np.float32)
+        for i, v in enumerate(found):
+            if v is not None:
+                vectors[i] = v
+        vectors[missing] = fresh
+    else:
+        vectors = fresh
     meta = {"model": embedder.model_id, "devices": embedder.devices, "normalized": embedder.normalize,
             "truncate_dim": embedder.truncate_dim, "seconds": seconds, **(extra_meta or {})}
+    if old is not None:  # provenance of the reused rows (they may come from another machine and dtype)
+        meta.update(reused_rows=len(texts) - len(missing), new_rows=len(missing),
+                    reused_from={k: old.meta.get(k) for k in ("model", "devices", "seconds", "rows", "reused_from")})
     EmbeddingStore.save(path, ids, texts, vectors, meta)
     return {"rows": len(ids), "dim": int(vectors.shape[1]), "seconds": seconds,
-            "rows_per_second": round(len(ids) / max(seconds, 1e-6), 1)}
+            "rows_per_second": round(len(missing) / max(seconds, 1e-6), 1),
+            **({"reused_rows": len(texts) - len(missing), "new_rows": len(missing)} if old is not None else {})}

@@ -172,6 +172,30 @@ def test_unarxive_extract_filters_and_round_trip(tmp_path):
     check_round_trip(docs, tmp_path, "unarxive")
 
 
+
+def test_unarxive_long_section_is_split_like_policy_sections(tmp_path):
+    """Phase 2 bug (CHANGELOG 2026-10-12 night): the loader ignored segment.max_section_chars. A long section is split
+    on paragraph breaks into chunks within the limit, keeping its heading; the document text and ids do not change."""
+    paras = [f"Paragraph {k} of the results reports a number and explains it in some detail." for k in range(40)]
+    paper = {"paper_id": "2001.00001", "metadata": {"categories": "cs.CL", "title": "T",
+             "versions": [{"version": "v1", "created": "Wed, 1 Jan 2020 10:00:00 GMT"}]},
+             "abstract": {"text": "Short abstract."},
+             "body_text": [{"section": "Introduction", "content_type": "paragraph", "text": "A short introduction."}]
+             + [{"section": "Results", "content_type": "paragraph", "text": t} for t in paras]
+             + [{"section": "Conclusion", "content_type": "paragraph", "text": "We conclude."}]}
+    with gzip.open(tmp_path / "x.jsonl.gz", "wt") as f:
+        f.write(json.dumps(paper) + "\n")
+    whole = next(unarxive.iter_documents(tmp_path / "x.jsonl.gz"))
+    split = next(unarxive.iter_documents(tmp_path / "x.jsonl.gz", max_section_chars=600))
+    assert [s.heading for s in whole.sections] == ["Abstract", "Introduction", "Results", "Conclusion"]
+    results = [s for s in split.sections if s.heading == "Results"]
+    assert len(results) > 2 and all(len(s.text) <= 600 for s in split.sections)
+    assert [s.heading for s in split.sections] == ["Abstract", "Introduction"] + ["Results"] * len(results) + ["Conclusion"]
+    assert "\n".join(s.text for s in results) == whole.sections[2].text
+    assert split.document == whole.document
+    assert [s.idx for s in split.sections] == list(range(len(split.sections)))
+    assert all(split.text()[s.char_span[0]:s.char_span[1]] == s.text for s in split.sections)
+
 # ------------------------------------------------------------------------------------ arXiv e-prints
 MAIN_TEX = r"""\documentclass{article}
 \newcommand{\sys}{OmitNet}
@@ -214,6 +238,26 @@ def test_eprint_parsing(tmp_path):
     (tmp_path / "single").write_bytes(gzip.compress(MAIN_TEX.replace(r"\input{intro}", "").encode()))
     single = arxiv_versions.eprint_to_document(tmp_path / "single", arxiv_id="x", version="v2", date=None, category=None)
     assert [s.heading for s in single.sections] == ["Abstract", "Method", "Limitations"]
+
+
+def test_eprint_long_section_is_split(tmp_path):
+    long = "\n\n".join(f"Paragraph {k} of the method explains one more step of the procedure." for k in range(40))
+    make_eprint(tmp_path / "e", extra_section=r"\section{Details} " + long + "\n")
+    whole = arxiv_versions.eprint_to_document(tmp_path / "e", arxiv_id="x", version="v1", date=None, category=None)
+    split = arxiv_versions.eprint_to_document(tmp_path / "e", arxiv_id="x", version="v1", date=None, category=None,
+                                              max_section_chars=500)
+    assert max(len(s.text) for s in whole.sections) > 500 and all(len(s.text) <= 500 for s in split.sections)
+    assert sum(s.heading == "Details" for s in split.sections) > 2
+    assert split.text().split() == whole.text().split()
+
+
+def test_eprint_text_does_not_depend_on_build_date(tmp_path):
+    """pylatexenc renders \\maketitle and \\today as placeholders plus today's date: found 2026-10-15, when a rebuild
+    changed 8 revision documents' text ("October 12, 2026" -> "October 15, 2026")."""
+    make_eprint(tmp_path / "e", extra_section=r"\section{Notes} \maketitle Compiled on \today{} for review." + "\n")
+    d = arxiv_versions.eprint_to_document(tmp_path / "e", arxiv_id="x", version="v1", date=None, category=None)
+    text = d.text()
+    assert "GIVEN" not in text and "2026" not in text and "Compiled on" in text
 
 
 def test_fetch_eprint_is_cached_and_anonymous(tmp_path, monkeypatch):
@@ -310,6 +354,7 @@ def test_build_papers_end_to_end(tmp_path, monkeypatch):
     src = cfg["data_sources"]["papers"]
     src["unarxive"].update(archive=str(tmp_path / "u.tar.xz"), extract=str(tmp_path / "x.jsonl.gz"))
     src["arxiv_eprints"]["max_pairs"] = None
+    cfg["segment"]["max_section_chars"] = 150  # every fixture section (3 paragraphs, ~215 chars) must be split
     metrics = build_papers(cfg)
     out = tmp_path / "data_processed" / "papers"
     docs = list(read_jsonl(out / "documents.jsonl", Document))
@@ -322,3 +367,6 @@ def test_build_papers_end_to_end(tmp_path, monkeypatch):
     assert metrics["papers/revision_candidates"] == len(test_ids)
     rev = {d.id: d for d in read_jsonl(out / "revisions" / "documents.jsonl", Document)}
     assert all(rev[p["old_doc_id"]].version == "v1" and rev[p["new_doc_id"]].version == "v2" for p in pairs)
+    for sections in (out / "sections.jsonl", out / "revisions" / "sections.jsonl"):
+        assert all(len(s.text) <= 150 for s in read_jsonl(sections, Section))
+    assert metrics["papers/sections"] > 4 * len(docs)  # abstract + 3 sections of 3 paragraphs, each split

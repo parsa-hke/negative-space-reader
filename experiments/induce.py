@@ -16,6 +16,8 @@
   coverage   (3.5) the teacher maps what held-out dev sections assert to the candidate's types or "none"; every
              "none" gets a second look among the most similar types
   freeze     (3.6) candidate -> packs/<genre>/schema.yaml version 1 (sign-off, passing coverage; never overwrites)
+  relink     after a rebuild that split long sections (2026-10-15): the extract-stage claims -> claims_<genre>.jsonl
+             with section_idx pointing into the rebuilt sections (by the claims' verbatim spans); ids unchanged
 
 The section selection is stored as ids in prompts/eval/ (tracked) so every model sees the same 20 sections; the
 text is read from data/processed/ and its sha1 is checked, so a changed corpus cannot silently change the test.
@@ -680,6 +682,45 @@ def run_freeze(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
     return metrics
 
 
+def run_relink(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
+    """Claims of induce.cluster.claims -> claims_<genre>.jsonl re-linked to the current data/processed sections, for
+    every genre with induce.relink.old_sections[genre] (the sections file the claims were extracted from)."""
+    from collections import defaultdict
+
+    from packs.schema_induction import load_claims, relink_claims
+
+    rcfg = cfg["induce"]["relink"]
+    metrics: dict[str, Any] = {}
+    for genre in _genres(cfg):
+        old_path = (rcfg.get("old_sections") or {}).get(genre)
+        if not old_path:
+            continue
+        claims = load_claims(_path(cfg["induce"]["cluster"]["claims"][genre]))
+        docs = {c["doc_id"] for c in claims}
+
+        def sections(path: Path) -> dict[str, list[Section]]:
+            by_doc: dict[str, list[Section]] = defaultdict(list)
+            for sec in read_jsonl(path, Section):
+                if sec.doc_id in docs:
+                    by_doc[sec.doc_id].append(sec)
+            return by_doc
+
+        old = sections(_path(old_path))
+        new = sections(_path(cfg["paths"]["data_processed"]) / genre / "sections.jsonl")
+        out, counts = relink_claims(claims, old, new)
+        with open(run_dir / f"claims_{genre}.jsonl", "w", encoding="utf-8") as f:
+            for row in out:
+                f.write(json.dumps(row, ensure_ascii=False) + "\n")
+        split_docs = sum(len(old[d]) != len(new[d]) for d in docs)
+        moved = sum(c["section_idx"] != c["section_idx_unsplit"] for c in out)
+        metrics.update({f"{genre}/claims": len(out), f"{genre}/documents": len(docs),
+                        f"{genre}/documents_with_split_sections": split_docs, f"{genre}/claims_index_changed": moved,
+                        f"{genre}/claims_span_ungrounded": sum(not c.get("span_grounded", True) for c in out),
+                        **{f"{genre}/relink_{k}": v for k, v in sorted(counts.items())}})
+        print(f"[relink {genre}] {len(out)} claims, {moved} moved: {counts}", flush=True)
+    return metrics
+
+
 def dt_stamp() -> str:
     import datetime as dt
 
@@ -704,4 +745,6 @@ def main(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
         return run_coverage(cfg, run_dir)
     if stage == "freeze":
         return run_freeze(cfg, run_dir)
+    if stage == "relink":
+        return run_relink(cfg, run_dir)
     raise NotImplementedError(f"induce stage {stage!r} is implemented in a later Phase 3 task")

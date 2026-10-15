@@ -6,3 +6,4 @@ run:
   seeds: [0]
 embed:
   limit: null                     # first N sections/documents per genre (tests and smoke only)
+  reuse: false                    # true: encode only texts whose sha1 is not already in the store (after a rebuild)

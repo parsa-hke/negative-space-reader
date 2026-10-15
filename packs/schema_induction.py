@@ -205,6 +205,57 @@ def load_claims(path: str | Path, *, exclude_docs: Iterable[str] = ()) -> list[d
         return [r for r in (json.loads(line) for line in f) if r["doc_id"] not in excluded]
 
 
+def align_sections(old: list[Section], new: list[Section]) -> dict[int, list[int]]:
+    """One document before and after a rebuild that only split sections: old section idx -> the new section indices
+    that hold its text, in order. Raises ValueError when the texts do not line up (the rebuild changed content)."""
+    out: dict[int, list[int]] = {}
+    j = 0
+    for s in old:
+        target, got, chunks = _norm(s.text), "", []
+        while j < len(new) and len(got) < len(target):
+            got = _norm(f"{got} {new[j].text}")
+            chunks.append(new[j].idx)
+            j += 1
+        if got != target:
+            raise ValueError(f"{s.doc_id}: section {s.idx} does not match the rebuilt sections {chunks}")
+        out[s.idx] = chunks
+    if j != len(new):
+        raise ValueError(f"{old[0].doc_id if old else '?'}: {len(new) - j} rebuilt sections left over")
+    return out
+
+
+def relink_claims(claims: list[dict[str, Any]], old_sections: dict[str, list[Section]],
+                  new_sections: dict[str, list[Section]]) -> tuple[list[dict[str, Any]], dict[str, int]]:
+    """Point each claim at the section that holds it after long sections were split. Claim ids are kept; each row
+    gains section_idx_unsplit (the old index) and relink, how the new index was found:
+      same_section        the old section was not split (its index may still shift)
+      span                the claim's span occurs in one chunk of the split section (first chunk if several)
+      span_across_chunks  the span runs over a chunk boundary: the chunk where it starts
+      overlap             the span is not in the section verbatim: the chunk sharing most of its words
+      first_chunk         no word in common: the first chunk of the old section."""
+    maps = {d: align_sections(old_sections[d], new_sections[d]) for d in {c["doc_id"] for c in claims}}
+    out, counts = [], {}
+    for c in claims:
+        chunks = maps[c["doc_id"]][c["section_idx"]]
+        texts = [_norm(new_sections[c["doc_id"]][i].text) for i in chunks]
+        span = _norm(c.get("span") or "")
+        if len(chunks) == 1:
+            idx, how = chunks[0], "same_section"
+        elif span and (hits := [i for i, t in zip(chunks, texts) if span in t]):
+            idx, how = hits[0], "span"
+        elif span and (pos := " ".join(texts).find(span)) >= 0:
+            ends = [sum(len(t) + 1 for t in texts[: k + 1]) for k in range(len(texts))]
+            idx, how = chunks[next(k for k, e in enumerate(ends) if pos < e)], "span_across_chunks"
+        else:
+            words = set(re.findall(r"\w+", span))
+            shared = [len(words & set(re.findall(r"\w+", t))) for t in texts]
+            best = max(range(len(chunks)), key=lambda k: (shared[k], -k))
+            idx, how = (chunks[best], "overlap") if shared[best] else (chunks[0], "first_chunk")
+        out.append({**c, "section_idx": idx, "section_idx_unsplit": c["section_idx"], "relink": how})
+        counts[how] = counts.get(how, 0) + 1
+    return out, counts
+
+
 def center_by_document(X: "np.ndarray", doc_ids: list[str], *, alpha: float) -> "np.ndarray":
     """Subtract alpha times each document's mean claim vector from its claims, then re-normalise. What every claim
     of a document shares is its subject matter; the kind of statement varies within the document. Removing the

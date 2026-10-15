@@ -191,6 +191,9 @@ induce:
       min_samples: [5, 10]
       selection: [eom]            # leaf left more noise than eom at every size (run cluster_umap10_s0)
     max_cluster_share: 0.10       # a setting whose largest cluster holds more of the claims is not eligible
+  relink:                         # stage relink: claims -> rebuilt sections after long sections were split
+    old_sections:                 # the sections file each genre's claims were extracted from (null: not needed)
+      papers: data/processed/_backup_papers_unsplit_2026-10-15/sections.jsonl
   name:                           # plan §3.3, second half
     prompt: induce_name
     from_run: null                # a cluster run directory, e.g. runs/cluster_s0
@@ -240,8 +243,30 @@ schema:
 
 # ---------------------------------------------------------------- presence (Phase 4)
 distil:
+  stage: labels                   # labels | select | teacher_labels (4.1, 4.2) | later stages of Phase 4
   label_sections_per_genre: 2000  # lean: teacher labels only where no human labels exist (plan §4.1); full = 5000
   human_set_per_genre: 300
+  label_sets:                     # stage select -> packs/<genre>/label_sets.json (tracked: ids + text sha1)
+    min_chars: 80                 # = segment.min_section_chars
+    exclude_sample: runs/extract_32b_{genre}_s0/sample_{genre}.json   # documents the schema was induced from
+    annotated_per_document: 10    # genre with human annotations: the human set takes this many sections from each of
+                                  # randomly drawn whole annotated documents (as many as 300 needs); the teacher set
+                                  # comes from the other annotated documents, so no document is in both
+  teacher_labels:                 # stage teacher_labels (plan §4.1); the teacher labels every type of the schema
+    sets: [teacher, human]        # which label sets to label
+    limit: null                   # first N sections of each set (prompt iteration)
+    sample: null                  # a seeded random N of each set instead (calibration)
+    max_assertions: 12
+    max_tokens: 1500
+    check_max_tokens: 400
+    k_claim: 2                    # second look: per first-pass statement, the k most similar types not found
+    k_section: 4                  # ... and the section's k most similar types not found
+    max_candidates: 8
+  score:                          # stage score: teacher labels vs a reference, per type
+    name: opp115                  # table name: reports/tables/teacher_vs_<name>_<genre>.csv
+    teacher: null                 # e.g. runs/<run>/teacher_labels_{genre}.jsonl
+    reference: null               # e.g. runs/labels_opp115_s0/labels_{genre}.jsonl, or page answers (jsonl)
+    min_positives: 1              # macro F1 over types with at least this many reference positives
   min_teacher_f1: 0.85            # per type with >= min_type_positives (plan §4.2)
   min_type_positives: 20
 

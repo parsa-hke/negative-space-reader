@@ -29,3 +29,36 @@ def test_embed_task_is_registered_and_lab_config_resolves():
     t = load_config("configs/induce.yaml", ["lab"])["models"]["teacher"]
     assert t["backend"] == "openai" and len(t["base_url"]) == 4 and t["concurrency"] == 32
     assert "Qwen2.5-32B" in t["served_as"]
+
+
+class CountingEmbedder:
+    """Stands in for Embedder: deterministic unit vectors, records which texts it was asked to encode."""
+    model_id, devices, normalize, truncate_dim, dim = "fake", ["cpu"], True, None, 8
+
+    def __init__(self):
+        self.seen = []
+
+    def encode(self, texts, show_progress=False):
+        self.seen += list(texts)
+        rows = [np.random.default_rng(int(text_sha1(t)[:8], 16)).normal(size=self.dim) for t in texts]
+        out = np.asarray(rows, dtype=np.float32).reshape(len(texts), self.dim)
+        return out / np.linalg.norm(out, axis=1, keepdims=True) if len(texts) else out
+
+
+def test_embed_reuses_stored_rows_by_text_hash(tmp_path):
+    """After a rebuild that split some sections, only the new texts are encoded; reused rows keep their vectors."""
+    from engine.embed import embed_and_store
+
+    first = CountingEmbedder()
+    embed_and_store(first, [["d", 0], ["d", 1]], ["kept section", "long section"], tmp_path / "s")
+    before = EmbeddingStore.load(tmp_path / "s")
+    second = CountingEmbedder()
+    stats = embed_and_store(second, [["d", 0], ["d", 1], ["d", 2]], ["kept section", "long", "section"],
+                            tmp_path / "s", reuse=True)
+    assert second.seen == ["long", "section"] and stats["reused_rows"] == 1 and stats["new_rows"] == 2
+    after = EmbeddingStore.load(tmp_path / "s")
+    assert after.ids == [["d", 0], ["d", 1], ["d", 2]] and after.meta["reused_rows"] == 1
+    assert np.allclose(after.vectors[0], before.vectors[0]) and after.lookup(["long section"]) == [None]
+    third = CountingEmbedder()
+    embed_and_store(third, [["d", 0]], ["kept section"], tmp_path / "s")  # reuse off: everything is encoded
+    assert third.seen == ["kept section"]

@@ -2,6 +2,163 @@
 
 Date, what was done, what was found (negative findings included). Newest first.
 
+## 2026-10-15 (evening) — Phase 4 session 1: oversized paper sections fixed; 4.1 privacy labels; label sets; 4.2 page
+
+**Checks at start:** 248 tests pass; both schemas `version: 1`, `status: frozen`, 58 and 50 types, as in HANDOFF.md.
+(This session ran in a git worktree; the gitignored data, venv, caches and run folders are symlinks to the main
+checkout, so everything rebuilt here lives in the main checkout's `data/`.)
+
+**Phase 2 bug fixed: long paper sections are now split** (test first: `tests/test_data_segment.py`,
+`tests/test_data_loaders.py`). The split step of `normalise_sections` is now its own function,
+`data/segment.split_oversized` (no genre code; the policy path is unchanged: privacy has 0 sections over 8,000), used
+by `data/loaders/unarxive.py` and `data/loaders/arxiv_versions.py` with `segment.max_section_chars`. A section over
+the limit is cut at paragraph breaks into chunks of about 4,000 characters keeping its heading; a paragraph over the
+limit at sentence boundaries; a "sentence" over the limit (tables, listings) at spaces. Rebuilt with `configs/data.yaml`
+(smoke first): run `data_papers_split_s0_20261015-223426-488981` (the first rebuild, `data_papers_split_s0`, was
+replaced because of the next finding). Old files kept as `data/processed/_backup_papers_unsplit_2026-10-15/`.
+
+| Papers corpus | Before | After |
+|---|---|---|
+| documents | 17,644 | 17,644 (identical `documents.jsonl`) |
+| sealed test hash | `12bc037d…` | `12bc037d…` (unchanged) |
+| sections | 373,478 | 380,736 |
+| sections > 8,000 chars (> 24,000) | 2,462 (127), in 1,788 papers; longest 245,576 | 0; longest 7,999 |
+| sentences | 4,981,128 | 4,981,476 |
+| revision documents: sections, > 8,000 | 13,015, 243 (143 documents) | 13,631, 0 |
+| revision pairs | 343 | 343 |
+
+Checked section by section: the 2,462 long sections became 9,720 chunks, the other 371,016 sections are byte-identical,
+and no document's text changed (whitespace aside).
+
+- **Found (bug, fixed):** the e-print converter (pylatexenc) rendered `\maketitle` as "[NO \title GIVEN] [NO \author
+  GIVEN] <today's date>", so the build date leaked into 8 of the 686 revision documents and rebuilds were not
+  reproducible. `\maketitle` and `\today` now render as nothing (test added). One revision pair's change ratio moved
+  0.164 → 0.156; the same 343 pairs.
+- **Found:** the e-print revision documents had the same long-section gap (243 sections, 143 documents); fixed by the
+  same function.
+- **Claims re-linked** (stage `induce.stage: relink`, `tests/test_relink_claims.py`; run `relink_claims_s0` →
+  `runs/relink_claims_s0/claims_papers.jsonl`). Claim ids are unchanged; `section_idx` now points into the rebuilt
+  sections, with `section_idx_unsplit` and `relink` (how it was matched) added. Of 44,579 claims (304 papers, 27 of
+  them with a split section): 44,076 in sections that were not split (4,010 claims changed index in total, because
+  sections after a split shift); of the 503 in split sections, 480 matched their verbatim span in one chunk, 4 a span
+  running over a chunk boundary, 19 by shared words. All 19 are claims whose span was already marked not verbatim at
+  extraction. The Phase 3 record (`induce.cluster.claims`) still points to the original file; Phase 4+ uses the
+  re-linked one.
+- The eye-test selection (`prompts/eval/induce_extract_eye_test.json`): 3 of the 20 paper references pointed to
+  shifted indices (texts unchanged, matched by their stored sha1) and were updated: 2204.13650 57→65, 2206.02468
+  19→21, 2206.07681 16→23.
+- **Re-embedding only the changed sections:** `embed.reuse: true` (`engine.embed.embed_and_store(..., reuse=True)`,
+  test added) keeps every row whose text sha1 is in the store and encodes the rest. Store backed up as
+  `data/embeddings/Qwen__Qwen3-Embedding-0.6B/papers/_sections_unsplit_2026-10-15/`. Run `embed_papers_split_s0` (9,728 new chunks, MPS fp32) **stopped at Parsa's request at batch 147 of 304 (≈ 70 min); the store only saves at the end, so that work is lost** and the store on disk is the old, intact one. Rerun needed (≈ 1.5–2 h on MPS, longest texts first; faster with nothing else on the GPU).
+
+**Task 4.1, privacy labels from OPP-115** (`packs/presence_labels.py`, `distil.stage: labels`,
+`tests/test_presence_labels.py`; run `labels_opp115_s0` → `runs/labels_opp115_s0/labels_privacy.jsonl`, table
+`reports/tables/presence_labels_privacy.csv`). Each `label_source` entry is parsed (`Category` or `Category :: A = v &
+B = w`, all conditions on one annotation) and every name is checked against the annotation file (an unknown name is
+refused instead of giving a silent zero): all 35 mapped types passed. Every section of the 115 OPP-115 policies is
+labelled (3,792 sections; one has no annotation and is negative for every type). Every mapped type has 32–648
+positives (none under 20). The 23 `teacher` types: `uses_web_beacons`, `tracking_data_not_linked_to_identity`,
+`defines_personal_information`, `transfers_data_internationally`, `disclaims_control_of_third_party_cookies`,
+`does_not_store_payment_cards`, `security_not_guaranteed`, `advises_users_on_security`,
+`warns_disabling_cookies_limits_site`, `states_minimum_age`, `deletes_children_data_if_found`,
+`continued_use_means_acceptance`, `states_last_updated_date`, `scope_excludes_third_party_sites`,
+`third_party_sites_and_their_policies`, `consent_by_use`, `complies_with_laws_and_programs`,
+`governing_law_and_disputes`, `policy_coverage`, `disclose_data_rights`, `content_and_usage_restrictions`,
+`company_identification_and_service_definition`, `provides_third_party_links`. (The run went through the config's
+default three seeds, `labels_opp115_s0..s2`, identical; deterministic stages now pass `run.seeds=[0]`.)
+
+- **Found (schema, for Parsa):** `data_collection_methods` and `data_collection_contests_surveys` have the identical
+  `label_source` (`First Party Collection/Use :: Collection Mode = Explicit & Does/Does Not = Does`), so their OPP-115
+  labels are identical (493 positives each): the classifier cannot tell them apart. A fix changes the schema (a
+  version-2 pack). **Parsa's decision: keep v1 for now and decide after 4.2/4.3** (per-type F1 and the hand labels
+  show whether to merge them or teacher-label one in a version-2 pack).
+- **Found:** `states_policy_scope_and_commitment` takes OPP-115's broad `Other :: Introductory/Generic` (648 positives,
+  17% of sections), probably looser than its definition; 4.2 cannot measure it (OPP-mapped types are not hand-labelled).
+- **Found (plan wording):** §0.2 #7 says OPP-115 gives "~23k labelled segments". The consolidated data has 3,792
+  segments (115 policies) carrying 19,720 annotations at threshold 0.75; ~23k is OPP-115's count of practice
+  annotations. **Corrected with Parsa's OK** (wording only, no decision changed) in §0.2 #7 and in decision record
+  001's tier table.
+
+**Label sets (4.1, 4.2)**: `distil.stage: select` → `packs/<genre>/label_sets.json` (tracked; ids + text sha1; refuses
+to overwrite; refuses the test split). Run `label_sets_s0_20261015-225337-783546` (the first, `label_sets_s0`, gave
+privacy only 285 human sections and was redone with a per-document rule).
+- Papers: human set 300 dev sections, one per paper, excluding the 500 papers sampled for schema induction; teacher set
+  2,000 train sections, one per paper; both stratified by relative position (5 bins) × length (< 600, 600–2,000,
+  ≥ 2,000 chars), in proportion to the pool.
+- Privacy: human set 300 sections, 10 from each of 31 whole OPP-115 policies drawn at random; teacher set 2,000
+  sections of the other 84 policies. No policy is in both, so heads trained on the teacher set are evaluated on
+  unseen policies.
+
+**Task 4.1, teacher labels: method and prompts** (`packs/presence_labels.teacher_labels`, `distil.stage:
+teacher_labels`; prompts `label_presence` v1 `36470c3f3686`, `label_presence_check` v1 `e3dd44279652`). With the 3.5
+lesson (about 1 statement in 30 missed with 50+ definitions in one prompt) built in:
+1. First pass, whole schema in the prompt: the section's statements, each mapped to a type or "none", with a
+   verbatim span (the 3.5 coverage prompt plus spans).
+2. Second look, one call per section: the types most similar (pack embedder, type cards = definition + examples) to
+   each first-pass statement ("none" ones first, 2 each) and to the section itself (4), not found by the first pass,
+   at most 8; the teacher says which the section states, with spans.
+Every label records `found_by` (first | second_look) and whether its span is verbatim; the teacher labels every type
+(privacy: the 35 OPP-mapped types too, a free check of the teacher against human annotations). `agreement()`
+computes per-type P/R/F1 against the human set for the final labels and for the first pass alone, which measures
+the second look's gain and cost in 4.2.
+- **Local 7B check** (run `label_7b_iter1_s0`, 6 teacher-set sections per genre, embedder on CPU): privacy ran
+  (6/6, 12 labels, 6 from the second look). Read against OPP-115: the format works end to end; of the 6 second-look
+  additions about 4 are right (`data_collection_methods`, `warns_disabling_cookies_limits_site`,
+  `third_party_sites_and_their_policies`, `states_minimum_age` defensible) and 2 wrong (`states_last_updated_date` for
+  "terms are subject to change", `does_not_sell_or_share` in a children's section); the 7B's first pass also filed
+  "subject to change" under `states_policy_scope_and_commitment`. **Negative:** the papers half failed with a Metal
+  out-of-memory error (longer prompts while the MPS re-embedding job held memory); not retried. Prompts stay at v1 for
+  the 72B check: the 7B is too weak to judge the content (3.5).
+- **72B trial** (Parsa's go-ahead: 5-section trial, then the full run unless the trial shows a problem). Run
+  `label_72b_try_s0`: 5 sections of each set per genre (20), 42 calls, 67,890 + 12,709 tokens ≈ $0.03; 0 failures;
+  every span verbatim; 3.0–3.6 labels per privacy section, 5.4–5.8 per paper section. **Second look adds 22–40% of the
+  labels** (far above the ~1 in 30 first-pass misses of 3.5). Read all 25 additions: privacy about 5 of 10 right (5 of
+  7 right against OPP-115's own labels; all 3 on teacher types wrong: `deletes_children_data_if_found` for "does not
+  knowingly collect", `tracking_data_not_linked_to_identity` for repeat-visit cookies, `provides_third_party_links`
+  with no link); papers about 10 of 15 right. Most wrong additions reuse a passage the first pass already gave a
+  better-fitting type. **Finding: the second look recovers real misses at roughly 60% precision.** Measured cost per
+  section ≈ $0.0015 (3,395 input + 635 output tokens), so the full run is ≈ $6.8.
+- **Calibration (Parsa's choice, ≈ $0.15):** 100 seeded random privacy teacher-set sections, both check versions,
+  scored against OPP-115 on the 35 mapped types (new `distil.stage: score`, reusable for 4.2; option
+  `distil.teacher_labels.sample`). Runs `label_calib_v1_s0`, `label_calib_v2_s0` (first pass from the cache),
+  `score_calib_v1_s0`, `score_calib_v2_s0`; tables `reports/tables/teacher_vs_opp115_calib_v{1,2}_privacy.csv`.
+
+  | vs OPP-115 (100 sections) | micro P | micro R | micro F1 | macro F1 (17 types ≥ 5 pos.) | labels from 2nd look |
+  |---|---|---|---|---|---|
+  | first pass only | 0.591 | 0.473 | 0.525 | 0.470 | – |
+  | + second look v1 | 0.468 | 0.581 | 0.518 | 0.514 | 118 of 331 |
+  | + second look v2 | 0.565 | 0.538 | **0.551** | **0.525** | 43 of 256 |
+
+  `label_presence_check` v2 (`b5617b165eb1`; v1 kept in `prompts/history/`) shows the types already found and counts a
+  candidate only when the section states it explicitly. Reading 22 random v2 additions: about 16–17 right (~75%).
+  **v2 adopted for the full run.** Run `label_72b_s0` (concurrency 8, ~43 calls/min) was restarted at concurrency 24
+  (~55–75 calls/min, no errors) as `label_72b_s0_20261015-233752-628701`, then **stopped at Parsa's request** after
+  ≈ 1,000 calls; every answer is in the response cache, so the rerun replays them free. Remaining ≈ 7,500 calls
+  (≈ 2 h, ≈ $6).
+- **Finding (important, negative): the 72B agrees poorly with OPP-115-derived labels overall (micro F1 ≈ 0.53–0.55)**,
+  but the disagreement sits in loose mappings: crisp ones agree (security measures 8/10, business transfer 3/3,
+  does-not-sell 4/5, cookies, encryption), loose ones do not (`states_policy_scope_and_commitment` 3/18 from OPP's
+  "Introductory/Generic"; `data_use_for_services` from "Basic service/feature"; `data_collection_contests_surveys`
+  1/10, the identical-mapping pair). Reading the disagreements, the teacher was mostly right and the OPP→schema
+  mapping too narrow or too broad (log files with IP addresses are automatic usage collection; "companies that
+  perform marketing services on our behalf" are service providers; a mailing address is not scope and commitment).
+  So OPP-115 labels mapped through `label_source` are noisier against the schema's definitions than the plan assumed
+  ("derive from OPP-115 where the mapping is direct").
+
+**Task 4.2 page**: private artifact https://claude.ai/artifact/Sy6Z8atpJ45WzJWHNkcKJi (source
+`reports/human_labels/page/`, data from `analysis/label_page.py`, current data hash `946582249e6e`, page version 2).
+One section per screen; **all types in both genres** (papers 50, privacy 58). Version 1 asked privacy for the 23
+teacher types only (plan 4.2: "derive from OPP-115 where the mapping is direct"); after the calibration finding above,
+**Parsa chose to hand-label all 58 privacy types**, so the human set measures the OPP-115-derived labels as well as
+the teacher, type by type (no answers had been saved under version 1). Blind to the teacher. A "closest by wording" shortlist (8 types by
+embedding) is shown as a reading aid. Guards from the 3.4 lessons: no save without "I went through every type";
+nothing marked requires "states none of these types"; "unsure" kept apart. Answers in collections
+`labels_papers` / `labels_privacy` (one document per section). Database checked with one probe write, read, delete.
+
+**Tests:** 271 pass (new: `test_relink_claims.py`, `test_presence_labels.py`, cases in `test_data_segment.py`,
+`test_data_loaders.py`, `test_embed.py`; `test_run.py`'s stub example moved from `distil` to `train_mam`). Nothing
+committed.
+
 ## 2026-10-15 — Phase 3 closed: human pass, coverage check, both schemas frozen (GATE 3.6 passed)
 
 **Task 3.4 (human pass), Parsa.** Done on a guided review page (private artifact

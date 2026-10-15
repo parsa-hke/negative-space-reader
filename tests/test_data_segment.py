@@ -10,7 +10,7 @@ listings, repeated section names and versions past the corpus cutoff.
 import pytest
 
 from data.loaders.unarxive import paper_to_document
-from data.segment import clean_inline, normalise_sections, segment_markdown, split_sentences
+from data.segment import RawSection, clean_inline, normalise_sections, segment_markdown, split_oversized, split_sentences
 
 
 def headings(text, **kw):
@@ -181,6 +181,20 @@ def test_oversized_section_is_split_without_losing_text():
     assert len(secs) > 1 and all(len(s.text) <= 2000 for s in secs) and all(s.heading == "Sharing" for s in secs)
     assert sum(s.text.count("Sentence number") for s in secs) == 300
 
+
+
+def test_split_oversized_only_splits_long_sections():
+    """The split step on its own (used by every loader): short sections, including tiny ones, are left as they are;
+    a long one is split at paragraph breaks, and a paragraph longer than the limit at sentence boundaries."""
+    short = RawSection(heading="Tiny", paragraphs=["Short."])
+    long = RawSection(heading="Results", paragraphs=[f"Paragraph {i} reports one more result in detail." for i in range(60)]
+                      + [" ".join(f"Sentence {j} of a single giant paragraph." for j in range(80))])
+    out = split_oversized([short, long], max_chars=500)
+    assert out[0] == short
+    rest = out[1:]
+    assert len(rest) > 2 and all(len(s.text) <= 500 for s in rest) and all(s.heading == "Results" for s in rest)
+    assert " ".join(" ".join(s.paragraphs) for s in rest).split() == " ".join(long.paragraphs).split()
+    assert split_oversized([long], max_chars=None) == [long]
 
 def test_clean_inline():
     assert clean_inline("**_Contact Us_**") == "Contact Us"

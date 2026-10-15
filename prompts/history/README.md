@@ -28,3 +28,16 @@ v2 is confirmed or revised on the 72B teacher in the lab session (plan Appendix 
 | Version | Hash | Runs | Verdict |
 |---|---|---|---|
 | v1 | `d637c0f37fd7` | 7B 10+10 sections (`coverage_7b_iter1_s0`: 40% / 50%, mostly missed mappings), 72B 10+10 (`coverage_72b_iter1_s0`: 10% / 0%), 72B 100+100 (`coverage_72b_s0`: privacy 18%, papers 3%), 72B fresh 100+100 after widening 11 definitions (`coverage_72b_v2_s1`: privacy 17%, papers 1%) | the 7B is too weak for the classification; with the 72B, privacy's remaining misses are a long tail in which explanations of technologies/laws and promotional filler made about half |
+
+## label_presence and label_presence_check (task 4.1)
+
+Two passes per section (`packs/presence_labels.teacher_labels`). Calibration: 100 random privacy teacher-set sections
+(seeded), scored against OPP-115's labels on the 35 mapped types (`distil.stage: score`), and by reading the
+second-look additions. OPP-115 is a noisy yardstick for this schema (its attribute values often do not match the type
+definitions; in the disagreements read, the teacher was mostly right), so the reading decided as much as the numbers.
+
+| Prompt | Version | Hash | Runs | Verdict |
+|---|---|---|---|---|
+| label_presence | v1 | `36470c3f3686` | `label_7b_iter1_s0` (7B, privacy 6), `label_72b_try_s0` (72B, 20), calibration | **current** |
+| label_presence_check | v1 | `e3dd44279652` | `label_72b_try_s0`, `label_calib_v1_s0` | **superseded**: added 22–40% of labels (118 of 331 in calibration) at about 60% precision, mostly by reusing a passage already labelled with a better-fitting type; vs OPP-115 micro P/R/F1 0.468/0.581/0.518 (first pass alone 0.591/0.473/0.525) |
+| label_presence_check | v2 | `b5617b165eb1` | `label_calib_v2_s0`, `label_72b_s0` | **current**: shows the types already found, counts only explicit statements; adds 43 of 256 labels, about 75% right by reading 22; vs OPP-115 0.565/0.538/**0.551**, macro F1 0.525 (v1 0.514, first pass 0.470) |

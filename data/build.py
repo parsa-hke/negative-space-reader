@@ -274,8 +274,9 @@ def build_papers(cfg: dict[str, Any], genre: str = "papers") -> dict[str, Any]:
     for split, n in split_sizes(cfg).items():
         pool = [m for m in candidates if split_of_entity[m["paper_id"]] == split]
         chosen += stratified_sample(pool, n, lambda m: (m["date"][:4], m["category"]), rng)
+    max_chars = cfg["segment"]["max_section_chars"]
     docs = [d for d in unarxive.iter_documents(extract_path, genre=genre, ids={m["paper_id"] for m in chosen},
-                                               cutoff=src["cutoff"]) if d.sections]
+                                               cutoff=src["cutoff"], max_section_chars=max_chars) if d.sections]
     split_of = {d.document.id: split_of_entity[d.document.entity_id] for d in docs}
     docs, dedup_report = dedup_sample(docs, split_of, cfg["dedup"])
     dedup_report.update(extract_report)
@@ -308,7 +309,8 @@ def fetch_paper_revisions(cfg: dict[str, Any], genre: str, candidates: list[dict
         try:
             docs = [eprint_to_document(fetch_eprint(c["entity_id"], v, _p(cfg, ecfg["cache"]),
                                                     min_interval=ecfg["min_interval_s"]),
-                                       arxiv_id=c["entity_id"], version=v, date=d, category=c["category"], genre=genre)
+                                       arxiv_id=c["entity_id"], version=v, date=d, category=c["category"], genre=genre,
+                                       max_section_chars=cfg["segment"]["max_section_chars"])
                     for v, d in ((v_old, d_old), (v_new, d_new))]
         except Exception as e:  # missing source (PDF-only submission), network error: logged, skipped
             print(f"[revisions] {c['entity_id']}: {type(e).__name__}: {e}")

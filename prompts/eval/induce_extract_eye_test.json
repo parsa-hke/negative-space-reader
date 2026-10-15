@@ -198,7 +198,7 @@
  {
   "genre": "papers",
   "doc_id": "unarxive:2204.13650",
-  "section_idx": 57,
+  "section_idx": 65,
   "text_sha1": "a0a3c9421f382e104339d916f8a1b732a4af0b2e",
   "position": "last"
  },
@@ -219,7 +219,7 @@
  {
   "genre": "papers",
   "doc_id": "unarxive:2206.02468",
-  "section_idx": 19,
+  "section_idx": 21,
   "text_sha1": "695bb451510286987696a077e2187e6dd33c2c55",
   "position": "last"
  },
@@ -240,7 +240,7 @@
  {
   "genre": "papers",
   "doc_id": "unarxive:2206.07681",
-  "section_idx": 16,
+  "section_idx": 23,
   "text_sha1": "298f9e993d940abcff7cda46ca3692dff36ef810",
   "position": "last"
  },

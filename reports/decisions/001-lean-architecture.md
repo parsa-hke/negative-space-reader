@@ -25,7 +25,7 @@ Adopt a **two-tier architecture**. Every swappable component is a configuration 
 | Corpus scope | 20–30k documents per genre, stratified by year and category, one snapshot per entity per year; full version chains kept | same (scope is not tiered) |
 | Embedder | Qwen3-Embedding-0.6B (Apache-2.0, CPU-servable) | Qwen3-Embedding-8B |
 | Late-interaction matcher | answerai-colbert-small-v1 (Apache-2.0) | Jina ColBERT v2 (CC-BY-NC) |
-| Presence classifier | Per-type logistic heads on frozen section embeddings, trained on existing human labels (OPP-115 for privacy, ~23k segments) plus ~2k teacher-labelled sections for papers; optional SetFit-style contrastive fine-tune | ModernBERT-large fine-tuned on 5k teacher labels per genre |
+| Presence classifier | Per-type logistic heads on frozen section embeddings, trained on existing human labels (OPP-115 for privacy: 3,792 segments of 115 policies) plus ~2k teacher-labelled sections for papers; optional SetFit-style contrastive fine-tune | ModernBERT-large fine-tuned on 5k teacher labels per genre |
 | Explanations | Template filled from evidence (prevalence, quoted peer sentences, attributed present types); no LLM on the hot path | Teacher-written rationale for the top 5, opt-in |
 | Real-omission benchmark | **OmitBench-revision:** natural omissions from version chains, validated on 50 documents per genre by two annotators | Blind annotation of 150 documents per genre by two annotators |
 | Teacher route | Same model (Qwen2.5-72B-Instruct) reached three ways: a 7B local proxy for prompt iteration; the 72B on the university server for the one recorded extraction pass; the 72B via OpenRouter (provider pinned, responses cached) when no GPU is available | same |

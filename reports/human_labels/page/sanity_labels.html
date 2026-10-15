@@ -1,0 +1,395 @@
+<title>Sanity Set Labelling</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a labelling bench. Sticky bar (genre, position, save state); a strip of 300 cells as the overview;
+   below, the section being read on the left and the checklist of statement types on the right, with the
+   save controls pinned to the bottom of the checklist. One column on phones. */
+:root {
+  --bg: #f2f4f2;
+  --surface: #ffffff;
+  --surface-2: #e6ebe7;
+  --ink: #18221d;
+  --ink-2: #4f5d55;
+  --line: #d0d9d3;
+  --accent: #2c6b55;
+  --accent-ink: #ffffff;
+  --accent-soft: #dbece4;
+  --unsure: #8a5a00;
+  --unsure-soft: #f6ebd1;
+  --bad: #a3322a;
+  --bad-soft: #f6dedb;
+  --f-ui: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --f-read: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  --r: 8px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #101512; --surface: #171e1a; --surface-2: #1f2924; --ink: #e2ebe5; --ink-2: #a2b2a8; --line: #2d3a33;
+    --accent: #6cc3a0; --accent-ink: #0c1a14; --accent-soft: #1b3529; --unsure: #e2b55a; --unsure-soft: #3a2f17;
+    --bad: #ec8d84; --bad-soft: #3d2220; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #101512; --surface: #171e1a; --surface-2: #1f2924; --ink: #e2ebe5; --ink-2: #a2b2a8; --line: #2d3a33;
+  --accent: #6cc3a0; --accent-ink: #0c1a14; --accent-soft: #1b3529; --unsure: #e2b55a; --unsure-soft: #3a2f17;
+  --bad: #ec8d84; --bad-soft: #3d2220; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 15px/1.5 var(--f-ui); margin: 0; }
+button, input, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.wrap { padding-inline: 16px; padding-block: 0 32px; max-width: 1400px; margin: 0 auto; }
+
+/* top bar */
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg);
+  border-bottom: 1px solid var(--line); padding-block: 10px; display: flex; flex-wrap: wrap; gap: 10px 16px;
+  align-items: center; }
+.tabs { display: flex; gap: 6px; }
+.tab { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 5px 14px; font-weight: 500; }
+.tab[aria-selected="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.tab small { font-family: var(--f-mono); font-size: 12px; opacity: .8; margin-left: 6px; font-variant-numeric: tabular-nums; }
+.nav { display: flex; gap: 6px; align-items: center; }
+.nav .pos { font-family: var(--f-mono); font-size: 13px; font-variant-numeric: tabular-nums; min-width: 84px; text-align: center; }
+.btn { border: 1px solid var(--line); background: var(--surface); border-radius: var(--r); padding: 5px 11px; }
+.btn:hover { border-color: var(--ink-2); }
+.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.save-state { font-size: 13px; color: var(--ink-2); margin-left: auto; }
+.save-state.bad { color: var(--bad); }
+
+/* overview strip */
+.overview { margin-block: 12px; }
+.overview summary { cursor: pointer; color: var(--ink-2); font-size: 13px; }
+.cells { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 8px; }
+.cell { width: 13px; height: 13px; border-radius: 3px; background: var(--surface-2); border: 1px solid var(--line); padding: 0; }
+.cell.done { background: var(--accent); border-color: var(--accent); }
+.cell.flag { background: var(--unsure); border-color: var(--unsure); }
+.cell.here { outline: 2px solid var(--ink); outline-offset: 1px; }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--ink-2); margin-top: 6px; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+
+.intro { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 16px;
+  margin-block: 12px; font-size: 14px; }
+.intro p { margin: 0 0 6px; max-width: 80ch; }
+.intro ul { margin: 6px 0 0; padding-left: 20px; max-width: 80ch; }
+.banner { background: var(--bad-soft); color: var(--bad); border-radius: var(--r); padding: 8px 12px; margin-block: 10px; font-size: 14px; }
+
+/* main */
+.main { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 16px; align-items: start; }
+@media (max-width: 900px) { .main { grid-template-columns: minmax(0, 1fr); } }
+.reader { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 18px 20px; min-width: 0; }
+@media (min-width: 901px) { .reader { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 64px);
+  max-height: calc(100vh - 84px); overflow: auto; } }
+.eyebrow { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); }
+.doc-title { font-weight: 600; margin: 4px 0 2px; text-wrap: balance; }
+.meta { font-family: var(--f-mono); font-size: 12px; color: var(--ink-2); overflow-wrap: anywhere; }
+.heading { font-family: var(--f-read); font-weight: 600; font-size: 20px; margin: 14px 0 8px; text-wrap: balance; }
+.text { font-family: var(--f-read); font-size: 17px; line-height: 1.6; max-width: 68ch; overflow-wrap: anywhere; }
+.text p { margin: 0 0 .8em; }
+
+.judge { min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+.tools { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.tools input { flex: 1 1 200px; min-width: 0; border: 1px solid var(--line); background: var(--surface); border-radius: var(--r); padding: 6px 10px; }
+.group { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); }
+.group > h3 { margin: 0; font-size: 13px; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2);
+  padding: 9px 14px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; gap: 8px; }
+.group > h3 span { text-transform: none; letter-spacing: 0; font-weight: 400; }
+.group.closest > h3 { background: var(--surface-2); }
+.row { display: grid; grid-template-columns: auto auto minmax(0, 1fr) auto; gap: 4px 10px; align-items: start;
+  padding: 8px 14px; border-top: 1px solid var(--line); }
+.group > h3 + .row { border-top: 0; }
+.row.present { background: var(--accent-soft); }
+.row.unsure { background: var(--unsure-soft); }
+.mark { border: 1px solid var(--line); background: var(--surface); border-radius: 6px; padding: 2px 9px; font-size: 13px; white-space: nowrap; }
+.mark.on.yes { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.mark.on.maybe { background: var(--unsure); color: var(--surface); border-color: var(--unsure); }
+.tname { font-weight: 600; font-size: 14px; }
+.tdef { font-size: 13.5px; color: var(--ink-2); }
+.tid { font-family: var(--f-mono); font-size: 11.5px; color: var(--ink-2); overflow-wrap: anywhere; }
+.more { border: 0; background: none; color: var(--accent); font-size: 13px; padding: 2px 4px; }
+.detail { grid-column: 3 / 5; font-size: 13.5px; background: var(--surface-2); border-radius: 6px; padding: 8px 10px; }
+.detail b { font-weight: 600; }
+.detail ul { margin: 2px 0 6px; padding-left: 18px; }
+
+.dock { position: sticky; bottom: env(safe-area-inset-bottom, 0px); background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--r); padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 -6px 18px rgba(0,0,0,.06); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; font-size: 13px; }
+.chip { border-radius: 999px; padding: 2px 10px; background: var(--accent-soft); }
+.chip.maybe { background: var(--unsure-soft); }
+.chips .empty { color: var(--ink-2); }
+.check { display: flex; gap: 8px; align-items: flex-start; font-size: 14px; }
+.check input { margin-top: 3px; }
+.dock textarea { width: 100%; min-height: 36px; border: 1px solid var(--line); background: var(--bg); border-radius: 6px; padding: 6px 8px; font-size: 13.5px; resize: vertical; }
+.why { font-size: 13px; color: var(--bad); }
+.dock-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.saved-note { font-size: 13px; color: var(--ink-2); }
+@media (prefers-reduced-motion: no-preference) { .row { transition: background .12s; } }
+</style>
+
+<div class="wrap">
+  <div class="bar" role="toolbar" aria-label="Labelling controls">
+    <div class="tabs" role="tablist" id="tabs"></div>
+    <div class="nav">
+      <button class="btn" id="prev" aria-label="Previous section">← Prev</button>
+      <span class="pos" id="pos">–</span>
+      <button class="btn" id="next" aria-label="Next section">Next →</button>
+      <button class="btn" id="todo">Next to do</button>
+    </div>
+    <span class="save-state" id="saveState">Connecting…</span>
+  </div>
+
+  <div id="banner" class="banner" hidden></div>
+
+  <details class="intro" id="intro">
+    <summary><b>How to label</b> (open once, then close)</summary>
+    <p>For each section, mark every type of statement the section <b>makes</b>. This is the hand-labelled set that
+    measures the teacher model (plan task 4.2): the teacher's answers are not shown here, so your labels stay independent.</p>
+    <ul>
+      <li><b>Stated</b> means the section contains an instance of the type, a narrower case of it, or a negative form
+        of it ("does not sell data" counts for the selling type). Wording can differ from the examples.</li>
+      <li>Only mentioning the topic is not stating it. A section about cookies that never says what the site does with them does not state "uses cookies".</li>
+      <li>In papers, what the section says about <i>other</i> works counts only as what this paper does with them (for example "reviews prior work", "compares with other works").</li>
+      <li>Use <b>Unsure</b> when you cannot decide; it is counted apart, not as a yes.</li>
+      <li>The grey <b>Closest by wording</b> box is a rough reading aid from the embedder, not an answer. Go through every family below it.</li>
+      <li id="privacyNote" hidden>Privacy: you judge all 58 types. These sections come from OPP-115, whose annotators labelled them in their own scheme; your labels also show how well that scheme maps onto these types.</li>
+      <li>Save needs the box "I went through every type" ticked. If nothing applies, tick "This section states none of these types".</li>
+      <li>Keys: ← and → move between sections; Ctrl+Enter saves and moves on (outside the note box).</li>
+    </ul>
+  </details>
+
+  <details class="overview" open>
+    <summary id="overviewSummary">Overview</summary>
+    <div class="cells" id="cells"></div>
+    <div class="legend"><span><i style="background:var(--accent)"></i>saved</span><span><i style="background:var(--unsure)"></i>saved with an unsure mark</span><span><i style="background:var(--surface-2);border:1px solid var(--line)"></i>to do</span></div>
+  </details>
+
+  <div class="main" id="main">
+    <article class="reader" id="reader" aria-live="polite"><p class="meta">Loading the sections…</p></article>
+    <section class="judge" aria-label="Statement types">
+      <div class="tools">
+        <input id="filter" type="search" placeholder="Filter types by word" aria-label="Filter types by word">
+        <button class="btn" id="expand">Show all examples</button>
+      </div>
+      <div id="groups"></div>
+      <div class="dock" id="dock">
+        <div class="chips" id="chips"></div>
+        <label class="check"><input type="checkbox" id="noneBox"> <span>This section states none of these types</span></label>
+        <label class="check"><input type="checkbox" id="allBox"> <span id="allLabel">I went through every type</span></label>
+        <textarea id="note" placeholder="Note (optional): anything odd about this section or a type" aria-label="Note"></textarea>
+        <div class="why" id="why" aria-live="polite"></div>
+        <div class="dock-actions">
+          <button class="btn primary" id="save">Save and next</button>
+          <span class="saved-note" id="savedNote"></span>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+const S = { data: null, genre: "papers", pos: { papers: 0, privacy: 0 }, answers: { papers: {}, privacy: {} },
+  draft: null, db: null, canWrite: true, expanded: false, filter: "", open: new Set() };
+const $ = (id) => document.getElementById(id);
+const docId = (key) => key.replace(/[^A-Za-z0-9_-]/g, "_");
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+function G() { return S.data.genres[S.genre]; }
+function current() { return G().sections[S.pos[S.genre]]; }
+function saved(sec) { return S.answers[S.genre][sec.key]; }
+function saveState(text, bad) { const el = $("saveState"); el.textContent = text; el.classList.toggle("bad", !!bad); }
+
+function freshDraft(sec) {
+  const a = saved(sec);
+  return a ? { present: new Set(a.present || []), unsure: new Set(a.unsure || []), none: !!a.none,
+               all: !!a.checked_all, note: a.note || "", dirty: false }
+           : { present: new Set(), unsure: new Set(), none: false, all: false, note: "", dirty: false };
+}
+
+function renderTabs() {
+  $("tabs").innerHTML = Object.values(S.data.genres).map((g) => {
+    const done = Object.keys(S.answers[g.genre]).length;
+    return `<button class="tab" role="tab" aria-selected="${g.genre === S.genre}" data-g="${g.genre}">${esc(g.label)}<small>${done}/${g.sections.length}</small></button>`;
+  }).join("");
+  $("tabs").querySelectorAll(".tab").forEach((b) => b.onclick = () => go(b.dataset.g, S.pos[b.dataset.g]));
+}
+
+function renderCells() {
+  const g = G();
+  $("cells").innerHTML = g.sections.map((s, i) => {
+    const a = S.answers[S.genre][s.key];
+    const cls = a ? ((a.unsure || []).length ? "flag" : "done") : "";
+    return `<button class="cell ${cls} ${i === S.pos[S.genre] ? "here" : ""}" data-i="${i}" aria-label="Section ${i + 1}${a ? ", saved" : ""}" title="${i + 1}: ${esc(s.heading || "(no heading)")}"></button>`;
+  }).join("");
+  $("cells").querySelectorAll(".cell").forEach((c) => c.onclick = () => go(S.genre, +c.dataset.i));
+  const done = Object.keys(S.answers[S.genre]).length;
+  $("overviewSummary").textContent = `Overview: ${done} of ${g.sections.length} saved`;
+}
+
+function paragraphs(text) { return text.split("\n").filter((p) => p.trim()).map((p) => `<p>${esc(p)}</p>`).join(""); }
+
+function renderReader() {
+  const s = current(), g = G();
+  $("pos").textContent = `${S.pos[S.genre] + 1} / ${g.sections.length}`;
+  $("reader").innerHTML = `
+    <div class="eyebrow">${esc(g.label)} · section ${s.idx + 1} of ${s.of}</div>
+    <div class="doc-title">${esc(s.title || "(untitled document)")}</div>
+    <div class="meta">${esc(s.doc_id)}${s.previous_heading ? ` · follows “${esc(s.previous_heading)}”` : ""}</div>
+    <div class="heading">${esc(s.heading || "(no heading)")}</div>
+    <div class="text">${paragraphs(s.text)}</div>`;
+  $("reader").scrollTop = 0;
+}
+
+function typeRow(t, d) {
+  const yes = d.present.has(t.id), maybe = d.unsure.has(t.id);
+  const open = S.expanded || S.open.has(t.id);
+  return `<div class="row ${yes ? "present" : maybe ? "unsure" : ""}" data-t="${t.id}">
+    <button class="mark yes ${yes ? "on" : ""}" data-act="yes" aria-pressed="${yes}" aria-label="${esc(t.name)}: stated">Stated</button>
+    <button class="mark maybe ${maybe ? "on" : ""}" data-act="maybe" aria-pressed="${maybe}" aria-label="${esc(t.name)}: unsure">Unsure</button>
+    <div><div class="tname">${esc(t.name)}</div><div class="tdef">${esc(t.definition)}</div></div>
+    <button class="more" data-act="more" aria-expanded="${open}">${open ? "Less" : "Examples"}</button>
+    ${open ? `<div class="detail"><b>Counts:</b><ul>${(t.examples || []).map((e) => `<li>${esc(e)}</li>`).join("")}</ul>
+      ${t.near_miss ? `<b>Does not count (near miss):</b> ${esc(t.near_miss)}<br>` : ""}
+      ${t.where ? `<b>Usually:</b> ${esc(t.where)}<br>` : ""}<span class="tid">${esc(t.id)}</span></div>` : ""}
+  </div>`;
+}
+
+function renderGroups() {
+  const g = G(), s = current(), d = S.draft, f = S.filter.trim().toLowerCase();
+  const match = (t) => !f || (t.name + " " + t.definition + " " + t.id).toLowerCase().includes(f);
+  const closest = s.closest.map((id) => g.types[id]).filter(match);
+  let html = closest.length ? `<div class="group closest"><h3>Closest by wording <span>a rough aid, also listed below</span></h3>${closest.map((t) => typeRow(t, d)).join("")}</div>` : "";
+  for (const fam of g.families) {
+    const ts = fam.types.map((id) => g.types[id]).filter(match);
+    if (!ts.length) continue;
+    const n = fam.types.filter((id) => d.present.has(id)).length;
+    html += `<div class="group"><h3>${esc(fam.name)} <span>${n ? n + " marked" : ""}</span></h3>${ts.map((t) => typeRow(t, d)).join("")}</div>`;
+  }
+  $("groups").innerHTML = html || `<p class="meta">No type matches “${esc(S.filter)}”.</p>`;
+  $("groups").querySelectorAll(".row").forEach((row) => row.querySelectorAll("button").forEach((b) => b.onclick = () => act(row.dataset.t, b.dataset.act)));
+}
+
+function renderDock() {
+  const d = S.draft, g = G(), s = current();
+  const yes = [...d.present].map((id) => `<span class="chip">${esc(g.types[id].name)}</span>`);
+  const maybe = [...d.unsure].map((id) => `<span class="chip maybe">? ${esc(g.types[id].name)}</span>`);
+  $("chips").innerHTML = yes.length + maybe.length ? yes.concat(maybe).join("") : `<span class="empty">Nothing marked yet.</span>`;
+  $("noneBox").checked = d.none;
+  $("noneBox").disabled = d.present.size + d.unsure.size > 0;
+  $("allBox").checked = d.all;
+  $("allLabel").textContent = `I went through every type (${g.judged_types})`;
+  $("note").value = d.note;
+  const why = problem();
+  $("why").textContent = why || "";
+  $("save").disabled = !!why || !S.db || !S.canWrite;
+  const a = saved(s);
+  $("savedNote").textContent = a ? (d.dirty ? "Saved earlier; you have unsaved changes." : `Saved ${new Date(a.saved_at).toLocaleString()}.`) : (d.dirty ? "Not saved yet." : "");
+}
+
+function problem() {
+  const d = S.draft;
+  if (!d.all) return "Tick “I went through every type” to save.";
+  if (!d.present.size && !d.unsure.size && !d.none) return "Nothing is marked: mark the types it states, or tick “states none of these types”.";
+  if (d.none && (d.present.size || d.unsure.size)) return "“States none” is ticked but some types are marked.";
+  return "";
+}
+
+function act(id, what) {
+  const d = S.draft;
+  if (what === "more") { S.open.has(id) ? S.open.delete(id) : S.open.add(id); renderGroups(); return; }
+  if (what === "yes") { d.present.has(id) ? d.present.delete(id) : (d.present.add(id), d.unsure.delete(id)); }
+  if (what === "maybe") { d.unsure.has(id) ? d.unsure.delete(id) : (d.unsure.add(id), d.present.delete(id)); }
+  if (d.present.size || d.unsure.size) d.none = false;
+  d.dirty = true;
+  renderGroups(); renderDock();
+}
+
+function go(genre, i) {
+  if (S.draft && S.draft.dirty && !S.leaveOk) {
+    S.leaveOk = true;
+    $("why").textContent = "You have unsaved changes on this section. Press the same button again to leave without saving.";
+    setTimeout(() => { S.leaveOk = false; }, 4000);
+    return;
+  }
+  S.leaveOk = false;
+  S.genre = genre;
+  const n = G().sections.length;
+  S.pos[genre] = Math.max(0, Math.min(n - 1, i));
+  try { localStorage.setItem("sanity-pos", JSON.stringify({ genre: S.genre, pos: S.pos })); } catch (e) {}
+  S.draft = freshDraft(current()); S.open.clear();
+  $("privacyNote").hidden = G().set_source !== "annotated";
+  render();
+  window.scrollTo({ top: 0 });
+}
+
+function nextTodo() {
+  const g = G(), n = g.sections.length, start = S.pos[S.genre];
+  for (let k = 1; k <= n; k++) { const i = (start + k) % n; if (!S.answers[S.genre][g.sections[i].key]) return go(S.genre, i); }
+  $("why").textContent = "Every section of this genre is saved.";
+}
+
+async function save() {
+  if (problem() || !S.db) return;
+  const s = current(), d = S.draft, g = G();
+  const doc = { key: s.key, doc_id: s.doc_id, idx: s.idx, genre: S.genre, present: [...d.present].sort(),
+    unsure: [...d.unsure].sort(), none: d.none, checked_all: true, judged_types: g.judged_types, note: d.note.trim(),
+    schema_version: g.schema_version, data: S.data.data_sha1, saved_at: new Date().toISOString() };
+  saveState("Saving…");
+  try {
+    await S.db.collection("labels_" + S.genre).doc(docId(s.key)).set(doc);
+    S.answers[S.genre][s.key] = doc;
+    S.draft.dirty = false;
+    saveState("Saved");
+    nextTodo();
+  } catch (e) { saveState("Couldn't save: " + (e && e.message ? e.message : "try again"), true); renderDock(); }
+}
+
+function render() { renderTabs(); renderCells(); renderReader(); renderGroups(); renderDock(); }
+
+async function connect() {
+  let db = null;
+  try { db = await (window.claude && window.claude.use ? window.claude.use("db") : null); } catch (e) { db = null; }
+  if (!db) { saveState("Not connected", true); $("banner").hidden = false;
+    $("banner").textContent = "Answers can't be saved in this view. Open the page in Claude (signed in) to label."; renderDock(); return; }
+  S.db = db;
+  try { const user = await window.claude.use("user"); if (user) { const c = await user.can("data.write"); if (c === false) { S.canWrite = false; saveState("Read-only view", true); } } } catch (e) {}
+  for (const genre of ["papers", "privacy"]) {
+    db.collection("labels_" + genre).onSnapshot((snap) => {
+      const next = {};
+      snap.docs.forEach((doc) => { const v = doc.data(); if (v && v.key) next[v.key] = v; });
+      S.answers[genre] = next;
+      if (S.data) { if (S.draft && !S.draft.dirty && genre === S.genre) S.draft = freshDraft(current()); render(); }
+    }, () => saveState("Lost the connection to saved answers", true));
+  }
+  if (S.canWrite) saveState("Connected");
+}
+
+$("prev").onclick = () => go(S.genre, S.pos[S.genre] - 1);
+$("next").onclick = () => go(S.genre, S.pos[S.genre] + 1);
+$("todo").onclick = nextTodo;
+$("save").onclick = save;
+$("filter").oninput = (e) => { S.filter = e.target.value; renderGroups(); };
+$("expand").onclick = () => { S.expanded = !S.expanded; $("expand").textContent = S.expanded ? "Hide examples" : "Show all examples"; renderGroups(); };
+$("noneBox").onchange = (e) => { S.draft.none = e.target.checked; S.draft.dirty = true; renderDock(); };
+$("allBox").onchange = (e) => { S.draft.all = e.target.checked; S.draft.dirty = true; renderDock(); };
+$("note").oninput = (e) => { S.draft.note = e.target.value; S.draft.dirty = true; renderDock(); };
+document.addEventListener("keydown", (e) => {
+  if (!S.data) return;
+  const typing = /^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName) && document.activeElement.type !== "checkbox";
+  if (e.key === "Enter" && (e.ctrlKey || e.metaKey) && document.activeElement.id !== "note") { e.preventDefault(); save(); return; }
+  if (typing) return;
+  if (e.key === "ArrowRight") go(S.genre, S.pos[S.genre] + 1);
+  if (e.key === "ArrowLeft") go(S.genre, S.pos[S.genre] - 1);
+});
+
+fetch("label_data.json").then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); }).then((d) => {
+  S.data = d;
+  try { const p = JSON.parse(localStorage.getItem("sanity-pos") || "null"); if (p && p.pos) { S.pos = p.pos; S.genre = p.genre in d.genres ? p.genre : "papers"; } } catch (e) {}
+  try { if (!localStorage.getItem("sanity-intro-seen")) { $("intro").open = true; localStorage.setItem("sanity-intro-seen", "1"); } } catch (e) { $("intro").open = true; }
+  go(S.genre, S.pos[S.genre]);
+}).catch((e) => { $("reader").innerHTML = `<p class="meta">Couldn't load the sections (${esc(e.message)}).</p>`; });
+connect();
+</script>
