@@ -154,7 +154,7 @@ def status(tracker: Tracker, totals: dict[tuple[str, str], int]) -> dict[str, An
                      "per_min": per_min, "eta_min": round(remaining / per_min) if per_min and alive else None,
                      "last_answer_s": round(now - last) if last else None, "spark": buckets[::-1],
                      "groups": groups, "log": log_lines})
-    return {"now": now, "runs": runs, "profiles": profiles_status(now)}
+    return {"now": now, "runs": runs, "profiles": profiles_status(now), "upload": upload_status(now)}
 
 
 PROFILES = {"title": "Corpus profiles (4.7)", "log": "runs/profiles_v1.out", "process": "name profiles_v1",
@@ -200,6 +200,30 @@ def profiles_status(now: float) -> dict[str, Any]:
     return {"title": PROFILES["title"], "state": "running" if alive else (state or "stopped"), "alive": alive,
             "eta_min": eta, "last_part_s": round(now - last_part) if last_part else None, "genres": genres,
             "log": lines[-5:]}
+
+
+def upload_status(now: float) -> dict[str, Any] | None:
+    """The latest hub_sync push (runs/hub_push_*.out): files committed, the current chunk's bytes and rate, retries."""
+    logs = sorted((REPO / "runs").glob("hub_push_*.out"), key=lambda p: p.stat().st_mtime)
+    if not logs:
+        return None
+    log = logs[-1]
+    text = log.read_text(encoding="utf-8", errors="replace").replace("\r", "\n")
+    committed = re.findall(r"\[hub_sync\] committed (\d+)/(\d+) files", text)
+    plan = re.findall(r"\[hub_sync\] plan: (\d+) files, ([\d.]+) GB", text)
+    chunk = re.findall(r"Processing Files \((\d+) / (\d+)\)\s*:\s*(\d+)%\|[^|]*\|\s*([\d.]+\s*\w?B) /\s*([\d.]+\s*\w?B),\s*([\d.]+\s*\w?B/s)", text)
+    retries = re.findall(r"\[hub_sync\] commit of .*", text)
+    done = re.search(r"\{'uploaded': (\d+)", text)
+    failed = "Traceback" in text
+    alive = _running("experiments.hub_sync push")
+    c = committed[-1] if committed else None
+    k = chunk[-1] if chunk else None
+    return {"title": "Upload to the private dataset repo", "log": log.name,
+            "state": "running" if alive else ("finished" if done else ("failed" if failed else "stopped")),
+            "files_done": int(c[0]) if c else 0, "files_total": int(c[1]) if c else (int(plan[-1][0]) if plan else None),
+            "planned_gb": float(plan[-1][1]) if plan else None,
+            "chunk": {"files": f"{k[0]}/{k[1]}", "pct": int(k[2]), "done": k[3], "total": k[4], "rate": k[5]} if k else None,
+            "retries": retries[-3:], "last_write_s": round(now - log.stat().st_mtime)}
 
 
 PAGE = (Path(__file__).resolve().parent / "progress_page.html")

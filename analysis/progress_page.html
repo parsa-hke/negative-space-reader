@@ -52,6 +52,7 @@ pre { margin: 0; font: 12px/1.5 var(--f-mono); color: var(--ink-2); white-space:
 <body>
 <div class="wrap">
   <header><h1>Pipeline runs</h1><span class="updated" id="updated">connecting…</span></header>
+  <div id="upload"></div>
   <div id="profiles"></div>
   <div id="runs"></div>
   <p class="updated">Counts are exact: each answer in the response cache is matched to its section and pass. Sections
@@ -85,6 +86,23 @@ function card(r) {
     ${r.log.length ? `<pre>${esc(r.log.join("\n"))}</pre>` : ""}
   </section>`;
 }
+function uploadCard(u) {
+  if (!u) return "";
+  const k = u.chunk;
+  const stale = u.state === "running" && u.last_write_s > 180;
+  return `<section class="card">
+    <div class="top"><h2>${esc(u.title)}</h2><span class="pill ${esc(u.state)}">${esc(u.state)}</span>
+      <span class="stat"><b>${u.files_done}</b> / ${u.files_total ?? "?"} files committed${u.planned_gb ? ` · ${u.planned_gb} GB planned` : ""}</span>
+      <span class="stat ${stale ? "stale" : ""}">log updated <b>${ago(u.last_write_s)}</b></span></div>
+    <table><tbody>
+      <tr><td class="name">all files</td><td><div class="bar first"><span style="width:${pct(u.files_done, u.files_total || 1)}%"></span></div></td>
+          <td class="num">${u.files_done} / ${u.files_total ?? "?"}</td></tr>
+      ${k ? `<tr><td class="name">current chunk (${esc(k.files)} files)</td><td><div class="bar check"><span style="width:${k.pct}%"></span></div></td>
+          <td class="num">${esc(k.done)} / ${esc(k.total)} · ${esc(k.rate)}</td></tr>` : ""}
+    </tbody></table>
+    ${u.retries.length ? `<pre>${esc(u.retries.join("\n"))}</pre>` : ""}
+  </section>`;
+}
 function profilesCard(p) {
   if (!p) return "";
   const rows = p.genres.map((g) => `<tr><td class="name">${esc(g.genre)}</td>
@@ -107,6 +125,7 @@ async function tick() {
   try {
     const r = await fetch("/status.json", { cache: "no-store" });
     const d = await r.json();
+    $("upload").innerHTML = uploadCard(d.upload);
     $("profiles").innerHTML = profilesCard(d.profiles);
     $("runs").innerHTML = d.runs.map(card).join("");
     last = Date.now();

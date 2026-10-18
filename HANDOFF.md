@@ -21,12 +21,12 @@ Written 2026-10-18 at the end of Phase 4 (all eight tasks ticked; papers below i
   runs,packs`. Tests and smoke stay on the Mac. Colab secrets Parsa must add once: `HF_TOKEN` (read+write on the
   dataset repo), `GH_TOKEN` (fine-grained, read-only contents of the GitHub repo), and API keys when a run needs them.
 - **Stores:** GitHub `parsa-hke/negative-space-reader` (private; `main`); Hugging Face dataset
-  `parsa-hke/negative-space-reader-data` (private; bundles in `configs/base.yaml` `hub:`). UPLOAD STATUS.
+  `parsa-hke/negative-space-reader-data` (private; bundles in `configs/base.yaml` `hub:`). **Uploaded and verified 2026-10-19:** 514 files, 4.42 GB (data, embeddings, the teacher cache archive, packs incl. profiles, runs, the merged run log); every local bundle file matches the hub.
 - **APIs:** OpenRouter (teacher, 72B; `.env` `OPEN_ROUTER_KEY` → `OPENROUTER_API_KEY`); **Anthropic API** for the
   frontier comparison (7.3: Claude Opus 5.5, Message Batches; $100 credit; needs `ANTHROPIC_API_KEY` in `.env` and in
   Colab secrets, and an `anthropic` backend in `models/teacher.py` written with the official SDK). Spend so far:
   OpenRouter ≈ $0.80 (Phase 3) + ≈ $8 (Phase 4 labelling, trial, calibration) + the judge ≈ $1.05.
-- Tests: 328 pass. Commits are authored by Parsa only (no Claude co-author line).
+- Tests: 329 pass. Commits are authored by Parsa only (no Claude co-author line).
 
 ## First job of Phase 5: document-level presence (a Phase 4 finding)
 
@@ -61,6 +61,6 @@ Qdrant), 5.3 cohort (never the query's own entity), 5.4 level-1 expectation with
 ## Checks before starting
 
 ```bash
-.venv/bin/python -m pytest -q        # expected: 328 passed
+.venv/bin/python -m pytest -q        # expected: 329 passed
 ```
 `packs/privacy/schema.yaml` version 1 (58 types); `packs/papers/schema.yaml` version 2 (47 types).

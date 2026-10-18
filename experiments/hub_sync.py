@@ -124,6 +124,7 @@ def push(api: Any, repo_id: str, root: Path, bundles: dict[str, Any], names: lis
                     continue
             ops.append(CommitOperationAdd(path_in_repo=rel, path_or_fileobj=str(p)))
             sizes.append(p.stat().st_size)
+    print(f"[hub_sync] plan: {len(ops)} files, {sum(sizes) / 1e9:.2f} GB to upload", flush=True)
     commits, start = 0, 0
     while start < len(ops):  # bounded commits: a failed upload loses one chunk, not everything
         end, total = start, 0
