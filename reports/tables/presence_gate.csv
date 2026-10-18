@@ -1,0 +1,3 @@
+genre,presence_model,macro_f1,teacher_ceiling,share_of_ceiling,required_share,f1_gate,profiled_documents,indexable_documents,profiles_complete,sections_per_second,machine,device,reference
+privacy,classifier + prototypes,0.619,0.773,0.801,0.8,pass,22300,22300,True,133.6,arm64 Darwin,mps,silver (decision record 004)
+papers,classifier + prototypes,0.497,0.688,0.722,0.8,not met,14114,14114,True,65.2,arm64 Darwin,mps,silver (decision record 004)

@@ -2,6 +2,31 @@
 
 Date, what was done, what was found (negative findings included). Newest first.
 
+## 2026-10-18 (night) — Compute moves to Colab Pro; private GitHub and Hugging Face stores
+
+**Parsa's resources:** Colab Pro (A100), $100 of Anthropic API credit, Hugging Face Pro. **Plan edited first:** §0.6
+(Colab Pro A100 is the primary GPU from Phase 5 on, through one runner notebook; Hugging Face Pro for the private data
+store and a ZeroGPU Space as the demo host option) and 7.3 (frontier model: **Claude Opus 5.5** via the Anthropic API,
+Message Batches at 50% off, ≈ $10–20, official `anthropic` SDK; Parsa's choice). No §0.2 decision changed.
+
+- **GitHub:** private repo https://github.com/parsa-hke/negative-space-reader created with Parsa's OK; `main` pushed
+  (commits authored by Parsa, no Claude co-author). Commit `d624f13` holds Phase 4 up to the ablations.
+- **Hugging Face:** private dataset repo `parsa-hke/negative-space-reader-data` (Parsa's OK), the store shared by the
+  Mac and Colab. `experiments/hub_sync.py` (`push` / `pull --bundles ...`, tests `tests/test_hub_sync.py`): bundles in
+  `configs/base.yaml` (`hub.bundles`: data 2.4 GB, embeddings 1.7 GB, the teacher cache as one archive, packs, runs);
+  push uploads only files whose content differs (git blob sha1 / LFS sha256), in bounded commits, never deletes; the
+  run log is merged (`logs/runs_log.csv` on the hub), not overwritten. Credentials come from the logged-in HF client;
+  none is stored in the repo or printed.
+- **Colab:** `notebooks/colab_runner.ipynb` (secrets HF_TOKEN, GH_TOKEN read-only, optional API keys; clone, install
+  `requirements-colab.txt` keeping Colab's CUDA torch, pull bundles, run with `--overlay colab`, push outputs);
+  `configs/colab.yaml` (CUDA, fp16, larger batches). Tests and smoke stay on the Mac.
+- `.gitignore`: pack artefacts built by the presence stages (`packs/*/profiles/`, `packs/*/cascade*.json`) are synced
+  through the hub, never committed.
+- **First upload failed (negative):** after 16 files (2.06 GB) an S3 part upload hit `RequestTimeout` (the socket
+  idled during a slow upload, ~1.5 MB/s) and the whole push stopped. Fixed (test first): commits of at most 512 MB,
+  each retried up to 4 times with back-off; the cache archive is staged as a file so the hub's chunked upload is used
+  (an in-memory buffer fell back to plain HTTP). The rerun skips everything already on the hub.
+
 ## 2026-10-18 — Phase 4.3–4.6: linear heads, prototypes, cascade, ablations
 
 All presence numbers below are on the **evaluation half of the silver reference set** (judge Claude Haiku 5.5;
@@ -87,6 +112,26 @@ both genres; fit-half macro F1 privacy 0.666–0.710, papers 0.526–0.552 acros
   5 types per section). The plan's remedy is SetFit (fine-tuning the embedder on the labels), kept as the upgrade.
 - For papers, prototypes improve calibration (ECE 0.124 → 0.013) but not F1 (0.508 → 0.497); the pipeline uses the
   combined model for its calibrated probabilities.
+
+**4.7 profiles** (`packs/profiles.py`, `distil.stage: profiles`, run `profiles_v1_s0`, smoke `profiles_smoke_s0` first
+into a separate folder; `packs/<genre>/profiles/part-*.parquet`, 500 documents per part, resumable;
+`reports/tables/profile_prevalence_<genre>.csv`): classifier + prototypes over every section of every train-split
+document on the M5 (MPS). Privacy 22,300 documents, 192,596 sections, 134 sections/s (24 min); papers 14,114
+documents, 305,088 sections, 65 sections/s (78 min). A document's `prob_<type>` is its best section's probability,
+`bit_<type>` whether that reaches the type's threshold.
+- **Negative finding (important for Phase 5): document-level presence is inflated.** Privacy 20.2 of 58 types per
+  document, papers 26.8 of 47; `uses_cookies` in 78% of policies, `states_own_limitations` in 96.6% and
+  `states_limitations_of_existing_approaches` in 99.2% of papers, while `code_and_data_availability` is at 13.5%. A
+  document counts a type when any of its ~10–20 sections passes a threshold tuned for section-level F1 (which leans to
+  recall), so small per-section false-positive rates compound. A type that looks present everywhere can never be
+  ranked as a conspicuous omission, so document-level calibration (for example thresholds fitted on documents whose
+  every section is labelled, such as the OPP-115 policies, or a noisy-OR with calibrated section probabilities) comes
+  before ranking in Phase 5.
+
+**4.8 gate** (`distil.stage: gate`, run `gate_v1_s0`, `reports/tables/presence_gate.csv`): privacy 0.619 / 0.773 =
+**0.801 of the ceiling: pass**; papers 0.497 / 0.688 = **0.722: not met** (Parsa's decision: recorded, continue;
+SetFit on Colab is the upgrade); profiles cover the whole indexable corpus (22,300 / 22,300 and 14,114 / 14,114).
+**Phase 4 closed** with papers below its gate.
 
 ## 2026-10-17 — Silver presence reference (decision record 004); paper re-embed finished on Colab
 

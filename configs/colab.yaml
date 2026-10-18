@@ -1,0 +1,17 @@
+# Colab Pro compute overlay (plan §0.6, 2026-10-18): one NVIDIA A100 (40 or 80 GB), CUDA, fp16. Used through
+# notebooks/colab_runner.ipynb: python -m experiments.run --config configs/<task>.yaml --overlay colab ...
+# The teacher stays on OpenRouter (add --overlay openrouter); the 72B does not fit a 40 GB A100.
+
+run:
+  device: cuda
+
+models:
+  embedder:
+    dtype: float16
+    batch_size: 128
+  late_interaction:
+    batch_size: 256
+  reranker:
+    batch_size: 128
+  student:
+    batch_size: 32

@@ -269,6 +269,8 @@ distil:
     chunk_documents: 500          # one Parquet part per chunk; finished parts are skipped on a rerun
     limit: null                   # first N documents (smoke)
     out: null                     # null: packs/<genre>/profiles; smoke runs write elsewhere, e.g. runs/x/{genre}
+  gate:                           # stage gate (4.8)
+    profiles_run: null            # the run whose metrics hold the profiles' throughput, e.g. runs/profiles_v1_s0
   score:                          # stage score: teacher labels vs a reference, per type
     name: opp115                  # table name: reports/tables/teacher_vs_<name>_<genre>.csv
     teacher: null                 # e.g. runs/<run>/teacher_labels_{genre}.jsonl
@@ -416,3 +418,23 @@ serve:
 tracking:
   wandb: false
   wandb_project: negspace
+
+# ---------------------------------------------------------------- Mac <-> Colab store (plan §0.6, 2026-10-18)
+hub:                              # python -m experiments.hub_sync push|pull --bundles ...
+  repo: parsa-hke/negative-space-reader-data   # private Hugging Face dataset repo
+  bundles:
+    data:
+      include: ["data/processed/privacy/*", "data/processed/papers/*", "data/processed/splits/*"]
+      exclude: ["data/processed/papers/_extract*", "data/processed/_backup*"]
+    embeddings:
+      include: ["data/embeddings/*"]
+      exclude: ["data/embeddings/*/_sections_unsplit*"]
+    cache:
+      archive: .cache/negspace/teacher   # ~22k small response files travel as one archive
+    packs:
+      include: ["packs/*/classifier/*", "packs/*/prototypes/*", "packs/*/profiles/*", "packs/*/cascade*.json"]
+      exclude: []
+    runs:
+      include: ["runs/*/*"]           # run folders; runs/log.csv is merged separately (hub_sync push_log/pull_log)
+      exclude: ["runs/log.csv*", "runs/*.out"]
+

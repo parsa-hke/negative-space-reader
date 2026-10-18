@@ -56,7 +56,7 @@ FULL = {"tier": "full", "embedder": "Qwen/Qwen3-Embedding-8B", "late": "jinaai/j
 
 @pytest.mark.parametrize("config", ["data", "embed", "pack_privacy", "pack_papers", "induce", "distil", "mam", "bench",
                                     "baselines", "drift", "serve"])
-@pytest.mark.parametrize("overlays", [[], ["local"], ["local", "smoke"], ["gpu"], ["openrouter"],
+@pytest.mark.parametrize("overlays", [[], ["local"], ["local", "smoke"], ["gpu"], ["openrouter"], ["colab"], ["colab", "openrouter"],
                                       ["full"], ["full", "gpu"], ["full", "local"]])
 def test_repo_configs_resolve(config, overlays):
     cfg = load_config(f"configs/{config}.yaml", overlays)
