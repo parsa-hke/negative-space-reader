@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pipeline Runs</title>
+<style>
+/* Layout: one card per run, stacked; inside, a summary row (state, rate, ETA, last answer), a 10-minute rate strip,
+   then one row per genre and set with two bars (first pass, second look), then the run log's last lines. */
+:root {
+  --bg: #f1f3f5; --surface: #ffffff; --ink: #172028; --ink-2: #56616b; --line: #d6dce1;
+  --first: #2f6690; --check: #3a7d5c; --track: #e3e8ec; --warn: #9a6400; --bad: #a3322a; --good: #2d7a4f;
+  --f-ui: -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --f-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #0f1418; --surface: #171e24; --ink: #e2e8ec; --ink-2: #9aa7b1; --line: #2a343c;
+    --first: #6ea8d6; --check: #6cc39a; --track: #232d34; --warn: #e2b55a; --bad: #ec8d84; --good: #72c99a; color-scheme: dark; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.45 var(--f-ui); }
+.wrap { max-width: 980px; margin: 0 auto; padding-inline: 16px; padding-block: 16px 32px; display: grid; gap: 14px; }
+header { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+h1 { font-size: 18px; margin: 0; }
+.updated { color: var(--ink-2); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: grid; gap: 12px; min-width: 0; }
+.top { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; }
+.top h2 { font-size: 15px; margin: 0; margin-right: auto; }
+.pill { font-size: 12px; font-weight: 600; padding: 2px 10px; border-radius: 999px; border: 1px solid currentColor; }
+.pill.running { color: var(--first); } .pill.finished { color: var(--good); } .pill.failed { color: var(--bad); }
+.pill.stopped, .pill.not-started { color: var(--ink-2); }
+.stat { font-variant-numeric: tabular-nums; color: var(--ink-2); font-size: 13px; }
+.stat b { color: var(--ink); font-weight: 600; }
+.stat.stale b { color: var(--warn); }
+.spark { display: flex; align-items: flex-end; gap: 1px; height: 38px; }
+.spark i { flex: 1; background: var(--first); opacity: .75; min-height: 1px; border-radius: 1px 1px 0 0; }
+.spark-cap { display: flex; justify-content: space-between; font-size: 11px; color: var(--ink-2); }
+table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+th { text-align: left; font-weight: 500; color: var(--ink-2); font-size: 12px; padding: 4px 6px; }
+td { padding: 6px; border-top: 1px solid var(--line); vertical-align: middle; }
+td.name { white-space: nowrap; }
+.bar { position: relative; height: 16px; background: var(--track); border-radius: 4px; overflow: hidden; min-width: 90px; }
+.bar span { position: absolute; inset: 0 auto 0 0; border-radius: 4px; }
+.bar.first span { background: var(--first); } .bar.check span { background: var(--check); }
+.num { font-size: 12.5px; color: var(--ink-2); white-space: nowrap; }
+.tbl { overflow-x: auto; }
+pre { margin: 0; font: 12px/1.5 var(--f-mono); color: var(--ink-2); white-space: pre-wrap; overflow-wrap: anywhere;
+  background: var(--track); border-radius: 6px; padding: 8px 10px; }
+.err { color: var(--bad); font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><h1>Pipeline runs</h1><span class="updated" id="updated">connecting…</span></header>
+  <div id="profiles"></div>
+  <div id="runs"></div>
+  <p class="updated">Counts are exact: each answer in the response cache is matched to its section and pass. Sections
+    answered by an earlier run count as done (they are replayed from the cache). Totals count distinct section texts:
+    a few sections repeat another's text (e.g. 1,966 distinct of the 2,000 privacy teacher-set sections, shared
+    boilerplate), and a repeated text is answered once. ETA assumes the last 2 minutes' rate
+    and one second look per section.</p>
+</div>
+<script>
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const pct = (a, n) => (n ? Math.min(100, (100 * a) / n) : 0);
+function eta(m) { if (m == null) return "–"; if (m < 1) return "under a minute"; const h = Math.floor(m / 60); return h ? `${h} h ${m % 60} min` : `${m} min`; }
+function ago(s) { if (s == null) return "–"; if (s < 90) return `${s} s ago`; if (s < 5400) return `${Math.round(s / 60)} min ago`; return `${(s / 3600).toFixed(1)} h ago`; }
+function card(r) {
+  const max = Math.max(1, ...r.spark);
+  const rows = r.groups.map((g) => `<tr><td class="name">${esc(g.genre)} · ${esc(g.set)}</td>
+      <td><div class="bar first" title="first pass"><span style="width:${pct(g.first, g.total)}%"></span></div></td>
+      <td class="num">${g.first.toLocaleString()} / ${g.total.toLocaleString()}</td>
+      <td><div class="bar check" title="second look"><span style="width:${pct(g.check, g.total)}%"></span></div></td>
+      <td class="num">${g.check.toLocaleString()} / ${g.total.toLocaleString()}</td></tr>`).join("");
+  const stale = r.alive && r.last_answer_s != null && r.last_answer_s > 120;
+  return `<section class="card">
+    <div class="top"><h2>${esc(r.title)}</h2><span class="pill ${esc(r.state.replace(" ", "-"))}">${esc(r.state)}</span>
+      <span class="stat"><b>${r.per_min.toFixed(0)}</b> answers/min</span>
+      <span class="stat">ETA <b>${r.alive ? eta(r.eta_min) : "–"}</b></span>
+      <span class="stat ${stale ? "stale" : ""}">last answer <b>${ago(r.last_answer_s)}</b></span></div>
+    <div><div class="spark" aria-label="answers per 10 seconds, last 10 minutes">${r.spark.map((v) => `<i style="height:${(100 * v) / max}%" title="${v}"></i>`).join("")}</div>
+      <div class="spark-cap"><span>10 min ago</span><span>answers per 10 s</span><span>now</span></div></div>
+    <div class="tbl"><table><thead><tr><th>Sections</th><th colspan="2">First pass</th><th colspan="2">Second look</th></tr></thead><tbody>${rows}</tbody></table></div>
+    ${r.log.length ? `<pre>${esc(r.log.join("\n"))}</pre>` : ""}
+  </section>`;
+}
+function profilesCard(p) {
+  if (!p) return "";
+  const rows = p.genres.map((g) => `<tr><td class="name">${esc(g.genre)}</td>
+      <td><div class="bar first"><span style="width:${pct(g.parts, g.total)}%"></span></div></td>
+      <td class="num">${g.parts} / ${g.total} parts · ${g.documents.toLocaleString()} documents</td>
+      <td class="num">${g.rate ? g.rate.toFixed(0) + " sections/s" : "–"}</td>
+      <td class="num">${g.per_part_s ? Math.round(g.per_part_s) + " s/part" : "–"}</td></tr>`).join("");
+  const stale = p.alive && p.last_part_s != null && p.last_part_s > 300;
+  return `<section class="card">
+    <div class="top"><h2>${esc(p.title)}</h2><span class="pill ${esc(p.state.replace(" ", "-"))}">${esc(p.state)}</span>
+      <span class="stat">ETA <b>${p.alive ? eta(p.eta_min) : "–"}</b></span>
+      <span class="stat ${stale ? "stale" : ""}">last part <b>${ago(p.last_part_s)}</b></span></div>
+    <div class="tbl"><table><thead><tr><th>Genre</th><th colspan="2">Parts (500 documents each)</th><th>Rate</th><th>Pace</th></tr></thead>
+      <tbody>${rows}</tbody></table></div>
+    ${p.log.length ? `<pre>${esc(p.log.join("\n"))}</pre>` : ""}
+  </section>`;
+}
+let last = 0;
+async function tick() {
+  try {
+    const r = await fetch("/status.json", { cache: "no-store" });
+    const d = await r.json();
+    $("profiles").innerHTML = profilesCard(d.profiles);
+    $("runs").innerHTML = d.runs.map(card).join("");
+    last = Date.now();
+  } catch (e) {
+    $("runs").insertAdjacentHTML("afterbegin", "");
+    $("updated").innerHTML = `<span class="err">lost the connection to the progress server</span>`;
+  }
+}
+setInterval(() => { if (last) $("updated").textContent = `updated ${Math.round((Date.now() - last) / 1000)} s ago · refreshes every second`; }, 250);
+tick(); setInterval(tick, 1000);
+</script>
+</body>
+</html>

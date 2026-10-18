@@ -126,11 +126,13 @@ models:
     title_abstract_weight: 0.5    # document emb = (1-w) * mean(section embs) + w * title/abstract emb
   late_interaction:               # plan §0.2 #8 step 1; lean = Apache-2.0 small ColBERT, full = Jina (CC-BY-NC)
     id: answerdotai/answerai-colbert-small-v1
+    revision: 934fa8bb4ce2284f4c2baa232d81aca4d076fa5e   # checked on the hub 2026-10-18 (colbert-ai format, 96-d)
     fallback_dense_id: null         # null = dense cosine with models.embedder
     max_length: 512
     batch_size: 32
   reranker:                       # plan §0.2 #8 step 3
     id: BAAI/bge-reranker-v2-m3
+    revision: 953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e   # checked on the hub 2026-10-18
     upgrade_candidate_id: Qwen/Qwen3-Reranker-8B
     max_length: 512
     batch_size: 32
@@ -262,6 +264,11 @@ distil:
     k_claim: 2                    # second look: per first-pass statement, the k most similar types not found
     k_section: 4                  # ... and the section's k most similar types not found
     max_candidates: 8
+  profiles:                       # stage profiles (4.7)
+    splits: [train]               # the indexable corpus (plan §2.7)
+    chunk_documents: 500          # one Parquet part per chunk; finished parts are skipped on a rerun
+    limit: null                   # first N documents (smoke)
+    out: null                     # null: packs/<genre>/profiles; smoke runs write elsewhere, e.g. runs/x/{genre}
   score:                          # stage score: teacher labels vs a reference, per type
     name: opp115                  # table name: reports/tables/teacher_vs_<name>_<genre>.csv
     teacher: null                 # e.g. runs/<run>/teacher_labels_{genre}.jsonl
@@ -272,11 +279,26 @@ distil:
 
 presence:
   head: linear                    # linear (lean) | setfit | finetune (full); plan §0.2 #7, §4.3
+  labels:                         # inputs of 4.3-4.8 (labels made under the schema version they name; projected)
+    teacher: runs/label_72b_s0_20261018-195259-515194/teacher_labels_{genre}.jsonl      # 72B, teacher + reference sets
+    reference: runs/judge_haiku_s0_20261017-004935-303611/teacher_labels_{genre}.jsonl  # silver reference (4.2)
+    annotations:                  # human labels mapped through label_source (4.1)
+      privacy: runs/labels_opp115_s0/labels_privacy.jsonl
+  train_labels: teacher           # teacher: teacher labels for every type (lean, 2026-10-18, decision record 005)
+                                  # | plan: annotations where a type has a label_source rule, teacher otherwise
+  cascade:
+    reranker: false               # lean: classifier + prototypes (4.6: the reranker added +0.002 / -0.004 at 5-9x the
+                                  # time); true = the full cascade of §0.2 #8 for profiles and the pipeline
+  gate:
+    relative_to_ceiling: 0.80     # 4.8: presence macro F1 >= this x the teacher's own macro F1 vs the reference
+    min_positives: 5              # macro F1 over types with at least this many reference positives (eval half)
+  reference_split_seed: 1234      # whole reference documents -> fit half (calibration, thresholds, combiner) / eval half
   label_sources:                  # per pack: where presence labels come from (plan §4.1)
     privacy: opp115               # human annotations mapped through schema label_source
     papers: teacher
   linear:
     C: 1.0
+    C_grid: [0.1, 0.3, 1.0, 3.0, 10.0]   # 4.3: C chosen per pack by macro F1 on the reference fit half (null = C)
     class_weight: balanced
   setfit:
     pairs_per_type: 200
@@ -284,8 +306,9 @@ presence:
     lr: 2.0e-5
   prototypes_per_type: [10, 30]
   band:                           # Phase 4.5: fixed per pack from the similarity distributions
-    low: null
+    low: null                     # null: computed by distil.stage cascade (recorded in packs/<genre>/cascade.json)
     high: null
+    quantiles: [0.05, 0.95]       # low = this quantile of labelled positives, high = of labelled negatives
   combine: logistic               # classifier prob + cascade score
   threshold: null                 # Phase 4: calibrated P(present) cut-off
   target_macro_f1: 0.80           # GATE 4.8

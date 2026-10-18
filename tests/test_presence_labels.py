@@ -269,11 +269,32 @@ def test_score_stage_against_a_labels_file(tmp_path):
            {"doc_id": "d", "section_idx": 1, "labels": {"a": 0, "b": 1}}]
     for name, rows in (("t.jsonl", teacher), ("r.jsonl", ref)):
         (tmp_path / name).write_text("".join(_json.dumps(r) + "\n" for r in rows))
+    import yaml
+
+    (tmp_path / "packs" / "g").mkdir(parents=True)
+    schema = {"version": 1, "status": "frozen", "types": [{"id": "a"}, {"id": "b"}]}
+    (tmp_path / "packs" / "g" / "schema.yaml").write_text(yaml.safe_dump(schema))
     cfg = load_config("configs/distil.yaml", ["smoke"])
-    cfg["pack"], cfg["paths"]["tables"] = "g", str(tmp_path / "tables")
+    cfg["pack"], cfg["paths"]["tables"], cfg["paths"]["packs"] = "g", str(tmp_path / "tables"), str(tmp_path / "packs")
     cfg["distil"].update(stage="score", score={"name": "ref", "teacher": str(tmp_path / "t.jsonl"),
                                                "reference": str(tmp_path / "r.jsonl"), "min_positives": 1})
     m = distil.main(cfg, tmp_path)
     assert m["g/final/micro_precision"] == round(2 / 3, 3) and m["g/first_pass/micro_precision"] == 1.0
     assert m["g/final/micro_recall"] == 1.0 and m["g/first_pass/macro_f1"] == 1.0
     assert (tmp_path / "tables" / "teacher_vs_ref_g.csv").is_file()
+
+    # a version-2 schema that merged a and b: the same v1 labels are scored as one type, and agree fully
+    v2 = {"version": 2, "status": "frozen", "types": [{"id": "ab", "merged_from": ["a", "b"]}]}
+    (tmp_path / "packs" / "g" / "schema.yaml").write_text(yaml.safe_dump(v2))
+    m = distil.main(cfg, tmp_path)
+    assert m["g/schema_version"] == 2 and m["g/final/micro_f1"] == 1.0
+
+
+def test_reference_skips_failed_judge_sections(tmp_path):
+    from experiments.distil import load_reference
+
+    rows = [{"doc_id": "d", "section_idx": 0, "failed": False, "labels": {"a": 1, "b": 0}},
+            {"doc_id": "d", "section_idx": 1, "failed": True, "labels": {}}]
+    (tmp_path / "j.jsonl").write_text("".join(_json.dumps(r) + "\n" for r in rows))
+    ref = load_reference(tmp_path / "j.jsonl")
+    assert list(ref) == [("d", 0)] and ref[("d", 0)]["present"] == ["a"] and ref[("d", 0)]["types"] == ["a", "b"]

@@ -13,6 +13,24 @@
            every type of the schema is labelled; writes teacher_labels_<genre>.jsonl (source teacher:<route>)
   score    (4.2) teacher labels vs a reference (OPP-115 labels, or the human set read back from the page), per type,
            final and first pass only -> reports/tables/teacher_vs_<name>_<genre>.csv
+  heads    (4.3) presence.head linear: one logistic head per type on the section embeddings, trained on
+           presence.train_labels rows, temperature-scaled and thresholded on the reference set's fit half, scored on its
+           eval half (vs the reference, vs the teacher, vs annotations) next to the teacher's own agreement with the
+           reference (the ceiling); heads saved to packs/<genre>/classifier/linear_<train_labels>/
+  prototypes (4.4) the teacher's evidence spans on training sections -> 10-30 prototypes per type (packs/prototypes.py)
+           -> packs/<genre>/prototypes/{prototypes.json, tokens.npz}; table reports/tables/prototypes_<genre>.csv
+  cascade  (4.5, 4.6) prototype scores, the band (from the training sections), reranker scores for band pairs, the
+           combination layer and per-type thresholds (fit half) -> packs/<genre>/cascade.json; ablations on the eval
+           half (classifier only, prototypes only, prototypes + reranker, classifier + prototypes, full cascade) with
+           latency per section -> reports/tables/presence_ablation_<genre>.csv, presence_cascade_<genre>.csv, figure
+           reports/figures/presence_band_<genre>.png
+  profiles (4.7) the presence model (packs/<genre>/cascade.json over the linear heads and prototypes; no reranker in
+           the lean tier) over every section of every train-split document -> packs/<genre>/profiles/part-*.parquet
+           (prob_<type> = best section probability, bit_<type> = at the type's threshold), resumable by chunk
+  gate     (4.8) the gate table from the measured artefacts: the presence model's macro F1 on the reference eval half
+           vs presence.gate.relative_to_ceiling x the teacher's (reports/tables/presence_ablation_<genre>.csv), the
+           profiles' coverage of the indexable corpus and their throughput (distil.gate.profiles_run) ->
+           reports/tables/presence_gate.csv
 """
 
 from __future__ import annotations
@@ -240,18 +258,25 @@ def run_teacher_labels(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
     return metrics
 
 
-def load_reference(path: Path) -> dict[tuple[str, int], dict[str, Any]]:
+def load_reference(path: Path, proj: dict[str, str] | None = None) -> dict[tuple[str, int], dict[str, Any]]:
     """Reference labels as {key: {present, unsure}}: a labels-stage file (rows with labels {type: 0/1}) or the
-    labelling page's answers (rows with present/unsure, read back from its database as JSON lines)."""
+    labelling page's answers (rows with present/unsure, read back from its database as JSON lines). proj maps type
+    ids of an earlier schema version to the current one (packs/schema_versions.projection)."""
+    from packs.schema_versions import project_labels
+
+    proj = proj or {}
     ref = {}
     for line in open(path, encoding="utf-8"):
         r = json.loads(line)
+        if r.get("failed"):  # a judge section that failed has no labels: leave it out, never count it as all-negative
+            continue
         key = (r["doc_id"], r.get("section_idx", r.get("idx")))
         if "labels" in r:
-            ref[key] = {"present": [t for t, v in r["labels"].items() if v], "unsure": [],
-                        "types": list(r["labels"])}
+            labels = project_labels(r, proj)["labels"]
+            ref[key] = {"present": [t for t, v in labels.items() if v], "unsure": [], "types": list(labels)}
         else:
-            ref[key] = {"present": r.get("present") or [], "unsure": r.get("unsure") or [], "types": None}
+            ids = lambda xs: list(dict.fromkeys(proj.get(t, t) for t in xs or []))  # noqa: E731
+            ref[key] = {"present": ids(r.get("present")), "unsure": ids(r.get("unsure")), "types": None}
     return ref
 
 
@@ -261,17 +286,22 @@ def run_score(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
     reports/tables/teacher_vs_<name>_<genre>.csv and macro/micro numbers as metrics."""
     from packs.presence_labels import agreement
 
+    from packs.schema_versions import project_labels, projection
+
     sc = cfg["distil"]["score"]
     metrics: dict[str, Any] = {}
     for genre in _genres(cfg):
+        schema = load_schema(cfg, genre)
+        proj = projection(schema)  # labels made under an earlier version are read in this one
         teacher = {}
         for line in open(_path(sc["teacher"].format(genre=genre)), encoding="utf-8"):
             r = json.loads(line)
             if not r["failed"]:
-                teacher[(r["doc_id"], r["section_idx"])] = r
-        ref = load_reference(_path(sc["reference"].format(genre=genre)))
+                teacher[(r["doc_id"], r["section_idx"])] = project_labels(r, proj)
+        ref = load_reference(_path(sc["reference"].format(genre=genre)), proj)
         typed = next(iter(ref.values()))["types"]
-        types = typed or [t["id"] for t in load_schema(cfg, genre)["types"]]
+        types = typed or [t["id"] for t in schema["types"]]
+        metrics[f"{genre}/schema_version"] = schema["version"]
         rows = agreement(ref, teacher, types)
         out = _path(cfg["paths"]["tables"]) / f"teacher_vs_{sc['name']}_{genre}.csv"
         out.parent.mkdir(parents=True, exist_ok=True)
@@ -295,6 +325,410 @@ def run_score(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
     return metrics
 
 
+def _write_table(path: Path, rows: list[dict[str, Any]]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=list(rows[0]))
+        w.writeheader()
+        w.writerows([{k: (round(v, 3) if isinstance(v, float) else v) for k, v in r.items()} for r in rows])
+
+
+def run_heads(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
+    import numpy as np
+
+    from engine.classifier import LinearHeads, ece, prf_table, summary
+    from experiments.presence_data import PresenceData
+
+    pc = cfg["presence"]
+    mode, lin = pc.get("train_labels", "plan"), pc["linear"]
+    min_pos = cfg["distil"].get("min_type_positives_report", 5)
+    metrics: dict[str, Any] = {"head": "linear", "train_labels": mode}
+    for genre in _genres(cfg):
+        D = PresenceData(cfg, genre)
+        metrics.update({f"{genre}/{k}": v for k, v in D.describe().items()})
+        cache: dict[tuple, Any] = {}
+
+        def train(C: float) -> LinearHeads:
+            h = LinearHeads(D.types, C=C, class_weight=lin["class_weight"])
+            for t in D.types:
+                keys, y = D.train_rows(t, mode)
+                sig = (keys[0], keys[-1], len(keys))
+                if sig not in cache:
+                    cache[sig] = D.X(keys)
+                h.fit_type(t, cache[sig], y)
+            return h
+
+        fit, ev = D.reference_keys("fit"), D.reference_keys("eval")
+        Xf, Xe = D.X(fit), D.X(ev)
+        Yf, Ye = D.Y(fit, D.reference), D.Y(ev, D.reference)
+        grid = lin.get("C_grid") or [lin["C"]]
+        fit_scores = {}
+        for C in grid:  # selection on the fit half only; the eval half is never used to choose
+            h = train(C)
+            h.calibrate(Xf, Yf)
+            h.tune_thresholds(Xf, Yf)
+            fit_scores[C] = summary(prf_table(Yf, h.predict_proba(Xf), D.types, thresholds=h.threshold),
+                                    min_positives=min_pos)["macro_f1"] or 0.0
+        best_C = max(grid, key=lambda C: (fit_scores[C], -abs(C - lin["C"])))
+        heads = train(best_C)
+        metrics.update({f"{genre}/C": best_C, f"{genre}/C_fit_macro_f1": {str(k): v for k, v in fit_scores.items()}})
+        raw = heads.predict_proba(Xe)
+        heads.calibrate(Xf, Yf)
+        heads.tune_thresholds(Xf, Yf)
+        Pe = heads.predict_proba(Xe)
+        out_dir = _path(cfg["paths"]["packs"]) / genre / "classifier" / f"linear_{mode}"
+        heads.save(out_dir)
+        heads.save(run_dir / f"heads_{genre}")
+        vs_ref = prf_table(Ye, Pe, D.types, thresholds=heads.threshold)
+        vs_teacher = prf_table(D.Y(ev, D.teacher), Pe, D.types, thresholds=heads.threshold)
+        ceiling = prf_table(Ye, D.Y(ev, D.teacher).astype(float), D.types, thresholds=np.full(len(D.types), 0.5))
+        table = []
+        for j, t in enumerate(D.types):
+            table.append({"type_id": t, "trained_on": "annotations" if (mode == "plan" and t in D.rule_types) else "teacher",
+                          "mode": heads.info[t]["mode"], "train_rows": heads.info[t]["rows"],
+                          "train_positives": heads.info[t]["positives"], "eval_positives": vs_ref[j]["positives"],
+                          "precision": vs_ref[j]["precision"], "recall": vs_ref[j]["recall"], "f1": vs_ref[j]["f1"],
+                          "f1_vs_teacher": vs_teacher[j]["f1"], "teacher_f1_vs_reference": ceiling[j]["f1"],
+                          "threshold": vs_ref[j]["threshold"], "temperature": round(float(heads.temperature[j]), 3)})
+        _write_table(_path(cfg["paths"]["tables"]) / f"presence_heads_{genre}_{mode}.csv", table)
+        res = {"vs_reference": summary(vs_ref, min_positives=min_pos), "vs_teacher": summary(vs_teacher, min_positives=min_pos),
+               "teacher_vs_reference_ceiling": summary(ceiling, min_positives=min_pos),
+               "ece_raw": ece(Ye, raw), "ece_calibrated": ece(Ye, Pe),
+               "heads": sum(i["mode"] == "head" for i in heads.info.values()),
+               "priors": sum(i["mode"] == "prior" for i in heads.info.values())}
+        if D.annotations:
+            rule = [D.types.index(t) for t in D.rule_types]
+            ann = [k for k in ev if k in D.annotations]
+            Ya = D.Y(ann, D.annotations)[:, rule]
+            Pa = heads.predict_proba(D.X(ann))[:, rule]
+            res["vs_annotations_rule_types"] = summary(prf_table(Ya, Pa, D.rule_types, thresholds=heads.threshold[rule]),
+                                                       min_positives=min_pos)
+        for k, v in res.items():
+            if isinstance(v, dict):
+                metrics.update({f"{genre}/{k}/{kk}": vv for kk, vv in v.items()})
+            else:
+                metrics[f"{genre}/{k}"] = v
+        print(f"[heads {genre}] eval vs reference {res['vs_reference']} | ceiling (teacher) "
+              f"{res['teacher_vs_reference_ceiling']} | ECE {res['ece_raw']} -> {res['ece_calibrated']}", flush=True)
+    return metrics
+
+
+def load_colbert(cfg: dict[str, Any]) -> Any:
+    from engine.late_interaction import ColBERT
+    from experiments.run import resolve_device
+
+    li = cfg["models"]["late_interaction"]
+    return ColBERT(li["id"], revision=li.get("revision"), device=resolve_device(cfg["run"].get("device", "auto")),
+                   batch_size=li.get("batch_size", 64))
+
+
+def run_prototypes(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
+    import numpy as np
+
+    from experiments.presence_data import PresenceData
+    from packs.prototypes import n_prototypes, select_prototypes, span_candidates
+
+    k_min, k_max = cfg["presence"]["prototypes_per_type"]
+    colbert = load_colbert(cfg)
+    metrics: dict[str, Any] = {"late_interaction": colbert.model_id, "revision": colbert.revision}
+    for genre in _genres(cfg):
+        D = PresenceData(cfg, genre, need_vectors=False)
+        cands = span_candidates(D.teacher_full, D.types, keys=set(D.teacher_train))
+        chosen: dict[str, list[dict[str, Any]]] = {}
+        tokens, lengths, type_idx, table = [], [], [], []
+        for j, t in enumerate(D.types):
+            c = cands[t]
+            if not c:
+                chosen[t] = []
+                table.append({"type_id": t, "candidates": 0, "prototypes": 0})
+                continue
+            enc = colbert.encode([x["text"] for x in c], mode="query")
+            pooled = np.stack([e.astype(np.float32).mean(0) for e in enc])
+            pooled /= np.linalg.norm(pooled, axis=1, keepdims=True)
+            picked = select_prototypes(pooled, k=n_prototypes(len(c), k_min, k_max), seed=cfg["run"]["seed"])
+            chosen[t] = [c[i] for i in picked]
+            for i in picked:
+                tokens.append(enc[i])
+                lengths.append(len(enc[i]))
+                type_idx.append(j)
+            table.append({"type_id": t, "candidates": len(c), "prototypes": len(picked)})
+        out = _path(cfg["paths"]["packs"]) / genre / "prototypes"
+        out.mkdir(parents=True, exist_ok=True)
+        (out / "prototypes.json").write_text(json.dumps({
+            "genre": genre, "schema_version": D.schema["version"], "types": D.types, "late_interaction": colbert.model_id,
+            "revision": colbert.revision, "source": cfg["presence"]["labels"]["teacher"], "prototypes": chosen},
+            indent=1, ensure_ascii=False), encoding="utf-8")
+        np.savez(out / "tokens.npz", tokens=np.concatenate(tokens) if tokens else np.zeros((0, colbert.dim), np.float16),
+                 lengths=np.array(lengths, dtype=np.int32), type_idx=np.array(type_idx, dtype=np.int32))
+        _write_table(_path(cfg["paths"]["tables"]) / f"prototypes_{genre}.csv", table)
+        n = [r["prototypes"] for r in table]
+        metrics.update({f"{genre}/prototypes": sum(n), f"{genre}/types_without_prototypes": sum(x == 0 for x in n),
+                        f"{genre}/types_under_10": sum(0 < x < 10 for x in n)})
+        print(f"[prototypes {genre}] {sum(n)} prototypes for {len(n)} types ({sum(x == 0 for x in n)} without any)",
+              flush=True)
+    return metrics
+
+
+def _band_figure(path: Path, genre: str, types: list[str], proto: Any, Y: Any, low: float, high: float) -> None:
+    import matplotlib
+
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    n = len(types)
+    cols = 8
+    rows = 1 + (n + cols - 1) // cols
+    fig = plt.figure(figsize=(cols * 1.9, rows * 1.5 + 1.0))
+    ax = fig.add_subplot(rows, 1, 1)
+    bins = np.linspace(min(proto.min(), 0), 1, 50)
+    ax.hist(proto[Y == 0], bins=bins, alpha=0.6, density=True, label="labelled negative", color="#7a8791")
+    ax.hist(proto[Y == 1], bins=bins, alpha=0.6, density=True, label="labelled positive", color="#2f6690")
+    for x in (low, high):
+        ax.axvline(x, color="#a3322a", lw=1)
+    ax.set_title(f"{genre}: best prototype match per section and type (training sections); band [{low:.3f}, {high:.3f})",
+                 fontsize=9)
+    ax.legend(fontsize=7)
+    ax.tick_params(labelsize=7)
+    for j, t in enumerate(types):
+        a = fig.add_subplot(rows, cols, cols + j + 1)
+        a.hist(proto[Y[:, j] == 0, j], bins=bins, alpha=0.6, density=True, color="#7a8791")
+        if (Y[:, j] == 1).any():
+            a.hist(proto[Y[:, j] == 1, j], bins=bins, alpha=0.6, density=True, color="#2f6690")
+        a.axvline(low, color="#a3322a", lw=0.6)
+        a.axvline(high, color="#a3322a", lw=0.6)
+        a.set_title(t[:28], fontsize=5.5)
+        a.set_xticks([])
+        a.set_yticks([])
+    fig.tight_layout()
+    fig.savefig(path, dpi=130)
+    plt.close(fig)
+
+
+def run_cascade(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
+    import time
+
+    import numpy as np
+
+    from engine.classifier import LinearHeads, ece, prf_table, summary, tune_thresholds
+    from engine.presence import FEATURES, Cascade, PrototypeScorer, Reranker, band_thresholds, rerank_pairs, type_query
+    from experiments.presence_data import PresenceData
+    from experiments.run import resolve_device
+
+    pc = cfg["presence"]
+    mode = pc.get("train_labels", "plan")
+    min_pos = cfg["distil"].get("min_type_positives_report", 5)
+    device = resolve_device(cfg["run"].get("device", "auto"))
+    colbert = load_colbert(cfg)
+    rcfg = cfg["models"]["reranker"]
+    use_rr = bool((pc.get("cascade") or {}).get("reranker", True))
+    reranker = Reranker(rcfg["id"], revision=rcfg.get("revision"), device=device, max_length=rcfg.get("max_length", 512),
+                        batch_size=rcfg.get("batch_size", 16)) if use_rr else None
+    metrics: dict[str, Any] = {"late_interaction": colbert.model_id, "reranker": rcfg["id"] if use_rr else None,
+                               "train_labels": mode}
+    for genre in _genres(cfg):
+        D = PresenceData(cfg, genre)
+        T = len(D.types)
+        heads = LinearHeads.load(_path(cfg["paths"]["packs"]) / genre / "classifier" / f"linear_{mode}")
+        if heads.types != D.types:
+            raise ValueError(f"{genre}: classifier types differ from the schema; rerun the heads stage")
+        scorer = PrototypeScorer.from_pack(colbert, _path(cfg["paths"]["packs"]) / genre / "prototypes", T,
+                                           min_sentence_chars=cfg["segment"]["min_sentence_chars"])
+        # band from the training sections (teacher labels)
+        train = sorted(D.teacher_train)
+        t0 = time.perf_counter()
+        proto_train = scorer.score([D.sections[k].text for k in train])
+        proto_rate = len(train) / (time.perf_counter() - t0)
+        Ytr = D.Y(train, D.teacher)
+        q_lo, q_hi = pc["band"].get("quantiles", [0.05, 0.95])
+        low, high = band_thresholds(proto_train[Ytr == 1], proto_train[Ytr == 0], q_low=q_lo, q_high=q_hi)
+        if pc["band"].get("low") is not None:
+            low, high = pc["band"]["low"], pc["band"]["high"]
+        _band_figure(_path(cfg["paths"]["figures"]) / f"presence_band_{genre}.png", genre, D.types, proto_train, Ytr, low, high)
+        halves: dict[str, dict[str, Any]] = {}
+        for half in ("fit", "eval"):
+            keys = D.reference_keys(half)
+            texts = [D.sections[k].text for k in keys]
+            clf = heads.predict_proba(D.X(keys))
+            t0 = time.perf_counter()
+            proto = scorer.score(texts)
+            t_proto = (time.perf_counter() - t0) / len(keys)
+            pairs = rerank_pairs(proto, low=low, high=high)
+            t0 = time.perf_counter()
+            scores = reranker.score([(type_query(D.schema["types"][j]), texts[i]) for i, j in pairs]) if use_rr else []
+            t_rr = (time.perf_counter() - t0) / len(keys)
+            rr = np.full(proto.shape, np.nan, dtype=np.float32)
+            for (i, j), v in zip(pairs, scores):
+                rr[i, j] = v
+            halves[half] = {"keys": keys, "Y": D.Y(keys, D.reference), "clf": clf, "proto": proto, "rr": rr,
+                            "t_proto": t_proto, "t_rr": t_rr, "band_pairs": len(pairs)}
+        # section embedding cost (the classifier's input) on a sample, for the latency column
+        from engine.embed import Embedder
+
+        ecfg = cfg["models"]["embedder"]
+        emb = Embedder(ecfg["id"], devices=[device], dtype=ecfg.get("dtype", "float16"),
+                       max_length=ecfg.get("max_length", 1024), batch_size=ecfg.get("batch_size", 32))
+        sample = [D.sections[k].text for k in halves["eval"]["keys"][:64]]
+        emb.encode(sample[:4])
+        t0 = time.perf_counter()
+        emb.encode(sample)
+        t_emb = (time.perf_counter() - t0) / len(sample)
+        del emb
+        F, E = halves["fit"], halves["eval"]
+
+        def stepped(proto: Any, rr: Any) -> Any:  # prototypes + reranker: clear miss 0, clear hit 1, band -> reranker
+            return np.where(proto >= high, 1.0, np.where(proto < low, 0.0, np.nan_to_num(rr, nan=0.0)))
+
+        variants: dict[str, tuple[Any, Any, float, bool]] = {}
+        variants["classifier only"] = (E["clf"], heads.threshold, t_emb, True)
+        th = tune_thresholds(F["Y"], F["proto"])
+        variants["prototypes only"] = (E["proto"], th, E["t_proto"], False)
+        if use_rr:
+            th = tune_thresholds(F["Y"], stepped(F["proto"], F["rr"]))
+            variants["prototypes + reranker"] = (stepped(E["proto"], E["rr"]), th, E["t_proto"] + E["t_rr"], False)
+        nan_f, nan_e = np.full(F["rr"].shape, np.nan), np.full(E["rr"].shape, np.nan)
+        cp = Cascade(D.types, low=low, high=high)
+        cp.fit(F["clf"], F["proto"], nan_f, F["Y"])
+        variants["classifier + prototypes"] = (cp.predict(E["clf"], E["proto"], nan_e), cp.threshold, t_emb + E["t_proto"], True)
+        model, model_name = cp, "classifier + prototypes"
+        if use_rr:
+            full = Cascade(D.types, low=low, high=high)
+            full.fit(F["clf"], F["proto"], F["rr"], F["Y"])
+            variants["full cascade"] = (full.predict(E["clf"], E["proto"], E["rr"]), full.threshold,
+                                        t_emb + E["t_proto"] + E["t_rr"], True)
+            full.save(_path(cfg["paths"]["packs"]) / genre / "cascade_full.json")
+            model, model_name = full, "full cascade"
+        # the presence model the profiles and the pipeline use (presence.cascade.reranker decides which)
+        model.save(_path(cfg["paths"]["packs"]) / genre / "cascade.json")
+        Pfull, metrics[f"{genre}/presence_model"] = variants[model_name][0], model_name
+        ceiling = summary(prf_table(E["Y"], D.Y(E["keys"], D.teacher).astype(float), D.types,
+                                    thresholds=np.full(T, 0.5)), min_positives=min_pos)
+        table = []
+        for name, (P, th, latency, prob) in variants.items():
+            sm = summary(prf_table(E["Y"], P, D.types, thresholds=th), min_positives=min_pos)
+            table.append({"variant": name, **sm, "ece": ece(E["Y"], P) if prob else None,
+                          "ms_per_section": round(1000 * latency, 1)})
+            metrics.update({f"{genre}/{name.replace(' ', '_')}/{k}": v for k, v in sm.items()})
+        table.append({"variant": "teacher labels (ceiling)", **ceiling, "ece": None, "ms_per_section": None})
+        _write_table(_path(cfg["paths"]["tables"]) / f"presence_ablation_{genre}.csv", table)
+        per_type = prf_table(E["Y"], Pfull, D.types, thresholds=model.threshold)
+        _write_table(_path(cfg["paths"]["tables"]) / f"presence_cascade_{genre}.csv", per_type)
+        metrics.update({f"{genre}/band_low": round(low, 4), f"{genre}/band_high": round(high, 4),
+                        f"{genre}/band_share_eval": round(E["band_pairs"] / E["proto"].size, 3),
+                        f"{genre}/prototype_sections_per_s": round(proto_rate, 1),
+                        f"{genre}/reranker_pairs_eval": E["band_pairs"], f"{genre}/ceiling_macro_f1": ceiling["macro_f1"],
+                        f"{genre}/combiner_coef": dict(zip(FEATURES, model.coef.round(3).tolist()))})
+        metrics.update({f"{genre}/{k}": v for k, v in {
+            "ceiling": ceiling, "model_eval": summary(per_type, min_positives=min_pos),
+            "model_ms_per_section": round(1000 * variants[model_name][2], 1)}.items()})
+        print(f"[cascade {genre}] band [{low:.3f}, {high:.3f}), {E['band_pairs']} band pairs in eval; ablation:", flush=True)
+        for r in table:
+            print(f"   {r['variant']:26} micro F1 {r['micro_f1']}  macro F1 {r['macro_f1']}  ECE {r['ece']}  "
+                  f"{r['ms_per_section']} ms/section", flush=True)
+    return metrics
+
+
+def run_profiles(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
+    import platform
+
+    import numpy as np
+
+    from data.schema import Document
+    from data.splits import load_manifest
+    from engine.classifier import LinearHeads
+    from engine.embed import EmbeddingStore, embedding_slug, text_sha1
+    from engine.presence import Cascade, PrototypeScorer
+    from packs.profiles import build_profiles, read_profiles
+
+    pc = cfg["presence"]
+    if (pc.get("cascade") or {}).get("reranker"):
+        raise NotImplementedError("profiles with the reranker are not built in the lean tier (decision record 005)")
+    mode = pc.get("train_labels", "teacher")
+    colbert = load_colbert(cfg)
+    pf = cfg["distil"].get("profiles") or {}
+    metrics: dict[str, Any] = {"machine": f"{platform.machine()} {platform.system()}", "device": colbert.device}
+    for genre in _genres(cfg):
+        packs = _path(cfg["paths"]["packs"]) / genre
+        schema = load_schema(cfg, genre)
+        types = [t["id"] for t in schema["types"]]
+        heads = LinearHeads.load(packs / "classifier" / f"linear_{mode}")
+        model = Cascade.load(packs / "cascade.json")
+        if heads.types != types or model.types != types:
+            raise ValueError(f"{genre}: classifier or cascade types differ from the schema; rerun heads and cascade")
+        scorer = PrototypeScorer.from_pack(colbert, packs / "prototypes", len(types),
+                                           min_sentence_chars=cfg["segment"]["min_sentence_chars"])
+        split = load_manifest(_path(cfg["paths"]["splits"]) / f"{genre}.json")
+        wanted = {d for d, s in split.items() if s in pf.get("splits", ["train"])}
+        processed = _path(cfg["paths"]["data_processed"]) / genre
+        docs = [{"id": d.id, "split": split[d.id], "category": d.category, "date": d.date}
+                for d in read_jsonl(processed / "documents.jsonl", Document) if d.id in wanted]
+        docs = docs[: pf.get("limit") or None]
+        keep = {d["id"] for d in docs}
+        texts: dict[str, list[str]] = defaultdict(list)
+        for sec in read_jsonl(processed / "sections.jsonl", Section):
+            if sec.doc_id in keep:
+                texts[sec.doc_id].append(sec.text)
+        store = EmbeddingStore.load(_path(cfg["paths"]["embeddings"]) / embedding_slug(cfg["models"]["embedder"])
+                                    / genre / "sections")
+        row_of = {h: i for i, h in enumerate(store.sha1)}
+
+        def score(batch: list[str]) -> Any:
+            idx = [row_of.get(text_sha1(t)) for t in batch]
+            if any(i is None for i in idx):
+                raise ValueError(f"{genre}: {sum(i is None for i in idx)} sections have no stored embedding")
+            clf = heads.predict_proba(store.vectors[idx])
+            proto = scorer.score(batch)
+            return model.predict(clf, proto, np.full(clf.shape, np.nan))
+
+        out = _path(pf["out"].format(genre=genre)) if pf.get("out") else packs / "profiles"
+        res = build_profiles(docs, lambda d: texts[d], score, types, model.threshold, out,
+                             chunk_documents=pf.get("chunk_documents", 500),
+                             log=lambda m: print(f"[profiles {genre}] {m}", flush=True))
+        df = read_profiles(out)
+        bits = df[[f"bit_{t}" for t in types]].to_numpy() if len(df) else np.zeros((0, len(types)))
+        metrics.update({f"{genre}/{k}": v for k, v in res.items()})
+        metrics.update({f"{genre}/documents": len(df), f"{genre}/types_present_per_document":
+                        round(float(bits.sum(1).mean()), 2) if len(df) else None,
+                        f"{genre}/types_never_present": [t for t, c in zip(types, bits.sum(0)) if c == 0]})
+        prevalence = [{"type_id": t, "documents_with_type": int(c), "prevalence": round(float(c) / max(1, len(df)), 4)}
+                      for t, c in zip(types, bits.sum(0))]
+        if prevalence:
+            _write_table(_path(cfg["paths"]["tables"]) / f"profile_prevalence_{genre}.csv", prevalence)
+    return metrics
+
+
+def run_gate(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
+    from data.splits import load_manifest
+    from packs.profiles import read_profiles
+
+    pc, g = cfg["presence"], cfg["presence"]["gate"]
+    model_name = "full cascade" if (pc.get("cascade") or {}).get("reranker") else "classifier + prototypes"
+    prof_run = (cfg["distil"].get("gate") or {}).get("profiles_run")
+    prof = json.loads((_path(prof_run) / "metrics.json").read_text(encoding="utf-8"))["metrics"] if prof_run else {}
+    rows, metrics = [], {"presence_model": model_name}
+    for genre in _genres(cfg):
+        table = {r["variant"]: r for r in csv.DictReader(open(_path(cfg["paths"]["tables"]) / f"presence_ablation_{genre}.csv",
+                                                              encoding="utf-8"))}
+        model, ceiling = float(table[model_name]["macro_f1"]), float(table["teacher labels (ceiling)"]["macro_f1"])
+        ratio = model / ceiling if ceiling else 0.0
+        split = load_manifest(_path(cfg["paths"]["splits"]) / f"{genre}.json")
+        indexable = sum(1 for s in split.values() if s in (cfg["distil"].get("profiles") or {}).get("splits", ["train"]))
+        df = read_profiles(_path(cfg["paths"]["packs"]) / genre / "profiles")
+        row = {"genre": genre, "presence_model": model_name, "macro_f1": model, "teacher_ceiling": ceiling,
+               "share_of_ceiling": round(ratio, 3), "required_share": g["relative_to_ceiling"],
+               "f1_gate": "pass" if ratio >= g["relative_to_ceiling"] else "not met",
+               "profiled_documents": len(df), "indexable_documents": indexable,
+               "profiles_complete": len(df) == indexable,
+               "sections_per_second": prof.get(f"{genre}/sections_per_second"), "machine": prof.get("machine"),
+               "device": prof.get("device"), "reference": "silver (decision record 004)"}
+        rows.append(row)
+        metrics.update({f"{genre}/{k}": v for k, v in row.items() if k != "genre"})
+        print(f"[gate {genre}] {row}", flush=True)
+    _write_table(_path(cfg["paths"]["tables"]) / "presence_gate.csv", rows)
+    return metrics
+
+
 def main(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
     stage = cfg["distil"].get("stage")
     if stage == "labels":
@@ -305,4 +739,14 @@ def main(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
         return run_teacher_labels(cfg, run_dir)
     if stage == "score":
         return run_score(cfg, run_dir)
+    if stage == "heads":
+        return run_heads(cfg, run_dir)
+    if stage == "prototypes":
+        return run_prototypes(cfg, run_dir)
+    if stage == "cascade":
+        return run_cascade(cfg, run_dir)
+    if stage == "profiles":
+        return run_profiles(cfg, run_dir)
+    if stage == "gate":
+        return run_gate(cfg, run_dir)
     raise NotImplementedError(f"distil stage {stage!r} is implemented later in Phase 4")

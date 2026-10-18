@@ -45,3 +45,7 @@ dist/
 .DS_Store
 # Labelling-page data holds full third-party section texts; rebuilt by analysis/label_page.py, never committed
 reports/human_labels/page/label_data.json
+
+# Pack artefacts built by the presence stages (synced through the private HF dataset repo, never committed)
+packs/*/profiles/
+packs/*/cascade*.json

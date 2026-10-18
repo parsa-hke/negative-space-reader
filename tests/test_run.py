@@ -62,7 +62,11 @@ def test_repo_configs_resolve(config, overlays):
     cfg = load_config(f"configs/{config}.yaml", overlays)
     assert cfg["task"] in runner.TASKS
     assert cfg["cohort"]["k"] > 0 and cfg["models"]["teacher"]["id"]
-    assert cfg["presence"]["band"] == {"low": None, "high": None}  # fixed in Phase 4
+    band = cfg["presence"]["band"]  # fixed per pack in Phase 4.5 (configs/pack_<genre>.yaml), computed elsewhere
+    if config.startswith("pack_"):
+        assert 0 < band["low"] <= band["high"] < 1
+    else:
+        assert band["low"] is None and band["high"] is None and band["quantiles"] == [0.05, 0.95]
     want = FULL if "full" in overlays else LEAN  # plan §0.2 #25: one overlay flips every tiered key
     assert cfg["tier"] == want["tier"]
     assert cfg["models"]["embedder"]["id"] == ("BAAI/bge-small-en-v1.5" if "smoke" in overlays else want["embedder"])

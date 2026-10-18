@@ -4,3 +4,7 @@ task: build_pack
 pack: papers
 corpus:
   min_date: "2018-01-01"
+presence:
+  band:                           # plan 4.5, fixed from the training sections' prototype scores (run cascade_v2_s0)
+    low: 0.9210
+    high: 0.9459

@@ -2,6 +2,197 @@
 
 Date, what was done, what was found (negative findings included). Newest first.
 
+## 2026-10-18 — Phase 4.3–4.6: linear heads, prototypes, cascade, ablations
+
+All presence numbers below are on the **evaluation half of the silver reference set** (judge Claude Haiku 5.5;
+decision record 004), with calibration, thresholds and the combination layer fitted on the **fit half** (the 300
+reference sections split by document, `engine/classifier.reference_split`, seed 1234: privacy 15/16 policies, papers
+150/150 papers). "Ceiling" = the teacher's own labels scored the same way (a student trained on teacher labels can
+hardly beat it). Papers use pack version 2 (47 types).
+
+**4.3 linear heads** (`engine/classifier.py`, `distil.stage: heads`, runs `heads_linear_plan_s0`,
+`heads_linear_teacher_s0`; tables `reports/tables/presence_heads_<genre>_<labels>.csv`). One logistic head per type
+on the stored Qwen3-Embedding-0.6B section vectors (C 1, balanced), temperature per type and an F1-tuned threshold on
+the fit half. Trains in seconds. Logistic regression is deterministic, so the three-seed rule gives identical runs
+(one seed recorded).
+
+| Heads | Privacy macro F1 | Papers macro F1 | ECE before → after temperature |
+|---|---|---|---|
+| plan labels (privacy: OPP-115 for 35 rule types, teacher for 23) | 0.576 | 0.486 | 0.124 → 0.089 / 0.189 → 0.146 |
+| teacher labels for every type (privacy) | **0.613** | – | 0.120 → 0.077 |
+| ceiling (teacher's own labels) | 0.773 | 0.688 | |
+
+Privacy against OPP-115's human labels (26 rule types with ≥ 5 positives in the eval half): plan-trained 0.568,
+teacher-trained 0.534. Each training source wins on its own kind of reference.
+
+**4.4 prototypes** (`packs/prototypes.py`, `engine/late_interaction.py`, run `prototypes_v1_s0`; `reports/tables/
+prototypes_<genre>.csv`): late-interaction model answerdotai/answerai-colbert-small-v1 (Apache-2.0, commit `934fa8bb`,
+colbert-ai format loaded with transformers; downloaded with Parsa's OK, 134.6 MB; query augmentation left out on
+purpose). Candidates = the teacher's verbatim evidence spans on training sections; k-means, centroid-nearest:
+privacy 1,031 prototypes (58 types), papers 1,139 (47); 10–30 per type except `governing_law_and_disputes` and
+`ethics_and_declarations` (9 candidates each).
+
+**4.5 cascade** (`engine/presence.py`, `distil.stage: cascade`, run `cascade_v1_s0`; `packs/<genre>/cascade.json`;
+figure `reports/figures/presence_band_<genre>.png`). Reranker BAAI/bge-reranker-v2-m3 (Apache-2.0, commit `953dc6f6`,
+2.29 GB, Parsa's OK): 13 pairs/s on MPS for section-length text. Band from the training sections' prototype scores
+(5% quantile of positives, 95% of negatives): **privacy [0.934, 0.951), papers [0.921, 0.946)**. ColBERT MaxSim
+scores sit high and positives and negatives overlap heavily: 38% (privacy) and 67% (papers) of eval section-type
+pairs fall in the band.
+
+**4.6 ablations** (`reports/tables/presence_ablation_<genre>.csv`; latency on the M5, MPS; the classifier's latency
+is the section embedding, which dominates for long paper sections):
+
+| Variant | Privacy macro F1 | ECE | ms/section | Papers macro F1 | ECE | ms/section |
+|---|---|---|---|---|---|---|
+| classifier only | 0.576 | 0.089 | 141 | 0.486 | 0.146 | 911 |
+| prototypes only | 0.417 | – | 5 | 0.328 | – | 16 |
+| prototypes + reranker | 0.442 | – | 1,187 | 0.309 | – | 3,455 |
+| classifier + prototypes | **0.612** | **0.004** | 146 | **0.505** | **0.016** | 926 |
+| full cascade | 0.614 | 0.005 | 1,328 | 0.501 | 0.015 | 4,366 |
+| teacher labels (ceiling) | 0.773 | | | 0.688 | | |
+
+- **Negative: the reranker does not pay.** Full cascade vs classifier + prototypes: +0.002 (privacy), −0.004
+  (papers), at 9× / 4.7× the time. Prototypes alone are weak; their value is as a second signal next to the
+  classifier, where they lift macro F1 by 0.036 (privacy) and 0.019 (papers) and fix calibration (ECE 0.089 → 0.004).
+- **Gate 4.8 (macro F1 ≥ 0.80 against the reference) is not met by any variant**, and cannot be against this
+  reference: the teacher's own labels reach 0.773 / 0.688. Heads trained on teacher labels recover 79% (privacy) and
+  73% (papers) of that ceiling. Decision for Parsa.
+
+**Decisions (Parsa, 2026-10-18; decision record `reports/decisions/005-presence-model-and-gate.md`; plan edited
+first: §0.2 #7, §0.2 #8, 4.8):**
+1. **Gate 4.8 is relative:** the presence model's macro F1 against the reference ≥ 0.80 × the teacher's own macro F1
+   against it (eval half, both genres). With hand labels the absolute 0.80 applies again.
+2. **Presence heads train on teacher labels for every type** (`presence.train_labels: teacher`); OPP-115 stays a
+   reported human check.
+3. **The lean presence model is classifier + prototypes** (`presence.cascade.reranker: false`); the reranker stays
+   implemented and ablated.
+4. **Papers below the gate: recorded as not met, continue** (after the diagnosis below); SetFit is the recorded
+   upgrade.
+
+**Final 4.3 / 4.5 runs** with those settings: `heads_linear_v2_s0` (C chosen on the fit half from 0.1–10: **3.0** in
+both genres; fit-half macro F1 privacy 0.666–0.710, papers 0.526–0.552 across the grid), `cascade_v2_s0`
+(`packs/<genre>/cascade.json` = classifier + prototypes). Band thresholds recorded in `configs/pack_<genre>.yaml`.
+
+| Eval half vs reference | Privacy macro F1 | ECE | ms/section | Papers macro F1 | ECE | ms/section |
+|---|---|---|---|---|---|---|
+| classifier only (teacher labels, C 3) | 0.617 | 0.061 | 107 | 0.508 | 0.124 | 485 |
+| prototypes only | 0.417 | – | 5 | 0.328 | – | 13 |
+| **classifier + prototypes (the model)** | **0.619** | **0.003** | 113 | **0.497** | **0.013** | 498 |
+| teacher labels (ceiling) | 0.773 | | | 0.688 | | |
+| **share of the ceiling (gate ≥ 0.80)** | **0.801: pass** | | | **0.722: not met** | | |
+
+- **Diagnosis (papers):** the heads reach only 0.687 macro F1 on their own training sections (privacy 0.729) and
+  0.477 in 5-fold cross-validation against the teacher (privacy 0.605): a frozen whole-section embedding cannot
+  separate 47 fine-grained statement types in long sections (median 1,074 characters, 90th percentile 3,474; about
+  5 types per section). The plan's remedy is SetFit (fine-tuning the embedder on the labels), kept as the upgrade.
+- For papers, prototypes improve calibration (ECE 0.124 → 0.013) but not F1 (0.508 → 0.497); the pipeline uses the
+  combined model for its calibrated probabilities.
+
+## 2026-10-17 — Silver presence reference (decision record 004); paper re-embed finished on Colab
+
+**Decision (Parsa): no hand-labelled sanity set for now.** Labelling 300 + 300 sections against 50–58 types (about
+32,000 judgements) does not fit the schedule. The 4.2 reference set is now **silver**: the same 300 fixed sections per
+genre labelled by a second judge of another family, **Claude Haiku 5.5** via OpenRouter (pinned to Anthropic,
+structured outputs), with the teacher's own prompts; for privacy, OPP-115's human labels on the 35 mapped types are
+reported alongside. Hand labels on the page stay as the upgrade (`distil.score.reference`). **Plan edited first:**
+§0.2 #15 (false alarms judged by the reference set), §0.2 #25 (reference set is a swappable component), tasks 4.2,
+4.3, 4.5, 4.6, 4.8 ("human set" → "reference set"; the gate states which reference), Appendix B. Decision record
+`reports/decisions/004-silver-presence-reference.md`. Options weighed: hand labels (20+ h), adjudicating only
+teacher–judge disagreements (1–2 h; the cheapest later upgrade), verify mode (anchoring), OPP-115 alone (loose,
+35 of 58 privacy types, no papers).
+- Judge overlay `configs/judge.yaml` (`sets: [human]`). Test call `judge_haiku_try_s0` (2 paper sections): works;
+  agrees with the teacher on core types, differs on the watch-list neighbours (the three comparison types,
+  `proposes_method`/`method_proposal`). **Cost estimate corrected:** Claude counts ≈ 13k input tokens per section
+  (≈ 3.4k for Qwen: tokenizer, schema in the structured-output request, retries), so 600 sections ≈ $1.50, not the
+  $0.40 first quoted.
+- **Judge run** `judge_haiku_s0`: 600/600 sections, 0 first-pass failures, but **the second look failed on 4 privacy
+  and 29 paper sections**: 252 answers were cut off mid-JSON (Claude quotes long spans; the 400-token budget, doubled
+  once to 800 on retry, ran out) or empty. Rerun with `distil.teacher_labels.check_max_tokens=1500` (judge only; the
+  teacher's second look had no such failures) as `judge_haiku_s0_20261017-004935-303611`: **0 failures**; privacy
+  765 labels (2.55 per section, 8% from the second look), papers 1,435 (4.78, 15%); spans 99.8–100% verbatim. Cost
+  of both judge runs ≈ $1.05 (6.39M input + 0.82M output tokens at $0.10 / $0.50 per 1M).
+- **Judge vs OPP-115** on the 300 privacy reference sections, 35 mapped types (run `score_judge_vs_opp115_s0`, table
+  `reports/tables/teacher_vs_opp115_judge_privacy.csv`): micro P/R/F1 0.657/0.577/**0.614**, macro F1 0.630 over 29
+  types with ≥ 5 positives (first pass alone 0.676/0.541/0.601, macro 0.610). The same pattern as the teacher's
+  calibration (0.551 on other sections): the OPP-115 mapping, not only the models, limits agreement.
+- `distil.score` now leaves out sections the judge failed on (a failed section has no labels and must not count as
+  all-negative; test added).
+- **Watch (from decision 004):** the plan fits calibration (4.3) and the combination layer (4.5) on the same reference
+  set it evaluates on (4.6, 4.8); decide a document-level fit/evaluation split before 4.3.
+
+**Paper re-embed: done on Colab** (see the 2026-10-15 entry for details): A100, 140 s; import checked (cosine
+≥ 0.99999 against the Mac's encoder on 50 texts); store aligned with the rebuilt corpus (380,736 rows).
+
+**72B teacher labelling** resumed (`label_72b_s0_20261017-001458-852549`, concurrency 24, 40–136 calls/min): privacy
+done (teacher set 1,999/2,000 sections, 5,379 labels, 20% from the second look; reference set 300/300, 842 labels,
+19%), then the papers phase **crashed on one HTTP 429** (OpenRouter: the shared DeepInfra pool for the 72B was
+overloaded, "engine_overloaded"). **Fix:** `OpenAITeacher` now waits out rate limits and transient server errors (up
+to 8 retries, 5 s doubling to a 120 s cap, jittered) instead of failing the run (test added). Relaunched; privacy
+replays from the cache.
+
+**Privacy scores** (teacher labels from the run above; tables `reports/tables/teacher_vs_<name>_privacy.csv`):
+
+| Comparison (sections) | micro P | micro R | micro F1 | macro F1 (types ≥ 5 pos.) | first pass F1 |
+|---|---|---|---|---|---|
+| teacher vs judge, all 58 types (300 reference) | 0.740 | 0.814 | **0.775** | 0.777 (46) | 0.736 |
+| teacher vs OPP-115, 35 types (300 reference) | 0.606 | 0.586 | 0.596 | 0.605 (29) | 0.569 |
+| judge vs OPP-115, 35 types (300 reference) | 0.657 | 0.577 | 0.614 | 0.630 (29) | 0.601 |
+| teacher vs OPP-115, 35 types (all 2,299 labelled) | 0.578 | 0.575 | 0.576 | 0.613 (35) | 0.539 |
+
+- The second look raises teacher–judge agreement (micro F1 0.736 → 0.775: recall 0.70 → 0.81, precision 0.78 →
+  0.74) and agreement with OPP-115 (0.569 → 0.596).
+- The two models agree with each other (0.78) much more than either agrees with the OPP-115 mapping (≈ 0.60), which
+  supports the 2026-10-15 reading that the mapping, not the models, is the main source of disagreement there.
+- **Plan rule (4.2) triggered:** all 12 privacy types with ≥ 20 reference positives are below teacher F1 0.85 against
+  the judge (0.66–0.84; lowest `shares_with_service_providers` 0.66, `data_use_for_services` 0.67,
+  `sends_marketing_communications` 0.73, `shares_with_affiliates_and_partners` 0.74). Against a silver reference this
+  is model–model agreement, so a low value means the two models read the definition differently, not which one is
+  wrong. Revisiting definitions is a schema change (version-2 pack): for Parsa, with the papers results.
+
+**72B labelling finished (2026-10-18)** after a stop at Parsa's request and a resume: run
+`label_72b_s0_20261018-195259-515194` (all 4,600 sections; privacy replayed from the cache). Papers: teacher set
+1,989/2,000 sections (11 failed first passes, 6 failed second looks), 10,412 labels (5.2 per section, 22% from the
+second look), spans 98.4% verbatim; reference set 300/300, 1,492 labels (19% second look). Whole run: 9,804 calls
+(6,777 from the cache), 4.15M + 0.78M tokens in the last segment. The provider rate-limited the run 37 times in the last segment (HTTP 429); the new back-off waited them out (worst case retry 7 of 8, waits up to ~100 s) and no call failed.
+
+**Papers scores, teacher vs judge** (300 reference sections, all 50 types; `reports/tables/teacher_vs_judge_papers.csv`,
+run `score_judge_papers_s0`): micro P/R/F1 0.658/0.684/**0.671**, macro F1 0.666 over 47 types (first pass alone
+0.631, macro 0.630). Lower than privacy (0.775). **All 30 types with ≥ 20 reference positives are below 0.85**;
+lowest `method_proposal` 0.11, `performance_comparison_across_other_works` 0.33, `states_own_limitations` 0.42,
+`defines_notation` 0.50, `performance_comparison` 0.58, `method_comparison` 0.61, `task_description` 0.61.
+- **The disagreement is between neighbouring types** (where the judge said A and the teacher did not, the teacher's
+  other labels in that section): papers `performance_comparison_across_other_works` → `performance_comparison` (10),
+  `describes_method_details` → `defines_notation` (9), `performance_comparison` → `reports_experimental_results` (7),
+  `task_description` → `motivates_problem` / `proposes_method` (6 each), `states_limitations_of_existing_approaches`
+  → `states_own_limitations` (6); privacy `shares_with_affiliates_and_partners` → `shares_with_service_providers` (9).
+  These are the 3.4 watch-list pairs.
+- **Merging the clear duplicates helps little** (simulated on the labels, no schema change): `method_proposal` into
+  `proposes_method` and the three comparison types into one: micro F1 0.671 → 0.692, macro 0.666 → 0.693 (merged
+  comparison type 0.77). The rest needs sharper definitions, not merges.
+- **Consequence for gate 4.8:** a classifier trained on teacher labels can hardly agree with the judge more than the
+  teacher does, so against the silver reference papers macro F1 is capped near 0.67 with schema v1; the 0.80 gate is
+  out of reach for papers unless the types become more separable or the gate's reference changes. For Parsa.
+
+**Papers pack version 2 (2026-10-18).** Parsa asked for "the best and fastest approach with no cost" that "keeps the
+novelty"; chosen by Claude: **merge only the two evidence-backed near-duplicates, no relabelling.**
+`method_proposal` → `proposes_method`; `performance_comparison`, `performance_comparison_across_other_works`,
+`method_comparison` → **`compares_with_other_methods`** (new card: definition, two positive examples taken from the
+merged types, a near-miss taken from a neighbouring type's claims). 50 → **47 types** (inside the 40–60 bound);
+v1 kept byte-for-byte as `packs/papers/history/schema.v1.yaml` (sha1 `34253189e850`); `schema.yaml` records
+`derived_from`, `changes` and `merged_from` per merged type; seed mapping rewritten (NeurIPS 1 → `proposes_method`).
+Written by `analysis/make_papers_schema_v2.py` with `packs/schema_versions.py` (tests: `test_schema_versions.py`).
+Labels stay as produced under v1 and are **projected** when read (`distil.stage: score` does it from the schema's
+`merged_from`; training will too). Privacy stays version 1.
+- Kept apart on purpose: own vs existing-approach limitations (a missing limitations statement is a core omission for
+  this project), notation vs method details, task vs motivation: they need sharper definitions (a relabelling run),
+  not merges.
+- **Rescored under v2** (run `score_judge_papers_v2_s0`, table `teacher_vs_judge_v2_papers.csv`): teacher vs judge
+  micro P/R/F1 0.673/0.711/**0.692**, macro F1 **0.693** (44 types with ≥ 5 positives; first pass alone 0.656/0.650);
+  `proposes_method` 0.71, `compares_with_other_methods` 0.77. The plan's 0.85 rule is still triggered for most common
+  types; the gate (4.8) is to be decided with the classifier's numbers, measured next to this teacher–judge ceiling.
+- The labelling page (upgrade path) still shows the v1 types; its answers would be projected the same way.
+  `analysis/label_page.py` now lists the v2 families for a rebuild.
+
 ## 2026-10-15 (evening) — Phase 4 session 1: oversized paper sections fixed; 4.1 privacy labels; label sets; 4.2 page
 
 **Checks at start:** 248 tests pass; both schemas `version: 1`, `status: frozen`, 58 and 50 types, as in HANDOFF.md.
@@ -50,6 +241,15 @@ and no document's text changed (whitespace aside).
 - **Re-embedding only the changed sections:** `embed.reuse: true` (`engine.embed.embed_and_store(..., reuse=True)`,
   test added) keeps every row whose text sha1 is in the store and encodes the rest. Store backed up as
   `data/embeddings/Qwen__Qwen3-Embedding-0.6B/papers/_sections_unsplit_2026-10-15/`. Run `embed_papers_split_s0` (9,728 new chunks, MPS fp32) **stopped at Parsa's request at batch 147 of 304 (≈ 70 min); the store only saves at the end, so that work is lost** and the store on disk is the old, intact one. Rerun needed (≈ 1.5–2 h on MPS, longest texts first; faster with nothing else on the GPU).
+  **Done on Colab instead (2026-10-17, Parsa's choice):** new `embed.mode: export` → bundle of the texts the store
+  lacks (run `embed_export_papers_s0`: 9,608 unique texts, 30.6M chars, 9.4 MB zip; manifest pins the model snapshot
+  `97b0c614…` and settings) → `notebooks/colab_embed.ipynb` with the self-contained `experiments/colab_embed.py`
+  (encodes exactly like `engine/embed.Embedder`; a test checks this on a small model) → `embed.mode: import`
+  (run `embed_import_papers_s0`). Parsa ran it on an A100 (fp16, torch 2.11, same sentence-transformers 6.1.0 and
+  transformers 5.17.0): 140 s, 68.7 texts/s. Import: 9,716 rows imported, 371,020 reused; 50 imported texts
+  re-encoded on the Mac: cosine min 0.99999, mean 1.0. Store checked: 380,736 rows aligned with the rebuilt sections
+  by id and sha1, all finite, unit norm. Tests: export → Colab script → import round trip, refusal when a text has
+  no vector, Colab settings = Embedder.
 
 **Task 4.1, privacy labels from OPP-115** (`packs/presence_labels.py`, `distil.stage: labels`,
 `tests/test_presence_labels.py`; run `labels_opp115_s0` → `runs/labels_opp115_s0/labels_privacy.jsonl`, table

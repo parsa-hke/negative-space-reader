@@ -290,3 +290,27 @@ def test_openai_backend_round_robin_route_label_and_rejections():
     with pytest.raises(T.StructuredOutputError):  # a rejected request is a failed item, never a crash
         bad.generate_structured("p", Retention)
     assert T.TEACHER_STATS.summary()["served_by"].get("openai:test:label/rejected") == 2
+
+
+def test_rate_limits_are_waited_out_not_fatal():
+    """2026-10-17: the 72B run died on one 429 from OpenRouter's shared DeepInfra pool. Rate limits and transient
+    server errors are now retried with back-off; only after rate_limit_retries attempts does the error surface."""
+    from openai import OpenAI
+
+    calls = []
+
+    def handler(request):
+        calls.append(1)
+        if len(calls) <= 2:
+            return httpx.Response(429, json={"error": {"message": "temporarily rate-limited upstream", "code": 429}})
+        return httpx.Response(200, json=chat_response(GOOD))
+
+    client = OpenAI(api_key="t", base_url="http://test/v1", max_retries=0,
+                    http_client=httpx.Client(transport=httpx.MockTransport(handler)))
+    teacher = T.OpenAITeacher("m", client=client, rate_limit_retries=3, rate_limit_wait_s=0)
+    assert teacher.generate_structured("p", Retention).retention_days == 30 and len(calls) == 3
+
+    calls.clear()
+    stubborn = T.OpenAITeacher("m", client=client, rate_limit_retries=1, rate_limit_wait_s=0)
+    with pytest.raises(Exception, match="429|rate"):
+        stubborn.generate("p")

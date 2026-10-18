@@ -1,0 +1,5 @@
+variant,micro_precision,micro_recall,micro_f1,macro_f1,types_scored,ece,ms_per_section
+classifier only,0.41,0.635,0.499,0.508,40,0.124,485.2
+prototypes only,0.166,0.718,0.27,0.328,40,,12.8
+classifier + prototypes,0.427,0.615,0.504,0.497,40,0.013,498.1
+teacher labels (ceiling),0.666,0.705,0.685,0.688,40,,

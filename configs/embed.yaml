@@ -7,3 +7,7 @@ run:
 embed:
   limit: null                     # first N sections/documents per genre (tests and smoke only)
   reuse: false                    # true: encode only texts whose sha1 is not already in the store (after a rebuild)
+  mode: encode                    # encode | export (bundle for Colab) | import (merge Colab's output); experiments/embed.py
+  import_from: null               # import: colab_out.zip (or its folder) from notebooks/colab_embed.ipynb
+  import_check: 50                # import: re-encode this many imported texts locally and compare
+  import_min_cosine: 0.99         # import: refuse if any of them falls below this cosine

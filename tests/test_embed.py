@@ -62,3 +62,82 @@ def test_embed_reuses_stored_rows_by_text_hash(tmp_path):
     third = CountingEmbedder()
     embed_and_store(third, [["d", 0]], ["kept section"], tmp_path / "s")  # reuse off: everything is encoded
     assert third.seen == ["kept section"]
+
+
+def _embed_cfg(tmp_path, mode, **embed):
+    from data.schema import Document, Section, write_jsonl
+    from experiments.config import load_config
+
+    processed = tmp_path / "processed" / "g"
+    processed.mkdir(parents=True, exist_ok=True)
+    texts = ["kept section", "new chunk one", "new chunk two", "new chunk one"]  # a repeated text is sent once
+    write_jsonl(processed / "sections.jsonl", [Section(doc_id="d", idx=i, heading=None, text=t) for i, t in enumerate(texts)])
+    write_jsonl(processed / "documents.jsonl", [Document(id="d", genre="g", source="s", entity_id="d", version=None,
+                                                         date=None, category=None, title="kept title", meta={})])
+    cfg = load_config("configs/embed.yaml", ["smoke"])
+    cfg["pack"] = "g"
+    cfg["paths"].update(data_processed=str(tmp_path / "processed"), embeddings=str(tmp_path / "emb"))
+    cfg["embed"].update(mode=mode, **embed)
+    return cfg, texts
+
+
+def test_export_colab_import_round_trip(tmp_path):
+    import json
+    import zipfile
+
+    from engine.embed import embed_and_store, embedding_slug
+    from experiments import colab_embed, embed
+    from experiments.config import load_config
+
+    cfg, texts = _embed_cfg(tmp_path, "export")
+    store = tmp_path / "emb" / embedding_slug(cfg["models"]["embedder"]) / "g"
+    first = CountingEmbedder()
+    embed_and_store(first, [["d", 0]], ["kept section"], store / "sections")
+    embed_and_store(first, ["d"], ["kept title"], store / "titles")
+    (tmp_path / "run").mkdir()
+    m = embed.main(cfg, tmp_path / "run")
+    assert m["g/sections_missing"] == 2 and m["g/titles_missing"] == 0
+    with zipfile.ZipFile(tmp_path / "run" / "colab_bundle.zip") as z:
+        z.extractall(tmp_path / "bundle")
+        assert "colab_embed.py" in z.namelist()
+    manifest = json.loads((tmp_path / "bundle" / "manifest.json").read_text())
+    assert list(manifest["files"]) == ["g_sections"] and manifest["files"]["g_sections"]["rows"] == 2
+
+    colab = CountingEmbedder()
+    colab_embed.encode_bundle(tmp_path / "bundle", tmp_path / "colab_out", colab.encode, {"device": "fake"})
+    assert colab.seen == ["new chunk one", "new chunk two"]
+
+    cfg["embed"].update(mode="import", import_from=str(tmp_path / "colab_out"), import_check=0)
+    m = embed.main(cfg, tmp_path / "run")
+    st = EmbeddingStore.load(store / "sections")
+    assert st.ids == [["d", 0], ["d", 1], ["d", 2], ["d", 3]] and m["g/sections_imported_rows"] == 3
+    assert np.allclose(st.vectors[1], st.vectors[3]) and st.meta["imported_from"]["device"] == "fake"
+    assert np.allclose(st.vectors[2], CountingEmbedder().encode(["new chunk two"])[0], atol=1e-3)
+
+
+def test_import_refuses_when_texts_are_still_missing(tmp_path):
+    import pytest
+
+    from experiments import embed
+
+    cfg, _ = _embed_cfg(tmp_path, "import", import_from=str(tmp_path / "empty"), import_check=0)
+    (tmp_path / "empty").mkdir()
+    (tmp_path / "empty" / "meta.json").write_text('{"files": {}}')
+    with pytest.raises(ValueError, match="no vector"):
+        embed.main(cfg, tmp_path)
+
+
+def test_colab_model_settings_match_the_embedder(monkeypatch):
+    """The Colab script must encode exactly like engine/embed.Embedder (checked with a small model on CPU)."""
+    import huggingface_hub.constants
+
+    monkeypatch.setenv("HF_HUB_OFFLINE", "1")  # cached model; network checks made this test take 11 s
+    monkeypatch.setattr(huggingface_hub.constants, "HF_HUB_OFFLINE", True)
+    from engine.embed import Embedder
+    from experiments.colab_embed import load_model
+
+    texts = ["We keep your data for two years.", "The authors report accuracy on three datasets.", "x" * 600]
+    ref = Embedder("BAAI/bge-small-en-v1.5", devices=["cpu"], max_length=64).encode(texts)
+    model = load_model({"model": "BAAI/bge-small-en-v1.5", "max_length": 64, "truncate_dim": None}, "cpu")
+    got = model.encode(texts, normalize_embeddings=True, convert_to_numpy=True)
+    assert np.allclose(ref, got, atol=1e-5)

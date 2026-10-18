@@ -31,7 +31,7 @@ GENRES = {"privacy": "Privacy policies", "papers": "Research papers"}
 FAMILIES = {
     "papers": [
         ("Framing", ["motivates_problem", "task_description", "reviews_prior_work",
-                     "states_limitations_of_existing_approaches", "proposes_method", "method_proposal",
+                     "states_limitations_of_existing_approaches", "proposes_method",
                      "states_method_advantages", "claims_broader_applicability"]),
         ("Theory", ["defines_notation", "assumption_and_distribution", "mdp_component_definition",
                     "states_theoretical_result", "proves_or_derives"]),
@@ -42,9 +42,8 @@ FAMILIES = {
                   "generates_synthetic_data", "describes_annotation_process"]),
         ("Setup", ["describes_evaluation_metrics", "uses_baselines", "specifies_hyperparameters",
                    "specifies_compute_resources", "names_software_and_libraries", "reports_computational_cost"]),
-        ("Results", ["reports_experimental_results", "performance_comparison", "performance_comparison_across_other_works",
-                     "method_comparison", "reports_ablation_or_improvement", "reports_variance_or_significance",
-                     "visualizes_results", "reports_observations"]),
+        ("Results", ["reports_experimental_results", "compares_with_other_methods", "reports_ablation_or_improvement",
+                     "reports_variance_or_significance", "visualizes_results", "reports_observations"]),
         ("Closing", ["states_own_limitations", "suggests_future_work", "discusses_societal_impact_or_misuse",
                      "ethics_and_declarations", "code_and_data_availability", "discloses_funding",
                      "acknowledges_contributors", "refers_to_appendix"]),

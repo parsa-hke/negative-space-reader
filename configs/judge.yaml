@@ -1,0 +1,16 @@
+# Second judge for the silver presence reference (plan 4.2, decision record 004): a model of another family than the
+# Qwen teacher labels the reference sections with the teacher's own prompts. Apply after the openrouter overlay:
+#   python -m experiments.run --config configs/distil.yaml --overlay openrouter --overlay judge --name judge_haiku \
+#       --set distil.stage=teacher_labels --set 'run.seeds=[0]' --set run.device=cpu
+# Checked 2026-10-17: served by Anthropic with structured outputs, $0.10 / $0.50 per 1M tokens in / out.
+models:
+  teacher:
+    id: anthropic/claude-haiku-5.5
+    provider:
+      order: [anthropic]
+      allow_fallbacks: false
+      data_collection: deny
+
+distil:
+  teacher_labels:
+    sets: [human]                 # the reference sections only

@@ -452,8 +452,10 @@ class OpenAITeacher(Teacher):
     def __init__(self, model_id: str, *, base_url: str | list[str] | None = None, api_key_env: str | None = None,
                  response_format: str = "json_schema", request_timeout_s: float = 120,
                  concurrency: int = 8, provider: dict[str, Any] | None = None, served_as: str | None = None,
-                 client: Any = None, **kw: Any):
+                 client: Any = None, rate_limit_retries: int = 8, rate_limit_wait_s: float = 5.0, **kw: Any):
         super().__init__(model_id, **kw)
+        # rate limits (429) and transient server errors are waited out: wait_s, 2*wait_s, ... capped at 120 s
+        self.rate_limit_retries, self.rate_limit_wait_s = rate_limit_retries, rate_limit_wait_s
         urls = base_url if isinstance(base_url, list) else [base_url]
         self.base_url = urls[0]
         self.provider = provider
@@ -498,14 +500,28 @@ class OpenAITeacher(Teacher):
             kwargs["response_format"] = {"type": "json_object"}
         import openai
 
-        try:
-            resp = self._pick_client().chat.completions.create(
-                model=self.model_id, messages=messages, temperature=self.temperature, top_p=self.top_p,
-                max_completion_tokens=max_tokens, **kwargs)
-        except openai.BadRequestError as e:  # e.g. prompt + budget beyond a slot's context: a failed item, not a crash
-            print(f"[teacher] request rejected: {str(e)[:200]}", flush=True)
-            self._served(served_by=f"{self._route()}/rejected")
-            return ""
+        import random
+        import time
+
+        transient = (openai.RateLimitError, openai.InternalServerError, openai.APIConnectionError,
+                     openai.APITimeoutError)
+        for attempt in range(self.rate_limit_retries + 1):
+            try:
+                resp = self._pick_client().chat.completions.create(
+                    model=self.model_id, messages=messages, temperature=self.temperature, top_p=self.top_p,
+                    max_completion_tokens=max_tokens, **kwargs)
+                break
+            except openai.BadRequestError as e:  # e.g. prompt + budget beyond a slot's context: a failed item
+                print(f"[teacher] request rejected: {str(e)[:200]}", flush=True)
+                self._served(served_by=f"{self._route()}/rejected")
+                return ""
+            except transient as e:
+                if attempt == self.rate_limit_retries:
+                    raise
+                wait = min(120.0, self.rate_limit_wait_s * 2 ** attempt) * (0.5 + random.random() / 2)
+                print(f"[teacher] {type(e).__name__}, retry {attempt + 1}/{self.rate_limit_retries} in {wait:.0f}s",
+                      flush=True)
+                time.sleep(wait)
         usage = getattr(resp, "usage", None)
         extra = getattr(resp, "model_extra", None) or {}
         served = extra.get("provider") or getattr(resp, "provider", None)  # OpenRouter adds `provider`

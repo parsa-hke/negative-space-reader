@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "progress",
+      "runtimeExecutable": ".venv/bin/python",
+      "runtimeArgs": ["-m", "analysis.progress_server", "--port", "8765"],
+      "port": 8765
+    }
+  ]
+}

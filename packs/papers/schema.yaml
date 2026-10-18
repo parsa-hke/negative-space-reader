@@ -1,22 +1,51 @@
 genre: papers
-version: 1
 status: frozen
-frozen:
+pruned_clusters:
+- cluster: c040
+  size: 172
+  reason: reviewed on the page; see decisions/page_answers_2026-10-15.json and resolutions_2026-10-15.yaml
+- cluster: c064
+  size: 120
+  reason: reviewed on the page; see decisions/page_answers_2026-10-15.json and resolutions_2026-10-15.yaml
+provenance:
   date: '2026-10-15'
-  signed_off_by: Parsa Hosseini, 2026-10-15
-  coverage_run: coverage_72b_v4_s3
-  unmapped_section_rate: 0.0
-  candidate_sha1: d790a2005a31
+  workbook: schema_review_papers.xlsx
+  workbook_sha1: 759186c52675
+  cluster_run: cluster_v1_s0
+  candidate_run: candidate_v3_s0
+version: 2
+frozen:
+  date: '2026-10-18'
+  decided_by: 'Claude, on Parsa''s instruction (2026-10-18): the best fast approach with no cost that keeps the
+    novelty'
+derived_from:
+  version: 1
+  file: packs/papers/history/schema.v1.yaml
+  sha1: 34253189e850
+changes:
+- merged:
+  - proposes_method
+  - method_proposal
+  into: proposes_method
+  reason: 'near-duplicates: the teacher and the second judge split them differently on the reference sections (CHANGELOG
+    2026-10-18)'
+- merged:
+  - performance_comparison
+  - performance_comparison_across_other_works
+  - method_comparison
+  into: compares_with_other_methods
+  reason: 'near-duplicates: the teacher and the second judge split them differently on the reference sections (CHANGELOG
+    2026-10-18)'
 types:
 - id: motivates_problem
   name: motivates_problem
-  definition: States why the problem matters (its importance, prevalence, real-world risks or costs), usually in the introduction,
-    without yet describing the authors' method.
+  definition: States why the problem matters (its importance, prevalence, real-world risks or costs), usually in
+    the introduction, without yet describing the authors' method.
   positive_examples:
   - The authors describe the risks associated with false and misleading information about a topic.
   - The authors state that misinformation about a topic is prevalent and poses high risks.
-  near_miss: The authors state that the content of their work represents their own opinion and not necessarily that of their
-    employers or sponsors.
+  near_miss: The authors state that the content of their work represents their own opinion and not necessarily that
+    of their employers or sponsors.
   severity_weight: 1.0
   section_hint: under a heading like 'introduction', in the first half of the document
   label_source: []
@@ -24,12 +53,13 @@ types:
   - c053
 - id: reviews_prior_work
   name: reviews_prior_work
-  definition: Reviews or cites previous work on the problem or on background methods, including recent advances in the field,
-    without contrasting it with the authors' own contribution.
+  definition: Reviews or cites previous work on the problem or on background methods, including recent advances
+    in the field, without contrasting it with the authors' own contribution.
   positive_examples:
   - The authors relate their work to previous attempts found in the literature.
   - The authors review prior work on the problem and its limitations.
-  near_miss: The authors state that their method differs from existing works in adopting a separate exploration policy.
+  near_miss: The authors state that their method differs from existing works in adopting a separate exploration
+    policy.
   severity_weight: 1.0
   section_hint: under a heading like 'related work', in the first half of the document
   label_source: []
@@ -39,20 +69,25 @@ types:
   - c042
 - id: proposes_method
   name: proposes_method
-  definition: Announces the authors' proposed method, model, algorithm or framework, often by name, as the paper's contribution.
+  definition: Announces or proposes the authors' new method, model, algorithm or framework, often by name, as the
+    paper's contribution or to address a particular problem.
   positive_examples:
   - The authors propose a novel algorithm named ${\tt LyOn}$ for solving constrained bandit optimization problems.
-  - The authors present an algorithm that extends a previous algorithm to a new setting.
-  near_miss: The authors propose a new method called SpliMe to leverage static embedding models for temporal knowledge graphs.
+  - The authors propose a new method called SpliMe to leverage static embedding models for temporal knowledge graphs.
+  near_miss: The authors develop a version of Q-learning for finite horizon Markov decision processes.
+  section_hint: under a heading like 'abstract' or 'introduction', in the first half of the document
   severity_weight: 1.0
-  section_hint: under a heading like 'conclusion', in the first half of the document
   label_source: []
   source_clusters:
   - c050
+  - c020
+  merged_from:
+  - proposes_method
+  - method_proposal
 - id: states_method_advantages
   name: states_method_advantages
-  definition: States an advantage of the proposed method, such as needing less data, no retraining or fewer resources than
-    alternatives.
+  definition: States an advantage of the proposed method, such as needing less data, no retraining or fewer resources
+    than alternatives.
   positive_examples:
   - The authors state that CBLN can learn new tasks without forgetting previously learned ones.
   - The authors state that their proposed method does not require access to model internals or retraining.
@@ -88,11 +123,12 @@ types:
   - c030
 - id: states_theoretical_result
   name: states_theoretical_result
-  definition: States a theorem or formal guarantee (convergence, regret or error bounds, properties of an estimator) as a
-    result of the paper.
+  definition: States a theorem or formal guarantee (convergence, regret or error bounds, properties of an estimator)
+    as a result of the paper.
   positive_examples:
   - The authors provide an upper bound for the expected regret of the BIAS-OFUL algorithm.
-  - The authors report that the control variates estimator is unbiased and has the least variance among other unbiased estimators.
+  - The authors report that the control variates estimator is unbiased and has the least variance among other unbiased
+    estimators.
   near_miss: The authors use mathematical inequalities and properties to derive bounds.
   severity_weight: 1.0
   section_hint: in the first half of the document
@@ -104,8 +140,8 @@ types:
   - c074
 - id: proves_or_derives
   name: proves_or_derives
-  definition: Carries out or reports steps of a proof or derivation (applying a lemma, deriving a bound or expression, establishing
-    a property of a function).
+  definition: Carries out or reports steps of a proof or derivation (applying a lemma, deriving a bound or expression,
+    establishing a property of a function).
   positive_examples:
   - The authors provide a proof for Theorem [ref] that relies on an auxiliary result.
   - The authors derive a mathematical expression for the left hand side of an equation.
@@ -124,8 +160,8 @@ types:
   positive_examples:
   - The authors describe the process of encoding sequences through a multi-head attention and feed-forward network.
   - 'The authors describe their framework consisting of three components: parser, dialogue manager, and generator.'
-  near_miss: The authors initialize their model with the architecture and weights of a pre-existing visual language model
-    and then finetune it for a specific task.
+  near_miss: The authors initialize their model with the architecture and weights of a pre-existing visual language
+    model and then finetune it for a specific task.
   severity_weight: 1.0
   section_hint: in the first half of the document
   label_source: []
@@ -136,11 +172,12 @@ types:
   name: describes_training_objective
   definition: Describes the loss function or training objective, including regularisation terms.
   positive_examples:
-  - 'The authors describe their loss function, which consists of two parts: a prediction loss and a graph structure preserving
-    loss.'
-  - The authors describe the loss function with terms for empirical risk, domain discrepancy, and reconstruction loss.
-  near_miss: The authors propose a regularization loss to explicitly model the non-local dependencies among constituents that
-    belong to the same pattern.
+  - 'The authors describe their loss function, which consists of two parts: a prediction loss and a graph structure
+    preserving loss.'
+  - The authors describe the loss function with terms for empirical risk, domain discrepancy, and reconstruction
+    loss.
+  near_miss: The authors propose a regularization loss to explicitly model the non-local dependencies among constituents
+    that belong to the same pattern.
   severity_weight: 1.0
   section_hint: in the first half of the document
   label_source: []
@@ -148,13 +185,14 @@ types:
   - c037
 - id: describes_training_procedure
   name: describes_training_procedure
-  definition: Describes how the model is trained or optimised (training steps, update rules, optimisation algorithm, initialisation).
+  definition: Describes how the model is trained or optimised (training steps, update rules, optimisation algorithm,
+    initialisation).
   positive_examples:
   - The authors describe the update process for the regressor and EMA via SGD.
-  - The authors state that the optimization process uses Nesterov's method to iteratively solve for a placement that minimizes
-    both HPWL and density costs.
-  near_miss: The authors propose a regularization loss to explicitly model the non-local dependencies among constituents that
-    belong to the same pattern.
+  - The authors state that the optimization process uses Nesterov's method to iteratively solve for a placement
+    that minimizes both HPWL and density costs.
+  near_miss: The authors propose a regularization loss to explicitly model the non-local dependencies among constituents
+    that belong to the same pattern.
   severity_weight: 1.0
   section_hint: in the first half of the document
   label_source: []
@@ -164,11 +202,14 @@ types:
   - c051
 - id: describes_algorithm_steps
   name: describes_algorithm_steps
-  definition: Describes an algorithm step by step (initialisation, iterations, termination), often with reference to pseudocode.
+  definition: Describes an algorithm step by step (initialisation, iterations, termination), often with reference
+    to pseudocode.
   positive_examples:
-  - The authors describe the algorithm for discovering incremental skills, including the initialization and update steps.
+  - The authors describe the algorithm for discovering incremental skills, including the initialization and update
+    steps.
   - The authors describe a detailed algorithm for their method.
-  near_miss: The authors propose a novel algorithm named ${\tt LyOn}$ for solving constrained bandit optimization problems.
+  near_miss: The authors propose a novel algorithm named ${\tt LyOn}$ for solving constrained bandit optimization
+    problems.
   severity_weight: 1.0
   section_hint: in the first half of the document
   label_source: []
@@ -176,14 +217,14 @@ types:
   - c044
 - id: describes_method_details
   name: describes_method_details
-  definition: Describes how a specific technique or component of the approach works (for example a graph construction, a sampling
-    scheme, a classifier, a decomposition), when no more specific method type applies.
+  definition: Describes how a specific technique or component of the approach works (for example a graph construction,
+    a sampling scheme, a classifier, a decomposition), when no more specific method type applies.
   positive_examples:
   - The authors develop a version of Q-learning for finite horizon Markov decision processes.
-  - The authors state that they will discuss adversarial attacks against black-box machine learning models and iML inspired
-    contributions to combat them.
-  near_miss: The authors define the action value function of a policy in terms of a trajectory generated by rolling out in
-    the environment following the policy.
+  - The authors state that they will discuss adversarial attacks against black-box machine learning models and iML
+    inspired contributions to combat them.
+  near_miss: The authors define the action value function of a policy in terms of a trajectory generated by rolling
+    out in the environment following the policy.
   severity_weight: 1.0
   section_hint: in the first half of the document
   label_source: []
@@ -208,8 +249,8 @@ types:
   name: fine_tunes_pretrained_model
   definition: States that a pre-trained model is fine-tuned on the task or data, with what model and data.
   positive_examples:
-  - The authors initialize their model with the architecture and weights of a pre-existing visual language model and then
-    finetune it for a specific task.
+  - The authors initialize their model with the architecture and weights of a pre-existing visual language model
+    and then finetune it for a specific task.
   - The authors fine-tune the model on the ID training data with specified hyperparameters.
   near_miss: The authors describe the update process for the regressor and EMA via SGD.
   severity_weight: 1.0
@@ -255,7 +296,8 @@ types:
   - c005
 - id: reports_dataset_statistics
   name: reports_dataset_statistics
-  definition: Reports the size or other statistics of the datasets (number of examples, classes, tokens), often in a table.
+  definition: Reports the size or other statistics of the datasets (number of examples, classes, tokens), often
+    in a table.
   positive_examples:
   - The authors report the size of the datasets used in their experiments.
   - The authors report the statistics of datasets in a table.
@@ -267,8 +309,8 @@ types:
   - c054
 - id: describes_data_split
   name: describes_data_split
-  definition: States how the data is divided into training, validation and test sets (proportions, sizes, or the standard
-    split used).
+  definition: States how the data is divided into training, validation and test sets (proportions, sizes, or the
+    standard split used).
   positive_examples:
   - The authors describe the division of the dataset into training, validation, and test sets.
   - The authors divide the data set into training, validation, and testing sets with specified proportions.
@@ -280,12 +322,13 @@ types:
   - c025
 - id: describes_preprocessing
   name: describes_preprocessing
-  definition: Describes how data is preprocessed, filtered or cleaned before use (tokenisation, normalisation, removal of
-    noisy or irrelevant items).
+  definition: Describes how data is preprocessed, filtered or cleaned before use (tokenisation, normalisation, removal
+    of noisy or irrelevant items).
   positive_examples:
-  - The authors describe the pre-processing steps applied to Sentinel-2A data, including downloading, transformation, and
-    resampling.
-  - The authors describe the filtering process applied to the Reuters News Archive to ensure only relevant articles are retained.
+  - The authors describe the pre-processing steps applied to Sentinel-2A data, including downloading, transformation,
+    and resampling.
+  - The authors describe the filtering process applied to the Reuters News Archive to ensure only relevant articles
+    are retained.
   near_miss: The authors describe data augmentation as a method for creating variations of existing data.
   severity_weight: 1.0
   section_hint: in the second half of the document
@@ -307,12 +350,13 @@ types:
   - c034
 - id: describes_annotation_process
   name: describes_annotation_process
-  definition: Describes how data was annotated (guidelines, who annotated, how annotators were recruited or trained, agreement).
+  definition: Describes how data was annotated (guidelines, who annotated, how annotators were recruited or trained,
+    agreement).
   positive_examples:
   - The authors recruited expert annotators following institutional guidelines.
   - The authors describe the process of having the annotators perform the annotation task.
-  near_miss: The authors state that the content of their work represents their own opinion and not necessarily that of their
-    employers or sponsors.
+  near_miss: The authors state that the content of their work represents their own opinion and not necessarily that
+    of their employers or sponsors.
   severity_weight: 1.0
   section_hint: in the first half of the document
   label_source: []
@@ -335,11 +379,11 @@ types:
   definition: Reports hyperparameter values or how they were chosen (learning rate, batch size, epochs, search procedure),
     including using the same settings as another work for a fair comparison.
   positive_examples:
-  - The authors specify the parameters used during the fine-tuning process, such as the number of epochs, dropout probability,
-    batch size, and learning rates.
+  - The authors specify the parameters used during the fine-tuning process, such as the number of epochs, dropout
+    probability, batch size, and learning rates.
   - The authors train and evaluate the models using the same hyper-parameters as described in the original works.
-  near_miss: The authors initialize their model with the architecture and weights of a pre-existing visual language model
-    and then finetune it for a specific task.
+  near_miss: The authors initialize their model with the architecture and weights of a pre-existing visual language
+    model and then finetune it for a specific task.
   severity_weight: 1.0
   section_hint: in the second half of the document
   label_source: []
@@ -360,7 +404,8 @@ types:
   - c047
 - id: specifies_compute_resources
   name: specifies_compute_resources
-  definition: States the hardware and computing environment used (GPUs, CPUs, memory, cluster), sometimes with run time.
+  definition: States the hardware and computing environment used (GPUs, CPUs, memory, cluster), sometimes with run
+    time.
   positive_examples:
   - The authors describe the hardware and software environment used for the simulations.
   - The authors describe the hardware and software environment used for the experiments.
@@ -372,12 +417,13 @@ types:
   - c071
 - id: names_software_and_libraries
   name: names_software_and_libraries
-  definition: Names the software packages or libraries used to implement the method or experiments, sometimes with versions.
+  definition: Names the software packages or libraries used to implement the method or experiments, sometimes with
+    versions.
   positive_examples:
   - The authors use a specific software library for their implementation.
   - The authors use a specific library for the implementation of the MLMs.
-  near_miss: The authors describe the algorithm for discovering incremental skills, including the initialization and update
-    steps.
+  near_miss: The authors describe the algorithm for discovering incremental skills, including the initialization
+    and update steps.
   severity_weight: 1.0
   section_hint: in the second half of the document
   label_source: []
@@ -385,8 +431,8 @@ types:
   - c022
 - id: reports_computational_cost
   name: reports_computational_cost
-  definition: Reports or compares computational efficiency (time or memory complexity, training or inference time, resource
-    use).
+  definition: Reports or compares computational efficiency (time or memory complexity, training or inference time,
+    resource use).
   positive_examples:
   - The authors highlight the computational efficiency of their method compared to a variant.
   - The authors state that their proposed method has lower computational overhead compared to previous methods.
@@ -398,13 +444,15 @@ types:
   - c004
 - id: reports_variance_or_significance
   name: reports_variance_or_significance
-  definition: States how reliable the results are (runs repeated over random seeds and averaged, standard deviations or error
-    bars, significance tests).
+  definition: States how reliable the results are (runs repeated over random seeds and averaged, standard deviations
+    or error bars, significance tests).
   positive_examples:
-  - The authors state that p-values were calculated to determine the statistical significance of the improvements observed.
-  - The authors confirm the statistical difference between the performance under the original and learned models using a paired
-    t-test.
-  near_miss: The authors train and evaluate the models using the same hyper-parameters as described in the original works.
+  - The authors state that p-values were calculated to determine the statistical significance of the improvements
+    observed.
+  - The authors confirm the statistical difference between the performance under the original and learned models
+    using a paired t-test.
+  near_miss: The authors train and evaluate the models using the same hyper-parameters as described in the original
+    works.
   severity_weight: 1.0
   section_hint: in the second half of the document
   label_source: []
@@ -412,8 +460,8 @@ types:
   - c075
 - id: reports_experimental_results
   name: reports_experimental_results
-  definition: Reports what the experiments showed for the authors' method (scores on datasets or tasks), without a direct
-    comparison claim.
+  definition: Reports what the experiments showed for the authors' method (scores on datasets or tasks), without
+    a direct comparison claim.
   positive_examples:
   - The authors conduct extensive experiments on real-world datasets to demonstrate the effectiveness of their methods.
   - The authors report the performance of the models on the test set for text input.
@@ -426,13 +474,13 @@ types:
   - c062
 - id: reports_ablation_or_improvement
   name: reports_ablation_or_improvement
-  definition: Reports the effect of adding, removing or changing a component of the method (ablations, improvements from a
-    modification).
+  definition: Reports the effect of adding, removing or changing a component of the method (ablations, improvements
+    from a modification).
   positive_examples:
-  - The authors report that combining token averaging and layer combination further improves performance, surpassing a previous
-    state-of-the-art method.
-  - The authors found that the inclusion of transformer elements significantly improved the performance of their model on
-    a specific dataset.
+  - The authors report that combining token averaging and layer combination further improves performance, surpassing
+    a previous state-of-the-art method.
+  - The authors found that the inclusion of transformer elements significantly improved the performance of their
+    model on a specific dataset.
   near_miss: The authors report that RadNet outperforms benchmark models across all metrics for the RadSet dataset.
   severity_weight: 1.0
   section_hint: in the second half of the document
@@ -441,8 +489,8 @@ types:
   - c077
 - id: visualizes_results
   name: visualizes_results
-  definition: Presents results or model behaviour in figures (plots, heat maps, attention visualisations) and says what they
-    show.
+  definition: Presents results or model behaviour in figures (plots, heat maps, attention visualisations) and says
+    what they show.
   positive_examples:
   - The authors visualize results using bar graphs.
   - The authors use a visualization technique to show the effectiveness of their method.
@@ -454,8 +502,8 @@ types:
   - c029
 - id: reports_observations
   name: reports_observations
-  definition: Reports qualitative observations, trends or findings from data or a study (differences between groups, participants'
-    responses), rather than scores of a method.
+  definition: Reports qualitative observations, trends or findings from data or a study (differences between groups,
+    participants' responses), rather than scores of a method.
   positive_examples:
   - The authors report that respondents expressed a strong desire for interactive explanations.
   - The authors report that euphemistic and non-euphemistic terms tend to be used in slightly different contexts.
@@ -480,14 +528,14 @@ types:
   - c015
 - id: states_own_limitations
   name: states_own_limitations
-  definition: States a limitation or weakness of the authors' own method, data, experiments or claims (what it cannot do,
-    where it fails, what it assumes).
+  definition: States a limitation or weakness of the authors' own method, data, experiments or claims (what it cannot
+    do, where it fails, what it assumes).
   positive_examples:
   - The authors acknowledge the lack of language variety as a limitation of their work.
-  - The authors mention the limitation of their work is that the safety guarantees only hold as long as a specific assumption
-    is satisfied.
-  near_miss: The authors discuss the limitations of pre-trained language models due to differences in word distributions between
-    general and financial corpora.
+  - The authors mention the limitation of their work is that the safety guarantees only hold as long as a specific
+    assumption is satisfied.
+  near_miss: The authors discuss the limitations of pre-trained language models due to differences in word distributions
+    between general and financial corpora.
   severity_weight: 1.0
   section_hint: in a 'Limitations' or 'Discussion' section, or the conclusion, near the end of the document
   label_source: []
@@ -495,13 +543,13 @@ types:
   - c000
 - id: states_limitations_of_existing_approaches
   name: states_limitations_of_existing_approaches
-  definition: States a limitation, weakness or open challenge of existing methods or prior work, usually to motivate the authors'
-    approach.
+  definition: States a limitation, weakness or open challenge of existing methods or prior work, usually to motivate
+    the authors' approach.
   positive_examples:
-  - The authors discuss the limitations of pre-trained language models due to differences in word distributions between general
-    and financial corpora.
-  - The authors describe a limitation of BERT in capturing structural information due to the lack of explicit order in its
-    blocks.
+  - The authors discuss the limitations of pre-trained language models due to differences in word distributions
+    between general and financial corpora.
+  - The authors describe a limitation of BERT in capturing structural information due to the lack of explicit order
+    in its blocks.
   near_miss: The authors acknowledge the lack of language variety as a limitation of their work.
   severity_weight: 1.0
   section_hint: in the introduction or related work, in the first half of the document
@@ -522,8 +570,8 @@ types:
   - c007
 - id: code_and_data_availability
   name: code_and_data_availability
-  definition: States whether and where the code, data or models are released (URL, repository, on request) and under what
-    licence, including the licence under which the paper itself is published.
+  definition: States whether and where the code, data or models are released (URL, repository, on request) and under
+    what licence, including the licence under which the paper itself is published.
   positive_examples:
   - The authors disclose that their code is available at a specified URL.
   - The authors disclose that their code is available at a specific GitHub repository.
@@ -559,11 +607,11 @@ types:
   - c055
 - id: ethics_and_declarations
   name: ethics_and_declarations
-  definition: Makes a formal declaration about the research (ethics statement, ethics approval or consent, competing interests,
-    that views are the authors' own, how participants were paid or who they were).
+  definition: Makes a formal declaration about the research (ethics statement, ethics approval or consent, competing
+    interests, that views are the authors' own, how participants were paid or who they were).
   positive_examples:
-  - The authors state that the content of their work represents their own opinion and not necessarily that of their employers
-    or sponsors.
+  - The authors state that the content of their work represents their own opinion and not necessarily that of their
+    employers or sponsors.
   - The authors state that their opinions and findings do not reflect the views of the funding body.
   near_miss: The authors disclose the sources of funding that support their work.
   severity_weight: 1.0
@@ -573,10 +621,12 @@ types:
   - c057
 - id: discusses_societal_impact_or_misuse
   name: discusses_societal_impact_or_misuse
-  definition: Discusses the broader societal impact of the work, including possible misuse, bias or harm and any safeguards.
+  definition: Discusses the broader societal impact of the work, including possible misuse, bias or harm and any
+    safeguards.
   positive_examples:
   - The authors acknowledge the potential for their techniques to be misused for harmful purposes.
-  - The authors acknowledge that their model relies on pre-trained models which can reproduce and magnify societal bias.
+  - The authors acknowledge that their model relies on pre-trained models which can reproduce and magnify societal
+    bias.
   near_miss: The authors describe the prevalence of false and misleading information about COVID-19 in digital spaces.
   severity_weight: 1.0
   section_hint: in a 'Broader impact' or 'Ethics' section near the end, or in the conclusion
@@ -584,13 +634,14 @@ types:
   source_clusters: []
 - id: assumption_and_distribution
   name: assumption_and_distribution
-  definition: States that the authors make assumptions about the distributions of variables, often specifying the type of
-    distribution or the conditions under which these distributions are used.
+  definition: States that the authors make assumptions about the distributions of variables, often specifying the
+    type of distribution or the conditions under which these distributions are used.
   positive_examples:
-  - The authors assume a random variable follows a distribution from the exponential family with respect to a base measure.
+  - The authors assume a random variable follows a distribution from the exponential family with respect to a base
+    measure.
   - The authors assume a known distribution for a variable in the model.
-  near_miss: The authors report that the control variates estimator is unbiased and has the least variance among other unbiased
-    estimators.
+  near_miss: The authors report that the control variates estimator is unbiased and has the least variance among
+    other unbiased estimators.
   severity_weight: 1.0
   section_hint: in the first half of the document
   label_source: []
@@ -598,11 +649,11 @@ types:
   - c006
 - id: mdp_component_definition
   name: mdp_component_definition
-  definition: Defines or describes components of a Markov Decision Process (MDP), including states, actions, transition functions,
-    reward functions, and initial state distributions.
+  definition: Defines or describes components of a Markov Decision Process (MDP), including states, actions, transition
+    functions, reward functions, and initial state distributions.
   positive_examples:
-  - The authors define the action value function of a policy in terms of a trajectory generated by rolling out in the environment
-    following the policy.
+  - The authors define the action value function of a policy in terms of a trajectory generated by rolling out in
+    the environment following the policy.
   - The authors define the state-action distribution for a policy in an MDP.
   near_miss: The authors develop a version of Q-learning for finite horizon Markov decision processes.
   severity_weight: 1.0
@@ -612,8 +663,8 @@ types:
   - c008
 - id: task_description
   name: task_description
-  definition: Describes the specific tasks, subtasks, or objectives of the research, including their nature and scope, but
-    not the methods or results.
+  definition: Describes the specific tasks, subtasks, or objectives of the research, including their nature and
+    scope, but not the methods or results.
   positive_examples:
   - The authors describe the goal of the task as classifying a term as either literal or euphemistic.
   - The authors define the entity linking task as finding a unique identity for each mention in a document.
@@ -623,68 +674,35 @@ types:
   label_source: []
   source_clusters:
   - c010
-- id: method_proposal
-  name: method_proposal
-  definition: Proposes a new method, model, or framework, often with a specific name, to address a particular problem or improve
-    an existing approach.
+- id: compares_with_other_methods
+  name: compares_with_other_methods
+  definition: Compares the authors' method, model or system with other methods, baselines or state-of-the-art approaches,
+    by performance on datasets or metrics or otherwise, including reports that it outperforms them.
   positive_examples:
-  - The authors propose a new method called SpliMe to leverage static embedding models for temporal knowledge graphs.
-  - The authors propose a novel method that combines regularization and generative-based rehearsal approaches.
-  near_miss: The authors propose a novel algorithm named ${\tt LyOn}$ for solving constrained bandit optimization problems.
-  severity_weight: 1.0
-  section_hint: under a heading like 'abstract', in the first half of the document
-  label_source: []
-  source_clusters:
-  - c020
-- id: performance_comparison_across_other_works
-  name: performance_comparison_across_other_works
-  definition: Reports that the authors' method, approach, or system outperforms other methods, baselines, or state-of-the-art
-    techniques in terms of various performance metrics or tasks.
-  positive_examples:
-  - The authors report that their method outperforms other methods on the task.
-  - The authors report that their proposed method outperforms the state-of-the-art baselines in terms of various performance
-    metrics.
-  near_miss: The authors report that RadNet outperforms benchmark models across all metrics for the RadSet dataset.
-  severity_weight: 1.0
-  section_hint: under a heading like 'abstract', in the second half of the document
-  label_source: []
-  source_clusters:
-  - c023
-- id: performance_comparison
-  name: performance_comparison
-  definition: Reports that the authors' model or method outperforms other models or baselines on specific datasets or metrics.
-  positive_examples:
+  - The authors compare their method with state-of-the-art baselines.
   - The authors report that RadNet outperforms benchmark models across all metrics for the RadSet dataset.
-  - The authors report that RadNet outperforms benchmark models for the METR-LA dataset, with an average F1 score of 0.651,
-    which is 14.0% higher than the next best average F1 of the DKFN model.
-  near_miss: The authors report that their method outperforms other methods on the task.
-  severity_weight: 1.0
+  near_miss: The authors report the performance of the models on the test set for text input.
   section_hint: in the second half of the document
+  severity_weight: 1.0
   label_source: []
   source_clusters:
   - c036
-- id: method_comparison
-  name: method_comparison
-  definition: Compares the authors' method with other existing methods, algorithms, or baselines to evaluate performance.
-  positive_examples:
-  - The authors compare their method with several existing methods.
-  - The authors compare their method with state-of-the-art baselines.
-  near_miss: The authors report that RadNet outperforms benchmark models across all metrics for the RadSet dataset.
-  severity_weight: 1.0
-  section_hint: in the second half of the document
-  label_source: []
-  source_clusters:
+  - c023
   - c038
+  merged_from:
+  - performance_comparison
+  - performance_comparison_across_other_works
+  - method_comparison
 - id: introduces_regularization
   name: introduces_regularization
-  definition: Introduces or describes the use of regularization techniques in the loss function or model formulation to improve
-    performance or prevent overfitting.
+  definition: Introduces or describes the use of regularization techniques in the loss function or model formulation
+    to improve performance or prevent overfitting.
   positive_examples:
-  - The authors propose a regularization loss to explicitly model the non-local dependencies among constituents that belong
-    to the same pattern.
+  - The authors propose a regularization loss to explicitly model the non-local dependencies among constituents
+    that belong to the same pattern.
   - The authors introduce a max term to the loss function to ensure the model learns more from high-loss predictions.
-  near_miss: 'The authors describe their loss function, which consists of two parts: a prediction loss and a graph structure
-    preserving loss.'
+  near_miss: 'The authors describe their loss function, which consists of two parts: a prediction loss and a graph
+    structure preserving loss.'
   severity_weight: 1.0
   section_hint: in the first half of the document
   label_source: []
@@ -745,8 +763,8 @@ seed_mapping:
     types:
     - ethics_and_declarations
   neurips_16:
-    exclude: 'declaring LLM use post-dates the corpus (papers up to 2022): 14 claims in 4 papers mention LLMs as tools; revisit
-      with unarXive 2024 (Phase 10)'
+    exclude: 'declaring LLM use post-dates the corpus (papers up to 2022): 14 claims in 4 papers mention LLMs as
+      tools; revisit with unarXive 2024 (Phase 10)'
   acl_A1:
     types:
     - states_own_limitations
@@ -805,16 +823,3 @@ seed_mapping:
     - ethics_and_declarations
   acl_E1:
     exclude: 'as neurips_16: AI-assistant declarations post-date the 2018-2022 corpus'
-pruned_clusters:
-- cluster: c040
-  size: 172
-  reason: reviewed on the page; see decisions/page_answers_2026-10-15.json and resolutions_2026-10-15.yaml
-- cluster: c064
-  size: 120
-  reason: reviewed on the page; see decisions/page_answers_2026-10-15.json and resolutions_2026-10-15.yaml
-provenance:
-  date: '2026-10-15'
-  workbook: schema_review_papers.xlsx
-  workbook_sha1: 759186c52675
-  cluster_run: cluster_v1_s0
-  candidate_run: candidate_v3_s0
