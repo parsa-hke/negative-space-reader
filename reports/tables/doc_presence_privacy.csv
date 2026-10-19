@@ -1,0 +1,5 @@
+variant,cv_log_loss_fit,C,documents,micro_f1,macro_f1,macro_types,ece,brier,prevalence_abs_error,prob_prevalence_abs_error,types_present_per_document,labelled_types_per_document
+v1: best section >= section threshold,,,75,0.739,0.687,57,0.15,0.17,0.136,0.157,22.76,26.76
+document model: logit_max,0.392,1.0,75,0.807,0.753,57,0.016,0.125,0.067,0.045,25.37,26.76
+"document model: logit_max,logit_second,log_sum,log_n",0.39,1.0,75,0.808,0.754,57,0.018,0.125,0.063,0.045,26.09,26.76
+"document model: logit_max,logit_second,log_sum,log_n,logit_noisy_or",0.39,1.0,75,0.808,0.754,57,0.018,0.125,0.063,0.045,26.09,26.76

@@ -271,6 +271,16 @@ distil:
     chunk_documents: 500          # one Parquet part per chunk; finished parts are skipped on a rerun
     limit: null                   # first N documents (smoke)
     out: null                     # null: packs/<genre>/profiles; smoke runs write elsewhere, e.g. runs/x/{genre}
+  sentence_evidence:              # stage sentence_evidence (2026-10-20): every indexed sentence through the presence
+    splits: [train]               # model; per document and type the best sentence (P >= min_prob) -> packs/<genre>/evidence
+    chunk_documents: 500
+    min_prob: 0.2
+    limit: null
+    out: null
+  doc_presence:                   # stage doc_presence (engine/doc_presence.py): document-level presence
+    min_positives: 5              # macro F1 over types with at least this many labelled documents (eval half)
+    C_grid: [0.03, 0.1, 0.3, 1.0, 3.0]
+    write_profiles: false         # true: profiles v2 -> packs/<genre>/profiles (v1 moved to profiles_v1)
   section_probs:                  # stage section_probs (Phase 5, 2026-10-19): every section's probabilities, the
     splits: [train, dev]          # input of document-level presence (fitted on labelled dev documents)
     chunk_documents: 500
@@ -291,6 +301,8 @@ presence:
   labels:                         # inputs of 4.3-4.8 (labels made under the schema version they name; projected)
     teacher: runs/label_72b_s0_20261018-195259-515194/teacher_labels_{genre}.jsonl      # 72B, teacher + reference sets
     reference: runs/judge_haiku_s0_20261017-004935-303611/teacher_labels_{genre}.jsonl  # silver reference (4.2)
+    documents: runs/judge_docs_haiku_s0/teacher_labels_{genre}.jsonl  # whole dev documents, judge via the Anthropic
+                                  # API (document-level presence, 2026-10-19)
     annotations:                  # human labels mapped through label_source (4.1)
       privacy: runs/labels_opp115_s0/labels_privacy.jsonl
   train_labels: teacher           # teacher: teacher labels for every type (lean, 2026-10-18, decision record 005)
@@ -325,6 +337,7 @@ presence:
 # ---------------------------------------------------------------- retrieval and expectation (Phase 5)
 index:
   backend: faiss                  # faiss (development) | qdrant (production)
+  splits: [train]                 # the indexed corpus (plan §2.7)
   faiss:
     kind: hnsw
     M: 32
@@ -342,6 +355,12 @@ cohort:
   category_filter: true
   date_window: null               # [start, end] ISO dates
   fallback_unfiltered: true       # when the filtered pool is smaller than k
+
+build:                            # experiments/build_pack.py (plan 5.7): stages of packs/builder.py, in order
+  stages: [index, evidence, cohort_report]
+  cohort_report:
+    queries: 500                  # dev documents (never indexed) whose cohorts are reported (plan 5.3)
+    k: null                       # null: cohort.k
 
 expectation:
   level: 1                        # 1 = cohort prevalence, 2 = MAM (Phase 8)
@@ -440,7 +459,8 @@ hub:                              # python -m experiments.hub_sync push|pull --b
       archive: .cache/negspace/teacher   # ~22k small response files travel as one archive
     packs:
       include: ["packs/*/classifier/*", "packs/*/prototypes/*", "packs/*/profiles/*", "packs/*/section_probs/*",
-                "packs/*/cascade*.json"]
+                "packs/*/cascade*.json", "packs/*/doc_presence.json",
+                "packs/*/index/*", "packs/*/evidence/*"]
       exclude: []
     runs:
       include: ["runs/*/*"]           # run folders; runs/log.csv is merged separately (hub_sync push_log/pull_log)

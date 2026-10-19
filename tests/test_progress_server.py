@@ -39,3 +39,28 @@ def test_classify_and_count(tmp_path):
     assert t.counts("claude", "g", "human", "first") == 1 and t.counts("claude", "g", "human", "check") == 0
     t.scan()  # files are read once
     assert len(t.seen) == 4
+
+
+def test_documents_set_is_counted_and_any_recent_run_log_is_shown(tmp_path):
+    import os
+    import time
+
+    from analysis.progress_server import recent_runs
+
+    (tmp_path / "packs" / "g").mkdir(parents=True)
+    (tmp_path / "packs" / "g" / "label_sets.json").write_text(json.dumps(
+        {"genre": "g", "human": [], "teacher": [], "documents": [{"doc_id": "d", "section_idx": 0, "text_sha1": "abc"}],
+         "documents_selection": {"documents": 1}}))
+    assert load_sets(tmp_path) == {"abc": ("g", "documents")}
+
+    runs = tmp_path / "runs"
+    runs.mkdir()
+    (runs / "judge_docs_haiku.out").write_text("loading\r[teacher] batch: 10/20 still processing (60s)\n")
+    (runs / "section_probs_v1.out").write_text("[section_probs privacy] part 1/2\n[ok] runs/section_probs_v1_s0\n")
+    (runs / "old_run.out").write_text("[ok] long ago\n")
+    old = time.time() - 3 * 86400
+    os.utime(runs / "old_run.out", (old, old))
+    rr = {r["name"]: r for r in recent_runs(tmp_path, time.time(), hours=24, skip=set())}
+    assert set(rr) == {"judge_docs_haiku", "section_probs_v1"}
+    assert rr["section_probs_v1"]["state"] == "finished"
+    assert rr["judge_docs_haiku"]["log"][-1].startswith("[teacher] batch: 10/20")

@@ -5,7 +5,7 @@
 #   run:  the experiments/run.py arguments; always --overlay colab, and --name = the job's name
 #   push: hub bundles to upload afterwards; then on the Mac: .venv/bin/python -m experiments.hub_sync pull --bundles <push>
 
-next: section_probs_v1
+next: sentence_evidence_v1
 
 jobs:
   profiles_smoke_colab:
@@ -23,4 +23,12 @@ jobs:
     run: >-
       --config configs/distil.yaml --overlay colab --name section_probs_v1
       --set distil.stage=section_probs --set 'run.seeds=[0]'
+    push: runs,packs
+
+  sentence_evidence_v1:
+    what: "Evidence sentences: the presence model on every sentence of the indexed corpus (5.3M sentences), best sentence per document and type (~1 h)"
+    pull: data,embeddings,packs
+    run: >-
+      --config configs/distil.yaml --overlay colab --name sentence_evidence_v1
+      --set distil.stage=sentence_evidence --set 'run.seeds=[0]'
     push: runs,packs

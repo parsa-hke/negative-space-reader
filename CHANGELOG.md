@@ -60,6 +60,58 @@ from sources the indexed corpus has, never the induction sample, other label set
 Mac smoke `section_probs_smoke_s0` (150 documents per genre): the best section per document equals the stored profile
 (max difference 7e-8). Colab job `section_probs_v1` queued in `configs/colab_jobs.yaml`.
 
+**`section_probs_v1` on Colab** (A100, commit `2097ebf`, 30 min): 564,675 sections (privacy 422/s, papers 269/s),
+train + dev. Against the Mac's v1 profiles over the whole train split: 19 of about 2 million document-type values
+differ by more than 0.001 (fp16 near-ties in ColBERT on CUDA), 7 of 1.3 million privacy bits flip; negligible.
+
+**Route check, judge through the Anthropic API** (run `judge_route_check_s0`, 20 reference sections per genre, plain
+calls, $0.05): the same model (Claude Haiku 5.5) agrees with its own earlier OpenRouter labels at micro F1 **0.936**
+(privacy) and **0.850** (papers); teacher vs judge is 0.775 / 0.692. The gap is the judge's run-to-run variation
+(sampling defaults differ between routes; Claude Haiku 5.5 rejects temperature), mostly on papers' close neighbours;
+papers got 13% more labels through the direct route. **Documents run** `judge_docs_haiku_s0` (Message Batches):
+privacy 1,393/1,393 sections, 5,420 labels, 536 from the second look, 0 failures.
+
+**Document-level presence, privacy (run `doc_presence_privacy_try_s0`, eval half 75 policies):** the judge finds
+**26.8 of 58 types per policy**; the v1 rule marks 22.8. **Negative finding, corrected diagnosis:** v1 is not
+inflated overall; it is miscalibrated at document level in both directions: it overstates 8 types by more than 5
+points (`limits_internal_access` 71% vs 21% labelled, `deletes_children_data_if_found` 45% vs 11%) and understates 33
+(`sends_marketing_communications` 27% vs 71%, `shares_with_service_providers` 20% vs 59%). The document model
+(shared slopes, per-type intercept; features chosen by cross-validated log loss: best, second-best, sum of section
+probabilities, number of sections): macro F1 0.687 -> **0.754**, micro 0.739 -> 0.808, mean prevalence error 0.136
+-> **0.063**, ECE 0.150 -> **0.018**. The three feature sets tried score within 0.001 of each other.
+
+**Phase 5 tasks 5.2-5.6 built (tests first):**
+- 5.2 `engine/index.py`: `Index` with FAISS and Qdrant backends, payload filters (genre, category, date window,
+  splits, excluded entities and ids), shared save format; both backends return the same top-10 on exact search
+  (1,000 vectors, four filter settings). **Negative finding:** on macOS, faiss-cpu 1.15.1 and torch 2.13.0 bundle
+  different builds of libomp and a process that loads both aborts (either import order). Not worked around with
+  KMP_DUPLICATE_LIB_OK; instead FAISS is loaded only for unfiltered approximate search (exact and filtered search,
+  which cohorts use, is a NumPy pass), and in a macOS process with PyTorch loaded an approximate request runs exactly.
+- Document vector (§0.2 #9) in `engine/embed.py` with the existing key `models.embedder.title_abstract_weight` (0.5;
+  a duplicate key added by mistake was removed; the vectors are identical).
+- 5.3 `engine/cohort.py` (never the query's own entity; category filter falls back when the pool is under k);
+  builder stages `index`, `evidence` (best section per document and type) and `cohort_report` in `packs/builder.py`,
+  run by `experiments/build_pack.py` (runs `index_v2_<genre>_s0`, `evidence_v1_<genre>_s0`). Indexes: privacy 22,300
+  documents, papers 14,114 (1.5-1.9 s on the Mac). Cohorts of 500 dev documents (k 200): mean peer similarity 0.783 /
+  0.745, nearest 0.848 / 0.858, own entity in a cohort 0 / 0, category fallback 5.6% / 0%. **Finding:** privacy cohorts
+  hold several yearly snapshots of the same other site (88.4% distinct entities among the 200 peers), so such sites
+  count more than once in prevalence; one snapshot per entity is a possible ablation (not changed).
+- 5.4 `engine/expectation.py`: level-1 prevalence over cohort profiles (bits; mean probability as an option) with
+  Wilson intervals. 5.5 `engine/rank.py` (score per §0.2 #1, ties by prevalence) and `engine/evidence.py`.
+- 5.6 `engine/pipeline.py` `analyse()` -> `Report` (JSON), `packs/spec.py` `GenrePack.load`, `engine/explain.py`
+  template. Smoke on a held-out privacy policy (12 sections): 4.4 s on the M5 (embedding 2.7 s), model loading 10.5 s.
+- **Evidence (negative finding):** quoting the sentence of a peer's best section that best matches the type's
+  prototypes (ColBERT MaxSim) gave wrong quotes (an asset-sale sentence for `states_retention_period`, an SSL sentence
+  for `limits_internal_access`): MaxSim is a weak sentence selector (prototypes alone reached macro F1 0.42 in 4.6),
+  and a type-specificity variant agreed with the full model on only about half of the picks. The full presence model
+  on sentences picks the right ones, but at about 9 ms per sentence on the Mac it took evidence to 7.6 s (total
+  10.6 s). Fix: stage `sentence_evidence` precomputes, for every document and type of the indexed corpus, the best
+  sentence and its probability (5.3M sentences; Colab job `sentence_evidence_v1`); `analyse()` looks them up, keeps
+  those at or above the type's threshold, and drops duplicate boilerplate. Mac smoke (30 documents per genre):
+  correct quotes, e.g. retention periods, access limits, code availability URLs.
+- The live dashboard shows any run log written in the last 24 hours (state and last lines, including Message Batch
+  progress) and counts the documents set.
+
 ## 2026-10-18 (night) — Compute moves to Colab Pro; private GitHub and Hugging Face stores
 
 **Parsa's resources:** Colab Pro (A100), $100 of Anthropic API credit, Hugging Face Pro. **Plan edited first:** §0.6

@@ -2,7 +2,8 @@
 
     .venv/bin/python -m analysis.progress_server --port 8765     # then open http://localhost:8765
 
-Also the corpus-profiles run (plan 4.7): finished Parquet parts per genre against the parts the indexable corpus needs,
+Also any other run log written in the last 24 hours (runs/<name>.out: state and last lines, e.g. a Message Batch's
+progress), and the corpus-profiles run (plan 4.7): finished Parquet parts per genre against the parts the indexable corpus needs,
 the rate from the run log, and an ETA from the parts' timestamps.
 
 Counts are exact, read from the teacher's response cache (.cache/negspace/teacher/*.json: route, prompt, output):
@@ -36,8 +37,11 @@ RUNS = [
      "sets": ["teacher", "human"], "log": "runs/label_72b.out", "process": "name label_72b --set"},
     {"key": "judge", "title": "Second judge: Claude Haiku 5.5", "route": "anthropic/claude-haiku-5.5",
      "sets": ["human"], "log": "runs/judge_haiku.out", "process": "name judge_haiku --set"},
+    {"key": "judge_docs", "title": "Judge on whole documents: Claude Haiku 5.5 (Anthropic API, batches)",
+     "route": "anthropic:claude-haiku-5-5", "sets": ["documents"], "log": "runs/judge_docs_haiku.out",
+     "process": "name judge_docs_haiku --set"},
 ]
-SET_NAMES = {"teacher": "teacher set", "human": "reference set"}
+SET_NAMES = {"teacher": "teacher set", "human": "reference set", "documents": "whole documents"}
 _TEXT = re.compile(r'Section text:\n"""\n(.*?)\n"""\n\n', re.S)
 
 
@@ -61,7 +65,7 @@ def load_sets(repo: Path = REPO) -> dict[str, tuple[str, str]]:
     out = {}
     for path in sorted((repo / "packs").glob("*/label_sets.json")):
         d = json.loads(path.read_text(encoding="utf-8"))
-        for name in ("teacher", "human"):
+        for name in SET_NAMES:
             for r in d.get(name, []):
                 out[r["text_sha1"]] = (d["genre"], name)
     return out
@@ -120,10 +124,28 @@ def _log_tail(path: Path) -> tuple[str, list[str]]:
         return "not started", []
     text = path.read_text(encoding="utf-8", errors="replace").replace("\r", "\n")
     lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
-    keep = [ln for ln in lines if re.search(r"teacher_labels|\[ok\]|\[failed\]|Error|Traceback|WARNING", ln)]
+    keep = [ln for ln in lines if re.search(r"teacher_labels|\[teacher\] (batch|submitted|resuming)|\[ok\]|\[failed\]|Error|Traceback|WARNING", ln)]
     state = "finished" if any(ln.startswith("[ok]") for ln in lines) else (
         "failed" if any(ln.startswith("[failed]") or "Traceback" in ln for ln in lines) else "")
     return state, keep[-6:]
+
+
+def recent_runs(repo: Path, now: float, *, hours: float = 24, skip: set[str]) -> list[dict[str, Any]]:
+    """Every run log runs/<name>.out written in the last `hours` that no dedicated card shows: state (running from the
+    process list, else finished / failed from the log), the last lines, the age of the last write. Any long run
+    started with `> runs/<name>.out` shows up here without code changes."""
+    out = []
+    for path in sorted((repo / "runs").glob("*.out"), key=lambda p: -p.stat().st_mtime):
+        age = now - path.stat().st_mtime
+        if age > hours * 3600 or path.stem in skip:
+            continue
+        text = path.read_text(encoding="utf-8", errors="replace").replace("\r", "\n")
+        lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
+        alive = _running(f"name {path.stem}")
+        state = "running" if alive else ("finished" if any(ln.startswith("[ok]") for ln in lines) else (
+            "failed" if any(ln.startswith("[failed]") or "Traceback" in ln for ln in lines) else "stopped"))
+        out.append({"name": path.stem, "state": state, "alive": alive, "last_write_s": round(age), "log": lines[-8:]})
+    return out
 
 
 def status(tracker: Tracker, totals: dict[tuple[str, str], int]) -> dict[str, Any]:
@@ -154,7 +176,10 @@ def status(tracker: Tracker, totals: dict[tuple[str, str], int]) -> dict[str, An
                      "per_min": per_min, "eta_min": round(remaining / per_min) if per_min and alive else None,
                      "last_answer_s": round(now - last) if last else None, "spark": buckets[::-1],
                      "groups": groups, "log": log_lines})
-    return {"now": now, "runs": runs, "profiles": profiles_status(now), "upload": upload_status(now)}
+    skip = {Path(r["log"]).stem for r in RUNS} | {Path(PROFILES["log"]).stem}
+    skip |= {p.stem for p in (REPO / "runs").glob("hub_push_*.out")}
+    return {"now": now, "runs": runs, "profiles": profiles_status(now), "upload": upload_status(now),
+            "recent": recent_runs(REPO, now, skip=skip)}
 
 
 PROFILES = {"title": "Corpus profiles (4.7)", "log": "runs/profiles_v1.out", "process": "name profiles_v1",

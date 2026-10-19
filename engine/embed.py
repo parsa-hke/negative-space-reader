@@ -122,3 +122,18 @@ def embed_and_store(embedder: Embedder, ids: list[Any], texts: list[str], path: 
     return {"rows": len(ids), "dim": int(vectors.shape[1]), "seconds": seconds,
             "rows_per_second": round(len(missing) / max(seconds, 1e-6), 1),
             **({"reused_rows": len(texts) - len(missing), "new_rows": len(missing)} if old is not None else {})}
+
+
+def document_vector(section_vectors: np.ndarray, title_vector: np.ndarray | None = None, *,
+                    title_abstract_weight: float = 0.5) -> np.ndarray:
+    """Document embedding (plan §0.2 #9, models.embedder.title_abstract_weight = w): (1 - w) x the normalised mean
+    of the (normalised) section vectors + w x the normalised title/abstract vector, normalised again; sections only
+    when there is no title. Uploads use the same function and model as the index (the index records both)."""
+    S = np.atleast_2d(np.asarray(section_vectors, dtype=np.float64))
+    S = S / np.maximum(np.linalg.norm(S, axis=1, keepdims=True), 1e-12)
+    v = S.mean(0)
+    v = v / max(np.linalg.norm(v), 1e-12)
+    if title_vector is not None and title_abstract_weight:
+        t = np.asarray(title_vector, dtype=np.float64)
+        v = (1 - title_abstract_weight) * v + title_abstract_weight * t / max(np.linalg.norm(t), 1e-12)
+    return (v / max(np.linalg.norm(v), 1e-12)).astype(np.float32)

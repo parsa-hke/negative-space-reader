@@ -728,7 +728,8 @@ def _presence_model(cfg: dict[str, Any], genre: str, colbert: Any, splits: list[
         proto = scorer.score(batch)
         return model.predict(clf, proto, np.full(clf.shape, np.nan))
 
-    return {"types": types, "model": model, "docs": docs, "sections": sections, "score": score, "packs": packs}
+    return {"types": types, "model": model, "docs": docs, "sections": sections, "score": score, "packs": packs,
+            "scorer": scorer, "heads": heads}
 
 
 def run_profiles(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
@@ -790,6 +791,238 @@ def run_section_probs(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
     return metrics
 
 
+def run_doc_presence(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
+    """Document-level presence (engine/doc_presence.py): fitted on the whole labelled documents (label set
+    `documents`, labels in presence.labels.documents; a document states t when some labelled section does) from every
+    section's stored probabilities (packs/<genre>/section_probs). Fit / eval halves by document; the v1 rule (best
+    section >= the section threshold) is scored on the same eval half. Feature sets are chosen by cross-validated log
+    loss on the fit half; the chosen model is refitted on every labelled document and saved as
+    packs/<genre>/doc_presence.json. With distil.doc_presence.write_profiles, profiles v2 of the indexed split are
+    written to packs/<genre>/profiles (prob_ = document probability, bit_ = prob >= 0.5, best_ = the v1 best-section
+    probability); the v1 profiles are moved to packs/<genre>/profiles_v1."""
+    import numpy as np
+
+    from engine.doc_presence import ALL_FEATURES, FEATURES, DocPresence, evaluate, split_documents
+    from packs.profiles import read_profiles
+    from packs.schema_versions import project_labels, projection
+
+    dc = cfg["distil"].get("doc_presence") or {}
+    min_pos, C_grid = dc.get("min_positives", 5), tuple(dc.get("C_grid", (0.03, 0.1, 0.3, 1.0, 3.0)))
+    variants = {"logit_max": ("logit_max",), ",".join(FEATURES): FEATURES, ",".join(ALL_FEATURES): ALL_FEATURES}
+    metrics: dict[str, Any] = {}
+    for genre in _genres(cfg):
+        packs = _path(cfg["paths"]["packs"]) / genre
+        schema = load_schema(cfg, genre)
+        types = [t["id"] for t in schema["types"]]
+        proj = projection(schema)
+        cols = [f"prob_{t}" for t in types]
+        sp = read_profiles(packs / "section_probs")
+        refs = json.loads((packs / "label_sets.json").read_text(encoding="utf-8"))["documents"]
+        labelled_docs = {r["doc_id"] for r in refs}
+        n_sections = defaultdict(int)
+        for r in refs:
+            n_sections[r["doc_id"]] += 1
+        rows: dict[str, list[dict[str, Any]]] = defaultdict(list)
+        for line in open(_path(cfg["presence"]["labels"]["documents"].format(genre=genre)), encoding="utf-8"):
+            r = json.loads(line)
+            if r["doc_id"] in labelled_docs:
+                rows[r["doc_id"]].append(r)
+        # a document counts only when every section was labelled: a failed section could hide a statement
+        complete = sorted(d for d in labelled_docs if len(rows[d]) == n_sections[d] and not any(r.get("failed") for r in rows[d]))
+        by_doc = {d: g.sort_values("section_idx")[cols].to_numpy(np.float64) for d, g in sp[sp.doc_id.isin(complete)].groupby("doc_id")}
+        complete = [d for d in complete if d in by_doc and len(by_doc[d]) == n_sections[d]]
+        Y = np.array([[int(any(project_labels(r, proj)["labels"].get(t, 0) for r in rows[d])) for t in types]
+                      for d in complete])
+        fit, ev = split_documents(complete, seed=cfg["presence"].get("reference_split_seed", 1234))
+        fi, ei = [complete.index(d) for d in fit], [complete.index(d) for d in ev]
+        threshold = np.array(json.loads((packs / "cascade.json").read_text())["threshold"])
+        best = np.stack([by_doc[d].max(0) for d in complete])
+        table = [{"variant": "v1: best section >= section threshold", "cv_log_loss_fit": None, "C": None, **evaluate(Y[ei], best[ei], best[ei] >= threshold,
+                                                                                min_positives=min_pos)}]
+        metrics.update({f"{genre}/v1/eval/{k}": v for k, v in table[0].items()})
+        chosen = None
+        for name, feats in variants.items():
+            m = DocPresence(feats).fit([by_doc[complete[i]] for i in fi], Y[fi], C_grid=C_grid,
+                                       seed=cfg["run"].get("seed", 0))
+            P = np.stack([m.predict_proba(by_doc[complete[i]]) for i in ei])
+            row = {"variant": f"document model: {name}", "cv_log_loss_fit": round(m.cv_log_loss, 4), "C": m.C,
+                   **evaluate(Y[ei], P, P >= 0.5, min_positives=min_pos)}
+            table.append(row)
+            if chosen is None or m.cv_log_loss < chosen[1]:
+                chosen = (name, m.cv_log_loss, P)
+        name, _, P = chosen
+        sel = next(r for r in table if r["variant"] == f"document model: {name}")
+        metrics.update({f"{genre}/v2/eval/{k}": v for k, v in sel.items() if k != "variant"})
+        labelled_prev = Y.mean(0)
+        _write_table(_path(cfg["paths"]["tables"]) / f"doc_presence_{genre}.csv", table)
+        _write_table(_path(cfg["paths"]["tables"]) / f"doc_presence_types_{genre}.csv", [
+            {"type_id": t, "labelled_prevalence_all": round(float(labelled_prev[k]), 3),
+             "labelled_prevalence_eval": round(float(Y[ei, k].mean()), 3),
+             "v1_prevalence_eval": round(float((best[ei, k] >= threshold[k]).mean()), 3),
+             "v2_prevalence_eval": round(float((P[:, k] >= 0.5).mean()), 3),
+             "v2_mean_probability_eval": round(float(P[:, k].mean()), 3)} for k, t in enumerate(types)])
+        final = DocPresence(variants[name]).fit([by_doc[d] for d in complete], Y, C_grid=C_grid,
+                                                seed=cfg["run"].get("seed", 0))
+        final.save(packs / "doc_presence.json", types=types, labelled_documents=len(complete),
+                   eval_half=sel, labels=cfg["presence"]["labels"]["documents"].format(genre=genre))
+        metrics.update({f"{genre}/labelled_documents": len(complete), f"{genre}/fit_documents": len(fit),
+                        f"{genre}/eval_documents": len(ev), f"{genre}/selected_features": name,
+                        f"{genre}/labelled_types_per_document": round(float(Y.sum(1).mean()), 2)})
+        print(f"[doc_presence {genre}] {len(complete)} documents; v1 eval prevalence error "
+              f"{table[0]['prevalence_abs_error']}, macro F1 {table[0]['macro_f1']} -> v2 ({name}) "
+              f"{sel['prevalence_abs_error']}, macro F1 {sel['macro_f1']}, ECE {sel['ece']}", flush=True)
+        if dc.get("write_profiles"):
+            metrics.update({f"{genre}/profiles_v2/{k}": v for k, v in
+                            _write_profiles_v2(cfg, genre, packs, sp, types, final, threshold).items()})
+    return metrics
+
+
+def _write_profiles_v2(cfg: dict[str, Any], genre: str, packs: Path, sp: Any, types: list[str], model: Any,
+                       threshold: Any) -> dict[str, Any]:
+    import shutil
+
+    import numpy as np
+    import pandas as pd
+
+    from data.schema import Document
+
+    cols = [f"prob_{t}" for t in types]
+    splits = (cfg["distil"].get("profiles") or {}).get("splits", ["train"])
+    meta: dict[str, tuple[Any, Any]] = {}
+    docs_path = _path(cfg["paths"]["data_processed"]) / genre / "documents.jsonl"
+    if docs_path.exists():
+        meta = {d.id: (d.category, d.date) for d in read_jsonl(docs_path, Document)}
+    out = packs / "profiles"
+    manifest = out / "manifest.json"
+    if out.is_dir() and not (manifest.exists() and json.loads(manifest.read_text()).get("version") == 2):
+        old = packs / "profiles_v1"
+        if old.exists():
+            shutil.rmtree(old)
+        out.rename(old)  # v1 kept aside (also in the hub's history)
+    if out.exists():
+        shutil.rmtree(out)
+    out.mkdir(parents=True)
+    rows = []
+    for d, g in sp[sp.split.isin(splits)].groupby("doc_id", sort=True):
+        P = g.sort_values("section_idx")[cols].to_numpy(np.float64)
+        prob, best = model.predict_proba(P), P.max(0)
+        cat, date = meta.get(d, (None, None))
+        rows.append({"doc_id": d, "split": g["split"].iloc[0], "category": cat, "date": date, "sections": len(P),
+                     **{f"prob_{t}": float(v) for t, v in zip(types, prob)},
+                     **{f"bit_{t}": int(v >= 0.5) for t, v in zip(types, prob)},
+                     **{f"best_{t}": float(v) for t, v in zip(types, best)}})
+    df = pd.DataFrame(rows)
+    chunk = (cfg["distil"].get("profiles") or {}).get("chunk_documents", 500)
+    for k in range(0, len(df), chunk):
+        df.iloc[k:k + chunk].to_parquet(out / f"part-{k // chunk:05d}.parquet", index=False)
+    bits = df[[f"bit_{t}" for t in types]].to_numpy()
+    v1 = (df[[f"best_{t}" for t in types]].to_numpy() >= threshold).astype(int)
+    manifest.write_text(json.dumps({"version": 2, "presence": "document model (engine/doc_presence.py)",
+                                    "doc_presence": "doc_presence.json", "section_probs": "section_probs/",
+                                    "bit": "prob >= 0.5", "documents": len(df)}, indent=1) + "\n")
+    prevalence = [{"type_id": t, "documents_with_type": int(bits[:, k].sum()), "prevalence": round(float(bits[:, k].mean()), 4),
+                   "mean_probability": round(float(df[f"prob_{t}"].mean()), 4), "v1_prevalence": round(float(v1[:, k].mean()), 4)}
+                  for k, t in enumerate(types)]
+    _write_table(_path(cfg["paths"]["tables"]) / f"profile_prevalence_{genre}.csv", prevalence)
+    return {"documents": len(df), "types_present_per_document": round(float(bits.sum(1).mean()), 2),
+            "v1_types_present_per_document": round(float(v1.sum(1).mean()), 2)}
+
+
+def _line_ranges(path: Path, keep: set[str]) -> dict[str, list[tuple[int, int]]]:
+    """doc_id -> contiguous byte ranges of its lines in a jsonl file whose lines start with {"doc_id": ...}."""
+    import re
+
+    head = re.compile(rb'^\{"doc_id": "((?:[^"\\]|\\.)*)"')
+    out: dict[str, list[tuple[int, int]]] = defaultdict(list)
+    pos, cur, start = 0, None, 0
+    with open(path, "rb") as fh:
+        for line in fh:
+            m = head.match(line)
+            d = m.group(1).decode("utf-8") if m else json.loads(line)["doc_id"]
+            if d != cur:
+                if cur in keep:
+                    out[cur].append((start, pos))
+                cur, start = d, pos
+            pos += len(line)
+    if cur in keep:
+        out[cur].append((start, pos))
+    return out
+
+
+def run_sentence_evidence(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
+    """Evidence sentences (plan §0.2 #14): the lean presence model (embedder + linear heads, ColBERT prototypes,
+    cascade) on every sentence of the indexed documents (data/processed/<genre>/sentences.jsonl); for each document
+    and type the best sentence, kept when P >= min_prob -> packs/<genre>/evidence/part-*.parquet (doc_id, type,
+    section_idx, sentence_idx, p, text), resumable by chunk. analyse() quotes these instead of scoring peer
+    sentences at query time (about 9 ms per sentence on the Mac). A GPU job (Colab)."""
+    import platform
+    import time
+
+    import numpy as np
+    import pandas as pd
+
+    import engine.embed as E
+
+    sc = cfg["distil"].get("sentence_evidence") or {}
+    colbert = load_colbert(cfg)
+    ecfg = cfg["models"]["embedder"]
+    embedder = E.Embedder(ecfg["id"], devices=[colbert.device], dtype=ecfg.get("dtype", "float16"),
+                          max_length=ecfg.get("max_length", 1024), batch_size=ecfg.get("batch_size", 32),
+                          normalize=True, revision=ecfg.get("revision"))
+    metrics: dict[str, Any] = {"machine": f"{platform.machine()} {platform.system()}", "device": colbert.device}
+    for genre in _genres(cfg):
+        pm = _presence_model(cfg, genre, colbert, sc.get("splits", ["train"]), sc.get("limit"))
+        types, docs = pm["types"], pm["docs"]
+        heads, model, scorer = pm["heads"], pm["model"], pm["scorer"]
+        path = _path(cfg["paths"]["data_processed"]) / genre / "sentences.jsonl"
+        ranges = _line_ranges(path, {d["id"] for d in docs})
+        out = _path(sc["out"].format(genre=genre)) if sc.get("out") else pm["packs"] / "evidence"
+        out.mkdir(parents=True, exist_ok=True)
+        chunk, min_prob = sc.get("chunk_documents", 500), sc.get("min_prob", 0.2)
+        n_parts, written, n_sent, t0 = (len(docs) + chunk - 1) // chunk, 0, 0, time.perf_counter()
+        fh = open(path, "rb")
+        for part in range(n_parts):
+            dest = out / f"part-{part:05d}.parquet"
+            if dest.exists():
+                continue
+            rows_in: list[dict[str, Any]] = []
+            for d in docs[part * chunk:(part + 1) * chunk]:
+                for a, b in ranges.get(d["id"], []):
+                    fh.seek(a)
+                    rows_in += [json.loads(line) for line in fh.read(b - a).splitlines() if line.strip()]
+            texts = [r["text"] for r in rows_in]
+            if texts:
+                clf = heads.predict_proba(np.asarray(embedder.encode(texts)))
+                P = model.predict(clf, scorer.score(texts), np.full(clf.shape, np.nan))
+            else:
+                P = np.zeros((0, len(types)))
+            owner = np.array([r["doc_id"] for r in rows_in])
+            rows_out = []
+            for d in dict.fromkeys(owner.tolist()):
+                ix = np.flatnonzero(owner == d)
+                best = ix[P[ix].argmax(0)]
+                for k, t in enumerate(types):
+                    p = float(P[best[k], k])
+                    if p >= min_prob:
+                        r = rows_in[best[k]]
+                        rows_out.append({"doc_id": d, "type": t, "section_idx": int(r["section_idx"]),
+                                         "sentence_idx": int(r["idx"]), "p": round(p, 4), "text": r["text"]})
+            tmp = dest.with_suffix(".tmp")
+            pd.DataFrame(rows_out, columns=["doc_id", "type", "section_idx", "sentence_idx", "p", "text"]).to_parquet(tmp, index=False)
+            tmp.rename(dest)
+            written += 1
+            n_sent += len(texts)
+            rate = n_sent / max(1e-6, time.perf_counter() - t0)
+            print(f"[sentence_evidence {genre}] part {part + 1}/{n_parts}: {len(texts)} sentences ({rate:.0f} sentences/s)",
+                  flush=True)
+        fh.close()
+        seconds = time.perf_counter() - t0
+        metrics.update({f"{genre}/parts": n_parts, f"{genre}/parts_written": written, f"{genre}/sentences_scored": n_sent,
+                        f"{genre}/seconds": round(seconds, 1), f"{genre}/documents": len(docs),
+                        f"{genre}/sentences_per_second": round(n_sent / seconds, 1) if n_sent and seconds else None})
+    return metrics
+
+
 def run_gate(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
     from data.splits import load_manifest
     from packs.profiles import read_profiles
@@ -843,6 +1076,10 @@ def main(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
         return run_profiles(cfg, run_dir)
     if stage == "section_probs":
         return run_section_probs(cfg, run_dir)
+    if stage == "sentence_evidence":
+        return run_sentence_evidence(cfg, run_dir)
+    if stage == "doc_presence":
+        return run_doc_presence(cfg, run_dir)
     if stage == "gate":
         return run_gate(cfg, run_dir)
     raise NotImplementedError(f"distil stage {stage!r} is implemented later in Phase 4")

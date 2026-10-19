@@ -217,3 +217,45 @@ def test_section_probs_stage_matches_the_profiles(pack, monkeypatch):
     prof = read_profiles(tmp / "packs" / "g" / "profiles").set_index("doc_id")
     best = sp[sp.split == "train"].groupby("doc_id")["prob_alpha"].max()
     assert np.allclose(best.loc[prof.index].to_numpy(), prof["prob_alpha"].to_numpy(), atol=1e-6)
+
+
+def test_sentence_evidence_stage_keeps_each_documents_best_sentence_per_type(pack, monkeypatch):
+    import huggingface_hub.constants
+
+    import engine.embed as E
+    from data.schema import Sentence
+    from data.segment import split_sentences
+    from experiments import distil
+    from packs.profiles import read_profiles
+
+    monkeypatch.setattr(huggingface_hub.constants, "HF_HUB_OFFLINE", True)
+
+    class KeywordEmbedder:  # the same space as the fixture's stored section vectors
+        def __init__(self, *a, **k):
+            pass
+
+        def encode(self, texts, **kw):
+            V = np.array([[float("Alpha" in t), float("Beta" in t)] + [0.05] * 6 for t in texts], dtype=np.float32)
+            return V / np.linalg.norm(V, axis=1, keepdims=True)
+
+    monkeypatch.setattr(E, "Embedder", KeywordEmbedder)
+    cfg, tmp = pack
+    cfg["run"]["device"] = "cpu"
+    cfg["paths"]["figures"] = str(tmp / "figures")
+    secs = [json.loads(line) for line in open(tmp / "processed" / "g" / "sections.jsonl")]
+    sents = [Sentence(doc_id=s["doc_id"], section_idx=s["idx"], idx=j, text=t)
+             for s in secs for j, t in enumerate(split_sentences(s["text"]))]
+    write_jsonl(tmp / "processed" / "g" / "sentences.jsonl", sents)
+    cfg["distil"]["sentence_evidence"] = {"splits": ["train"], "chunk_documents": 40, "min_prob": 0.2, "limit": None, "out": None}
+    for stage in ("heads", "prototypes", "cascade", "sentence_evidence"):
+        cfg["distil"]["stage"] = stage
+        m = distil.main(cfg, tmp)
+    ev = read_profiles(tmp / "packs" / "g" / "evidence")
+    assert m["g/parts"] == 3 and m["g/sentences_scored"] == sum(1 for s in sents if int(s.doc_id[1:]) < 120)
+    assert set(ev.columns) == {"doc_id", "type", "section_idx", "sentence_idx", "p", "text"}
+    alpha = ev[ev.type == "alpha"]
+    assert len(alpha) > 20 and alpha["text"].str.contains("Alpha").mean() > 0.95  # the stating sentence, not filler
+    assert (ev["p"] >= 0.2).all() and not ev.duplicated(["doc_id", "type"]).any()
+    assert set(ev.doc_id) <= {f"d{i:03d}" for i in range(120)}  # the indexed (train) split only
+    again = distil.main(cfg, tmp)
+    assert again["g/parts_written"] == 0

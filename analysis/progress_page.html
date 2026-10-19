@@ -55,6 +55,7 @@ pre { margin: 0; font: 12px/1.5 var(--f-mono); color: var(--ink-2); white-space:
   <div id="upload"></div>
   <div id="profiles"></div>
   <div id="runs"></div>
+  <div id="recent"></div>
   <p class="updated">Counts are exact: each answer in the response cache is matched to its section and pass. Sections
     answered by an earlier run count as done (they are replayed from the cache). Totals count distinct section texts:
     a few sections repeat another's text (e.g. 1,966 distinct of the 2,000 privacy teacher-set sections, shared
@@ -120,6 +121,14 @@ function profilesCard(p) {
     ${p.log.length ? `<pre>${esc(p.log.join("\n"))}</pre>` : ""}
   </section>`;
 }
+function recentCard(r) {
+  const stale = r.alive && r.last_write_s > 600;
+  return `<section class="card">
+    <div class="top"><h2>${esc(r.name)}</h2><span class="pill ${esc(r.state)}">${esc(r.state)}</span>
+      <span class="stat ${stale ? "stale" : ""}">last log line <b>${ago(r.last_write_s)}</b></span></div>
+    ${r.log.length ? `<pre>${esc(r.log.join("\n"))}</pre>` : ""}
+  </section>`;
+}
 let last = 0;
 async function tick() {
   try {
@@ -128,6 +137,7 @@ async function tick() {
     $("upload").innerHTML = uploadCard(d.upload);
     $("profiles").innerHTML = profilesCard(d.profiles);
     $("runs").innerHTML = d.runs.map(card).join("");
+    $("recent").innerHTML = (d.recent || []).map(recentCard).join("");
     last = Date.now();
   } catch (e) {
     $("runs").insertAdjacentHTML("afterbegin", "");
