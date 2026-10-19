@@ -122,6 +122,8 @@ models:
     dtype: float16
     max_length: 1024
     batch_size: 32
+    query_batch_size: 4             # analyse() on one document: small batches avoid padding to the longest
+                                  # section (M5, MPS fp16, 29 sections: 2.6 s at 4 vs 8.6 s at 32; same vectors)
     normalize: true
     title_abstract_weight: 0.5    # document emb = (1-w) * mean(section embs) + w * title/abstract emb
   late_interaction:               # plan §0.2 #8 step 1; lean = Apache-2.0 small ColBERT, full = Jina (CC-BY-NC)
@@ -356,11 +358,18 @@ cohort:
   date_window: null               # [start, end] ISO dates
   fallback_unfiltered: true       # when the filtered pool is smaller than k
 
-build:                            # experiments/build_pack.py (plan 5.7): stages of packs/builder.py, in order
-  stages: [index, evidence, cohort_report]
+build:                            # experiments/build_pack.py (plan 5.7): packs/builder.py pack_stages, in order
+  stages: null                    # null: every stage (embed, heads, prototypes, cascade, section_probs,
+                                  # sentence_evidence, doc_presence, index, evidence, cohort_report)
+  adopt: false                    # true: record existing artefacts with no manifest entry instead of rebuilding
+  force: null                     # stages to rebuild even when unchanged
+  allow_gpu_stages_on_cpu: false  # a stale GPU stage on a machine without CUDA stops and names its Colab job
   cohort_report:
     queries: 500                  # dev documents (never indexed) whose cohorts are reported (plan 5.3)
     k: null                       # null: cohort.k
+  analyse_gate:                   # gate 5.9: analyse() on held-out dev documents, template explanations
+    documents: 5
+    max_seconds: 10
 
 expectation:
   level: 1                        # 1 = cohort prevalence, 2 = MAM (Phase 8)
@@ -460,7 +469,7 @@ hub:                              # python -m experiments.hub_sync push|pull --b
     packs:
       include: ["packs/*/classifier/*", "packs/*/prototypes/*", "packs/*/profiles/*", "packs/*/section_probs/*",
                 "packs/*/cascade*.json", "packs/*/doc_presence.json",
-                "packs/*/index/*", "packs/*/evidence/*"]
+                "packs/*/index/*", "packs/*/evidence/*", "packs/*/pack.json"]
       exclude: []
     runs:
       include: ["runs/*/*"]           # run folders; runs/log.csv is merged separately (hub_sync push_log/pull_log)

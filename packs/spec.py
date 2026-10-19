@@ -76,7 +76,8 @@ class GenrePack:
         device = device or resolve_device(cfg["run"].get("device", "auto"))
         if embedder is None:
             embedder = Embedder(ecfg["id"], devices=[device], dtype=ecfg.get("dtype", "float16"),
-                                max_length=ecfg.get("max_length", 1024), batch_size=ecfg.get("batch_size", 32),
+                                max_length=ecfg.get("max_length", 1024),
+                                batch_size=ecfg.get("query_batch_size", ecfg.get("batch_size", 32)),
                                 normalize=True, revision=ecfg.get("revision"))
         colbert = colbert or load_colbert(cfg)
         scorer = PrototypeScorer.from_pack(colbert, pack / "prototypes", len(types),

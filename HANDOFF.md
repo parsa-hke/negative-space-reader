@@ -1,66 +1,55 @@
-# Session handoff — start Phase 5 (packs, index, cohort, level-1 expectation)
+# Session handoff — finish Phase 5 (gate 5.9, teacher-mode check, wrap-up)
 
-Written 2026-10-18 at the end of Phase 4 (all eight tasks ticked; papers below its gate by Parsa's decision). Read with:
-`CLAUDE.md`, `NEGATIVE_SPACE_PLAN.md` (§0.2, §0.6, Phase 5, Appendix A), `CHANGELOG.md` (entries of 2026-10-18 and
-2026-10-17), `reports/decisions/001–005`. Replace this file at the end of the next session.
+Written 2026-10-20 at the end of Phase 5 session 1. Read with: `CLAUDE.md`, `NEGATIVE_SPACE_PLAN.md` (§0.2, §0.6,
+Phase 5 incl. the new 5.0), `CHANGELOG.md` (entry 2026-10-19), `reports/decisions/006-document-level-presence.md`
+(and 004–005 for context). Replace this file at the end of the next session.
 
 ## Where things stand
 
-- **Phase 4 is closed** (CHANGELOG 2026-10-18; decision records 004, 005). Presence model per pack = linear heads on
-  the stored Qwen3-Embedding-0.6B section vectors (teacher labels, C 3) + ColBERT prototype scores, combined by a
-  logistic layer (`packs/<genre>/cascade.json`; no reranker in the lean tier). Against the silver reference (judge
-  Claude Haiku 5.5, eval half): privacy macro F1 0.619 (gate: 0.801 of the teacher's 0.773, pass), papers 0.497 (0.722
-  of 0.688, not met, recorded). Profiles for the whole indexable corpus in `packs/<genre>/profiles/part-*.parquet`.
-- **Schemas:** privacy version 1 (58 types); papers **version 2** (47 types; v1 in `packs/papers/history/schema.v1.yaml`;
-  labels made under v1 are read through `merged_from`, `packs/schema_versions.py`).
-- **Pack artefacts** (gitignored, synced through the HF store): `packs/<genre>/classifier/linear_teacher/`,
-  `prototypes/`, `cascade.json`, `cascade_full.json` (with reranker, from `cascade_v1_s0`), `profiles/`.
-- **Compute (plan §0.6, from Phase 5 on):** GPU work runs on **Colab Pro (A100)** through
-  `notebooks/colab_runner.ipynb` (clone → install `requirements-colab.txt` → `hub_sync pull` → `experiments.run ...
-  --overlay colab` → `hub_sync push`); the Mac pulls with `.venv/bin/python -m experiments.hub_sync pull --bundles
-  runs,packs`. Tests and smoke stay on the Mac. Colab secrets Parsa must add once: `HF_TOKEN` (read+write on the
-  dataset repo), `GH_TOKEN` (fine-grained, read-only contents of the GitHub repo), and API keys when a run needs them.
-- **Stores:** GitHub `parsa-hke/negative-space-reader` (private; `main`); Hugging Face dataset
-  `parsa-hke/negative-space-reader-data` (private; bundles in `configs/base.yaml` `hub:`). **Uploaded and verified 2026-10-19:** 514 files, 4.42 GB (data, embeddings, the teacher cache archive, packs incl. profiles, runs, the merged run log); every local bundle file matches the hub.
-- **APIs:** OpenRouter (teacher, 72B; `.env` `OPEN_ROUTER_KEY` → `OPENROUTER_API_KEY`); **Anthropic API** for the
-  frontier comparison (7.3: Claude Opus 5.5, Message Batches; $100 credit; needs `ANTHROPIC_API_KEY` in `.env` and in
-  Colab secrets, and an `anthropic` backend in `models/teacher.py` written with the official SDK). Spend so far:
-  OpenRouter ≈ $0.80 (Phase 3) + ≈ $8 (Phase 4 labelling, trial, calibration) + the judge ≈ $1.05.
-- Tests: 329 pass. Commits are authored by Parsa only (no Claude co-author line).
+- **Uncommitted work on the Mac** since `a0b47a6` (pushed): pack builder (`packs/builder.py` `build`/`pack_stages`,
+  `experiments/build_pack.py`), gate stage `analyse_gate`, teacher explanation mode (`engine/explain.py`,
+  `prompts/explain.md` v1), `models.embedder.query_batch_size: 4`, manifests `packs/<genre>/pack.json` (tracked),
+  decision record 006, plan notes (4.7, 5.0), CHANGELOG. Tests: 393 pass. **Commit and push when Parsa asks**
+  (authored by Parsa only, no Claude co-author line).
+- **Document-level presence done (5.0, decision record 006):** 150 whole dev documents per genre labelled by the
+  judge (Claude Haiku 5.5 via the Anthropic API, Message Batches, run `judge_docs_haiku_s0`, ≈ $2.60); document model
+  `engine/doc_presence.py` (eval half: macro F1 privacy 0.687 → 0.754, papers 0.734 → 0.789; ECE ≈ 0.02); **profiles
+  v2** in `packs/<genre>/profiles` (v1 in `profiles_v1`). Finding: v1 was miscalibrated in both directions, not
+  uniformly inflated; `states_own_limitations` is really in ≈ 83% of papers.
+- **Phase 5 built (tests first):** 5.2 index (FAISS + Qdrant), 5.3 cohort + report, 5.4 level 1 (Wilson), 5.5 rank +
+  evidence, 5.6 `analyse()` (`engine/pipeline.py`, `packs/spec.py` `GenrePack.load`), 5.7 builder, 5.8 template +
+  teacher mode, 5.9 gate stage. Indexes: privacy 22,300 / papers 14,114 documents.
+- **Colab jobs done:** `section_probs_v1` (every section's probabilities, train + dev) and **`sentence_evidence_v1`**
+  (5.3M sentences, A100, 2 h 27 min, commit `a0b47a6`): 74 parts in the hub under `packs/<genre>/evidence/`, **not yet
+  pulled to the Mac**. Parsa may delete the Colab runtime; nothing is left there.
+- Stores: hub `parsa-hke/negative-space-reader-data` (packs synced up to profiles v2 and the manifests; evidence came
+  from Colab). Anthropic key in `.env` as `ANTHROPIC_API_KEY` (commands read it with grep, never print it).
 
-## First job of Phase 5: document-level presence (a Phase 4 finding)
+## Next session, in order (≈ 45 min if the gate passes; 2–3 h if papers needs speeding up)
 
-Profiles mark a type present when any section passes a section-level threshold, which inflates document-level
-presence (papers: `states_own_limitations` in 96.6% of papers; privacy 20 of 58 types per policy). A type that looks
-present everywhere can never be ranked as missing. Before level-1 expectation (5.4) and ranking (5.5), calibrate
-presence at document level, test first, generic (no genre code): for example thresholds fitted on documents whose
-every section is labelled (OPP-115 policies; papers have one labelled section per teacher-set paper, so propose an
-approach and ask), or a noisy-OR over calibrated section probabilities with a per-type document threshold. Profiles
-keep only the best section's probability, so storing every section's probabilities may be needed; rebuilding
-profiles is a Colab job from now on.
-
-## Phase 5 at a glance (plan Phase 5)
-
-5.1 embedder (corpus embeddings exist; document embedding = mean of sections + title, §0.2 #9), 5.2 Index (FAISS +
-Qdrant), 5.3 cohort (never the query's own entity), 5.4 level-1 expectation with Wilson intervals, 5.5 rank + evidence
-(prototypes double as peer evidence), 5.6 `analyse()`, 5.7 pack builder, 5.8 explanations (template), 5.9 gate
-(`analyse()` under 10 s on the Mac). For 5.9: papers presence on a new document costs ~0.5 s per section on the Mac
-(the section embedding), so a 20-section paper is near the 10 s budget.
-
-## Open items for Parsa (none blocks Phase 5)
-
-- Papers presence upgrade (SetFit or ModernBERT fine-tune on Colab): the recorded upgrade for the unmet gate.
-- Hand labels for the reference set (decision record 004): the upgrade from silver to human.
+1. `hub_sync pull --bundles runs,packs`; check `packs/<genre>/evidence/` (45 / 29 parts).
+2. Pack builder per genre: `--config configs/pack_<genre>.yaml --set build.adopt=true` (adopts `sentence_evidence`;
+   every other stage should be skipped), which runs the **gate 5.9** (`analyse_gate`: 5 held-out dev documents per
+   genre, template explanations, every document < 10 s on the M5). Look at a report's quotes by eye.
+   Risk: very long papers. Measured: a 26-section paper took 15.0 s before two fixes (embedding 8.0 s → 2.6 s with
+   `query_batch_size: 4`; query-time evidence 6.7 s → stored sentences).
+3. One real call of `explain.mode: teacher` (5.8) on one document, the plan's teacher (72B, OpenRouter; `.env`
+   `OPEN_ROUTER_KEY` → `OPENROUTER_API_KEY`), under a cent; check the wording stays within the quotes.
+4. Record 5.1's Mac timing (from the gate), tick 5.1–5.9 in the plan, CHANGELOG, HANDOFF, commit/push on request.
+5. Optional, if Parsa asks: related-work search + novelty memo (pasted prompt item 4).
 
 ## Watch
 
-- The 72B labelling needed up to 7 of 8 rate-limit retries; if OpenRouter is busier, raise `rate_limit_retries`.
-- Close-neighbour types (CHANGELOG 2026-10-15/18) remain hard to separate; per-type F1 in
-  `reports/tables/presence_cascade_<genre>.csv`.
+- FAISS and PyTorch must not both initialise in one macOS process (libomp clash); `engine/index.py` loads FAISS only
+  for unfiltered approximate search. Keep it that way.
+- Privacy cohorts repeat sites across years (88% distinct entities): possible Phase 6 ablation (one snapshot per
+  entity). Level 1 uses bits (plan); mean probability is the Phase 6 ablation (bits saturate common types).
+- The live dashboard (`analysis/progress_server.py`, launch config `progress`) shows any `runs/<name>.out` written
+  in the last 24 h.
 
 ## Checks before starting
 
 ```bash
-.venv/bin/python -m pytest -q        # expected: 329 passed
+.venv/bin/python -m pytest -q        # expected: 393 passed
+git status --short                   # expected: the uncommitted work listed above
 ```
-`packs/privacy/schema.yaml` version 1 (58 types); `packs/papers/schema.yaml` version 2 (47 types).

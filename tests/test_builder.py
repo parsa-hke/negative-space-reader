@@ -64,10 +64,13 @@ def test_build_pack_runs_index_and_cohort_report(tmp_path):
     cfg["paths"].update(figures=str(tmp_path / "figures"), tables=str(tmp_path / "tables"))
     cfg["build"] = {"stages": ["index", "cohort_report"], "cohort_report": {"queries": 10, "k": 3}}
     m = build_pack.main(cfg, tmp_path)
-    assert m["g/index/documents"] == 6 and m["g/cohort_report/queries"] == 2  # the two dev documents
-    assert m["g/cohort_report/own_entity_in_cohort"] == 0 and 0 <= m["g/cohort_report/fallback_rate"] <= 1
+    assert m["g/ran"] == ["index", "cohort_report"]
+    man = json.loads((tmp_path / "packs" / "g" / "pack.json").read_text())
+    assert man["stages"]["index"]["metrics"]["documents"] == 6 and man["stages"]["cohort_report"]["metrics"]["queries"] == 2
+    assert man["stages"]["cohort_report"]["metrics"]["own_entity_in_cohort"] == 0 and man["models"]["embedder"]
     assert (tmp_path / "figures" / "cohort_similarity_g.png").is_file()
     assert (tmp_path / "tables" / "cohort_similarity_g.csv").is_file()
+    assert build_pack.main(cfg, tmp_path)["g/skipped"] == ["index", "cohort_report"]  # nothing changed
 
 
 def test_section_texts_are_read_by_offset_for_indexed_documents(tmp_path):
@@ -100,3 +103,82 @@ def test_evidence_stage_stores_the_best_section_per_document_and_type(tmp_path):
     best = load_best_sections(pack / "index")
     assert m["documents"] == 2 and set(best) == {"d0", "d1"}  # the indexed split only
     assert best["d0"].tolist() == [1, 0] and best["d1"].tolist() == [0, 0]
+
+
+# ------------------------------------------------------------------ the builder: skip unchanged stages, manifest
+def toy_stages(root, calls):
+    from packs.builder import Stage
+
+    def writer(name, text):
+        def run(cfg, genre, run_dir):
+            calls.append(name)
+            (root / f"{name}.out").write_text(text(cfg))
+            return {"wrote": name}
+        return run
+
+    src = root / "src.txt"
+    return [
+        Stage("a", writer("a", lambda c: src.read_text().upper()), inputs=lambda c, g: [src],
+              outputs=lambda c, g: [root / "a.out"], config_keys=["x"]),
+        Stage("b", writer("b", lambda c: (root / "a.out").read_text() + "!"), inputs=lambda c, g: [root / "a.out"],
+              outputs=lambda c, g: [root / "b.out"], config_keys=["y"]),
+        Stage("gpu", writer("gpu", lambda c: "g"), inputs=lambda c, g: [root / "b.out"],
+              outputs=lambda c, g: [root / "gpu.out"], config_keys=[], gpu=True, colab_job="toy_gpu_job"),
+    ]
+
+
+def test_builder_skips_unchanged_stages_and_reruns_what_changed(tmp_path):
+    import pytest
+
+    from packs.builder import GpuStageNeeded, build
+
+    calls = []
+    (tmp_path / "src.txt").write_text("hello")
+    cfg = {"x": 1, "y": 2, "tier": "lean", "models": {"embedder": {"id": "emb"}}, "run": {"device": "cuda"}}
+    stages = toy_stages(tmp_path, calls)
+    man = tmp_path / "pack.json"
+    build(cfg, "g", stages, manifest_path=man, run_dir=tmp_path)
+    assert calls == ["a", "b", "gpu"]
+    calls.clear()
+    m = build(cfg, "g", stages, manifest_path=man, run_dir=tmp_path)
+    assert calls == [] and m["skipped"] == ["a", "b", "gpu"]
+    cfg["y"] = 3  # a setting of b changed: b reruns; gpu's input (b.out) is unchanged in content, so it stays
+    build(cfg, "g", stages, manifest_path=man, run_dir=tmp_path)
+    assert calls == ["b"]
+    calls.clear()
+    (tmp_path / "src.txt").write_text("changed")  # a's input changed: a, then b (its input changed) and gpu
+    build(cfg, "g", stages, manifest_path=man, run_dir=tmp_path)
+    assert calls == ["a", "b", "gpu"]
+    info = json.loads(man.read_text())
+    assert info["tier"] == "lean" and info["models"]["embedder"] == "emb" and set(info["stages"]) == {"a", "b", "gpu"}
+    assert all(len(info["stages"][s]["outputs"]) == 1 for s in info["stages"])
+
+    calls.clear()
+    cfg["run"]["device"] = "mps"
+    (tmp_path / "src.txt").write_text("again")
+    with pytest.raises(GpuStageNeeded, match="toy_gpu_job"):  # a GPU stage never runs silently on the Mac
+        build(cfg, "g", stages, manifest_path=man, run_dir=tmp_path)
+    assert calls == ["a", "b"]
+
+
+def test_builder_adopts_existing_outputs_without_rerunning(tmp_path):
+    from packs.builder import build
+
+    calls = []
+    for name, text in (("src.txt", "hello"), ("a.out", "HELLO"), ("b.out", "HELLO!"), ("gpu.out", "g")):
+        (tmp_path / name).write_text(text)
+    cfg = {"x": 1, "y": 2, "run": {"device": "mps"}, "models": {}}
+    m = build(cfg, "g", toy_stages(tmp_path, calls), manifest_path=tmp_path / "pack.json", run_dir=tmp_path, adopt=True)
+    assert calls == [] and m["adopted"] == ["a", "b", "gpu"]
+    assert json.loads((tmp_path / "pack.json").read_text())["stages"]["a"]["adopted"] is True
+    (tmp_path / "pack.json").unlink()
+    m = build(cfg, "g", toy_stages(tmp_path, calls), manifest_path=tmp_path / "pack.json", run_dir=tmp_path, adopt=True,
+              force=["b"])
+    assert calls == ["b"] and m["adopted"] == ["a", "gpu"]  # a forced stage is rebuilt, never adopted
+
+
+def test_fingerprints_inside_the_repository_are_relative_paths():
+    from packs.builder import REPO, fingerprint
+
+    fp = fingerprint([REPO / "configs" / "base.yaml"])
+    assert list(fp) == ["configs/base.yaml"]  # the same key on the Mac and on Colab

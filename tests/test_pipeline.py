@@ -114,3 +114,42 @@ def test_analyse_reads_files_and_refuses_empty_documents(pack, tmp_path):
     assert any(p["type"] == "sharing" for p in r.present)
     with pytest.raises(ValueError):
         analyse("   ", pack)
+
+
+def test_teacher_explanations_are_opt_in_and_fill_the_same_fields(pack):
+    from engine.explain import EXPLAIN_FIELDS
+    from engine.pipeline import analyse
+
+    class T:
+        def generate_structured_batch(self, prompts, model, **kw):
+            return [model(rationale="Peers say how long they keep data.", suggested_wording="We keep it for [period].")
+                    for _ in prompts]
+
+    pack.cfg["genre_info"]["g"] = {"document_kind": "test policy", "author_role": "the company"}
+    plain = analyse(DOC, pack)
+    taught = analyse(DOC, pack, explain_mode="teacher", teacher=T())
+    assert all(set(EXPLAIN_FIELDS) <= set(a) for a in plain.absences + taught.absences)
+    assert plain.absences[0]["explanation_mode"] == "template" and taught.absences[0]["explanation_mode"] == "teacher"
+    assert taught.absences[0]["suggested_wording"] == "We keep it for [period]."
+
+
+def test_analyse_gate_times_held_out_documents(pack, tmp_path, monkeypatch):
+    from data.schema import Document, Section, write_jsonl
+    from packs import builder
+
+    processed = tmp_path / "processed" / "g"
+    processed.mkdir(parents=True)
+    docs = [Document(id=f"q{i}", genre="g", source="s", entity_id=f"qe{i}", title=f"Policy {i}") for i in range(4)]
+    write_jsonl(processed / "documents.jsonl", docs)
+    write_jsonl(processed / "sections.jsonl", [Section(doc_id=d.id, idx=0, heading="Data",
+                                                       text="We share your data with partners when you ask.") for d in docs])
+    (tmp_path / "splits").mkdir()
+    (tmp_path / "splits" / "g.json").write_text(json.dumps({"doc_ids": {"train": [], "dev": [d.id for d in docs], "test": []}}))
+    cfg = pack.cfg
+    cfg["paths"].update(data_processed=str(tmp_path / "processed"), splits=str(tmp_path / "splits"),
+                        tables=str(tmp_path / "tables"))
+    cfg["build"] = {"analyse_gate": {"documents": 3, "max_seconds": 10}}
+    m = builder.analyse_gate(cfg, "g", pack=pack)
+    assert m["documents"] == 3 and m["gate"] == "pass" and m["max_seconds"] < 10 and m["median_seconds"] <= m["max_seconds"]
+    assert "embed" in m["median_timings"] and m["device"]
+    assert (tmp_path / "tables" / "analyse_gate_g.csv").is_file()

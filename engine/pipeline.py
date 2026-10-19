@@ -79,12 +79,12 @@ def segment(text: str, scfg: dict[str, Any]) -> list[tuple[str | None, str]]:
 
 def analyse(text_or_path: str | Path, pack: Any, *, title: str | None = None, category: str | None = None,
             entity_id: str | None = None, date_window: tuple[str | None, str | None] | None = None,
-            top_k: int | None = None) -> Report:
+            top_k: int | None = None, explain_mode: str | None = None, teacher: Any = None) -> Report:
     from engine.cohort import CohortRetriever
     from engine.embed import document_vector
     from engine.evidence import PeerEvidence
     from engine.expectation import level1
-    from engine.explain import template
+    from engine.explain import explain_absences
     from engine.rank import rank_absences
 
     cfg, T = pack.cfg, len(pack.types)
@@ -165,9 +165,14 @@ def analyse(text_or_path: str | Path, pack: Any, *, title: str | None = None, ca
                          "definition": cards[r["type"]].get("definition"), "section_hint": cards[r["type"]].get("section_hint"),
                          "evidence": quotes})
     lap("evidence")
-    if (cfg.get("explain") or {}).get("mode", "template") == "template":
-        for a in absences:
-            a["explanation"] = template(a, cards[a["type"]], a["evidence"])
+    xcfg = cfg.get("explain") or {}
+    mode = explain_mode or xcfg.get("mode", "template")
+    if mode == "teacher" and teacher is None:
+        from models.teacher import load_teacher
+
+        teacher = load_teacher(cfg["models"]["teacher"])
+    explain_absences(absences, cards, mode=mode, teacher=teacher, genre=(cfg.get("genre_info") or {}).get(pack.genre),
+                     top_n=xcfg.get("top_n", 5), max_tokens=xcfg.get("max_tokens", 256))
     lap("explain")
     best_sec = P.argmax(0)
     present = [{"type": t, "p_present": float(p_doc[k]), "section": int(best_sec[k]), "heading": secs[int(best_sec[k])][0]}

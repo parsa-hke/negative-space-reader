@@ -1,0 +1,168 @@
+{
+ "stages": {
+  "embed": {
+   "inputs": "46fc06f84521f28b",
+   "settings": "abad5ee7ab77e5d3",
+   "outputs": {
+    "data/embeddings/Qwen__Qwen3-Embedding-0.6B/papers/sections/meta.json": "62bbf46596d5f288",
+    "data/embeddings/Qwen__Qwen3-Embedding-0.6B/papers/sections/rows.jsonl": "ab402cff30941927",
+    "data/embeddings/Qwen__Qwen3-Embedding-0.6B/papers/sections/vectors.f16.npy": "d83f769baeaca652",
+    "data/embeddings/Qwen__Qwen3-Embedding-0.6B/papers/titles/meta.json": "dc8ba533288aa6c0",
+    "data/embeddings/Qwen__Qwen3-Embedding-0.6B/papers/titles/rows.jsonl": "90fa507135bc524a",
+    "data/embeddings/Qwen__Qwen3-Embedding-0.6B/papers/titles/vectors.f16.npy": "b3c300b3a17b02f1"
+   },
+   "adopted": true,
+   "at": "2026-10-20T00:46:00"
+  },
+  "heads": {
+   "inputs": "f6c89207799fbf5b",
+   "settings": "e130a50ca2ffc51c",
+   "outputs": {
+    "packs/papers/classifier/linear_teacher/heads.json": "dd7f4d605c366d21",
+    "packs/papers/classifier/linear_teacher/heads.npz": "69218390c2c13e1a"
+   },
+   "adopted": true,
+   "at": "2026-10-20T00:46:00"
+  },
+  "prototypes": {
+   "inputs": "7514435de84ea8e0",
+   "settings": "d6727ede7bde2eb6",
+   "outputs": {
+    "packs/papers/prototypes/prototypes.json": "7ad7b81827a716d8",
+    "packs/papers/prototypes/tokens.npz": "8bec52b66aeebae6"
+   },
+   "adopted": true,
+   "at": "2026-10-20T00:46:00"
+  },
+  "cascade": {
+   "inputs": "51483c471dc00a43",
+   "settings": "c5d40fd834a64dbf",
+   "outputs": {
+    "packs/papers/cascade.json": "dd7ce269f0a9c073"
+   },
+   "adopted": true,
+   "at": "2026-10-20T00:46:00"
+  },
+  "section_probs": {
+   "inputs": "fd672ee69ae3420a",
+   "settings": "aba3028b6ae5b4ae",
+   "outputs": {
+    "packs/papers/section_probs/part-00000.parquet": "37971bedd870cbbc",
+    "packs/papers/section_probs/part-00001.parquet": "5bd35902f2a99190",
+    "packs/papers/section_probs/part-00002.parquet": "865e3a1568f398ea",
+    "packs/papers/section_probs/part-00003.parquet": "fa71f2e13e3a3e17",
+    "packs/papers/section_probs/part-00004.parquet": "011f64821b04124c",
+    "packs/papers/section_probs/part-00005.parquet": "3a6ff6db473b885f",
+    "packs/papers/section_probs/part-00006.parquet": "1430cbc051682c19",
+    "packs/papers/section_probs/part-00007.parquet": "706e8d04aad82352",
+    "packs/papers/section_probs/part-00008.parquet": "e4db1148c250b63c",
+    "packs/papers/section_probs/part-00009.parquet": "5d3d23bb4a33dfa7",
+    "packs/papers/section_probs/part-00010.parquet": "d6848850ad51b13d",
+    "packs/papers/section_probs/part-00011.parquet": "37350f56875e4d62",
+    "packs/papers/section_probs/part-00012.parquet": "cc7d7df8033d7680",
+    "packs/papers/section_probs/part-00013.parquet": "e47bbc2bf6391fe0",
+    "packs/papers/section_probs/part-00014.parquet": "5b4d7e7bfafef893",
+    "packs/papers/section_probs/part-00015.parquet": "9beb377bbdef5054",
+    "packs/papers/section_probs/part-00016.parquet": "8fd8f68d55d65aaa",
+    "packs/papers/section_probs/part-00017.parquet": "f3974b4dd192a333",
+    "packs/papers/section_probs/part-00018.parquet": "92b377b2184234cc",
+    "packs/papers/section_probs/part-00019.parquet": "ef22229fa3bf4abe",
+    "packs/papers/section_probs/part-00020.parquet": "105aa08911e80787",
+    "packs/papers/section_probs/part-00021.parquet": "2ea2357f1db2e5f0",
+    "packs/papers/section_probs/part-00022.parquet": "5533b1e3c10af32a",
+    "packs/papers/section_probs/part-00023.parquet": "91d30a15bd474194",
+    "packs/papers/section_probs/part-00024.parquet": "de12ec68b789bde7",
+    "packs/papers/section_probs/part-00025.parquet": "ab8d202af4b38897",
+    "packs/papers/section_probs/part-00026.parquet": "0d1e49de7e3c7f82",
+    "packs/papers/section_probs/part-00027.parquet": "a78d2ab39bab6f5f",
+    "packs/papers/section_probs/part-00028.parquet": "96b8cd3e9adfd993",
+    "packs/papers/section_probs/part-00029.parquet": "61effda753ccb43c",
+    "packs/papers/section_probs/part-00030.parquet": "c03f029ec024ac9b",
+    "packs/papers/section_probs/part-00031.parquet": "78564ebaa011003d"
+   },
+   "adopted": true,
+   "at": "2026-10-20T00:46:00"
+  },
+  "doc_presence": {
+   "inputs": "49eb67814a53dd64",
+   "settings": "eb5aebb2b0487a0a",
+   "outputs": {
+    "packs/papers/doc_presence.json": "59b77329ef9ba49f",
+    "packs/papers/profiles/manifest.json": "0da91b90b493d4de",
+    "packs/papers/profiles/part-00000.parquet": "a50af35bb568732a",
+    "packs/papers/profiles/part-00001.parquet": "2fe594eda2d28b5c",
+    "packs/papers/profiles/part-00002.parquet": "6fe9c87f2c516f47",
+    "packs/papers/profiles/part-00003.parquet": "05751a11de26eeb8",
+    "packs/papers/profiles/part-00004.parquet": "1b67c50edc6f8f8a",
+    "packs/papers/profiles/part-00005.parquet": "1bf4ac32b728e370",
+    "packs/papers/profiles/part-00006.parquet": "ef996aeab71eb501",
+    "packs/papers/profiles/part-00007.parquet": "232abefc5c94fdbb",
+    "packs/papers/profiles/part-00008.parquet": "0be1f44a7b2c4170",
+    "packs/papers/profiles/part-00009.parquet": "fc48e30a28ceda33",
+    "packs/papers/profiles/part-00010.parquet": "8d8a36590f45620b",
+    "packs/papers/profiles/part-00011.parquet": "89a48f61be40ac7f",
+    "packs/papers/profiles/part-00012.parquet": "b8acb4bd89c990b3",
+    "packs/papers/profiles/part-00013.parquet": "695577d730d05d20",
+    "packs/papers/profiles/part-00014.parquet": "2a42bef62acdc6ad",
+    "packs/papers/profiles/part-00015.parquet": "d32101c1657a1feb",
+    "packs/papers/profiles/part-00016.parquet": "d8dcfbe764ce402c",
+    "packs/papers/profiles/part-00017.parquet": "8a8d6dfcda28793a",
+    "packs/papers/profiles/part-00018.parquet": "f4cf353f58f51ff3",
+    "packs/papers/profiles/part-00019.parquet": "b4b489e6af490b0e",
+    "packs/papers/profiles/part-00020.parquet": "21866b231fc8a30a",
+    "packs/papers/profiles/part-00021.parquet": "2d5cc67e69a1061f",
+    "packs/papers/profiles/part-00022.parquet": "2459547632b986ae",
+    "packs/papers/profiles/part-00023.parquet": "0f0659fecc41764b",
+    "packs/papers/profiles/part-00024.parquet": "028b978a47a545dc",
+    "packs/papers/profiles/part-00025.parquet": "89c2bd4dc46ba395",
+    "packs/papers/profiles/part-00026.parquet": "399a159241163487",
+    "packs/papers/profiles/part-00027.parquet": "a898879c124abdb1",
+    "packs/papers/profiles/part-00028.parquet": "6d0095597637161c"
+   },
+   "adopted": true,
+   "at": "2026-10-20T00:46:00"
+  },
+  "index": {
+   "inputs": "d1d8a72423e6d0c8",
+   "settings": "c84016e8345977b1",
+   "outputs": {
+    "packs/papers/index/vectors.npy": "9f20c8c8aed66062",
+    "packs/papers/index/payloads.jsonl": "27c45ffae2819dc6",
+    "packs/papers/index/index.json": "e64b6aabe4a7fd4a",
+    "packs/papers/index/sections.npz": "623323126fc3883c"
+   },
+   "adopted": true,
+   "at": "2026-10-20T00:46:00"
+  },
+  "evidence": {
+   "inputs": "da889d75e75f85d7",
+   "settings": "6eddc32dc8d3debe",
+   "outputs": {
+    "packs/papers/index/best_sections.npz": "dee576af46be97a8"
+   },
+   "adopted": true,
+   "at": "2026-10-20T00:46:00"
+  },
+  "cohort_report": {
+   "inputs": "a2147388787eb7a5",
+   "settings": "24c8d87f382e62a6",
+   "outputs": {
+    "reports/tables/cohort_similarity_papers.csv": "22f9417c353ee268",
+    "reports/figures/cohort_similarity_papers.png": "84e832ae0bca6492"
+   },
+   "adopted": true,
+   "at": "2026-10-20T00:46:00"
+  }
+ },
+ "genre": "papers",
+ "tier": "lean",
+ "models": {
+  "teacher": "Qwen/Qwen2.5-72B-Instruct",
+  "embedder": "Qwen/Qwen3-Embedding-0.6B",
+  "late_interaction": "answerdotai/answerai-colbert-small-v1",
+  "reranker": "BAAI/bge-reranker-v2-m3",
+  "student": "answerdotai/ModernBERT-large"
+ },
+ "schema_version": 2,
+ "updated": "2026-10-20T00:46:00"
+}

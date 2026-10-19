@@ -223,3 +223,256 @@ def load_best_sections(index_dir: str | Path) -> dict[str, np.ndarray]:
 
 
 STAGES = {"index": build_index, "evidence": build_evidence, "cohort_report": cohort_report}
+
+
+def analyse_gate(cfg: dict[str, Any], genre: str, *, pack: Any = None) -> dict[str, Any]:
+    """Gate 5.9: analyse() end to end on held-out dev documents (never indexed; rebuilt as Markdown from their
+    sections), template explanations, after one warm-up call. Pass when every document takes under max_seconds.
+    -> reports/tables/analyse_gate_<genre>.csv (per document: sections, every step's time)."""
+    import csv
+    import platform
+
+    from data.schema import Document, Section, read_jsonl
+    from data.splits import load_manifest
+    from engine.pipeline import analyse
+    from packs.spec import GenrePack
+
+    g = (cfg.get("build") or {}).get("analyse_gate") or {}
+    n, limit = g.get("documents", 5), g.get("max_seconds", 10)
+    pack = pack or GenrePack.load(cfg, genre)
+    split = load_manifest(_path(cfg["paths"]["splits"]) / f"{genre}.json")
+    processed = _path(cfg["paths"]["data_processed"]) / genre
+    labelled = set()
+    ls = _path(cfg["paths"]["packs"]) / genre / "label_sets.json"
+    if ls.exists():
+        labelled = {r["doc_id"] for refs in json.loads(ls.read_text()).values() if isinstance(refs, list) for r in refs}
+    indexed_sources = {p.get("source") for p in getattr(pack.index, "payloads", [])} - {None}
+    docs = [d for d in read_jsonl(processed / "documents.jsonl", Document) if split.get(d.id) == "dev"
+            and d.id not in labelled and (not indexed_sources or d.source in indexed_sources)]
+    rng = np.random.default_rng(cfg.get("splits", {}).get("seed", 0))
+    docs = [docs[i] for i in sorted(rng.choice(len(docs), size=min(n, len(docs)), replace=False))]
+    keep = {d.id for d in docs}
+    secs: dict[str, list[Any]] = defaultdict(list)
+    for s in read_jsonl(processed / "sections.jsonl", Section):
+        if s.doc_id in keep:
+            secs[s.doc_id].append(s)
+    texts = {d.id: (f"# {d.title}\n\n" if d.title else "") + "\n\n".join((f"## {s.heading}\n" if s.heading else "") + s.text
+                                                                       for s in secs[d.id]) for d in docs}
+    analyse(texts[docs[0].id], pack, top_k=10, explain_mode="template")  # warm-up: first calls load kernels
+    rows = []
+    for d in docs:
+        r = analyse(texts[d.id], pack, entity_id=d.entity_id, top_k=10, explain_mode="template")
+        rows.append({"doc_id": d.id, "sections": r.sections, "absences": len(r.absences), **r.timings})
+    tables = _path(cfg["paths"]["tables"])
+    tables.mkdir(parents=True, exist_ok=True)
+    keys = sorted({k for r in rows for k in r}, key=lambda k: list(rows[0]).index(k) if k in rows[0] else 99)
+    with open(tables / f"analyse_gate_{genre}.csv", "w", newline="", encoding="utf-8") as fh:
+        w = csv.DictWriter(fh, fieldnames=keys)
+        w.writeheader()
+        w.writerows(rows)
+    totals = np.array([r["total"] for r in rows])
+    steps = [k for k in rows[0] if k not in ("doc_id", "sections", "absences", "total")]
+    return {"documents": len(rows), "max_seconds": round(float(totals.max()), 2), "median_seconds": round(float(np.median(totals)), 2),
+            "max_sections": int(max(r["sections"] for r in rows)), "gate": "pass" if totals.max() < limit else "not met",
+            "limit_seconds": limit, "median_timings": {k: round(float(np.median([r[k] for r in rows])), 3) for k in steps},
+            "machine": f"{platform.machine()} {platform.system()} {platform.processor()}".strip(),
+            "device": (getattr(pack, "info", {}) or {}).get("device", "?"),
+            "evidence": (getattr(pack, "info", {}) or {}).get("evidence"), "presence": (getattr(pack, "info", {}) or {}).get("presence")}
+
+
+# ---------------------------------------------------------------------------- the builder (plan 5.7)
+from dataclasses import dataclass, field  # noqa: E402
+from typing import Callable  # noqa: E402
+
+
+class GpuStageNeeded(RuntimeError):
+    """A GPU stage is stale and this machine has no CUDA: run the named Colab job (configs/colab_jobs.yaml)."""
+
+
+@dataclass
+class Stage:
+    name: str
+    run: Callable[[dict[str, Any], str, Path], dict[str, Any]]
+    inputs: Callable[[dict[str, Any], str], list[Path]]
+    outputs: Callable[[dict[str, Any], str], list[Path]]
+    config_keys: list[str] = field(default_factory=list)
+    gpu: bool = False
+    colab_job: str | None = None
+
+
+def _get(cfg: dict[str, Any], dotted: str) -> Any:
+    cur: Any = cfg
+    for k in dotted.split("."):
+        cur = cur.get(k) if isinstance(cur, dict) else None
+    return cur
+
+
+def _file_fp(p: Path) -> str:
+    import hashlib
+
+    size = p.stat().st_size
+    h = hashlib.sha1(str(size).encode())
+    with open(p, "rb") as fh:
+        if size <= 64 * 1024 ** 2:
+            for chunk in iter(lambda: fh.read(1 << 20), b""):
+                h.update(chunk)
+        else:  # large files: size + head + tail (a rerun that changes them changes these)
+            h.update(fh.read(4 << 20))
+            fh.seek(-(4 << 20), 2)
+            h.update(fh.read())
+    return h.hexdigest()[:16]
+
+
+def _key(p: Path) -> str:
+    """Repository-relative path when inside the repository (manifests then compare across machines)."""
+    try:
+        return Path(p).resolve().relative_to(REPO).as_posix()
+    except ValueError:
+        return str(p)
+
+
+def fingerprint(paths: list[Path]) -> dict[str, str]:
+    """{path: content fingerprint} for files and every file under directories; missing paths are 'missing'."""
+    out: dict[str, str] = {}
+    for p in paths:
+        p = Path(p)
+        files = sorted(f for f in p.rglob("*") if f.is_file() and not f.name.startswith(".")) if p.is_dir() else [p]
+        if not p.exists() or (p.is_dir() and not files):
+            out[_key(p)] = "missing"
+            continue
+        for f in files:
+            out[_key(f)] = _file_fp(f)
+    return out
+
+
+def _digest(obj: Any) -> str:
+    import hashlib
+
+    return hashlib.sha1(json.dumps(obj, sort_keys=True, default=str).encode()).hexdigest()[:16]
+
+
+def build(cfg: dict[str, Any], genre: str, stages: list[Stage], *, manifest_path: Path, run_dir: Path,
+          adopt: bool = False, force: list[str] | None = None) -> dict[str, Any]:
+    """Run the stages in order, skipping a stage whose input fingerprints, settings (its config_keys and the model
+    ids) and outputs are those recorded in the manifest. adopt: a stage with no record whose outputs exist is
+    recorded as is (first run over artefacts built before the builder). A stale GPU stage on a machine without CUDA
+    raises GpuStageNeeded with its Colab job instead of running for hours on the CPU."""
+    import datetime
+
+    manifest_path = Path(manifest_path)
+    man = json.loads(manifest_path.read_text()) if manifest_path.exists() else {}
+    man.setdefault("stages", {})
+    models = {k: v.get("id") for k, v in (cfg.get("models") or {}).items() if isinstance(v, dict) and v.get("id")}
+    schema = _path(cfg["paths"]["packs"]) / genre / "schema.yaml" if cfg.get("paths") else None
+    man.update(genre=genre, tier=cfg.get("tier", "lean"), models=models)
+    if schema is not None and schema.exists():
+        import yaml
+
+        man["schema_version"] = yaml.safe_load(schema.read_text(encoding="utf-8")).get("version")
+    report: dict[str, Any] = {"ran": [], "skipped": [], "adopted": []}
+    device = str((cfg.get("run") or {}).get("device", ""))
+    for st in stages:
+        settings = _digest({"config": {k: _get(cfg, k) for k in st.config_keys}, "models": models if st.config_keys else {}})
+        ins, outs = fingerprint(st.inputs(cfg, genre)), st.outputs(cfg, genre)
+        out_fp = fingerprint(outs)
+        have = all(v != "missing" for v in out_fp.values())
+        rec = man["stages"].get(st.name)
+        if (rec and have and not (force and st.name in force) and rec["inputs"] == _digest(ins)
+                and rec["settings"] == settings and rec["outputs"] == out_fp):
+            report["skipped"].append(st.name)
+            continue
+        if adopt and rec is None and have and not (force and st.name in force):
+            man["stages"][st.name] = {"inputs": _digest(ins), "settings": settings, "outputs": out_fp, "adopted": True,
+                                      "at": datetime.datetime.now().isoformat(timespec="seconds")}
+            report["adopted"].append(st.name)
+        else:
+            if st.gpu and not device.startswith("cuda") and not (cfg.get("build") or {}).get("allow_gpu_stages_on_cpu"):
+                manifest_path.write_text(json.dumps(man, indent=1) + "\n")
+                raise GpuStageNeeded(f"{genre}: stage {st.name} is out of date and needs a GPU; run the Colab job "
+                                     f"{st.colab_job} (configs/colab_jobs.yaml), pull, and build again")
+            metrics = st.run(cfg, genre, run_dir)
+            man["stages"][st.name] = {"inputs": _digest(ins), "settings": settings, "outputs": fingerprint(outs),
+                                      "adopted": False, "metrics": metrics,
+                                      "at": datetime.datetime.now().isoformat(timespec="seconds")}
+            report["ran"].append(st.name)
+        man["updated"] = datetime.datetime.now().isoformat(timespec="seconds")
+        manifest_path.write_text(json.dumps(man, indent=1) + "\n")
+    return report
+
+
+def _with(cfg: dict[str, Any], **sets: Any) -> dict[str, Any]:
+    """A deep copy of cfg with dotted keys set."""
+    import copy
+
+    c = copy.deepcopy(cfg)
+    for dotted, v in sets.items():
+        cur = c
+        *head, last = dotted.split("__")
+        for k in head:
+            cur = cur.setdefault(k, {})
+        cur[last] = v
+    return c
+
+
+def _distil(stage: str, **sets: Any) -> Callable[[dict[str, Any], str, Path], dict[str, Any]]:
+    def run(cfg: dict[str, Any], genre: str, run_dir: Path) -> dict[str, Any]:
+        from experiments import distil
+
+        return distil.main(_with(cfg, pack=genre, distil__stage=stage, **sets), run_dir)
+    return run
+
+
+def _embed(cfg: dict[str, Any], genre: str, run_dir: Path) -> dict[str, Any]:
+    from experiments import embed
+
+    return embed.main(_with(cfg, pack=genre), run_dir)
+
+
+def pack_stages(cfg: dict[str, Any]) -> list[Stage]:
+    """The lean pack, in order (the schema must exist and be frozen). GPU stages name their Colab job."""
+    from engine.embed import embedding_slug
+
+    P = lambda g: _path(cfg["paths"]["packs"]) / g  # noqa: E731
+    D = lambda g: _path(cfg["paths"]["data_processed"]) / g  # noqa: E731
+    E = lambda g: _path(cfg["paths"]["embeddings"]) / embedding_slug(cfg["models"]["embedder"]) / g  # noqa: E731
+    S = lambda g: _path(cfg["paths"]["splits"]) / f"{g}.json"  # noqa: E731
+    lab = lambda key: (lambda g: [_path(cfg["presence"]["labels"][key].format(genre=g))])  # noqa: E731
+    mode = cfg["presence"].get("train_labels", "teacher")
+    model = lambda g: [P(g) / "classifier" / f"linear_{mode}", P(g) / "prototypes", P(g) / "cascade.json"]  # noqa: E731
+    tables, figures = _path(cfg["paths"]["tables"]), _path(cfg["paths"]["figures"])
+    return [
+        Stage("embed", _embed, inputs=lambda c, g: [D(g) / "sections.jsonl", D(g) / "documents.jsonl"],
+              outputs=lambda c, g: [E(g) / "sections", E(g) / "titles"], config_keys=["models.embedder"], gpu=True,
+              colab_job="an embed job (configs/embed.yaml --overlay colab)"),
+        Stage("heads", _distil("heads"), inputs=lambda c, g: [E(g) / "sections", P(g) / "schema.yaml", P(g) / "label_sets.json"]
+              + lab("teacher")(g) + lab("reference")(g), outputs=lambda c, g: [P(g) / "classifier" / f"linear_{mode}"],
+              config_keys=["presence.head", "presence.train_labels", "presence.reference_split_seed", "distil.heads"]),
+        Stage("prototypes", _distil("prototypes"), inputs=lambda c, g: [P(g) / "schema.yaml"] + lab("teacher")(g),
+              outputs=lambda c, g: [P(g) / "prototypes"], config_keys=["presence.prototypes_per_type", "models.late_interaction"]),
+        Stage("cascade", _distil("cascade"), inputs=lambda c, g: [P(g) / "classifier" / f"linear_{mode}", P(g) / "prototypes",
+                                                                 E(g) / "sections"] + lab("reference")(g),
+              outputs=lambda c, g: [P(g) / "cascade.json"], config_keys=["presence.cascade", "presence.band"]),
+        Stage("section_probs", _distil("section_probs"), inputs=lambda c, g: model(g) + [D(g) / "sections.jsonl", E(g) / "sections", S(g)],
+              outputs=lambda c, g: [P(g) / "section_probs"], config_keys=["distil.section_probs"], gpu=True,
+              colab_job="section_probs_v1"),
+        Stage("sentence_evidence", _distil("sentence_evidence"), inputs=lambda c, g: model(g) + [D(g) / "sentences.jsonl", S(g)],
+              outputs=lambda c, g: [P(g) / "evidence"], config_keys=["distil.sentence_evidence"], gpu=True,
+              colab_job="sentence_evidence_v1"),
+        Stage("doc_presence", _distil("doc_presence", distil__doc_presence__write_profiles=True),
+              inputs=lambda c, g: [P(g) / "section_probs", P(g) / "label_sets.json", P(g) / "cascade.json"] + lab("documents")(g),
+              outputs=lambda c, g: [P(g) / "doc_presence.json", P(g) / "profiles"],
+              config_keys=["distil.doc_presence.min_positives", "distil.doc_presence.C_grid", "presence.labels.documents"]),
+        Stage("index", lambda c, g, r: build_index(c, g), inputs=lambda c, g: [E(g) / "sections", E(g) / "titles",
+                                                                              D(g) / "documents.jsonl", D(g) / "sections.jsonl", S(g)],
+              outputs=lambda c, g: [P(g) / "index" / n for n in ("vectors.npy", "payloads.jsonl", "index.json", "sections.npz")],
+              config_keys=["index", "models.embedder.title_abstract_weight"]),
+        Stage("evidence", lambda c, g, r: build_evidence(c, g), inputs=lambda c, g: [P(g) / "section_probs"],
+              outputs=lambda c, g: [P(g) / "index" / "best_sections.npz"], config_keys=["index.splits"]),
+        Stage("cohort_report", lambda c, g, r: cohort_report(c, g), inputs=lambda c, g: [P(g) / "index" / "vectors.npy", S(g)],
+              outputs=lambda c, g: [tables / f"cohort_similarity_{g}.csv", figures / f"cohort_similarity_{g}.png"],
+              config_keys=["cohort", "build.cohort_report"]),
+        Stage("analyse_gate", lambda c, g, r: analyse_gate(c, g),
+              inputs=lambda c, g: [P(g) / "doc_presence.json", P(g) / "profiles", P(g) / "evidence", P(g) / "index" / "vectors.npy"],
+              outputs=lambda c, g: [tables / f"analyse_gate_{g}.csv"],
+              config_keys=["build.analyse_gate", "cohort", "rank", "evidence", "explain.top_n"]),
+    ]

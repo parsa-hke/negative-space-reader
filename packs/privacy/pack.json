@@ -1,0 +1,203 @@
+{
+ "stages": {
+  "embed": {
+   "inputs": "950a80a213fa0921",
+   "settings": "abad5ee7ab77e5d3",
+   "outputs": {
+    "data/embeddings/Qwen__Qwen3-Embedding-0.6B/privacy/sections/meta.json": "ed9fc844cf29014d",
+    "data/embeddings/Qwen__Qwen3-Embedding-0.6B/privacy/sections/rows.jsonl": "3705d49cdc8819cb",
+    "data/embeddings/Qwen__Qwen3-Embedding-0.6B/privacy/sections/vectors.f16.npy": "5e593ef91b18e4b9",
+    "data/embeddings/Qwen__Qwen3-Embedding-0.6B/privacy/titles/meta.json": "c5f561005287956e",
+    "data/embeddings/Qwen__Qwen3-Embedding-0.6B/privacy/titles/rows.jsonl": "5ff06f844df72335",
+    "data/embeddings/Qwen__Qwen3-Embedding-0.6B/privacy/titles/vectors.f16.npy": "5f04c04b2859402a"
+   },
+   "adopted": true,
+   "at": "2026-10-20T00:45:59"
+  },
+  "heads": {
+   "inputs": "06ad0b12d771d003",
+   "settings": "e130a50ca2ffc51c",
+   "outputs": {
+    "packs/privacy/classifier/linear_teacher/heads.json": "f31a7cd844f956f2",
+    "packs/privacy/classifier/linear_teacher/heads.npz": "984aa143f80857f5"
+   },
+   "adopted": true,
+   "at": "2026-10-20T00:45:59"
+  },
+  "prototypes": {
+   "inputs": "e9f885dc97515039",
+   "settings": "d6727ede7bde2eb6",
+   "outputs": {
+    "packs/privacy/prototypes/prototypes.json": "5fd358131799f3e8",
+    "packs/privacy/prototypes/tokens.npz": "3aac896ffb393dc9"
+   },
+   "adopted": true,
+   "at": "2026-10-20T00:45:59"
+  },
+  "cascade": {
+   "inputs": "7405bb3de45583db",
+   "settings": "3739d17484e2fda0",
+   "outputs": {
+    "packs/privacy/cascade.json": "0a8fae6f33d61f83"
+   },
+   "adopted": true,
+   "at": "2026-10-20T00:45:59"
+  },
+  "section_probs": {
+   "inputs": "b455620950d2249f",
+   "settings": "aba3028b6ae5b4ae",
+   "outputs": {
+    "packs/privacy/section_probs/part-00000.parquet": "d92ef72363600d31",
+    "packs/privacy/section_probs/part-00001.parquet": "63779db4db8239a9",
+    "packs/privacy/section_probs/part-00002.parquet": "bd5f74ed59463ebf",
+    "packs/privacy/section_probs/part-00003.parquet": "f54be66e2254b0e4",
+    "packs/privacy/section_probs/part-00004.parquet": "be65b723be56cff3",
+    "packs/privacy/section_probs/part-00005.parquet": "f8d4d54afbbf9d14",
+    "packs/privacy/section_probs/part-00006.parquet": "b41cdc00a1d561d7",
+    "packs/privacy/section_probs/part-00007.parquet": "069f20a5e8ef0355",
+    "packs/privacy/section_probs/part-00008.parquet": "9156672bc3bbc908",
+    "packs/privacy/section_probs/part-00009.parquet": "237749af2abf2d99",
+    "packs/privacy/section_probs/part-00010.parquet": "63c0999d9a92c9a2",
+    "packs/privacy/section_probs/part-00011.parquet": "92bb5a8c4ce877dc",
+    "packs/privacy/section_probs/part-00012.parquet": "26e60fd0a84aa4af",
+    "packs/privacy/section_probs/part-00013.parquet": "e7aa3bb1dd12f2cf",
+    "packs/privacy/section_probs/part-00014.parquet": "a59dabb1fb503b22",
+    "packs/privacy/section_probs/part-00015.parquet": "7adeef82ca076777",
+    "packs/privacy/section_probs/part-00016.parquet": "3206454873d285d8",
+    "packs/privacy/section_probs/part-00017.parquet": "65b57094337783d5",
+    "packs/privacy/section_probs/part-00018.parquet": "ef1866719cbc3c51",
+    "packs/privacy/section_probs/part-00019.parquet": "5e63f1b2bacb1989",
+    "packs/privacy/section_probs/part-00020.parquet": "0c4923934b37ec02",
+    "packs/privacy/section_probs/part-00021.parquet": "67cc4a95cfa345dd",
+    "packs/privacy/section_probs/part-00022.parquet": "fc97bd02f48cf143",
+    "packs/privacy/section_probs/part-00023.parquet": "c964d7395be50a7c",
+    "packs/privacy/section_probs/part-00024.parquet": "4440616d70fed94d",
+    "packs/privacy/section_probs/part-00025.parquet": "ed45b900aed9a858",
+    "packs/privacy/section_probs/part-00026.parquet": "e7cd88e2f432e546",
+    "packs/privacy/section_probs/part-00027.parquet": "63a4facad212106b",
+    "packs/privacy/section_probs/part-00028.parquet": "487d897f44cdeb58",
+    "packs/privacy/section_probs/part-00029.parquet": "b448d84b1fe6e610",
+    "packs/privacy/section_probs/part-00030.parquet": "fb05e595022c7ced",
+    "packs/privacy/section_probs/part-00031.parquet": "900785dd95f088e0",
+    "packs/privacy/section_probs/part-00032.parquet": "d0d7e3e7f121119a",
+    "packs/privacy/section_probs/part-00033.parquet": "64d3b25c68f48173",
+    "packs/privacy/section_probs/part-00034.parquet": "939b65aa7f9bea65",
+    "packs/privacy/section_probs/part-00035.parquet": "220ea94c2f6cfc36",
+    "packs/privacy/section_probs/part-00036.parquet": "12477ffa26af76a4",
+    "packs/privacy/section_probs/part-00037.parquet": "bf9b6b749f224c49",
+    "packs/privacy/section_probs/part-00038.parquet": "b91d5c0f881265e5",
+    "packs/privacy/section_probs/part-00039.parquet": "d2eca06a810699d4",
+    "packs/privacy/section_probs/part-00040.parquet": "48ec1a10624624d3",
+    "packs/privacy/section_probs/part-00041.parquet": "26fdd4ba4d286b28",
+    "packs/privacy/section_probs/part-00042.parquet": "4b762a5d0507d051",
+    "packs/privacy/section_probs/part-00043.parquet": "978ec8f3ff3f19f0",
+    "packs/privacy/section_probs/part-00044.parquet": "d15af6be95d8a93c",
+    "packs/privacy/section_probs/part-00045.parquet": "a8335265752379d5",
+    "packs/privacy/section_probs/part-00046.parquet": "0d18daf0a0e815e0",
+    "packs/privacy/section_probs/part-00047.parquet": "6cc5cdefc5e92314",
+    "packs/privacy/section_probs/part-00048.parquet": "48830064ab76c38f",
+    "packs/privacy/section_probs/part-00049.parquet": "cf678ae45f507dc5",
+    "packs/privacy/section_probs/part-00050.parquet": "154541cf7574ffcd"
+   },
+   "adopted": true,
+   "at": "2026-10-20T00:45:59"
+  },
+  "doc_presence": {
+   "inputs": "d4ad4932335bec91",
+   "settings": "eb5aebb2b0487a0a",
+   "outputs": {
+    "packs/privacy/doc_presence.json": "c3b40a6a233cb5dd",
+    "packs/privacy/profiles/manifest.json": "28206d30590c0042",
+    "packs/privacy/profiles/part-00000.parquet": "f14d3a766c948b87",
+    "packs/privacy/profiles/part-00001.parquet": "76b5e6e2ca90cf7b",
+    "packs/privacy/profiles/part-00002.parquet": "b1da268b6469038c",
+    "packs/privacy/profiles/part-00003.parquet": "99d7c985e60eb075",
+    "packs/privacy/profiles/part-00004.parquet": "e50143e254775c95",
+    "packs/privacy/profiles/part-00005.parquet": "9b8f4d47cd788510",
+    "packs/privacy/profiles/part-00006.parquet": "c1ad1064b5ef1431",
+    "packs/privacy/profiles/part-00007.parquet": "e94d670cff4b7e03",
+    "packs/privacy/profiles/part-00008.parquet": "02557a87c9b895ac",
+    "packs/privacy/profiles/part-00009.parquet": "f51010bcce12e169",
+    "packs/privacy/profiles/part-00010.parquet": "58245c8dc9ad8194",
+    "packs/privacy/profiles/part-00011.parquet": "dbd3db9ff3ff4c4f",
+    "packs/privacy/profiles/part-00012.parquet": "5e2231d13b37b570",
+    "packs/privacy/profiles/part-00013.parquet": "f3914831e6ba9c44",
+    "packs/privacy/profiles/part-00014.parquet": "ee0c5670c7bc7b20",
+    "packs/privacy/profiles/part-00015.parquet": "3b96eeba9ad6308c",
+    "packs/privacy/profiles/part-00016.parquet": "29eb95e6dfb3f2f6",
+    "packs/privacy/profiles/part-00017.parquet": "401976429d7daef5",
+    "packs/privacy/profiles/part-00018.parquet": "40d22e9fa1cc4a8f",
+    "packs/privacy/profiles/part-00019.parquet": "96a25c8b603a3dfa",
+    "packs/privacy/profiles/part-00020.parquet": "bb0cdae2c130d44e",
+    "packs/privacy/profiles/part-00021.parquet": "cf8d673c19db7596",
+    "packs/privacy/profiles/part-00022.parquet": "8c28bdb438c97002",
+    "packs/privacy/profiles/part-00023.parquet": "217e067064ff92b5",
+    "packs/privacy/profiles/part-00024.parquet": "654df443c8a6c0ff",
+    "packs/privacy/profiles/part-00025.parquet": "993f0a043fd2edda",
+    "packs/privacy/profiles/part-00026.parquet": "796aa6dd8dfef43a",
+    "packs/privacy/profiles/part-00027.parquet": "26e78254a4416e53",
+    "packs/privacy/profiles/part-00028.parquet": "755bc7a6287d005a",
+    "packs/privacy/profiles/part-00029.parquet": "e78480cc8ecef30f",
+    "packs/privacy/profiles/part-00030.parquet": "9270811ec443e464",
+    "packs/privacy/profiles/part-00031.parquet": "b43ba896fad1c2ea",
+    "packs/privacy/profiles/part-00032.parquet": "daf677e61d28bc14",
+    "packs/privacy/profiles/part-00033.parquet": "78ebffa83ae24a6c",
+    "packs/privacy/profiles/part-00034.parquet": "f3be91c10ae64883",
+    "packs/privacy/profiles/part-00035.parquet": "68797f0323997782",
+    "packs/privacy/profiles/part-00036.parquet": "16c3b23fe5533c93",
+    "packs/privacy/profiles/part-00037.parquet": "7a7be7af0795e864",
+    "packs/privacy/profiles/part-00038.parquet": "89eae5255ae5b015",
+    "packs/privacy/profiles/part-00039.parquet": "77bf1d72554337a4",
+    "packs/privacy/profiles/part-00040.parquet": "3bf6df44095eb65b",
+    "packs/privacy/profiles/part-00041.parquet": "024f5b782f5e8267",
+    "packs/privacy/profiles/part-00042.parquet": "42821e802583d2be",
+    "packs/privacy/profiles/part-00043.parquet": "93e1e39f867da3b3",
+    "packs/privacy/profiles/part-00044.parquet": "104508892b5c493d"
+   },
+   "adopted": true,
+   "at": "2026-10-20T00:45:59"
+  },
+  "index": {
+   "inputs": "3cdca5bafc7cf218",
+   "settings": "c84016e8345977b1",
+   "outputs": {
+    "packs/privacy/index/vectors.npy": "c761988a60bde608",
+    "packs/privacy/index/payloads.jsonl": "d2fdfbf7356bd83e",
+    "packs/privacy/index/index.json": "7a1027dfb243c416",
+    "packs/privacy/index/sections.npz": "51341f2261b79ec3"
+   },
+   "adopted": true,
+   "at": "2026-10-20T00:45:59"
+  },
+  "evidence": {
+   "inputs": "15cbdb5149bcc2ac",
+   "settings": "6eddc32dc8d3debe",
+   "outputs": {
+    "packs/privacy/index/best_sections.npz": "785eba9b3b27ce74"
+   },
+   "adopted": true,
+   "at": "2026-10-20T00:45:59"
+  },
+  "cohort_report": {
+   "inputs": "4834cb8df3236e75",
+   "settings": "24c8d87f382e62a6",
+   "outputs": {
+    "reports/tables/cohort_similarity_privacy.csv": "2aef3f0d782e62ea",
+    "reports/figures/cohort_similarity_privacy.png": "8d70a95d4313dc6a"
+   },
+   "adopted": true,
+   "at": "2026-10-20T00:45:59"
+  }
+ },
+ "genre": "privacy",
+ "tier": "lean",
+ "models": {
+  "teacher": "Qwen/Qwen2.5-72B-Instruct",
+  "embedder": "Qwen/Qwen3-Embedding-0.6B",
+  "late_interaction": "answerdotai/answerai-colbert-small-v1",
+  "reranker": "BAAI/bge-reranker-v2-m3",
+  "student": "answerdotai/ModernBERT-large"
+ },
+ "schema_version": 1,
+ "updated": "2026-10-20T00:45:59"
+}

@@ -112,6 +112,41 @@ probabilities, number of sections): macro F1 0.687 -> **0.754**, micro 0.739 -> 
 - The live dashboard shows any run log written in the last 24 hours (state and last lines, including Message Batch
   progress) and counts the documents set.
 
+**Judge documents run finished** (`judge_docs_haiku_s0`): papers 2,834/2,834 sections, 13,698 labels (4.8 per
+section, 14% from the second look), 0 failures; spans 99.8% verbatim. Whole run 8,454 batch calls, 29.7M input +
+4.4M output tokens, about **$2.60** of the Anthropic credit.
+
+**Document-level presence, papers** (eval half 75 papers): the judge finds 27.8 of 47 types per paper; macro F1 0.734
+-> **0.789**, micro 0.789 -> 0.850, prevalence error 0.152 -> **0.094**, ECE 0.218 -> **0.019** (feature set chosen:
+all five, with the noisy-OR). The headline "inflation" was mostly real presence: the judge finds
+`states_own_limitations` in **82.7%** of papers (v1 profiles 96.6%) and `states_limitations_of_existing_approaches` in
+97.3%. v1 overstated 16 types (`gives_illustrative_example` 95% vs 55%) and understated 20 (`task_description` 28% vs
+96%, `code_and_data_availability` 16% vs 41%). Residual: v2 overstates a few near-universal types
+(`claims_broader_applicability` 100% vs 67%) and understates some rare ones (`generates_synthetic_data` 15% vs 36%).
+Decision record `reports/decisions/006-document-level-presence.md`; plan notes on 4.7 and a new task 5.0 (no §0.2
+change: #4 already aggregates section presence to document level).
+
+**Profiles v2** (pack builder, stage `doc_presence` forced; v1 kept in `packs/<genre>/profiles_v1`): privacy 24.2
+types per policy (v1 20.2), papers 29.7 (v1 26.8). Corpus prevalence moves toward the labels:
+`limits_internal_access` 69% -> 21%, `sends_marketing_communications` 19% -> 69%, `code_and_data_availability` 14% ->
+39%. **Finding:** a bit at 0.5 saturates near-universal types (`states_own_limitations` bit 98.6%, mean probability
+0.82); level 1 keeps the plan's bit mean, the mean probability is the Phase 6 ablation.
+
+**5.7 pack builder** (`packs/builder.py` `build`, `pack_stages`; `experiments/build_pack.py`): stages embed, heads,
+prototypes, cascade, section_probs, sentence_evidence, doc_presence, index, evidence, cohort_report, analyse_gate; a
+stage is skipped when its input fingerprints (content; repository-relative paths), its settings and the model ids
+match `packs/<genre>/pack.json`; `build.adopt` records existing artefacts; a stale GPU stage on a machine without
+CUDA stops and names its Colab job. Bug found by running it: adopting took precedence over forcing (fixed, test).
+Both packs' manifests recorded (every stage adopted, then `doc_presence` rebuilt).
+
+**5.8** `explain.mode: teacher` (`prompts/explain.md` v1; only the peer quotes go to the teacher, never the document;
+top-N absences with cohort quotes; same Report fields as the template). Not yet run against a real model.
+
+**Query-time embedding** (`models.embedder.query_batch_size: 4`): with batch 32 a document's sections were padded to
+the longest one; on the M5 (MPS, fp16) a 29-section paper embeds in 2.6 s at batch 4 vs 8.6 s at 32, vectors
+unchanged (min cosine to the stored ones 0.99978). Papers smoke before the fix: 15.0 s for 26 sections (embedding
+8.0 s, query-time evidence 6.7 s).
+
 ## 2026-10-18 (night) — Compute moves to Colab Pro; private GitHub and Hugging Face stores
 
 **Parsa's resources:** Colab Pro (A100), $100 of Anthropic API credit, Hugging Face Pro. **Plan edited first:** §0.6
