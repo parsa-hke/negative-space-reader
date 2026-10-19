@@ -1,6 +1,9 @@
 # Colab runtime (notebooks/colab_runner.ipynb): the project's pins without torch (Colab ships a CUDA build), MLX
-# (Apple only), vLLM, and the web stack (the demo is not run on Colab). Install with:
-#   pip install -r requirements-colab.txt && pip install -e . --no-deps
+# (Apple only), vLLM, and the web stack (the demo is not run on Colab). Colab's own scientific stack (numpy, pandas,
+# pyarrow, numba, scipy, torch) is NOT pinned here: replacing it under a running session breaks imports and
+# google-colab itself (2026-10-19, Python 3.13 runtime). The package is not installed either (pyproject pins the Mac's
+# Python 3.11); the code runs from the clone, which is the working directory. Install with:
+#   pip install -r requirements-colab.txt
 transformers==5.17.0
 sentence-transformers==6.1.0
 accelerate==1.15.0
@@ -12,9 +15,6 @@ datasketch==2.0.0
 faiss-cpu==1.15.1
 qdrant-client==1.19.1
 openpyxl==3.1.5
-pandas==3.0.6
-pyarrow==26.0.0
-numpy==2.4.6
 pyyaml==6.0.3
 pydantic==2.14.1
 tqdm==4.70.1

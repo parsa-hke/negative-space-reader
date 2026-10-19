@@ -2,6 +2,31 @@
 
 Date, what was done, what was found (negative findings included). Newest first.
 
+## 2026-10-19 — Phase 5 session 1: checks, Colab path fixed
+
+**Checks (HANDOFF):** pytest 329 passed; privacy schema v1, 58 types; papers schema v2, 47 types. **Hub vs Mac:**
+`hub_sync status` (new, read-only; test first) over data, embeddings, cache, packs, runs: 511 of 511 bundle files
+match, none differ or are missing; run log 91 rows on both sides with the same keys. The hub's 514 files are those
+511 plus `.gitattributes`, the merged run log and a stray `runs/.DS_Store` (the `runs/*/*` pattern also matches
+files directly in `runs/`); `select` now skips Finder/Windows junk files (test). The stray file stays on the hub
+(harmless; hub_sync never deletes).
+
+**Colab smoke test, first attempt (negative findings, all fixed test first, `tests/test_colab_runner.py`):**
+- **The clone cell printed the GitHub token** in the error of a failed `git clone` (the token was part of the clone
+  URL, and a failed command prints its arguments). Parsa revoked it and made a new one. Cell 2 now sends the token in
+  an HTTP header for github.com only (set in the session's `~/.gitconfig`), never in a URL or `.git/config`, and shows
+  git's own error with the token masked. Test: no cell interpolates a secret into a URL.
+- The clone failed because GitHub rejected the token (401 on `/user`); a new fine-grained token fixed it.
+- **Colab now runs Python 3.13**; `pip install -e .` refused (pyproject pins the Mac's 3.11), and
+  `requirements-colab.txt` replaced Colab's numpy, pandas and pyarrow under the running session (numpy `_slice`
+  ImportError; google-colab needs pandas 2.2.3). Fixed: Colab keeps its own scientific stack (only the model
+  libraries are pinned), and the package is not installed (the code runs from the clone). Plan §0.6 (Colab row)
+  edited to say so; no §0.2 decision changed. The Mac-vs-Colab smoke comparison checks this changes no result.
+- **Runner from GitHub:** the notebook opens directly from GitHub (link in its first cell) and runs the job named
+  under `next:` in the new `configs/colab_jobs.yaml` (pull bundles, run line, push bundles), so a new GPU job is a
+  commit on the Mac, not a notebook edit. Test: every job's config exists, uses `--overlay colab`, names its run after
+  the job, and names real bundles.
+
 ## 2026-10-18 (night) — Compute moves to Colab Pro; private GitHub and Hugging Face stores
 
 **Parsa's resources:** Colab Pro (A100), $100 of Anthropic API credit, Hugging Face Pro. **Plan edited first:** §0.6

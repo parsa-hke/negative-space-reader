@@ -3,6 +3,7 @@ Colab share one store).
 
     python -m experiments.hub_sync push --bundles data,embeddings,cache,packs,runs
     python -m experiments.hub_sync pull --bundles data,embeddings,cache,packs,runs
+    python -m experiments.hub_sync status --bundles data,embeddings,cache,packs,runs   # read-only comparison
 
 Bundles are defined in configs/base.yaml (`hub.bundles`): include/exclude patterns relative to the repository root
 (fnmatch, `*` crosses folders), or `archive: <folder>` for a folder of many small files, which travels as one
@@ -32,6 +33,7 @@ MAX_COMMIT_BYTES = 512 * 1024 ** 2   # a failed upload (network timeout) loses a
 MAX_COMMIT_FILES = 500
 COMMIT_RETRIES = 4
 RETRY_WAIT_S = 30.0
+JUNK_FILES = {".DS_Store", "Thumbs.db"}
 
 
 def git_blob_sha1_bytes(data: bytes) -> str:
@@ -62,6 +64,8 @@ def select(root: Path, bundle: dict[str, Any]) -> list[str]:
         dirnames[:] = [d for d in dirnames if d not in (".git", ".venv", "__pycache__")
                        and not _matches(f"{rel_dir}/{d}".lstrip("./"), exclude)]
         for name in filenames:
+            if name in JUNK_FILES:
+                continue
             rel = f"{rel_dir}/{name}".lstrip("./") if rel_dir != "." else name
             if _matches(rel, include) and not _matches(rel, exclude):
                 out.append(rel)
@@ -91,13 +95,13 @@ def _archive(folder: Path) -> bytes:
     return buf.getvalue()
 
 
-def push(api: Any, repo_id: str, root: Path, bundles: dict[str, Any], names: list[str]) -> dict[str, Any]:
-    from huggingface_hub import CommitOperationAdd
-
-    api.create_repo(repo_id, repo_type="dataset", private=True, exist_ok=True)
+def _plan(api: Any, repo_id: str, root: Path, bundles: dict[str, Any], names: list[str]
+          ) -> tuple[list[tuple[str, Any, int, bool]], int]:
+    """Files whose content differs from the hub's copy: [(path in repo, local source, size, missing on hub)], and the
+    number of files that already match. Archives are staged under .cache/hub_sync so the hub's chunked upload works."""
     remote = _remote(api, repo_id)
-    ops: list[Any] = []
-    sizes: list[int] = []
+    todo: list[tuple[str, Any, int, bool]] = []
+    matched = 0
     for name in names:
         b = bundles[name]
         if "archive" in b:
@@ -112,8 +116,9 @@ def push(api: Any, repo_id: str, root: Path, bundles: dict[str, Any], names: lis
                 staged = root / ".cache" / "hub_sync" / path  # a file, so the hub's chunked upload can be used
                 staged.parent.mkdir(parents=True, exist_ok=True)
                 staged.write_bytes(data)
-                ops.append(CommitOperationAdd(path_in_repo=path, path_or_fileobj=str(staged)))
-                sizes.append(len(data))
+                todo.append((path, str(staged), len(data), r is None))
+            else:
+                matched += 1
             continue
         for rel in select(root, b):
             p = (root / rel).resolve()
@@ -121,9 +126,26 @@ def push(api: Any, repo_id: str, root: Path, bundles: dict[str, Any], names: lis
             if r is not None and r.size == p.stat().st_size:
                 g, s = _file_hashes(p)
                 if getattr(r, "blob_id", None) == g or (getattr(r, "lfs", None) and r.lfs.sha256 == s):
+                    matched += 1
                     continue
-            ops.append(CommitOperationAdd(path_in_repo=rel, path_or_fileobj=str(p)))
-            sizes.append(p.stat().st_size)
+            todo.append((rel, str(p), p.stat().st_size, r is None))
+    return todo, matched
+
+
+def status(api: Any, repo_id: str, root: Path, bundles: dict[str, Any], names: list[str]) -> dict[str, Any]:
+    """Read-only: which local bundle files differ from (or are missing on) the hub. Nothing is uploaded."""
+    todo, matched = _plan(api, repo_id, root, bundles, names)
+    return {"matched": matched, "differs": len(todo), "missing_on_hub": sum(m for *_, m in todo),
+            "bytes": sum(t[2] for t in todo), "files": [t[0] for t in todo]}
+
+
+def push(api: Any, repo_id: str, root: Path, bundles: dict[str, Any], names: list[str]) -> dict[str, Any]:
+    from huggingface_hub import CommitOperationAdd
+
+    api.create_repo(repo_id, repo_type="dataset", private=True, exist_ok=True)
+    todo, _ = _plan(api, repo_id, root, bundles, names)
+    ops = [CommitOperationAdd(path_in_repo=rel, path_or_fileobj=src) for rel, src, _, _ in todo]
+    sizes = [size for _, _, size, _ in todo]
     print(f"[hub_sync] plan: {len(ops)} files, {sum(sizes) / 1e9:.2f} GB to upload", flush=True)
     commits, start = 0, 0
     while start < len(ops):  # bounded commits: a failed upload loses one chunk, not everything
@@ -234,14 +256,19 @@ def main() -> None:
     from huggingface_hub import HfApi
 
     ap = argparse.ArgumentParser()
-    ap.add_argument("action", choices=["push", "pull"])
+    ap.add_argument("action", choices=["push", "pull", "status"])
     ap.add_argument("--bundles", default="data,embeddings,cache,packs,runs")
     ap.add_argument("--config", default="configs/base.yaml")
     args = ap.parse_args()
     hub = yaml.safe_load((REPO / args.config).read_text(encoding="utf-8"))["hub"]
     names = [n.strip() for n in args.bundles.split(",") if n.strip()]
     api = HfApi()
-    if args.action == "push":
+    if args.action == "status":
+        s = status(api, hub["repo"], REPO, hub["bundles"], names)
+        print({k: v for k, v in s.items() if k != "files"}, flush=True)
+        for f in s["files"][:50]:
+            print("  differs:", f)
+    elif args.action == "push":
         print(push(api, hub["repo"], REPO, hub["bundles"], names), flush=True)
         if "runs" in names:
             print({"log_rows_added_to_hub": push_log(api, hub["repo"], REPO)})

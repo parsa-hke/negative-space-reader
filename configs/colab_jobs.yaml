@@ -1,0 +1,18 @@
+# Colab jobs (plan §0.6). notebooks/colab_runner.ipynb runs the job named under `next:` (or the one set in cell 4),
+# so a new GPU job is: add it here on the Mac, set `next:`, push to GitHub, then Run all in Colab.
+#   what: one line shown in the notebook
+#   pull: hub bundles the run reads (configs/base.yaml hub.bundles)
+#   run:  the experiments/run.py arguments; always --overlay colab, and --name = the job's name
+#   push: hub bundles to upload afterwards; then on the Mac: .venv/bin/python -m experiments.hub_sync pull --bundles <push>
+
+next: profiles_smoke_colab
+
+jobs:
+  profiles_smoke_colab:
+    what: "Smoke test of the Colab path: presence profiles of the first 200 train documents per genre (compared with the Mac's)"
+    pull: data,embeddings,packs
+    run: >-
+      --config configs/distil.yaml --overlay colab --name profiles_smoke_colab
+      --set distil.stage=profiles --set 'run.seeds=[0]' --set distil.profiles.limit=200
+      --set distil.profiles.chunk_documents=100 --set 'distil.profiles.out=runs/profiles_smoke_colab_out/{genre}'
+    push: runs

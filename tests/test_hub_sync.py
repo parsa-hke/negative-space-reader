@@ -52,6 +52,7 @@ class FakeApi:
 
 def test_select_follows_patterns(tmp_path):
     make_repo(tmp_path)
+    (tmp_path / "data" / "processed" / "g" / ".DS_Store").write_bytes(b"\0")  # Finder junk never travels
     files = H.select(tmp_path, BUNDLES["data"])
     assert files == ["data/processed/g/a.jsonl", "data/processed/g/b.jsonl"]
 
@@ -119,3 +120,16 @@ def test_push_retries_a_failed_commit(tmp_path, monkeypatch):
     monkeypatch.setattr(H, "RETRY_WAIT_S", 0)
     m = H.push(api, "u/r", tmp_path, BUNDLES, ["data"])
     assert m["uploaded"] == 2 and len(calls) == 2 and "data/processed/g/a.jsonl" in api.files
+
+
+def test_status_reports_differences_without_committing(tmp_path):
+    make_repo(tmp_path)
+    api = FakeApi()
+    s = H.status(api, "u/r", tmp_path, BUNDLES, ["data", "cache"])
+    assert s["differs"] == 3 and s["missing_on_hub"] == 3 and api.commits == []  # read-only
+    H.push(api, "u/r", tmp_path, BUNDLES, ["data", "cache"])
+    s = H.status(api, "u/r", tmp_path, BUNDLES, ["data", "cache"])
+    assert s["differs"] == 0 and s["matched"] == 3 and s["files"] == []
+    (tmp_path / "data" / "processed" / "g" / "a.jsonl").write_text("one, edited\n")
+    s = H.status(api, "u/r", tmp_path, BUNDLES, ["data"])
+    assert s["differs"] == 1 and s["missing_on_hub"] == 0 and s["files"] == ["data/processed/g/a.jsonl"]
