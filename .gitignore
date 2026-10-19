@@ -48,4 +48,5 @@ reports/human_labels/page/label_data.json
 
 # Pack artefacts built by the presence stages (synced through the private HF dataset repo, never committed)
 packs/*/profiles/
+packs/*/section_probs/
 packs/*/cascade*.json

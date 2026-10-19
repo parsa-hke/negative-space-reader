@@ -26,6 +26,39 @@ files directly in `runs/`); `select` now skips Finder/Windows junk files (test).
   under `next:` in the new `configs/colab_jobs.yaml` (pull bundles, run line, push bundles), so a new GPU job is a
   commit on the Mac, not a notebook edit. Test: every job's config exists, uses `--overlay colab`, names its run after
   the job, and names real bundles.
+- **Colab smoke passed** (run `profiles_smoke_colab_s0`, A100, Python 3.13, Colab's own numpy/pandas/torch, opened
+  from GitHub, Run all): presence profiles of the first 200 train documents per genre, compared document by document
+  with the Mac's profiles (`packs/<genre>/profiles`, MPS): same documents and section counts; largest probability
+  difference 1.0e-6 (privacy) and 2.4e-3 (papers, one value; mean 2.9e-7); **0 of 21,000 presence bits differ**.
+  254 / 248 sections/s (Mac 134 / 65). The Colab environment changes no result.
+- **Bug found by the smoke's `-dirty` commit flag:** the profiles stage wrote `reports/tables/profile_prevalence_*.csv`
+  even when the profiles went elsewhere, so a limited run overwrote the corpus table with 200-document numbers
+  (the Mac's copy is intact: committed in `b7eae69`). Fixed (test): such a run writes its table next to its profiles.
+
+**Document-level presence (HANDOFF first job), started.** Method (proposed, Parsa's choices 2026-10-19): label
+**whole documents** and fit a document-level calibrator on them; no genre code. Findings that shaped it:
+- No corpus document has every section labelled: papers have one labelled section per paper, and OPP-115's policies
+  are cut into 33 short segments each (3,792 segments of 115 policies, median 369 characters) against 8.6 sections
+  (median 585 characters) for a corpus policy, so a document-level rule fitted on OPP-115 would not transfer.
+  Privacy needs the same method as papers.
+- A noisy-OR over section probabilities is no fix on its own: it is never below the best section, so it inflates
+  presence further; any document threshold needs document-level labels to be fitted.
+- **Labels from the judge, Claude Haiku 5.5, through the Anthropic API** (Parsa: use the Anthropic credit instead of
+  OpenRouter). Consistent with the presence model, whose section probabilities were calibrated against the judge's
+  labels (fit half of the silver reference). One labelling pass covers both the calibration and a document-level
+  silver reference.
+
+Built (tests first): `AnthropicTeacher` in `models/teacher.py` (official `anthropic` SDK 1.15.0, pinned; structured
+outputs with closed schemas; no sampling parameters, which Claude Haiku 5.5 rejects; a prompt prefix shared by a batch
+is cached; `mode: batch` sends Message Batches at half price, chunked, and an interrupted batch is resumed from the
+cache directory instead of paid twice; refusals and cut-off answers are failed items, retried with a doubled budget);
+`configs/judge_anthropic.yaml`; stage `select_documents` (whole dev documents stratified by year and category, only
+from sources the indexed corpus has, never the induction sample, other label sets or test): run `select_documents_s0`,
+**150 policies (1,393 sections) and 150 papers (2,834 sections)**, added as the `documents` set of
+`packs/<genre>/label_sets.json` (existing sets unchanged); stage `section_probs` (every section's probabilities, train
++ dev, `packs/<genre>/section_probs/`, synced through the hub), sharing the presence model loader with `profiles`.
+Mac smoke `section_probs_smoke_s0` (150 documents per genre): the best section per document equals the stored profile
+(max difference 7e-8). Colab job `section_probs_v1` queued in `configs/colab_jobs.yaml`.
 
 ## 2026-10-18 (night) — Compute moves to Colab Pro; private GitHub and Hugging Face stores
 

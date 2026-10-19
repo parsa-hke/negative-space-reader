@@ -8,6 +8,7 @@ transformers==5.17.0
 sentence-transformers==6.1.0
 accelerate==1.15.0
 openai==3.29.0
+anthropic==1.15.0
 scikit-learn==1.9.1
 hdbscan==0.8.44
 umap-learn==0.5.12

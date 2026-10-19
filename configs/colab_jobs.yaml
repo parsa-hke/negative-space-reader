@@ -5,7 +5,7 @@
 #   run:  the experiments/run.py arguments; always --overlay colab, and --name = the job's name
 #   push: hub bundles to upload afterwards; then on the Mac: .venv/bin/python -m experiments.hub_sync pull --bundles <push>
 
-next: profiles_smoke_colab
+next: section_probs_v1
 
 jobs:
   profiles_smoke_colab:
@@ -16,3 +16,11 @@ jobs:
       --set distil.stage=profiles --set 'run.seeds=[0]' --set distil.profiles.limit=200
       --set distil.profiles.chunk_documents=100 --set 'distil.profiles.out=runs/profiles_smoke_colab_out/{genre}'
     push: runs
+
+  section_probs_v1:
+    what: "Every section's presence probabilities, train + dev, both genres (document-level presence calibration; ~30-40 min)"
+    pull: data,embeddings,packs
+    run: >-
+      --config configs/distil.yaml --overlay colab --name section_probs_v1
+      --set distil.stage=section_probs --set 'run.seeds=[0]'
+    push: runs,packs

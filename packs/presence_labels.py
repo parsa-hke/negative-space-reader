@@ -373,3 +373,22 @@ def agreement(human: dict[tuple[str, int], dict[str, Any]], teacher: dict[tuple[
                     "precision": p, "recall": r, "f1": f,
                     "precision_first_pass": p1, "recall_first_pass": r1, "f1_first_pass": f1})
     return out
+
+
+def sample_documents(docs: list[dict[str, Any]], *, n: int, seed: int) -> list[str]:
+    """n whole documents stratified by year and category (proportional allocation, largest remainder), seeded and
+    independent of input order. docs: {"id", "date", "category"}. Returns document ids, sorted."""
+    import random
+
+    strata: dict[tuple[str, str], list[str]] = defaultdict(list)
+    for d in sorted(docs, key=lambda d: d["id"]):
+        strata[((d.get("date") or "")[:4], d.get("category") or "")].append(d["id"])
+    total = sum(len(v) for v in strata.values())
+    n = min(n, total)
+    keys = sorted(strata)
+    quota = {k: n * len(strata[k]) / total for k in keys}
+    take = {k: int(quota[k]) for k in keys}
+    for k in sorted(keys, key=lambda k: (-(quota[k] - take[k]), k))[: n - sum(take.values())]:
+        take[k] += 1
+    rng = random.Random(seed)
+    return sorted(i for k in keys for i in rng.sample(strata[k], take[k]))

@@ -1,0 +1,25 @@
+# The second judge (Claude Haiku 5.5, decision record 004) through the Anthropic API with the official SDK instead of
+# OpenRouter (2026-10-19: Parsa's Anthropic credit). Same model and prompts as configs/judge.yaml; the route is
+# recorded per label (`teacher:anthropic:claude-haiku-5-5`). Key from ANTHROPIC_API_KEY (.env), never from a file here.
+# Message Batches (half price, no per-minute limits): one batch per pass, so induce.batch_size covers every section.
+#   python -m experiments.run --config configs/distil.yaml --overlay judge_anthropic --name judge_docs_haiku \
+#       --set distil.stage=teacher_labels --set 'run.seeds=[0]' --set run.device=cpu
+# Claude Haiku 5.5 thinks by default and thinking counts toward max_tokens, hence the larger budgets.
+models:
+  teacher:
+    backend: anthropic
+    id: claude-haiku-5-5
+    api_key_env: ANTHROPIC_API_KEY
+    mode: batch
+    poll_s: 30
+    cache: true
+    max_tokens: 4000
+
+induce:
+  batch_size: 100000
+
+distil:
+  teacher_labels:
+    sets: [documents]             # whole dev documents for document-level presence (stage select_documents)
+    max_tokens: 4000
+    check_max_tokens: 4000

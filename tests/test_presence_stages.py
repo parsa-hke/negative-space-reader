@@ -182,3 +182,38 @@ def test_profiles_stage(pack, monkeypatch):
     gate = distil.main(cfg, tmp)
     assert gate["g/profiles_complete"] and gate["g/profiled_documents"] == 120 and gate["g/sections_per_second"] == 50.0
     assert gate["g/f1_gate"] in ("pass", "not met") and (tmp / "tables" / "presence_gate.csv").is_file()
+
+
+def test_profiles_written_elsewhere_keep_their_table_out_of_reports(tmp_path):
+    # a limited run (smoke, Colab check) writing profiles outside the pack must not overwrite the corpus table
+    from experiments.distil import profile_table_path
+
+    cfg = {"paths": {"tables": str(tmp_path / "reports" / "tables")}}
+    assert profile_table_path(cfg, {}, "papers") == tmp_path / "reports" / "tables" / "profile_prevalence_papers.csv"
+    out = tmp_path / "runs" / "x_out" / "papers"
+    assert profile_table_path(cfg, {"out": str(tmp_path / "runs" / "x_out" / "{genre}")}, "papers") == \
+        out / "profile_prevalence_papers.csv"
+
+
+def test_section_probs_stage_matches_the_profiles(pack, monkeypatch):
+    import huggingface_hub.constants
+
+    import engine.embed as E
+    from experiments import distil
+    from packs.profiles import read_profiles
+
+    monkeypatch.setattr(huggingface_hub.constants, "HF_HUB_OFFLINE", True)
+    monkeypatch.setattr(E, "Embedder", lambda *a, **k: type("F", (), {"encode": lambda self, t, **kw: np.zeros((len(t), 8))})())
+    cfg, tmp = pack
+    cfg["run"]["device"] = "cpu"
+    cfg["paths"]["figures"] = str(tmp / "figures")
+    cfg["distil"]["profiles"] = {"splits": ["train"], "chunk_documents": 50, "limit": None}
+    cfg["distil"]["section_probs"] = {"splits": ["train", "dev"], "chunk_documents": 50, "limit": None, "out": None}
+    for stage in ("heads", "prototypes", "cascade", "profiles", "section_probs"):
+        cfg["distil"]["stage"] = stage
+        m = distil.main(cfg, tmp)
+    sp = read_profiles(tmp / "packs" / "g" / "section_probs")
+    assert len(sp) == 160 and set(sp["split"]) == {"train", "dev"} and m["g/sections_scored"] == 160
+    prof = read_profiles(tmp / "packs" / "g" / "profiles").set_index("doc_id")
+    best = sp[sp.split == "train"].groupby("doc_id")["prob_alpha"].max()
+    assert np.allclose(best.loc[prof.index].to_numpy(), prof["prob_alpha"].to_numpy(), atol=1e-6)

@@ -1,6 +1,6 @@
 """Teacher LLM clients with structured output, and the prompt registry (plan §0.2 #6, §1.6).
 
-Four backends behind one `Teacher` interface, chosen by the compute overlay (plan §0.2 #6):
+Five backends behind one `Teacher` interface, chosen by the compute overlay (plan §0.2 #6):
   - `VLLMTeacher`         in-process vLLM engine for batch jobs on the GPU server (schema induction,
                           labels); structured output via vLLM's xgrammar backend
                           (set models.teacher.structured_backend: outlines to fall back).
@@ -8,6 +8,10 @@ Four backends behind one `Teacher` interface, chosen by the compute overlay (pla
                           (configs/openrouter.yaml, provider pinned via `provider`), or API models for
                           the baselines (plan §0.2 #17). Keys come from an env var. Records which
                           provider served each call.
+  - `AnthropicTeacher`    Claude models through the official `anthropic` SDK (the silver-reference judge, the 7.3
+                          frontier comparison): structured outputs (`output_config.format`), a prompt prefix shared
+                          by a batch is cached, and `mode: batch` sends Message Batches (half price, no per-minute
+                          limits; an interrupted batch is resumed from `cache_dir`, never paid twice).
   - `MLXTeacher`          Qwen2.5-7B-Instruct 4-bit under MLX on the Mac (configs/local.yaml) for prompt
                           iteration and coverage checks; structured output via Outlines' MLX adapter.
   - `TransformersTeacher` the 1.5B stand-in for smoke runs and tests (configs/smoke.yaml); structured
@@ -537,6 +541,157 @@ class OpenAITeacher(Teacher):
             return list(pool.map(lambda c: self._one(c, json_schema, max_tokens), conversations))
 
 
+# ---------------------------------------------------------------------------- Anthropic (official SDK)
+_UNSUPPORTED_SCHEMA_KEYS = {"minLength", "maxLength", "minimum", "maximum", "exclusiveMinimum", "exclusiveMaximum",
+                            "multipleOf", "minItems", "maxItems", "uniqueItems", "pattern"}
+
+
+def strict_json_schema(schema: Any) -> Any:
+    """A pydantic JSON schema in the form Claude's structured outputs accept: every object closed
+    (additionalProperties false) and the unsupported numeric/string/array constraints dropped (pydantic still
+    validates the answer against the full model)."""
+    if isinstance(schema, list):
+        return [strict_json_schema(v) for v in schema]
+    if not isinstance(schema, dict):
+        return schema
+    out = {k: strict_json_schema(v) for k, v in schema.items() if k not in _UNSUPPORTED_SCHEMA_KEYS}
+    if out.get("type") == "object" or "properties" in out:
+        out["additionalProperties"] = False
+    return out
+
+
+def _common_prefix(texts: list[str]) -> str:
+    return os.path.commonprefix(texts) if len(texts) > 1 else ""
+
+
+class AnthropicTeacher(Teacher):
+    """Claude through the official SDK. Sampling parameters are not sent (current models reject non-default
+    temperature/top_p); `effort` and `thinking` are sent only when configured (the API defaults otherwise).
+    mode: messages (concurrent calls; the SDK waits out 429/5xx) | batch (one Message Batch per call of _complete,
+    split into chunks of at most max_batch_requests / max_batch_mb, polled every poll_s). Refusals, truncation and
+    errored batch items return "" (a failed item: generate_structured retries it with a doubled budget)."""
+
+    backend = "anthropic"
+
+    def __init__(self, model_id: str, *, api_key_env: str = "ANTHROPIC_API_KEY", mode: str = "messages",
+                 concurrency: int = 4, effort: str | None = None, thinking: dict[str, Any] | None = None,
+                 cache_prefix_min_chars: int = 2000, poll_s: float = 30.0, max_batch_requests: int = 5000,
+                 max_batch_mb: float = 200.0, sdk_max_retries: int = 8, request_timeout_s: float = 600,
+                 client: Any = None, **kw: Any):
+        super().__init__(model_id, **kw)
+        if mode not in ("messages", "batch"):
+            raise ValueError(f"mode must be messages or batch, not {mode!r}")
+        if client is None:
+            import anthropic
+
+            if not os.environ.get(api_key_env):
+                raise RuntimeError(f"environment variable {api_key_env} is not set")
+            client = anthropic.Anthropic(api_key=os.environ[api_key_env], max_retries=sdk_max_retries,
+                                         timeout=request_timeout_s)
+        self.client, self.mode, self.concurrency = client, mode, concurrency
+        self.effort, self.thinking, self.cache_prefix_min_chars = effort, thinking, cache_prefix_min_chars
+        self.poll_s, self.max_batch_requests, self.max_batch_bytes = poll_s, max_batch_requests, max_batch_mb * 1e6
+
+    def _route(self) -> str:
+        return f"anthropic:{self.model_id}" + (f"@effort={self.effort}" if self.effort else "")
+
+    def _params(self, conv: list[dict[str, str]], json_schema: dict[str, Any] | None, max_tokens: int,
+                prefix: str) -> dict[str, Any]:
+        system = "\n\n".join(m["content"] for m in conv if m["role"] == "system")
+        messages: list[dict[str, Any]] = []
+        for m in conv:
+            if m["role"] == "system":
+                continue
+            text = m["content"]
+            if prefix and m is conv[-1] and text.startswith(prefix) and len(text) > len(prefix):
+                content: Any = [{"type": "text", "text": prefix, "cache_control": {"type": "ephemeral"}},
+                                {"type": "text", "text": text[len(prefix):]}]
+            else:
+                content = text
+            messages.append({"role": m["role"], "content": content})
+        params: dict[str, Any] = {"model": self.model_id, "max_tokens": max_tokens, "messages": messages}
+        if system:
+            params["system"] = system
+        output_config: dict[str, Any] = {}
+        if json_schema is not None:
+            output_config["format"] = {"type": "json_schema", "schema": strict_json_schema(json_schema)}
+        if self.effort:
+            output_config["effort"] = self.effort
+        if output_config:
+            params["output_config"] = output_config
+        if self.thinking:
+            params["thinking"] = self.thinking
+        return params
+
+    def _text(self, msg: Any, served_by: str) -> str:
+        u = getattr(msg, "usage", None)
+        prompt = sum(getattr(u, k, 0) or 0 for k in ("input_tokens", "cache_read_input_tokens",
+                                                       "cache_creation_input_tokens")) if u else 0
+        self._served(served_by=served_by, prompt_tokens=prompt, completion_tokens=getattr(u, "output_tokens", 0) or 0)
+        if getattr(msg, "stop_reason", None) in ("refusal", "max_tokens"):
+            return ""  # no answer, or a cut-off one: a failed item
+        return next((b.text for b in msg.content if getattr(b, "type", None) == "text"), "")
+
+    def _complete(self, conversations, *, json_schema, max_tokens):
+        last = [c[-1]["content"] for c in conversations if c and c[-1]["role"] == "user"]
+        prefix = _common_prefix(last) if len(last) == len(conversations) else ""
+        prefix = prefix if len(prefix) >= self.cache_prefix_min_chars else ""
+        params = [self._params(c, json_schema, max_tokens, prefix) for c in conversations]
+        if self.mode == "batch":
+            return self._batch(params)
+        one = lambda p: self._text(self.client.messages.create(**p), self._route())  # noqa: E731
+        if len(params) == 1:
+            return [one(params[0])]
+        with ThreadPoolExecutor(max_workers=self.concurrency) as pool:
+            return list(pool.map(one, params))
+
+    def _batch(self, params: list[dict[str, Any]]) -> list[str]:
+        import time
+
+        requests = [{"custom_id": f"r{i}", "params": p} for i, p in enumerate(params)]
+        chunks, cur, size = [], [], 0
+        for r in requests:
+            n = len(json.dumps(r, ensure_ascii=False).encode("utf-8"))
+            if cur and (len(cur) >= self.max_batch_requests or size + n > self.max_batch_bytes):
+                chunks.append(cur)
+                cur, size = [], 0
+            cur.append(r)
+            size += n
+        if cur:
+            chunks.append(cur)
+        # an interrupted run finds its batches again (same requests -> same key) instead of paying twice
+        key = hashlib.sha256(json.dumps(requests, sort_keys=True, ensure_ascii=False).encode()).hexdigest()[:24]
+        pending = self.cache_dir / "_batches" / f"{key}.json" if self.cache_dir else None
+        if pending is not None and pending.is_file():
+            ids = json.loads(pending.read_text())["batch_ids"]
+            print(f"[teacher] resuming {len(ids)} batch(es) {ids}", flush=True)
+        else:
+            ids = [self.client.messages.batches.create(requests=c).id for c in chunks]
+            if pending is not None:
+                pending.parent.mkdir(parents=True, exist_ok=True)
+                pending.write_text(json.dumps({"batch_ids": ids, "requests": len(requests), "model": self.model_id}))
+            print(f"[teacher] submitted {len(requests)} requests as batch(es) {ids}", flush=True)
+        t0 = time.time()
+        while True:
+            states = [self.client.messages.batches.retrieve(b) for b in ids]
+            if all(b.processing_status == "ended" for b in states):
+                break
+            left = sum(getattr(b.request_counts, "processing", 0) for b in states)
+            print(f"[teacher] batch: {left}/{len(requests)} still processing ({time.time() - t0:.0f}s)", flush=True)
+            time.sleep(self.poll_s)
+        out: dict[str, str] = {}
+        for b in ids:
+            for r in self.client.messages.batches.results(b):
+                if r.result.type == "succeeded":
+                    out[r.custom_id] = self._text(r.result.message, f"{self._route()}/batch")
+                else:
+                    self._served(served_by=f"{self._route()}/batch-{r.result.type}")
+                    out[r.custom_id] = ""
+        if pending is not None:
+            pending.unlink(missing_ok=True)
+        return [out.get(r["custom_id"], "") for r in requests]
+
+
 # ---------------------------------------------------------------------------- factory
 def load_teacher(tcfg: dict[str, Any], *, device: str | None = None, seed: int = 0) -> Teacher:
     """Build a teacher from the `models.teacher` config block."""
@@ -564,4 +719,11 @@ def load_teacher(tcfg: dict[str, Any], *, device: str | None = None, seed: int =
                              request_timeout_s=tcfg.get("request_timeout_s", 120),
                              concurrency=tcfg.get("concurrency", 8), provider=tcfg.get("provider"),
                              served_as=tcfg.get("served_as"), **common)
-    raise ValueError(f"unknown teacher backend {backend!r} (transformers | mlx | vllm | openai)")
+    if backend == "anthropic":
+        return AnthropicTeacher(tcfg["id"], api_key_env=tcfg.get("api_key_env", "ANTHROPIC_API_KEY"),
+                                mode=tcfg.get("mode", "messages"), concurrency=tcfg.get("concurrency", 4),
+                                effort=tcfg.get("effort"), thinking=tcfg.get("thinking"),
+                                cache_prefix_min_chars=tcfg.get("cache_prefix_min_chars", 2000),
+                                poll_s=tcfg.get("poll_s", 30.0), request_timeout_s=tcfg.get("request_timeout_s", 600),
+                                **common)
+    raise ValueError(f"unknown teacher backend {backend!r} (transformers | mlx | vllm | openai | anthropic)")

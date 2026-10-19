@@ -298,3 +298,62 @@ def test_reference_skips_failed_judge_sections(tmp_path):
     (tmp_path / "j.jsonl").write_text("".join(_json.dumps(r) + "\n" for r in rows))
     ref = load_reference(tmp_path / "j.jsonl")
     assert list(ref) == [("d", 0)] and ref[("d", 0)]["present"] == ["a"] and ref[("d", 0)]["types"] == ["a", "b"]
+
+
+# ------------------------------------------------------------------ whole-document label set (document-level presence)
+def test_sample_documents_is_stratified_by_year_and_category_and_deterministic():
+    from packs.presence_labels import sample_documents
+
+    docs = [{"id": f"d{i}", "date": f"{2016 + i % 4}-01-01", "category": "a" if i % 3 else "b"} for i in range(200)]
+    a = sample_documents(docs, n=40, seed=7)
+    assert a == sample_documents(list(reversed(docs)), n=40, seed=7) and len(a) == 40 == len(set(a))
+    by = {d["id"]: d for d in docs}
+    years = {by[d]["date"][:4] for d in a}
+    cats = [by[d]["category"] for d in a]
+    assert years == {"2016", "2017", "2018", "2019"} and 8 <= cats.count("b") <= 18  # b is a third of the pool
+    assert len(sample_documents(docs, n=500, seed=7)) == 200  # never more than the pool
+
+
+def test_select_documents_stage_takes_whole_corpus_documents_from_dev(tmp_path):
+    import yaml
+
+    from data.schema import Document, write_jsonl
+    from experiments import distil
+    from experiments.config import load_config
+
+    (tmp_path / "packs" / "g").mkdir(parents=True)
+    (tmp_path / "packs" / "g" / "schema.yaml").write_text(yaml.safe_dump({"version": 1, "status": "frozen", "types": LTYPES}))
+    processed = tmp_path / "processed" / "g"
+    processed.mkdir(parents=True)
+    split = {f"d{i}": ("train" if i < 30 else "dev" if i < 60 else "test") for i in range(70)}
+    split.update({f"a{i}": "dev" for i in range(10)})  # a source with its own segmentation, never indexed
+    docs = [Document(id=d, genre="g", source="annot" if d.startswith("a") else "corp", entity_id=d,
+                     date=f"{2018 + int(d[1:]) % 3}-05-01", category="x") for d in split]
+    write_jsonl(processed / "documents.jsonl", docs)
+    sections = [Section(doc_id=d, idx=j, heading="H", text=("short" if j == 0 else f"Alpha stated. {d} {j} " * 4))
+                for d in split for j in range(1 + int(d[1:]) % 3)]
+    write_jsonl(processed / "sections.jsonl", sections)
+    (tmp_path / "splits").mkdir()
+    (tmp_path / "splits" / "g.json").write_text(_json.dumps({"doc_ids": {s: [d for d in split if split[d] == s]
+                                                                          for s in ("train", "dev", "test")}}))
+    (tmp_path / "sample.json").write_text(_json.dumps(["d30", "d31"]))
+    existing = {"genre": "g", "seed": 1, "source": "splits", "teacher": [{"doc_id": "d1", "section_idx": 0, "text_sha1": "x"}],
+                "human": [{"doc_id": "d32", "section_idx": 0, "text_sha1": "y"}]}
+    (tmp_path / "packs" / "g" / "label_sets.json").write_text(_json.dumps(existing))
+    cfg = load_config("configs/distil.yaml", ["smoke"])
+    cfg["pack"] = "g"
+    cfg["paths"].update(packs=str(tmp_path / "packs"), data_processed=str(tmp_path / "processed"),
+                        splits=str(tmp_path / "splits"))
+    cfg["distil"].update(stage="select_documents")
+    cfg["distil"]["label_sets"].update(exclude_sample=str(tmp_path / "sample.json"), documents_per_genre=12)
+    m = distil.main(cfg, tmp_path)
+    sets = _json.loads((tmp_path / "packs" / "g" / "label_sets.json").read_text())
+    assert sets["teacher"] == existing["teacher"] and sets["human"] == existing["human"]  # untouched
+    chosen = {r["doc_id"] for r in sets["documents"]}
+    assert len(chosen) == 12 == m["g/documents_documents"]
+    assert all(split[d] == "dev" and d.startswith("d") for d in chosen)  # dev, corpus source only
+    assert not chosen & {"d30", "d31", "d32"}
+    n_secs = {d: sum(s.doc_id == d for s in sections) for d in chosen}
+    assert len(sets["documents"]) == sum(n_secs.values()) == m["g/documents_sections"]  # every section, short ones too
+    with pytest.raises(FileExistsError):
+        distil.main(cfg, tmp_path)  # fixed once chosen

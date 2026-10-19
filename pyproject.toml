@@ -21,6 +21,7 @@ dependencies = [
   "xgrammar==0.2.7",
   "outlines==1.3.3",
   "openai==3.29.0",
+  "anthropic==1.15.0",              # 2026-10-19: Claude via the official SDK (judge labels, 7.3 frontier comparison)
   "qdrant-client==1.19.1",
   "faiss-cpu==1.15.1",
   "scikit-learn==1.9.1",

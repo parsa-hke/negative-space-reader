@@ -11505,5 +11505,6981 @@
    "section_idx": 6,
    "text_sha1": "be7d199e9499c818963ccc9e46b37242b29335d9"
   }
- ]
+ ],
+ "documents": [
+  {
+   "doc_id": "privacy_pl:741616",
+   "section_idx": 0,
+   "text_sha1": "215d98d7107fd29ab1853e0a4c41a3854637015e"
+  },
+  {
+   "doc_id": "privacy_pl:741616",
+   "section_idx": 1,
+   "text_sha1": "f497e8b64ca642dbe5ea6d304c5140391076add7"
+  },
+  {
+   "doc_id": "privacy_pl:741616",
+   "section_idx": 2,
+   "text_sha1": "e7a7f3f16332db49d0b62f0a5c11d852999ba02a"
+  },
+  {
+   "doc_id": "privacy_pl:741616",
+   "section_idx": 3,
+   "text_sha1": "73fd0289eb752aaa8ee009f8ef72fe5485602285"
+  },
+  {
+   "doc_id": "privacy_pl:741616",
+   "section_idx": 4,
+   "text_sha1": "2ba0959800d9ae8c0c10135022049714cd0b734b"
+  },
+  {
+   "doc_id": "privacy_pl:741616",
+   "section_idx": 5,
+   "text_sha1": "07e06c5cfad29721b851e956caa08a7beb902602"
+  },
+  {
+   "doc_id": "privacy_pl:741616",
+   "section_idx": 6,
+   "text_sha1": "d6b26b717d3be5e1b4daad561d31541172b7a0a7"
+  },
+  {
+   "doc_id": "privacy_pl:741616",
+   "section_idx": 7,
+   "text_sha1": "09f9d8e55be56f05f202d5ba96857558e8dea1a7"
+  },
+  {
+   "doc_id": "privacy_pl:741616",
+   "section_idx": 8,
+   "text_sha1": "3fcdee0d7ec4d5f3403ea16c3689dcc459625091"
+  },
+  {
+   "doc_id": "privacy_pl:741616",
+   "section_idx": 9,
+   "text_sha1": "e4f29ba1c70f252d6d6efe49703d0e35c2c61aad"
+  },
+  {
+   "doc_id": "privacy_pl:741616",
+   "section_idx": 10,
+   "text_sha1": "a5b24bc5fcf37721e96fdc4394407a12cb087ef1"
+  },
+  {
+   "doc_id": "privacy_pl:741616",
+   "section_idx": 11,
+   "text_sha1": "d16fe9be50c7419992cefabce340152ad910efb3"
+  },
+  {
+   "doc_id": "privacy_pl:741616",
+   "section_idx": 12,
+   "text_sha1": "11a3f7c61e743f63ac88a411772bef400b84d78b"
+  },
+  {
+   "doc_id": "privacy_pl:178882",
+   "section_idx": 0,
+   "text_sha1": "85b7fa12b3e2aff20025fa4d3fa84ac8f871e196"
+  },
+  {
+   "doc_id": "privacy_pl:178882",
+   "section_idx": 1,
+   "text_sha1": "63bb30d1055e684906d1687a76e5c8c1173bb389"
+  },
+  {
+   "doc_id": "privacy_pl:178882",
+   "section_idx": 2,
+   "text_sha1": "43db0b97deb6c00c8a6ec366be43945cc4504bac"
+  },
+  {
+   "doc_id": "privacy_pl:178882",
+   "section_idx": 3,
+   "text_sha1": "4bad578d9541faec1c19b06c48260b49bfe09390"
+  },
+  {
+   "doc_id": "privacy_pl:178882",
+   "section_idx": 4,
+   "text_sha1": "51f08ef187c885d9f03150df7bb7e1796a0231fc"
+  },
+  {
+   "doc_id": "privacy_pl:178882",
+   "section_idx": 5,
+   "text_sha1": "72c070241337f516fa9393ec4969ae8d1a7f14ad"
+  },
+  {
+   "doc_id": "privacy_pl:178882",
+   "section_idx": 6,
+   "text_sha1": "af786ceed04050cfd83bbc30b85f31297b38c07e"
+  },
+  {
+   "doc_id": "privacy_pl:178882",
+   "section_idx": 7,
+   "text_sha1": "ad08cfd636ffb0d71ca650e2a1dc5fc96cf0e11d"
+  },
+  {
+   "doc_id": "privacy_pl:178882",
+   "section_idx": 8,
+   "text_sha1": "233a1345aa16fbca0b32cba6a6545310e9ab358f"
+  },
+  {
+   "doc_id": "privacy_pl:178882",
+   "section_idx": 9,
+   "text_sha1": "baf023a5adab0b727655e35a12c2eeba5965cdd7"
+  },
+  {
+   "doc_id": "privacy_pl:178882",
+   "section_idx": 10,
+   "text_sha1": "b0bc0f62092f8d14c66dc1c30afad8308da24781"
+  },
+  {
+   "doc_id": "privacy_pl:178882",
+   "section_idx": 11,
+   "text_sha1": "4ef28e61ef9a2cd44f242890e68d947d65637c80"
+  },
+  {
+   "doc_id": "privacy_pl:178882",
+   "section_idx": 12,
+   "text_sha1": "239e4880d1061aa3736f2f54c9167d92d5810c12"
+  },
+  {
+   "doc_id": "privacy_pl:108846",
+   "section_idx": 0,
+   "text_sha1": "0853664fded4975deb0762e26df6130b639dabff"
+  },
+  {
+   "doc_id": "privacy_pl:108846",
+   "section_idx": 1,
+   "text_sha1": "f80b22f30cbdd800fcbe77ef9767ed0d66e9f72d"
+  },
+  {
+   "doc_id": "privacy_pl:108846",
+   "section_idx": 2,
+   "text_sha1": "8bd28bb8f380d3ed0d7a240dd75fbe46b18eeedd"
+  },
+  {
+   "doc_id": "privacy_pl:108846",
+   "section_idx": 3,
+   "text_sha1": "95d1c6c4817ceb6256b356e0092d4da57fc6a449"
+  },
+  {
+   "doc_id": "privacy_pl:116758",
+   "section_idx": 0,
+   "text_sha1": "0652ab70c28cc8d3d7a8db38de4c17e909275b14"
+  },
+  {
+   "doc_id": "privacy_pl:116758",
+   "section_idx": 1,
+   "text_sha1": "78fc03537b5cfdd290562203f39b3aa687f2c330"
+  },
+  {
+   "doc_id": "privacy_pl:116758",
+   "section_idx": 2,
+   "text_sha1": "d4089d2a92a061f1b48f74765428abbf52357154"
+  },
+  {
+   "doc_id": "privacy_pl:116758",
+   "section_idx": 3,
+   "text_sha1": "86f675c19babef3aff1ea5192a1159e940fd9979"
+  },
+  {
+   "doc_id": "privacy_pl:116758",
+   "section_idx": 4,
+   "text_sha1": "8fea75db2994126f5536c0ecaf8f55e5dade410a"
+  },
+  {
+   "doc_id": "privacy_pl:116758",
+   "section_idx": 5,
+   "text_sha1": "a152c8e28193ea5cfa81ba36018832ba1aba39e4"
+  },
+  {
+   "doc_id": "privacy_pl:116758",
+   "section_idx": 6,
+   "text_sha1": "fbe640c3ee357afec2b091c53a6698bdf1a9e95f"
+  },
+  {
+   "doc_id": "privacy_pl:116758",
+   "section_idx": 7,
+   "text_sha1": "e66ce849eb82d3707851cb5adb52dee912b76665"
+  },
+  {
+   "doc_id": "privacy_pl:116758",
+   "section_idx": 8,
+   "text_sha1": "f10cb10ec45b08076d257335da43a624ae14f8ce"
+  },
+  {
+   "doc_id": "privacy_pl:116758",
+   "section_idx": 9,
+   "text_sha1": "bbd0072e221e527a0344ab1e1fd219b0458a26b2"
+  },
+  {
+   "doc_id": "privacy_pl:43941",
+   "section_idx": 0,
+   "text_sha1": "0e5c6cae8e5b377bc9154979ff31ee5dfb611ece"
+  },
+  {
+   "doc_id": "privacy_pl:43941",
+   "section_idx": 1,
+   "text_sha1": "bfe33d9eb62cf7a6d8b6dde217431378bf8d7efd"
+  },
+  {
+   "doc_id": "privacy_pl:43941",
+   "section_idx": 2,
+   "text_sha1": "e89e97efa5d9b68cef458ec423c5092a276a1eb7"
+  },
+  {
+   "doc_id": "privacy_pl:43941",
+   "section_idx": 3,
+   "text_sha1": "9d0c7a15225c65ff11d5691887f753e616b7739e"
+  },
+  {
+   "doc_id": "privacy_pl:43941",
+   "section_idx": 4,
+   "text_sha1": "c5dcd3bfc737ac51152ff5fcd513c83c533b5414"
+  },
+  {
+   "doc_id": "privacy_pl:43941",
+   "section_idx": 5,
+   "text_sha1": "f48e9b266369f3abe91774f2e7f0240775d6b088"
+  },
+  {
+   "doc_id": "privacy_pl:43941",
+   "section_idx": 6,
+   "text_sha1": "ace91ad6db04e0a4f5946a65ef010c3e6d0d6c9f"
+  },
+  {
+   "doc_id": "privacy_pl:43941",
+   "section_idx": 7,
+   "text_sha1": "bddba51760ccc77115149ea952d95b06c2342435"
+  },
+  {
+   "doc_id": "privacy_pl:43941",
+   "section_idx": 8,
+   "text_sha1": "ce0072badcbffc642ae1a018496e792e98bd21a1"
+  },
+  {
+   "doc_id": "privacy_pl:43941",
+   "section_idx": 9,
+   "text_sha1": "492e11a005d7677a7e1fc9be6618e9a29c3e5b76"
+  },
+  {
+   "doc_id": "privacy_pl:43941",
+   "section_idx": 10,
+   "text_sha1": "fb7df3acb96038c624ac3933c4481cc216ad39e4"
+  },
+  {
+   "doc_id": "privacy_pl:164729",
+   "section_idx": 0,
+   "text_sha1": "e57e54781c6bdce85033681c9a260034a61bab0b"
+  },
+  {
+   "doc_id": "privacy_pl:164729",
+   "section_idx": 1,
+   "text_sha1": "d9f42a15893fb76ab1997f59c073304ea483ca46"
+  },
+  {
+   "doc_id": "privacy_pl:682078",
+   "section_idx": 0,
+   "text_sha1": "c1705fa56d6156111618aed8565a0eaacc115699"
+  },
+  {
+   "doc_id": "privacy_pl:682078",
+   "section_idx": 1,
+   "text_sha1": "943851481313d3869f87363b3c28807237d3275c"
+  },
+  {
+   "doc_id": "privacy_pl:682078",
+   "section_idx": 2,
+   "text_sha1": "83239b32655a3b6826a9f5e49ecfb304062d5c43"
+  },
+  {
+   "doc_id": "privacy_pl:682078",
+   "section_idx": 3,
+   "text_sha1": "b4669c526a03b07fe568285970e62aa0c63932c2"
+  },
+  {
+   "doc_id": "privacy_pl:682078",
+   "section_idx": 4,
+   "text_sha1": "b3ade001756cc29469d9fab299bece84e1957bdd"
+  },
+  {
+   "doc_id": "privacy_pl:682078",
+   "section_idx": 5,
+   "text_sha1": "00b3b12add7ac5a4b047166be6b04921ff2e9b80"
+  },
+  {
+   "doc_id": "privacy_pl:682078",
+   "section_idx": 6,
+   "text_sha1": "b969acc97a908d6a8d62459c73d9a3f07b7094ce"
+  },
+  {
+   "doc_id": "privacy_pl:682078",
+   "section_idx": 7,
+   "text_sha1": "08ad2669bb114ebb55a053d1658454fe43673383"
+  },
+  {
+   "doc_id": "privacy_pl:154071",
+   "section_idx": 0,
+   "text_sha1": "3f43bba334bbbffefb199a9a6aaca5a1ae3a8a3f"
+  },
+  {
+   "doc_id": "privacy_pl:154071",
+   "section_idx": 1,
+   "text_sha1": "9644a2f25b62d080827d6f60239cada27ba84e73"
+  },
+  {
+   "doc_id": "privacy_pl:154071",
+   "section_idx": 2,
+   "text_sha1": "e9ff3e10e00dcc600571fe840d89b26219a1228e"
+  },
+  {
+   "doc_id": "privacy_pl:154071",
+   "section_idx": 3,
+   "text_sha1": "97eb6ae7ec3d5c10f7517c47d3fccb3f29c92802"
+  },
+  {
+   "doc_id": "privacy_pl:154071",
+   "section_idx": 4,
+   "text_sha1": "0e04aef02e7bf8c3d74084c3344d65257b8119e0"
+  },
+  {
+   "doc_id": "privacy_pl:154071",
+   "section_idx": 5,
+   "text_sha1": "1355a507a1cb50c4a30d5d984ee993a34f69bdf5"
+  },
+  {
+   "doc_id": "privacy_pl:154071",
+   "section_idx": 6,
+   "text_sha1": "b8d416e07512b15773ba2048b69ae9aa06344d1f"
+  },
+  {
+   "doc_id": "privacy_pl:154071",
+   "section_idx": 7,
+   "text_sha1": "ef18f06a747c59ed276611e63992a08b376ddc31"
+  },
+  {
+   "doc_id": "privacy_pl:1000113",
+   "section_idx": 0,
+   "text_sha1": "9108acbac04f7b715ef7f516720fa3675c398d59"
+  },
+  {
+   "doc_id": "privacy_pl:1000113",
+   "section_idx": 1,
+   "text_sha1": "9205a175322ee9c3c8a981e59a79f75053195cad"
+  },
+  {
+   "doc_id": "privacy_pl:1000113",
+   "section_idx": 2,
+   "text_sha1": "5673431f73216da2fa429ef7b392740e3c03ce9f"
+  },
+  {
+   "doc_id": "privacy_pl:699529",
+   "section_idx": 0,
+   "text_sha1": "4dbb87b76fb97ee970f69407a7e8f81856a86927"
+  },
+  {
+   "doc_id": "privacy_pl:699529",
+   "section_idx": 1,
+   "text_sha1": "0a56d4510fb0def4985f29ea133448e04c0e66b3"
+  },
+  {
+   "doc_id": "privacy_pl:699529",
+   "section_idx": 2,
+   "text_sha1": "9eaa28c3dae96f2a9bb1935b04ef522292693201"
+  },
+  {
+   "doc_id": "privacy_pl:152593",
+   "section_idx": 0,
+   "text_sha1": "ceb5355c3dd832b0def40fc7c5679af9799af96f"
+  },
+  {
+   "doc_id": "privacy_pl:152593",
+   "section_idx": 1,
+   "text_sha1": "556ee3f798aaf2bd9a5cc5ebe06b663958f8b4f6"
+  },
+  {
+   "doc_id": "privacy_pl:1057653",
+   "section_idx": 0,
+   "text_sha1": "e83106cf608c2c02502ab81c329a25189d874929"
+  },
+  {
+   "doc_id": "privacy_pl:1057653",
+   "section_idx": 1,
+   "text_sha1": "fa8a1e5c50e5e2b8e1f0f82eefd710810326fb0a"
+  },
+  {
+   "doc_id": "privacy_pl:1057653",
+   "section_idx": 2,
+   "text_sha1": "58d240b062dcbfad5e54e29d010d0ba71c0138fb"
+  },
+  {
+   "doc_id": "privacy_pl:1057653",
+   "section_idx": 3,
+   "text_sha1": "0a7186b4668e01ffb02f54d6df00581ff27fa2f8"
+  },
+  {
+   "doc_id": "privacy_pl:1057653",
+   "section_idx": 4,
+   "text_sha1": "5d0c0e6e5a0f1cd35e7bd89fb2cb295f787959cb"
+  },
+  {
+   "doc_id": "privacy_pl:1057653",
+   "section_idx": 5,
+   "text_sha1": "6d84d865d0183c73628b7867183d1b1eb10c4917"
+  },
+  {
+   "doc_id": "privacy_pl:1057653",
+   "section_idx": 6,
+   "text_sha1": "83ae50b3b572dc47777b323f705e805bfcfc385b"
+  },
+  {
+   "doc_id": "privacy_pl:1057653",
+   "section_idx": 7,
+   "text_sha1": "9823780373efac12f26f6678fb85278e44e1de3b"
+  },
+  {
+   "doc_id": "privacy_pl:139545",
+   "section_idx": 0,
+   "text_sha1": "528a12167a2d6d5d89369d9310f9a4cce9471889"
+  },
+  {
+   "doc_id": "privacy_pl:139545",
+   "section_idx": 1,
+   "text_sha1": "81fe9a36324f9fa30e3994610cd2f040dc724cc0"
+  },
+  {
+   "doc_id": "privacy_pl:139545",
+   "section_idx": 2,
+   "text_sha1": "30354f349b41e052ca375528cff849d4c32a5265"
+  },
+  {
+   "doc_id": "privacy_pl:139545",
+   "section_idx": 3,
+   "text_sha1": "66c407f77b0572552802a9092d07a87b38418580"
+  },
+  {
+   "doc_id": "privacy_pl:139545",
+   "section_idx": 4,
+   "text_sha1": "f22da09b08b2ba42b9a309042851f8984ccfbd62"
+  },
+  {
+   "doc_id": "privacy_pl:139545",
+   "section_idx": 5,
+   "text_sha1": "06ab3eba130efd307a3e7b90da596592505a8581"
+  },
+  {
+   "doc_id": "privacy_pl:139545",
+   "section_idx": 6,
+   "text_sha1": "6578e0b2eb7e4743f07452530a1a9fe4e16e181b"
+  },
+  {
+   "doc_id": "privacy_pl:139545",
+   "section_idx": 7,
+   "text_sha1": "01e64bbed582f7b90ab47fb1c2164a3ce32db8e4"
+  },
+  {
+   "doc_id": "privacy_pl:871665",
+   "section_idx": 0,
+   "text_sha1": "ef8540dda011a65d7c0b8f8d22b1d2f2b690ac95"
+  },
+  {
+   "doc_id": "privacy_pl:871665",
+   "section_idx": 1,
+   "text_sha1": "806a98d06e6e152b0a1027eeb977298ad439d7d2"
+  },
+  {
+   "doc_id": "privacy_pl:871665",
+   "section_idx": 2,
+   "text_sha1": "864c021982c817533df5493ad797d0ece910ab81"
+  },
+  {
+   "doc_id": "privacy_pl:871665",
+   "section_idx": 3,
+   "text_sha1": "309584692911bdef225544080f634c75d4cda541"
+  },
+  {
+   "doc_id": "privacy_pl:871665",
+   "section_idx": 4,
+   "text_sha1": "3c2f3aa23a7418deeb92215ed44ea79fac1668a8"
+  },
+  {
+   "doc_id": "privacy_pl:871665",
+   "section_idx": 5,
+   "text_sha1": "eb4357a8ae421306f495fd7f58de7b50a6ae932b"
+  },
+  {
+   "doc_id": "privacy_pl:871665",
+   "section_idx": 6,
+   "text_sha1": "9fc958cf58ce3cdae0a3eceb706d69c7ef2f0788"
+  },
+  {
+   "doc_id": "privacy_pl:871665",
+   "section_idx": 7,
+   "text_sha1": "1657e043a129f3154c52192edc850a74a537d010"
+  },
+  {
+   "doc_id": "privacy_pl:871665",
+   "section_idx": 8,
+   "text_sha1": "7b364d1b61dd1b90102d3ea2d1793ad80c2b2a5b"
+  },
+  {
+   "doc_id": "privacy_pl:871665",
+   "section_idx": 9,
+   "text_sha1": "161f63e12c42e7ec26ba1310f8fa13a1b43b9fc3"
+  },
+  {
+   "doc_id": "privacy_pl:871665",
+   "section_idx": 10,
+   "text_sha1": "7de680302fcb4a5d8d979ea75615c43db0d001a1"
+  },
+  {
+   "doc_id": "privacy_pl:871665",
+   "section_idx": 11,
+   "text_sha1": "b138d83981c28f09848bf4adf43c352a32a385fa"
+  },
+  {
+   "doc_id": "privacy_pl:1035360",
+   "section_idx": 0,
+   "text_sha1": "249b9453491c386fa7ade59f68acfff0925581d0"
+  },
+  {
+   "doc_id": "privacy_pl:1035360",
+   "section_idx": 1,
+   "text_sha1": "820925af24db63b75e85520dc56bcfc582762624"
+  },
+  {
+   "doc_id": "privacy_pl:1035360",
+   "section_idx": 2,
+   "text_sha1": "15d3b87e0adf86e8ad28974620c74b77a3a67223"
+  },
+  {
+   "doc_id": "privacy_pl:1035360",
+   "section_idx": 3,
+   "text_sha1": "fcd72656e14bcb1ffbf80f48ea6f77c3e3f2501f"
+  },
+  {
+   "doc_id": "privacy_pl:1035360",
+   "section_idx": 4,
+   "text_sha1": "56fb439d4b3085b4666f7effd6bac43279e66c56"
+  },
+  {
+   "doc_id": "privacy_pl:1035360",
+   "section_idx": 5,
+   "text_sha1": "a971da6d0eea278a33ff7347b139362adbe93411"
+  },
+  {
+   "doc_id": "privacy_pl:1035360",
+   "section_idx": 6,
+   "text_sha1": "6666f3d3fc6892f9926181c8374674aeb61c1e23"
+  },
+  {
+   "doc_id": "privacy_pl:1035360",
+   "section_idx": 7,
+   "text_sha1": "54bd543aa98e20045448b57ca30d00972f076813"
+  },
+  {
+   "doc_id": "privacy_pl:520344",
+   "section_idx": 0,
+   "text_sha1": "71f16ce3746e987c257dd6b6d044ec7a96a273f3"
+  },
+  {
+   "doc_id": "privacy_pl:520344",
+   "section_idx": 1,
+   "text_sha1": "66649c536594d9cb2fa041f6fabe0bf3ce3820a4"
+  },
+  {
+   "doc_id": "privacy_pl:520344",
+   "section_idx": 2,
+   "text_sha1": "57a4cb5de6178f1773c0f86808884a952132bea0"
+  },
+  {
+   "doc_id": "privacy_pl:520344",
+   "section_idx": 3,
+   "text_sha1": "471170b77660793160cf153caf019c20d622d121"
+  },
+  {
+   "doc_id": "privacy_pl:520344",
+   "section_idx": 4,
+   "text_sha1": "7ebb40f3d386bbd79121c51e63c4109ee643c8da"
+  },
+  {
+   "doc_id": "privacy_pl:520344",
+   "section_idx": 5,
+   "text_sha1": "25e5f1b7276334507a8e0162f7260c669ccfcdf6"
+  },
+  {
+   "doc_id": "privacy_pl:520344",
+   "section_idx": 6,
+   "text_sha1": "d87e634a3e101033f549587cd308262bcd9d4e61"
+  },
+  {
+   "doc_id": "privacy_pl:520344",
+   "section_idx": 7,
+   "text_sha1": "48ea232ceaa640ec5d0e225a43dc919585043db6"
+  },
+  {
+   "doc_id": "privacy_pl:520344",
+   "section_idx": 8,
+   "text_sha1": "8782a9e629652b669a1eb7b519a14837581ba57e"
+  },
+  {
+   "doc_id": "privacy_pl:520344",
+   "section_idx": 9,
+   "text_sha1": "448d748b66a6b61984319360251c34226c578f0e"
+  },
+  {
+   "doc_id": "privacy_pl:520344",
+   "section_idx": 10,
+   "text_sha1": "5b338deb39bd5343ebfe315610c7d7136d85cfc2"
+  },
+  {
+   "doc_id": "privacy_pl:520344",
+   "section_idx": 11,
+   "text_sha1": "4d876eabc6f521867b748c6cd41dc673f3c8bf0f"
+  },
+  {
+   "doc_id": "privacy_pl:520344",
+   "section_idx": 12,
+   "text_sha1": "cdfc72e9b2ab5fd28d7aa3c76c3af41b18db06fb"
+  },
+  {
+   "doc_id": "privacy_pl:844212",
+   "section_idx": 0,
+   "text_sha1": "1e2ffbb0347903b8bf266309efbf3671d7c8ad30"
+  },
+  {
+   "doc_id": "privacy_pl:844212",
+   "section_idx": 1,
+   "text_sha1": "e92f02050e786c20ec02191381911829cee17795"
+  },
+  {
+   "doc_id": "privacy_pl:844212",
+   "section_idx": 2,
+   "text_sha1": "bf1dc22c3e96fbbc6d4b9b034801d9f8761c8f9b"
+  },
+  {
+   "doc_id": "privacy_pl:844212",
+   "section_idx": 3,
+   "text_sha1": "657584eb1362403f31c658065ce85a6f6e3f0826"
+  },
+  {
+   "doc_id": "privacy_pl:990887",
+   "section_idx": 0,
+   "text_sha1": "f82daf0ce39b3ceb44bd22096c94082ae9d2f6a0"
+  },
+  {
+   "doc_id": "privacy_pl:990887",
+   "section_idx": 1,
+   "text_sha1": "839d5cb19369f65662d20653d257f2b253a4a0f3"
+  },
+  {
+   "doc_id": "privacy_pl:990887",
+   "section_idx": 2,
+   "text_sha1": "36920c806365cab3f8229b15c5a2dd6f594a3cd6"
+  },
+  {
+   "doc_id": "privacy_pl:990887",
+   "section_idx": 3,
+   "text_sha1": "1a8b2fb9b81e2a1974f9543fb6a03b885f280ef6"
+  },
+  {
+   "doc_id": "privacy_pl:990887",
+   "section_idx": 4,
+   "text_sha1": "ab230d0611f969b948fee033131f83442f21f192"
+  },
+  {
+   "doc_id": "privacy_pl:990887",
+   "section_idx": 5,
+   "text_sha1": "7ad7c09ecad1cdf07b07992092120b5ffb1c1537"
+  },
+  {
+   "doc_id": "privacy_pl:990887",
+   "section_idx": 6,
+   "text_sha1": "7bc1ad80d97f63d6ac92c386eca9cbab83699007"
+  },
+  {
+   "doc_id": "privacy_pl:990887",
+   "section_idx": 7,
+   "text_sha1": "8eba51782af9a65fa1f9b2d1eae4ffa364535e7c"
+  },
+  {
+   "doc_id": "privacy_pl:967977",
+   "section_idx": 0,
+   "text_sha1": "855a7c801f0a06eca424d78fb78d27d3e45abc6b"
+  },
+  {
+   "doc_id": "privacy_pl:967977",
+   "section_idx": 1,
+   "text_sha1": "cfc2c6a2e43721b2ba760a05a786e03c07c926e8"
+  },
+  {
+   "doc_id": "privacy_pl:967977",
+   "section_idx": 2,
+   "text_sha1": "4c0709b95bd0bd539ad96a60f033499f88fd87a3"
+  },
+  {
+   "doc_id": "privacy_pl:967977",
+   "section_idx": 3,
+   "text_sha1": "6003debc2395cffde17f10106a0e6f6047344980"
+  },
+  {
+   "doc_id": "privacy_pl:967977",
+   "section_idx": 4,
+   "text_sha1": "ff9927d652d1abdde23580f40ccd7051397360f3"
+  },
+  {
+   "doc_id": "privacy_pl:967977",
+   "section_idx": 5,
+   "text_sha1": "31ee0fe69bf43f5e1f535795aa86cbc7a1905d9e"
+  },
+  {
+   "doc_id": "privacy_pl:670706",
+   "section_idx": 0,
+   "text_sha1": "607c0844894a1c660520455865f66b371600d390"
+  },
+  {
+   "doc_id": "privacy_pl:670706",
+   "section_idx": 1,
+   "text_sha1": "b4e8b7a8b7c56b118b24e60d95153b0f9075d490"
+  },
+  {
+   "doc_id": "privacy_pl:670706",
+   "section_idx": 2,
+   "text_sha1": "be3db63cd8e5e6bbc22f004af2302a343e90e4b8"
+  },
+  {
+   "doc_id": "privacy_pl:670706",
+   "section_idx": 3,
+   "text_sha1": "fc767c5394dc073011f4bf1e264ae0540b0fdf14"
+  },
+  {
+   "doc_id": "privacy_pl:670706",
+   "section_idx": 4,
+   "text_sha1": "9cff3b64a487015a34b34e16f1596763724f8a97"
+  },
+  {
+   "doc_id": "privacy_pl:670706",
+   "section_idx": 5,
+   "text_sha1": "51006277ea2bb21bd9a985f7da8fd46e54ec24f3"
+  },
+  {
+   "doc_id": "privacy_pl:670706",
+   "section_idx": 6,
+   "text_sha1": "4bed5bad036e2ce46f0e6f4433428933bb04acc9"
+  },
+  {
+   "doc_id": "privacy_pl:164935",
+   "section_idx": 0,
+   "text_sha1": "a2ddb8ab169ca941ce3f11d9d6e5561a303024ce"
+  },
+  {
+   "doc_id": "privacy_pl:164935",
+   "section_idx": 1,
+   "text_sha1": "e9179459c82d4ce15a6136a2ad99d47312a71d87"
+  },
+  {
+   "doc_id": "privacy_pl:164935",
+   "section_idx": 2,
+   "text_sha1": "1977407d348e07be76685ec5d3eb6424d10da1fd"
+  },
+  {
+   "doc_id": "privacy_pl:164935",
+   "section_idx": 3,
+   "text_sha1": "71e9b73ad7a5c3c01d6ce29a724ef629a9d97d97"
+  },
+  {
+   "doc_id": "privacy_pl:164935",
+   "section_idx": 4,
+   "text_sha1": "cd17070ecbdb20c9f0b9100e1ed6d60f616ea564"
+  },
+  {
+   "doc_id": "privacy_pl:1053240",
+   "section_idx": 0,
+   "text_sha1": "ed84f713a239c72a55bc4acb77015dcdee603673"
+  },
+  {
+   "doc_id": "privacy_pl:1053240",
+   "section_idx": 1,
+   "text_sha1": "be9747d3a3842cf22a0fe23b595142174cd58a71"
+  },
+  {
+   "doc_id": "privacy_pl:1053240",
+   "section_idx": 2,
+   "text_sha1": "245410febd035327487617e60c751aa4934cd1b9"
+  },
+  {
+   "doc_id": "privacy_pl:1053240",
+   "section_idx": 3,
+   "text_sha1": "12d82ee3bae4622222fc2abc33a291b11b29f733"
+  },
+  {
+   "doc_id": "privacy_pl:1053240",
+   "section_idx": 4,
+   "text_sha1": "840edbc0b8396f1f9d514d67fead93cfb49f055a"
+  },
+  {
+   "doc_id": "privacy_pl:1053240",
+   "section_idx": 5,
+   "text_sha1": "4ed490d9ee259da4d94946058d07a221631b733c"
+  },
+  {
+   "doc_id": "privacy_pl:1053240",
+   "section_idx": 6,
+   "text_sha1": "75bd5e59ad7b91db1c8b9254b42eaeb7f09c7a14"
+  },
+  {
+   "doc_id": "privacy_pl:1053240",
+   "section_idx": 7,
+   "text_sha1": "829ce4f842b74bee7f5b1d9fcadc3de3d15e727b"
+  },
+  {
+   "doc_id": "privacy_pl:1053240",
+   "section_idx": 8,
+   "text_sha1": "d03c2e6a0f34571f92fcaf933af186a29bae217d"
+  },
+  {
+   "doc_id": "privacy_pl:1053240",
+   "section_idx": 9,
+   "text_sha1": "fb2665ebbb50746c90ef00cfdf4bf8bfe5c1d3a4"
+  },
+  {
+   "doc_id": "privacy_pl:1053240",
+   "section_idx": 10,
+   "text_sha1": "8b3e52080a037748fa0eebe6679384c72e2fba6c"
+  },
+  {
+   "doc_id": "privacy_pl:1053240",
+   "section_idx": 11,
+   "text_sha1": "c8dace9169434ec8c6f4b99d06a36fb6759784d8"
+  },
+  {
+   "doc_id": "privacy_pl:1053240",
+   "section_idx": 12,
+   "text_sha1": "a98213826782a914ed067c9e5f3cbdbb8fac56af"
+  },
+  {
+   "doc_id": "privacy_pl:529394",
+   "section_idx": 0,
+   "text_sha1": "a25863e26602ce0da3ae84803b6e6e53c6aea39c"
+  },
+  {
+   "doc_id": "privacy_pl:529394",
+   "section_idx": 1,
+   "text_sha1": "2d3c51b28028d353ce14823792844b6f86018ce7"
+  },
+  {
+   "doc_id": "privacy_pl:529394",
+   "section_idx": 2,
+   "text_sha1": "b2c9ba409fa7513569da133de17b3e895182f92d"
+  },
+  {
+   "doc_id": "privacy_pl:529394",
+   "section_idx": 3,
+   "text_sha1": "d0e980c90f81b43113cd48ca5f33b1410606fe09"
+  },
+  {
+   "doc_id": "privacy_pl:529394",
+   "section_idx": 4,
+   "text_sha1": "c80d7f270f7ed3473e56436cddb9461f7b7ae04c"
+  },
+  {
+   "doc_id": "privacy_pl:529394",
+   "section_idx": 5,
+   "text_sha1": "a528d5ab76895736558a96105781a1238a83cda1"
+  },
+  {
+   "doc_id": "privacy_pl:529394",
+   "section_idx": 6,
+   "text_sha1": "7cd98b1621613df3e5eb2945f3291f6cea42e6e1"
+  },
+  {
+   "doc_id": "privacy_pl:529394",
+   "section_idx": 7,
+   "text_sha1": "4dbe32e25773f39aa63e069d69e70a25c9389911"
+  },
+  {
+   "doc_id": "privacy_pl:529394",
+   "section_idx": 8,
+   "text_sha1": "39bddadcb53b279e2c65594368d84724effb4322"
+  },
+  {
+   "doc_id": "privacy_pl:529394",
+   "section_idx": 9,
+   "text_sha1": "8d6b6c533dd2d1dc33012571cf7f2dcdbc1ba733"
+  },
+  {
+   "doc_id": "privacy_pl:529394",
+   "section_idx": 10,
+   "text_sha1": "fed0b8d3427f15360db9261706abff5470c77bc5"
+  },
+  {
+   "doc_id": "privacy_pl:529394",
+   "section_idx": 11,
+   "text_sha1": "87f433bfc563ad56d711e185835bf6a698a3c97a"
+  },
+  {
+   "doc_id": "privacy_pl:529394",
+   "section_idx": 12,
+   "text_sha1": "ca3b5e0d5545345d278b8d5ca85139ac2e7ecaaa"
+  },
+  {
+   "doc_id": "privacy_pl:673601",
+   "section_idx": 0,
+   "text_sha1": "66d136f5f4ae06dde840b58f9043929a3c55bda1"
+  },
+  {
+   "doc_id": "privacy_pl:673601",
+   "section_idx": 1,
+   "text_sha1": "b40f6eb8f2dd6f0476eb7e954edf6749b7766264"
+  },
+  {
+   "doc_id": "privacy_pl:673601",
+   "section_idx": 2,
+   "text_sha1": "aa277d2736c801df3b45bae9951af328b6488655"
+  },
+  {
+   "doc_id": "privacy_pl:673601",
+   "section_idx": 3,
+   "text_sha1": "5c565589c27fc615c082a160f22260b35ea7ac0a"
+  },
+  {
+   "doc_id": "privacy_pl:673601",
+   "section_idx": 4,
+   "text_sha1": "7956ac3a3c8a9041414fa790ebf69f9e75f0cf0c"
+  },
+  {
+   "doc_id": "privacy_pl:673601",
+   "section_idx": 5,
+   "text_sha1": "08a913cf23e46563372e4c9e8779ec8a06a6a0d5"
+  },
+  {
+   "doc_id": "privacy_pl:673601",
+   "section_idx": 6,
+   "text_sha1": "73c0ae99b2b21f73abf1cac3e8594e9e27ebe77f"
+  },
+  {
+   "doc_id": "privacy_pl:673601",
+   "section_idx": 7,
+   "text_sha1": "d2db37faf3919354b8dac18173913a4b10b2d09d"
+  },
+  {
+   "doc_id": "privacy_pl:673601",
+   "section_idx": 8,
+   "text_sha1": "f29cc2346dae61060a299a09883f3960158642fa"
+  },
+  {
+   "doc_id": "privacy_pl:673601",
+   "section_idx": 9,
+   "text_sha1": "805aebafa2fd126343a74894e0e8686e5622532f"
+  },
+  {
+   "doc_id": "privacy_pl:673601",
+   "section_idx": 10,
+   "text_sha1": "41a873b9a5a885e958b76b9bbec20610a9500b91"
+  },
+  {
+   "doc_id": "privacy_pl:673601",
+   "section_idx": 11,
+   "text_sha1": "06fc96e3886253f1aa298cf074ad1524f8818e16"
+  },
+  {
+   "doc_id": "privacy_pl:122380",
+   "section_idx": 0,
+   "text_sha1": "97ef9f45a6d9ac02ecef8e997cc09b03caf9ef26"
+  },
+  {
+   "doc_id": "privacy_pl:122380",
+   "section_idx": 1,
+   "text_sha1": "db106e3794c8c76eee24708b3d1105be702df5c7"
+  },
+  {
+   "doc_id": "privacy_pl:122380",
+   "section_idx": 2,
+   "text_sha1": "2ced15de07d74544f31310dd54ffa002ff331501"
+  },
+  {
+   "doc_id": "privacy_pl:122380",
+   "section_idx": 3,
+   "text_sha1": "8b7fbaca2792b15029f7ff74296b00e84db25389"
+  },
+  {
+   "doc_id": "privacy_pl:122380",
+   "section_idx": 4,
+   "text_sha1": "83e33cc9e1f34d23f5d84a58c67bf92f4bebf312"
+  },
+  {
+   "doc_id": "privacy_pl:122380",
+   "section_idx": 5,
+   "text_sha1": "e722e9da24bf77702227af08ec071322165791d5"
+  },
+  {
+   "doc_id": "privacy_pl:122380",
+   "section_idx": 6,
+   "text_sha1": "0bab004069fcf389c1c8416f9fcf665febf31bd5"
+  },
+  {
+   "doc_id": "privacy_pl:122380",
+   "section_idx": 7,
+   "text_sha1": "536dc29f32b85ebaf88f3c79da20ede047711ec3"
+  },
+  {
+   "doc_id": "privacy_pl:122380",
+   "section_idx": 8,
+   "text_sha1": "7472d6c5b9a37c7b3a11210caa6341e15248d305"
+  },
+  {
+   "doc_id": "privacy_pl:122380",
+   "section_idx": 9,
+   "text_sha1": "558e3383a6c33f6a9c88e2e867b59fd332fb3f19"
+  },
+  {
+   "doc_id": "privacy_pl:122380",
+   "section_idx": 10,
+   "text_sha1": "886f04c6989e8e8af08f9a9699b0aacb3381918e"
+  },
+  {
+   "doc_id": "privacy_pl:122380",
+   "section_idx": 11,
+   "text_sha1": "a76defe1b7a34769f703188ed032b171edab72c0"
+  },
+  {
+   "doc_id": "privacy_pl:122380",
+   "section_idx": 12,
+   "text_sha1": "dd56a095529f12d8de5048ed7effbe494fa68798"
+  },
+  {
+   "doc_id": "privacy_pl:122380",
+   "section_idx": 13,
+   "text_sha1": "067265876abc8ef27129d7e01549fd2508e373c1"
+  },
+  {
+   "doc_id": "privacy_pl:122380",
+   "section_idx": 14,
+   "text_sha1": "2b9df21643f27b4a3f9174e4d96d7bd03416e9b9"
+  },
+  {
+   "doc_id": "privacy_pl:122380",
+   "section_idx": 15,
+   "text_sha1": "4e466c206eb7a852fce5d7163a26563a3a136bc7"
+  },
+  {
+   "doc_id": "privacy_pl:122380",
+   "section_idx": 16,
+   "text_sha1": "25b24197e917a219b059f39aea6f69b209cbe577"
+  },
+  {
+   "doc_id": "privacy_pl:122380",
+   "section_idx": 17,
+   "text_sha1": "71c2a74cb4e4cfdf84fe722120e25fbf1e755f1d"
+  },
+  {
+   "doc_id": "privacy_pl:122380",
+   "section_idx": 18,
+   "text_sha1": "9f432e1a77d801907df1ee1a0035e94bd924cc5a"
+  },
+  {
+   "doc_id": "privacy_pl:122380",
+   "section_idx": 19,
+   "text_sha1": "1d5386666c51527aa68f2468783e2f4fe786f9ef"
+  },
+  {
+   "doc_id": "privacy_pl:122380",
+   "section_idx": 20,
+   "text_sha1": "1a8c20e0c9799221756fceece5b78f698dbc5367"
+  },
+  {
+   "doc_id": "privacy_pl:122380",
+   "section_idx": 21,
+   "text_sha1": "4367ec26f0fded0d4876d01dd4f5540bf7ea64e9"
+  },
+  {
+   "doc_id": "privacy_pl:1043002",
+   "section_idx": 0,
+   "text_sha1": "04526cf4240b24e1ac29d7bae1773213a67dc933"
+  },
+  {
+   "doc_id": "privacy_pl:1043002",
+   "section_idx": 1,
+   "text_sha1": "974767165dea189d8bc530dc2b664ab90c5b9630"
+  },
+  {
+   "doc_id": "privacy_pl:1043002",
+   "section_idx": 2,
+   "text_sha1": "0c5803fc6e0e029f92fb57974e07f9fbcec3954f"
+  },
+  {
+   "doc_id": "privacy_pl:1043002",
+   "section_idx": 3,
+   "text_sha1": "1469ac2c990afb0e452855c4c86cef60ff1654d4"
+  },
+  {
+   "doc_id": "privacy_pl:1043002",
+   "section_idx": 4,
+   "text_sha1": "cbc02551e705590502a06fa6b364f6ec7e1266a2"
+  },
+  {
+   "doc_id": "privacy_pl:1043002",
+   "section_idx": 5,
+   "text_sha1": "cb5cb23ed4e30ff1c535c887c4710394305d304e"
+  },
+  {
+   "doc_id": "privacy_pl:1043002",
+   "section_idx": 6,
+   "text_sha1": "82fffe6c0b1d108e408da6b1ea0647a7210f2037"
+  },
+  {
+   "doc_id": "privacy_pl:1043002",
+   "section_idx": 7,
+   "text_sha1": "afeb10419ebfd09f44edef6dc619a3b9ee2db26f"
+  },
+  {
+   "doc_id": "privacy_pl:1043002",
+   "section_idx": 8,
+   "text_sha1": "4d11f218364f22d8febf18df497c3b23c3a556e7"
+  },
+  {
+   "doc_id": "privacy_pl:1043002",
+   "section_idx": 9,
+   "text_sha1": "7228037ce9fe27a99c037762d2e52514fd0dedc9"
+  },
+  {
+   "doc_id": "privacy_pl:1043002",
+   "section_idx": 10,
+   "text_sha1": "435672680a96ea5488c7d58719300961a2af0333"
+  },
+  {
+   "doc_id": "privacy_pl:1043002",
+   "section_idx": 11,
+   "text_sha1": "f7dbc23b824a5ca145569919a0395bc7d6748736"
+  },
+  {
+   "doc_id": "privacy_pl:1043002",
+   "section_idx": 12,
+   "text_sha1": "4b739b87162d991395fea669e7aa61f03c099f3a"
+  },
+  {
+   "doc_id": "privacy_pl:1043002",
+   "section_idx": 13,
+   "text_sha1": "313e094b4741e6aa210c9a9648a420ae5e696350"
+  },
+  {
+   "doc_id": "privacy_pl:1043002",
+   "section_idx": 14,
+   "text_sha1": "f1ae291581e1f4b79c01df6192c204a61400fe59"
+  },
+  {
+   "doc_id": "privacy_pl:1043002",
+   "section_idx": 15,
+   "text_sha1": "29bd8be85c30d417361cfa46bde07eb2416edaed"
+  },
+  {
+   "doc_id": "privacy_pl:1043002",
+   "section_idx": 16,
+   "text_sha1": "0a7d8ec6805075e17ebad66ab748bacb7846ca26"
+  },
+  {
+   "doc_id": "privacy_pl:1043002",
+   "section_idx": 17,
+   "text_sha1": "8d7ba79bee0fefb736be98ee4fc5b52e9e86efe2"
+  },
+  {
+   "doc_id": "privacy_pl:1043002",
+   "section_idx": 18,
+   "text_sha1": "812235c97b621d3896404a7e886aea1a761758bf"
+  },
+  {
+   "doc_id": "privacy_pl:1043002",
+   "section_idx": 19,
+   "text_sha1": "4285c880e7c9705b1e63797daf3385a7b93f1c8b"
+  },
+  {
+   "doc_id": "privacy_pl:1043002",
+   "section_idx": 20,
+   "text_sha1": "5ead4f5f03566dfe7db5a7296a1880978f5eaf5d"
+  },
+  {
+   "doc_id": "privacy_pl:1043002",
+   "section_idx": 21,
+   "text_sha1": "42a1dff243d6a7a7d67b1678a6f13217395ea1a6"
+  },
+  {
+   "doc_id": "privacy_pl:1043002",
+   "section_idx": 22,
+   "text_sha1": "c4bacb0c1c02da902d4c63a148a1a69e4d7d69a3"
+  },
+  {
+   "doc_id": "privacy_pl:1043002",
+   "section_idx": 23,
+   "text_sha1": "c2f5c514bd76c2ed1c9e6cd842a52fe71c81cabb"
+  },
+  {
+   "doc_id": "privacy_pl:1043002",
+   "section_idx": 24,
+   "text_sha1": "2cc55920b9bc25a0847ee649925a8f1464a45be3"
+  },
+  {
+   "doc_id": "privacy_pl:1043002",
+   "section_idx": 25,
+   "text_sha1": "d35e373b500f6bb40ab92742aab3932882d7f307"
+  },
+  {
+   "doc_id": "privacy_pl:1043002",
+   "section_idx": 26,
+   "text_sha1": "24d4eef2b5587eee96772981647eb9990c6a011b"
+  },
+  {
+   "doc_id": "privacy_pl:1043002",
+   "section_idx": 27,
+   "text_sha1": "a8b1cc051f0e6d064991dd53a8c92b92eaa91603"
+  },
+  {
+   "doc_id": "privacy_pl:1043002",
+   "section_idx": 28,
+   "text_sha1": "9aec11c61df97a2db794b35ed4fbddebe4e03178"
+  },
+  {
+   "doc_id": "privacy_pl:619882",
+   "section_idx": 0,
+   "text_sha1": "a0c933d2bccebcdab221a6f58f2196544e75fab7"
+  },
+  {
+   "doc_id": "privacy_pl:619882",
+   "section_idx": 1,
+   "text_sha1": "9affe6adae07e14cf8ffcc26699cf7860444d022"
+  },
+  {
+   "doc_id": "privacy_pl:619882",
+   "section_idx": 2,
+   "text_sha1": "6ea207999f35bb6c794d04bcff4dfd6f7b341507"
+  },
+  {
+   "doc_id": "privacy_pl:619882",
+   "section_idx": 3,
+   "text_sha1": "4fed31d21896db4848d19ddd0b7ed67441c649f1"
+  },
+  {
+   "doc_id": "privacy_pl:83529",
+   "section_idx": 0,
+   "text_sha1": "6c594fbfed85e2d69fc21cdea141b33162ed4826"
+  },
+  {
+   "doc_id": "privacy_pl:83529",
+   "section_idx": 1,
+   "text_sha1": "5b8c0c31f6c47ed5d562973b0d7df25954c81f56"
+  },
+  {
+   "doc_id": "privacy_pl:83529",
+   "section_idx": 2,
+   "text_sha1": "fbd65713cf441f6bb1524cb2fed66eeeac992b2e"
+  },
+  {
+   "doc_id": "privacy_pl:83529",
+   "section_idx": 3,
+   "text_sha1": "bf8b29c0e2fe7650e09a35e129202c5d591d13fc"
+  },
+  {
+   "doc_id": "privacy_pl:83529",
+   "section_idx": 4,
+   "text_sha1": "fb32c5545f1ffb3a086ce559cb56661766aebcda"
+  },
+  {
+   "doc_id": "privacy_pl:83529",
+   "section_idx": 5,
+   "text_sha1": "c9ebcd0b7bff4e65803598ea9b852f521ad0ecde"
+  },
+  {
+   "doc_id": "privacy_pl:83529",
+   "section_idx": 6,
+   "text_sha1": "c70d4d565e348b718c1361e53ca28982b38a8e0b"
+  },
+  {
+   "doc_id": "privacy_pl:83529",
+   "section_idx": 7,
+   "text_sha1": "d465f6cfc738b944dbdf8e437b95dd3725627bdc"
+  },
+  {
+   "doc_id": "privacy_pl:398740",
+   "section_idx": 0,
+   "text_sha1": "1b6203dcd21bbfc91454b7fb59ca839c9d6271ed"
+  },
+  {
+   "doc_id": "privacy_pl:398740",
+   "section_idx": 1,
+   "text_sha1": "4acd191e31e1811517bc2a708d98b09f93229f22"
+  },
+  {
+   "doc_id": "privacy_pl:398740",
+   "section_idx": 2,
+   "text_sha1": "b9e458768728633460d4b8e803da9e7cc84e47e3"
+  },
+  {
+   "doc_id": "privacy_pl:398740",
+   "section_idx": 3,
+   "text_sha1": "109b6a62fabe343eca2181e259dcaad2c6eb06ce"
+  },
+  {
+   "doc_id": "privacy_pl:398740",
+   "section_idx": 4,
+   "text_sha1": "46ab1b519110579366a0c1e665e7f2fb142fe508"
+  },
+  {
+   "doc_id": "privacy_pl:398740",
+   "section_idx": 5,
+   "text_sha1": "5b551f90dfbca1181bb4446310177c4f27f201f6"
+  },
+  {
+   "doc_id": "privacy_pl:398740",
+   "section_idx": 6,
+   "text_sha1": "5ca69754b7df86b3e36a3584871d359a235d896c"
+  },
+  {
+   "doc_id": "privacy_pl:398740",
+   "section_idx": 7,
+   "text_sha1": "3c966afb699fe5ee2a827e63fe54acd0aaf5f484"
+  },
+  {
+   "doc_id": "privacy_pl:398740",
+   "section_idx": 8,
+   "text_sha1": "93341629bbab3120ea39b87361e4300c672f6029"
+  },
+  {
+   "doc_id": "privacy_pl:282394",
+   "section_idx": 0,
+   "text_sha1": "564899577587339a834fb7d237e29e3fbb2a6cc8"
+  },
+  {
+   "doc_id": "privacy_pl:282394",
+   "section_idx": 1,
+   "text_sha1": "54fc3df7daf1dc0967cf0de6784edec8f51eb77f"
+  },
+  {
+   "doc_id": "privacy_pl:282394",
+   "section_idx": 2,
+   "text_sha1": "8bb1bfa53176c693c9f55d02b75143491902f3f6"
+  },
+  {
+   "doc_id": "privacy_pl:282394",
+   "section_idx": 3,
+   "text_sha1": "0138ad538daa0f34c0ad2a2bb45ad12dd53d1fb9"
+  },
+  {
+   "doc_id": "privacy_pl:282394",
+   "section_idx": 4,
+   "text_sha1": "293d97d93261c140646f2085cce669ed332fb43e"
+  },
+  {
+   "doc_id": "privacy_pl:282394",
+   "section_idx": 5,
+   "text_sha1": "41e164e837d85a58094e5a575ecc6ef1ed620f1f"
+  },
+  {
+   "doc_id": "privacy_pl:282394",
+   "section_idx": 6,
+   "text_sha1": "7aab53687e3e7d7d0debee732e5854569e75a54f"
+  },
+  {
+   "doc_id": "privacy_pl:734585",
+   "section_idx": 0,
+   "text_sha1": "b05a2d33c3156436300954db53ac232a7455013e"
+  },
+  {
+   "doc_id": "privacy_pl:734585",
+   "section_idx": 1,
+   "text_sha1": "38f590bf701d6dafb2d346aad0a7652e67155fc3"
+  },
+  {
+   "doc_id": "privacy_pl:734585",
+   "section_idx": 2,
+   "text_sha1": "b9932122f87378db50ecef41db1c140252291365"
+  },
+  {
+   "doc_id": "privacy_pl:734585",
+   "section_idx": 3,
+   "text_sha1": "b2dce15e15d99c12c396667d3b66b866190b589d"
+  },
+  {
+   "doc_id": "privacy_pl:734585",
+   "section_idx": 4,
+   "text_sha1": "adde80a3caae813fe085f75ba9799556b1122df7"
+  },
+  {
+   "doc_id": "privacy_pl:734585",
+   "section_idx": 5,
+   "text_sha1": "a438c929d137c3c727b80b35297876369c5d277b"
+  },
+  {
+   "doc_id": "privacy_pl:734585",
+   "section_idx": 6,
+   "text_sha1": "417ea4232d6a0e7e5bb8f74f66972087ddbc51ac"
+  },
+  {
+   "doc_id": "privacy_pl:526671",
+   "section_idx": 0,
+   "text_sha1": "0590634e741f2043c041b1b7e7f2fe04fd77f99e"
+  },
+  {
+   "doc_id": "privacy_pl:526671",
+   "section_idx": 1,
+   "text_sha1": "922d80252f0b676335750d7025893f5926b34a49"
+  },
+  {
+   "doc_id": "privacy_pl:526671",
+   "section_idx": 2,
+   "text_sha1": "372c164fa2e39761c02f2a8eb1f9b5df87a172dc"
+  },
+  {
+   "doc_id": "privacy_pl:526671",
+   "section_idx": 3,
+   "text_sha1": "543ebcdf1ad3e205e835c4c8a0f8701794d8f9ce"
+  },
+  {
+   "doc_id": "privacy_pl:526671",
+   "section_idx": 4,
+   "text_sha1": "307ad71086c6f9243006d62afd5aba4e06ce6ebb"
+  },
+  {
+   "doc_id": "privacy_pl:526671",
+   "section_idx": 5,
+   "text_sha1": "9376ed2fa189312ed3a5999e629dfef55f68792b"
+  },
+  {
+   "doc_id": "privacy_pl:526671",
+   "section_idx": 6,
+   "text_sha1": "ce68e8a869e2a7d427461487187e7ff61c01c8c8"
+  },
+  {
+   "doc_id": "privacy_pl:526671",
+   "section_idx": 7,
+   "text_sha1": "35f528ea73a426ec6016ac229b6b53e892d84ae9"
+  },
+  {
+   "doc_id": "privacy_pl:526671",
+   "section_idx": 8,
+   "text_sha1": "34a6f048eaf0626870c01527e2366df813a8e6fb"
+  },
+  {
+   "doc_id": "privacy_pl:526671",
+   "section_idx": 9,
+   "text_sha1": "ebfbe329ce3cb7e934b51fe58169ae00f7da08dd"
+  },
+  {
+   "doc_id": "privacy_pl:526671",
+   "section_idx": 10,
+   "text_sha1": "f7854e2e660f7881243c01046227803f36922934"
+  },
+  {
+   "doc_id": "privacy_pl:526671",
+   "section_idx": 11,
+   "text_sha1": "fd87b7d9695a0114ed1676a08e9e4a24de055038"
+  },
+  {
+   "doc_id": "privacy_pl:526671",
+   "section_idx": 12,
+   "text_sha1": "882e860988a46973e32e3704ca890dc22daba845"
+  },
+  {
+   "doc_id": "privacy_pl:526671",
+   "section_idx": 13,
+   "text_sha1": "000c833061f59184117eed504f85519f6a0c8070"
+  },
+  {
+   "doc_id": "privacy_pl:712278",
+   "section_idx": 0,
+   "text_sha1": "dd1185001b47c76708ff23bf12ecf723c4041db2"
+  },
+  {
+   "doc_id": "privacy_pl:712278",
+   "section_idx": 1,
+   "text_sha1": "e15a18383ba470193733e1657fcde372f00b0a64"
+  },
+  {
+   "doc_id": "privacy_pl:712278",
+   "section_idx": 2,
+   "text_sha1": "6ebdeab28c706b788411f8638e59d7486a140896"
+  },
+  {
+   "doc_id": "privacy_pl:712278",
+   "section_idx": 3,
+   "text_sha1": "230441dd1a0c40c6ce2d06f48b034d116c545d43"
+  },
+  {
+   "doc_id": "privacy_pl:712278",
+   "section_idx": 4,
+   "text_sha1": "b104f3e7d63e146371ccd101a156d9c3b58f9d76"
+  },
+  {
+   "doc_id": "privacy_pl:712278",
+   "section_idx": 5,
+   "text_sha1": "dc44e1dd317cc8e8e82fdd8435e287fae09cf1ee"
+  },
+  {
+   "doc_id": "privacy_pl:113915",
+   "section_idx": 0,
+   "text_sha1": "2a6469370acba45dc11009f870fabe3a02e1c200"
+  },
+  {
+   "doc_id": "privacy_pl:113915",
+   "section_idx": 1,
+   "text_sha1": "097daec5f0a7a9bae10bc60e4d08cd0d812f9aca"
+  },
+  {
+   "doc_id": "privacy_pl:113915",
+   "section_idx": 2,
+   "text_sha1": "f3319eca78f66a43b6f94908d3cb5f9244e095f4"
+  },
+  {
+   "doc_id": "privacy_pl:113915",
+   "section_idx": 3,
+   "text_sha1": "0b58c9c4e381c5048f5ce4221b14ecd232997b40"
+  },
+  {
+   "doc_id": "privacy_pl:113915",
+   "section_idx": 4,
+   "text_sha1": "b317f6abc38b4259714ff5132f90b18a85f5fb5a"
+  },
+  {
+   "doc_id": "privacy_pl:113915",
+   "section_idx": 5,
+   "text_sha1": "acddf9ac831e99cd7a50d7ec881bf75bbf2976e4"
+  },
+  {
+   "doc_id": "privacy_pl:113915",
+   "section_idx": 6,
+   "text_sha1": "83d0de5fd27107364044023227f38f823268e121"
+  },
+  {
+   "doc_id": "privacy_pl:113915",
+   "section_idx": 7,
+   "text_sha1": "7c0d86edb67ce4f7974c06fe309eab4ecf727179"
+  },
+  {
+   "doc_id": "privacy_pl:113915",
+   "section_idx": 8,
+   "text_sha1": "b8b3b984e487c59ce3732ee5fbf72e0c070b9f38"
+  },
+  {
+   "doc_id": "privacy_pl:113915",
+   "section_idx": 9,
+   "text_sha1": "486e938e1ca1982a5c52bed26494743be32932b8"
+  },
+  {
+   "doc_id": "privacy_pl:113915",
+   "section_idx": 10,
+   "text_sha1": "13aa8bd50d243c529ea5c74c40f315d67105aa96"
+  },
+  {
+   "doc_id": "privacy_pl:113915",
+   "section_idx": 11,
+   "text_sha1": "4f9b363a6f637f02df0633c86d992ec345257739"
+  },
+  {
+   "doc_id": "privacy_pl:113915",
+   "section_idx": 12,
+   "text_sha1": "f046bdc148dbf3936b064e81aea768db286def5a"
+  },
+  {
+   "doc_id": "privacy_pl:113915",
+   "section_idx": 13,
+   "text_sha1": "1835f7b9443c144f9ad0beb1ae4343af359c43e9"
+  },
+  {
+   "doc_id": "privacy_pl:113915",
+   "section_idx": 14,
+   "text_sha1": "940bc64ad48ae602d303dc295947a69b2ebc4fb8"
+  },
+  {
+   "doc_id": "privacy_pl:846757",
+   "section_idx": 0,
+   "text_sha1": "ea0ba9dcf47509c9b2f467d3ed01095eee886a18"
+  },
+  {
+   "doc_id": "privacy_pl:846757",
+   "section_idx": 1,
+   "text_sha1": "9affe6adae07e14cf8ffcc26699cf7860444d022"
+  },
+  {
+   "doc_id": "privacy_pl:846757",
+   "section_idx": 2,
+   "text_sha1": "be80cf1b543b149e62f8a1d2a8cb5cec8811988e"
+  },
+  {
+   "doc_id": "privacy_pl:122720",
+   "section_idx": 0,
+   "text_sha1": "48bf693e051f2d158dbc009f40ae40a58430a816"
+  },
+  {
+   "doc_id": "privacy_pl:122720",
+   "section_idx": 1,
+   "text_sha1": "539a33b767acdde00ba398e88c76f11fefbd689d"
+  },
+  {
+   "doc_id": "privacy_pl:122720",
+   "section_idx": 2,
+   "text_sha1": "1411354b2f713a9301e2b3012b461caabade8a1c"
+  },
+  {
+   "doc_id": "privacy_pl:122720",
+   "section_idx": 3,
+   "text_sha1": "0a175982453175261e54cfdd7f29e201bc7488b3"
+  },
+  {
+   "doc_id": "privacy_pl:122720",
+   "section_idx": 4,
+   "text_sha1": "2d4cffa55ac49f96b5ec35af2139b69e38cc9282"
+  },
+  {
+   "doc_id": "privacy_pl:122720",
+   "section_idx": 5,
+   "text_sha1": "1f574ebd850bf2354b169ad880e5bb87985f1891"
+  },
+  {
+   "doc_id": "privacy_pl:122720",
+   "section_idx": 6,
+   "text_sha1": "1f872ec80448be45ad2f595ea9ef3800108ea2a8"
+  },
+  {
+   "doc_id": "privacy_pl:122720",
+   "section_idx": 7,
+   "text_sha1": "6b979003baee2644f775e14819ffd498757f3cf0"
+  },
+  {
+   "doc_id": "privacy_pl:122720",
+   "section_idx": 8,
+   "text_sha1": "90e539e727e074f692e9e2fe4de6fff8e2e92271"
+  },
+  {
+   "doc_id": "privacy_pl:122720",
+   "section_idx": 9,
+   "text_sha1": "52e59b6d54bd183981713c48ffcd6d14d69d1da9"
+  },
+  {
+   "doc_id": "privacy_pl:122720",
+   "section_idx": 10,
+   "text_sha1": "429096388f2b510d4bfc0dfeb007c50817b5b1e0"
+  },
+  {
+   "doc_id": "privacy_pl:122720",
+   "section_idx": 11,
+   "text_sha1": "5eeeb60269812be97aa300da6c6538bf485149ed"
+  },
+  {
+   "doc_id": "privacy_pl:989281",
+   "section_idx": 0,
+   "text_sha1": "e141379d650a0b6f53a42343bb686b2ddd5e908b"
+  },
+  {
+   "doc_id": "privacy_pl:989281",
+   "section_idx": 1,
+   "text_sha1": "6d79ff911f605c0ff66cb86f758eae48ddcc8e1d"
+  },
+  {
+   "doc_id": "privacy_pl:989281",
+   "section_idx": 2,
+   "text_sha1": "449e905e58a23944b2a99c1c502f977f7cb5096c"
+  },
+  {
+   "doc_id": "privacy_pl:989281",
+   "section_idx": 3,
+   "text_sha1": "a6b369a8a0133281281aae2b43398cbd7716be70"
+  },
+  {
+   "doc_id": "privacy_pl:989281",
+   "section_idx": 4,
+   "text_sha1": "6e8c52f3a1a2b09ea278b98f368c7e3196d90f5d"
+  },
+  {
+   "doc_id": "privacy_pl:756369",
+   "section_idx": 0,
+   "text_sha1": "457687d1ef18e2fd4559b6db7a3e6893b1db0208"
+  },
+  {
+   "doc_id": "privacy_pl:756369",
+   "section_idx": 1,
+   "text_sha1": "6bf75fb9458bf0cbc5338bf9680c31776f75e303"
+  },
+  {
+   "doc_id": "privacy_pl:756369",
+   "section_idx": 2,
+   "text_sha1": "221d225fc47c85f57959041bed70606c2fd2cc54"
+  },
+  {
+   "doc_id": "privacy_pl:756369",
+   "section_idx": 3,
+   "text_sha1": "a91bd95bb924a2e7468906041307ade0a0ff5fd2"
+  },
+  {
+   "doc_id": "privacy_pl:756369",
+   "section_idx": 4,
+   "text_sha1": "78339ff2d8f6f65a0ab81c74bd8741e1af0a8ca5"
+  },
+  {
+   "doc_id": "privacy_pl:756369",
+   "section_idx": 5,
+   "text_sha1": "08a913cf23e46563372e4c9e8779ec8a06a6a0d5"
+  },
+  {
+   "doc_id": "privacy_pl:756369",
+   "section_idx": 6,
+   "text_sha1": "57e90f7befd60b6d0e0601b8e994e0abce0c9328"
+  },
+  {
+   "doc_id": "privacy_pl:756369",
+   "section_idx": 7,
+   "text_sha1": "d2db37faf3919354b8dac18173913a4b10b2d09d"
+  },
+  {
+   "doc_id": "privacy_pl:756369",
+   "section_idx": 8,
+   "text_sha1": "34623086e81ceacaf3c4b797260c29aab332694b"
+  },
+  {
+   "doc_id": "privacy_pl:152606",
+   "section_idx": 0,
+   "text_sha1": "3d2deaf7a6922e57effa2a19419e256bfe43f2a1"
+  },
+  {
+   "doc_id": "privacy_pl:582232",
+   "section_idx": 0,
+   "text_sha1": "dd2b29734b7e2b31bde6d5bd88d52b6b8c6d9a19"
+  },
+  {
+   "doc_id": "privacy_pl:582232",
+   "section_idx": 1,
+   "text_sha1": "adbacb21c76f5932947d20060176c3d07b4e35e5"
+  },
+  {
+   "doc_id": "privacy_pl:582232",
+   "section_idx": 2,
+   "text_sha1": "e991af24de0f8ef44f557dee619ff20de50bf3e4"
+  },
+  {
+   "doc_id": "privacy_pl:284384",
+   "section_idx": 0,
+   "text_sha1": "ca20680c9fc1313601d87484976f60b466f11ab9"
+  },
+  {
+   "doc_id": "privacy_pl:284384",
+   "section_idx": 1,
+   "text_sha1": "beed8360cf96918a99b4df1e741d57c9cbfa0e66"
+  },
+  {
+   "doc_id": "privacy_pl:284384",
+   "section_idx": 2,
+   "text_sha1": "3656051707776ddaa77ae47f326ae460dd5480c0"
+  },
+  {
+   "doc_id": "privacy_pl:284384",
+   "section_idx": 3,
+   "text_sha1": "0aba055168c939bc34a726895eedb0b54dc8ca7c"
+  },
+  {
+   "doc_id": "privacy_pl:284384",
+   "section_idx": 4,
+   "text_sha1": "1ab995152a51362e013babdb7fc9d446171c4643"
+  },
+  {
+   "doc_id": "privacy_pl:284384",
+   "section_idx": 5,
+   "text_sha1": "273d58e1244244b5a5fabf87988a346b0f9015ff"
+  },
+  {
+   "doc_id": "privacy_pl:284384",
+   "section_idx": 6,
+   "text_sha1": "90b9a7d3669104e029576eb86a3933e7344af375"
+  },
+  {
+   "doc_id": "privacy_pl:284384",
+   "section_idx": 7,
+   "text_sha1": "0d95941fa5601743760306fe2f8e1cafc44fc545"
+  },
+  {
+   "doc_id": "privacy_pl:408748",
+   "section_idx": 0,
+   "text_sha1": "347594c796b2de58aa14b312df5d21d5c9cab8ed"
+  },
+  {
+   "doc_id": "privacy_pl:408748",
+   "section_idx": 1,
+   "text_sha1": "e92088259b9ad957076590cf6246f1e6173086f1"
+  },
+  {
+   "doc_id": "privacy_pl:408748",
+   "section_idx": 2,
+   "text_sha1": "6719195f07179cda58a162ba5d74427a9312578e"
+  },
+  {
+   "doc_id": "privacy_pl:408748",
+   "section_idx": 3,
+   "text_sha1": "e0f633d287f823fe08a92d2783440f6c59a8e40b"
+  },
+  {
+   "doc_id": "privacy_pl:408748",
+   "section_idx": 4,
+   "text_sha1": "96857b6b1dd7adad9c9ef95d2f208624519d3ec8"
+  },
+  {
+   "doc_id": "privacy_pl:80409",
+   "section_idx": 0,
+   "text_sha1": "399c4e00c4f9d86d9685ec8fa279aa06845942c3"
+  },
+  {
+   "doc_id": "privacy_pl:80409",
+   "section_idx": 1,
+   "text_sha1": "e253f28723c54c9d4a9194aa1801e71b3e578300"
+  },
+  {
+   "doc_id": "privacy_pl:80409",
+   "section_idx": 2,
+   "text_sha1": "9995cd1b476f99602d2d610a2de53a71ed669500"
+  },
+  {
+   "doc_id": "privacy_pl:80409",
+   "section_idx": 3,
+   "text_sha1": "ec25c4fec18d9e4d29bc7fd4279e11a1e5c69d93"
+  },
+  {
+   "doc_id": "privacy_pl:80409",
+   "section_idx": 4,
+   "text_sha1": "1d6d718558e8a31b9ff72abe65c2c582c19f11fb"
+  },
+  {
+   "doc_id": "privacy_pl:80409",
+   "section_idx": 5,
+   "text_sha1": "e4a87d50617d32a592e6e84a79d8cb02caa4cf7e"
+  },
+  {
+   "doc_id": "privacy_pl:648023",
+   "section_idx": 0,
+   "text_sha1": "51dd1c20f0891c30539b540ee8dd995804beed90"
+  },
+  {
+   "doc_id": "privacy_pl:648023",
+   "section_idx": 1,
+   "text_sha1": "f92728ea52a1089bef5d500bceba6fc653950b11"
+  },
+  {
+   "doc_id": "privacy_pl:648023",
+   "section_idx": 2,
+   "text_sha1": "7b1a08fd96b806718261407bf2d71db2c94c2318"
+  },
+  {
+   "doc_id": "privacy_pl:648023",
+   "section_idx": 3,
+   "text_sha1": "e90a144e9c14484ab1a7aadaa766ca82bc3fca2e"
+  },
+  {
+   "doc_id": "privacy_pl:648023",
+   "section_idx": 4,
+   "text_sha1": "bf8b369c04f86751c477cae5b7f7cde0a3dc2134"
+  },
+  {
+   "doc_id": "privacy_pl:648023",
+   "section_idx": 5,
+   "text_sha1": "d3cc008d6179bec3e4039630e342cd2ac5372558"
+  },
+  {
+   "doc_id": "privacy_pl:648023",
+   "section_idx": 6,
+   "text_sha1": "3b42f1965f0a056a52b35b34b270005fb0cc705b"
+  },
+  {
+   "doc_id": "privacy_pl:3339",
+   "section_idx": 0,
+   "text_sha1": "7728dad5b79475eda5c5789a7bba88b509e6c338"
+  },
+  {
+   "doc_id": "privacy_pl:3339",
+   "section_idx": 1,
+   "text_sha1": "55a3679e92f1a5cc785f4ad8951c3097497f5310"
+  },
+  {
+   "doc_id": "privacy_pl:3339",
+   "section_idx": 2,
+   "text_sha1": "acd3b535fd57ba5fd619230d383383afa0696de0"
+  },
+  {
+   "doc_id": "privacy_pl:3339",
+   "section_idx": 3,
+   "text_sha1": "41d3fae221cfba2ff9064c150f1186f88c444aa7"
+  },
+  {
+   "doc_id": "privacy_pl:3339",
+   "section_idx": 4,
+   "text_sha1": "2ea015751302c71d6d7ddff1d651014178652e4e"
+  },
+  {
+   "doc_id": "privacy_pl:3339",
+   "section_idx": 5,
+   "text_sha1": "54498cb2d11f4fa3627eb2c875e31fc402757783"
+  },
+  {
+   "doc_id": "privacy_pl:3339",
+   "section_idx": 6,
+   "text_sha1": "bfc6ee8f08a75bef66d60b5c33dfb820ea7d9406"
+  },
+  {
+   "doc_id": "privacy_pl:3339",
+   "section_idx": 7,
+   "text_sha1": "3643bfdfb33228585152463c0a4fec59784e7337"
+  },
+  {
+   "doc_id": "privacy_pl:3339",
+   "section_idx": 8,
+   "text_sha1": "c1e823204216a309394b29cf2e612a7cd6760c85"
+  },
+  {
+   "doc_id": "privacy_pl:491240",
+   "section_idx": 0,
+   "text_sha1": "2eae3bed67834cb71738ab12e707166e304fda66"
+  },
+  {
+   "doc_id": "privacy_pl:491240",
+   "section_idx": 1,
+   "text_sha1": "9ce15d5d1e55327389dc7657701e58ee3757a460"
+  },
+  {
+   "doc_id": "privacy_pl:491240",
+   "section_idx": 2,
+   "text_sha1": "0047efa540d28b7c885365dee18cba7cc7b7e027"
+  },
+  {
+   "doc_id": "privacy_pl:491240",
+   "section_idx": 3,
+   "text_sha1": "a98d795f24b39364e83ff7caf13ed0443c3ee501"
+  },
+  {
+   "doc_id": "privacy_pl:491240",
+   "section_idx": 4,
+   "text_sha1": "a9d5622c28aae7e1bc0a99d54bbb6d1c02621464"
+  },
+  {
+   "doc_id": "privacy_pl:491240",
+   "section_idx": 5,
+   "text_sha1": "0189d37d14e6b88ca3849dcc1f77a1fb9d6a7c4a"
+  },
+  {
+   "doc_id": "privacy_pl:491240",
+   "section_idx": 6,
+   "text_sha1": "e2f9bb32099044b3013a0ec8e1b4b27fbdd74c35"
+  },
+  {
+   "doc_id": "privacy_pl:491240",
+   "section_idx": 7,
+   "text_sha1": "d148a7416245c27753186ee46fda36364513ff45"
+  },
+  {
+   "doc_id": "privacy_pl:370438",
+   "section_idx": 0,
+   "text_sha1": "911e0bb0ccf92aa4866bc53635e19e83550af68d"
+  },
+  {
+   "doc_id": "privacy_pl:370438",
+   "section_idx": 1,
+   "text_sha1": "730ea8c6ed562e829106e1ecaf6dc7e025ab4da3"
+  },
+  {
+   "doc_id": "privacy_pl:370438",
+   "section_idx": 2,
+   "text_sha1": "bda9bb299ad85da06ca0b92ec6f29691774532df"
+  },
+  {
+   "doc_id": "privacy_pl:370438",
+   "section_idx": 3,
+   "text_sha1": "293d97d93261c140646f2085cce669ed332fb43e"
+  },
+  {
+   "doc_id": "privacy_pl:370438",
+   "section_idx": 4,
+   "text_sha1": "54f0f20f31860328829d2c0ccb477ded58984768"
+  },
+  {
+   "doc_id": "privacy_pl:195546",
+   "section_idx": 0,
+   "text_sha1": "7eb0c502041c75c102ecfaf9d409d35a441b0c1d"
+  },
+  {
+   "doc_id": "privacy_pl:195546",
+   "section_idx": 1,
+   "text_sha1": "bccec03c993c957ad96eeb339b592c38dbf1a84e"
+  },
+  {
+   "doc_id": "privacy_pl:195546",
+   "section_idx": 2,
+   "text_sha1": "c83683e0ec2d18d9d519078bb98b4fb62712abda"
+  },
+  {
+   "doc_id": "privacy_pl:195546",
+   "section_idx": 3,
+   "text_sha1": "db3a5db3a10fee111bc8a09e192a53fd306dad09"
+  },
+  {
+   "doc_id": "privacy_pl:195546",
+   "section_idx": 4,
+   "text_sha1": "d8487eeb70b63c196c451486e33f0d8255a1db42"
+  },
+  {
+   "doc_id": "privacy_pl:846720",
+   "section_idx": 0,
+   "text_sha1": "fa5c931dcb074ecbd2d505c268568d4349834c09"
+  },
+  {
+   "doc_id": "privacy_pl:846720",
+   "section_idx": 1,
+   "text_sha1": "a43052358c6c529ae5e3269c391958368b8ea0c8"
+  },
+  {
+   "doc_id": "privacy_pl:846720",
+   "section_idx": 2,
+   "text_sha1": "dfc74a948db34776f45e7621f8217aaabfca1d00"
+  },
+  {
+   "doc_id": "privacy_pl:846720",
+   "section_idx": 3,
+   "text_sha1": "13753157d0f1af2eb76b42d2b5657f714a79e857"
+  },
+  {
+   "doc_id": "privacy_pl:804320",
+   "section_idx": 0,
+   "text_sha1": "90abde356937be4184dbdc6a98f30b9835581baf"
+  },
+  {
+   "doc_id": "privacy_pl:804320",
+   "section_idx": 1,
+   "text_sha1": "3be2c8c4ebb4ffe55b88e489baf3b065de71f1dc"
+  },
+  {
+   "doc_id": "privacy_pl:804320",
+   "section_idx": 2,
+   "text_sha1": "b569b38cffe4198330a4a349372e9eeb4343c289"
+  },
+  {
+   "doc_id": "privacy_pl:804320",
+   "section_idx": 3,
+   "text_sha1": "c7a7680f44f59e03e8daaf8bd2d9d0a524199ead"
+  },
+  {
+   "doc_id": "privacy_pl:804320",
+   "section_idx": 4,
+   "text_sha1": "dad36b8f7102e4b2830b48ea74a0fc20dac17c55"
+  },
+  {
+   "doc_id": "privacy_pl:804320",
+   "section_idx": 5,
+   "text_sha1": "d58fe39224c0b0f844f7b9977cbe12266ba144b5"
+  },
+  {
+   "doc_id": "privacy_pl:804320",
+   "section_idx": 6,
+   "text_sha1": "a534c7762eccc4d329452a263c47b800f7971355"
+  },
+  {
+   "doc_id": "privacy_pl:1021766",
+   "section_idx": 0,
+   "text_sha1": "73a8f02c4d4988c128abb82c57d54f347c7194ed"
+  },
+  {
+   "doc_id": "privacy_pl:1021766",
+   "section_idx": 1,
+   "text_sha1": "5b7130a35e4283fdafe01e96e031872b750e656e"
+  },
+  {
+   "doc_id": "privacy_pl:1021766",
+   "section_idx": 2,
+   "text_sha1": "791af29a234a153d0324b1362cbd44ffe2644685"
+  },
+  {
+   "doc_id": "privacy_pl:1021766",
+   "section_idx": 3,
+   "text_sha1": "05de07ede8012d5276eeb05301bb610a4df639b0"
+  },
+  {
+   "doc_id": "privacy_pl:1021766",
+   "section_idx": 4,
+   "text_sha1": "c24a2e930d1dda39b01275b78e831aea53db9514"
+  },
+  {
+   "doc_id": "privacy_pl:1021766",
+   "section_idx": 5,
+   "text_sha1": "691d9341a6f0ee9d45ebf7b9ed8154a432610414"
+  },
+  {
+   "doc_id": "privacy_pl:1021766",
+   "section_idx": 6,
+   "text_sha1": "73f576be31ca9fec2cd39986be3cc16bb66cff68"
+  },
+  {
+   "doc_id": "privacy_pl:1021766",
+   "section_idx": 7,
+   "text_sha1": "846e929d47d0f1355729dc817a251b6377c8b905"
+  },
+  {
+   "doc_id": "privacy_pl:1021766",
+   "section_idx": 8,
+   "text_sha1": "8b2fd37c6cee1934d550b671c1c0cf4b95cfac9e"
+  },
+  {
+   "doc_id": "privacy_pl:1021766",
+   "section_idx": 9,
+   "text_sha1": "88b1278a1b15c6fc9b4c16b316fc3b0e5746a7a8"
+  },
+  {
+   "doc_id": "privacy_pl:1021766",
+   "section_idx": 10,
+   "text_sha1": "5bef001aef999e06e773c02028a714ed3df55568"
+  },
+  {
+   "doc_id": "privacy_pl:1042543",
+   "section_idx": 0,
+   "text_sha1": "f7ddf06038f5571aa2a5eea70d15302c6f566cdb"
+  },
+  {
+   "doc_id": "privacy_pl:1042543",
+   "section_idx": 1,
+   "text_sha1": "ed318b64a1d4b3c307027c126ca246a09935bc62"
+  },
+  {
+   "doc_id": "privacy_pl:1042543",
+   "section_idx": 2,
+   "text_sha1": "18c567c8cb863321f0306c5cb52ee5d03446aca9"
+  },
+  {
+   "doc_id": "privacy_pl:1042543",
+   "section_idx": 3,
+   "text_sha1": "d074bb94e9dd6c8d816e63cef82225fee5ad143b"
+  },
+  {
+   "doc_id": "privacy_pl:1042543",
+   "section_idx": 4,
+   "text_sha1": "2760487dc73d722a4e889a7cb7a2894494e956ba"
+  },
+  {
+   "doc_id": "privacy_pl:1042543",
+   "section_idx": 5,
+   "text_sha1": "4c6568aadbdcd1f83cc9ce06d713b53de37fca39"
+  },
+  {
+   "doc_id": "privacy_pl:1042543",
+   "section_idx": 6,
+   "text_sha1": "8d195cd936ef2330fbe4b0c8ec1f20fd746768cb"
+  },
+  {
+   "doc_id": "privacy_pl:1042543",
+   "section_idx": 7,
+   "text_sha1": "e1804cfee5233ba62c358ad8294e49b390e36827"
+  },
+  {
+   "doc_id": "privacy_pl:1042543",
+   "section_idx": 8,
+   "text_sha1": "c237432c582cbb8fb549da3dfdda3aed7a01212d"
+  },
+  {
+   "doc_id": "privacy_pl:1042543",
+   "section_idx": 9,
+   "text_sha1": "20512017b2c263df9eeb69aeaa2b1306d6f6d9e4"
+  },
+  {
+   "doc_id": "privacy_pl:319644",
+   "section_idx": 0,
+   "text_sha1": "b36fccbfb4eac0a73471945206e5a734e37f949c"
+  },
+  {
+   "doc_id": "privacy_pl:319644",
+   "section_idx": 1,
+   "text_sha1": "0246b0932a33ecad207222448ad54fad7d5dc7ef"
+  },
+  {
+   "doc_id": "privacy_pl:319644",
+   "section_idx": 2,
+   "text_sha1": "4c9e31b5467f43de19c004970b20d97192a05ecc"
+  },
+  {
+   "doc_id": "privacy_pl:319644",
+   "section_idx": 3,
+   "text_sha1": "db3654ccbc84484fbae6382b26ae7ca023d41a92"
+  },
+  {
+   "doc_id": "privacy_pl:319644",
+   "section_idx": 4,
+   "text_sha1": "d18510a5fd179c914af5874052f97b966ec317cb"
+  },
+  {
+   "doc_id": "privacy_pl:319644",
+   "section_idx": 5,
+   "text_sha1": "b9b1698157c595c9203b90664f446ec45491b78c"
+  },
+  {
+   "doc_id": "privacy_pl:319644",
+   "section_idx": 6,
+   "text_sha1": "7b32ed1ba7a401e85397b49a2817901bca5d75c5"
+  },
+  {
+   "doc_id": "privacy_pl:319644",
+   "section_idx": 7,
+   "text_sha1": "c8b4fd60b5e4730e7ed9ba0a289405d4c4fa3023"
+  },
+  {
+   "doc_id": "privacy_pl:319644",
+   "section_idx": 8,
+   "text_sha1": "312f18f2abb2a6733375d6efad444894c5376ec9"
+  },
+  {
+   "doc_id": "privacy_pl:319644",
+   "section_idx": 9,
+   "text_sha1": "e73d85d188e3c7c6e81adf93c55adda56cc8d847"
+  },
+  {
+   "doc_id": "privacy_pl:319644",
+   "section_idx": 10,
+   "text_sha1": "b31f5cba6806907b86d7ae231cbe7ea88899d052"
+  },
+  {
+   "doc_id": "privacy_pl:319644",
+   "section_idx": 11,
+   "text_sha1": "02cec4e7e52682d02201849c109e5b3b28963324"
+  },
+  {
+   "doc_id": "privacy_pl:319644",
+   "section_idx": 12,
+   "text_sha1": "ab2c9d0a09ac7b89683d409d0f1de577b10b530d"
+  },
+  {
+   "doc_id": "privacy_pl:319644",
+   "section_idx": 13,
+   "text_sha1": "a66aeaf24e5f482ec7428560cdeb2e07bc2b769d"
+  },
+  {
+   "doc_id": "privacy_pl:319644",
+   "section_idx": 14,
+   "text_sha1": "bc06000f6bf8e492cfa5023eba735cb1f5813c3f"
+  },
+  {
+   "doc_id": "privacy_pl:319644",
+   "section_idx": 15,
+   "text_sha1": "ad5efe7f7b8e136c8a111eac12b94931aae7dec5"
+  },
+  {
+   "doc_id": "privacy_pl:319644",
+   "section_idx": 16,
+   "text_sha1": "44e8194d90af997ded2d1e7faa1a327f61ab0479"
+  },
+  {
+   "doc_id": "privacy_pl:319644",
+   "section_idx": 17,
+   "text_sha1": "87af88886e272193580d1fa7023f83879a29b42b"
+  },
+  {
+   "doc_id": "privacy_pl:319644",
+   "section_idx": 18,
+   "text_sha1": "3e7196b44ce564ed0f55ea16d63079d28b9c9182"
+  },
+  {
+   "doc_id": "privacy_pl:140870",
+   "section_idx": 0,
+   "text_sha1": "6be125680addcf14319cfbb2a70e4e3c17c1158a"
+  },
+  {
+   "doc_id": "privacy_pl:140870",
+   "section_idx": 1,
+   "text_sha1": "14e86f5f975e76e4c9a6467c3a137007a4119843"
+  },
+  {
+   "doc_id": "privacy_pl:140870",
+   "section_idx": 2,
+   "text_sha1": "476f7d9bd153537cf918a1b3fbf09fec1fba36e9"
+  },
+  {
+   "doc_id": "privacy_pl:140870",
+   "section_idx": 3,
+   "text_sha1": "2f1ea552b65ec499e791fa78331262465579aad7"
+  },
+  {
+   "doc_id": "privacy_pl:34577",
+   "section_idx": 0,
+   "text_sha1": "b4881060b433b05dc7f7570be5311fe64cfb1583"
+  },
+  {
+   "doc_id": "privacy_pl:34577",
+   "section_idx": 1,
+   "text_sha1": "2775b47780e54cd2b5479d9e2d6266028647f994"
+  },
+  {
+   "doc_id": "privacy_pl:34577",
+   "section_idx": 2,
+   "text_sha1": "5c35f315b8202f8a1890333c566fe383958bda77"
+  },
+  {
+   "doc_id": "privacy_pl:34577",
+   "section_idx": 3,
+   "text_sha1": "86ed5bb134242198c000fff7bf5c915d8c7dfaac"
+  },
+  {
+   "doc_id": "privacy_pl:34577",
+   "section_idx": 4,
+   "text_sha1": "96d7c4b09df7df7bfcfd1a2b9ca8f9463fd4e563"
+  },
+  {
+   "doc_id": "privacy_pl:34577",
+   "section_idx": 5,
+   "text_sha1": "a6ccfba2b17fd88f2d64dec41a8f72f6fa58932e"
+  },
+  {
+   "doc_id": "privacy_pl:34577",
+   "section_idx": 6,
+   "text_sha1": "d90725de776e7f99c61ef642ec559279bc3fe7c9"
+  },
+  {
+   "doc_id": "privacy_pl:34577",
+   "section_idx": 7,
+   "text_sha1": "e0c57e18a5a8ad6ec6903a9fbc492bfdf1d3b948"
+  },
+  {
+   "doc_id": "privacy_pl:34577",
+   "section_idx": 8,
+   "text_sha1": "0fa05f10359001200b16a73257d42ad789f158bb"
+  },
+  {
+   "doc_id": "privacy_pl:34577",
+   "section_idx": 9,
+   "text_sha1": "0093c66523fd35b181789d4081cf087196c838f5"
+  },
+  {
+   "doc_id": "privacy_pl:34577",
+   "section_idx": 10,
+   "text_sha1": "3f2cc646a885ddb2e3fa9306d8932fb23fafee12"
+  },
+  {
+   "doc_id": "privacy_pl:603404",
+   "section_idx": 0,
+   "text_sha1": "04342ec0eee707a3a23a5ad081c8a48b2025afdf"
+  },
+  {
+   "doc_id": "privacy_pl:603404",
+   "section_idx": 1,
+   "text_sha1": "5c89baaba1529b4da9bf3b3c255bdb2bbd677d1d"
+  },
+  {
+   "doc_id": "privacy_pl:603404",
+   "section_idx": 2,
+   "text_sha1": "0ed98a7ca9577a65b5534bd88d209d0b62f1c96e"
+  },
+  {
+   "doc_id": "privacy_pl:781232",
+   "section_idx": 0,
+   "text_sha1": "289b43b4308ab5c1d346ea06eb14b5eb4ad79050"
+  },
+  {
+   "doc_id": "privacy_pl:781232",
+   "section_idx": 1,
+   "text_sha1": "0dd298fbf5bc7137b16f960da2a16dd715501e81"
+  },
+  {
+   "doc_id": "privacy_pl:781232",
+   "section_idx": 2,
+   "text_sha1": "953cb82873a4c1ce00d2b513720c7be2a6cfff85"
+  },
+  {
+   "doc_id": "privacy_pl:781232",
+   "section_idx": 3,
+   "text_sha1": "172e5d26854cc309adada72d61cfd828bcc4504d"
+  },
+  {
+   "doc_id": "privacy_pl:781232",
+   "section_idx": 4,
+   "text_sha1": "f493133ea44560005672e95690ee50a7b35eb4a9"
+  },
+  {
+   "doc_id": "privacy_pl:781232",
+   "section_idx": 5,
+   "text_sha1": "1462ad116c3f51d027dc5dbcb80593d0d27d38f3"
+  },
+  {
+   "doc_id": "privacy_pl:781232",
+   "section_idx": 6,
+   "text_sha1": "2611da98ff814f8302a048aa60e1a3985d64e316"
+  },
+  {
+   "doc_id": "privacy_pl:781232",
+   "section_idx": 7,
+   "text_sha1": "872ecee8cf28fe8bc6363d887710a44c939aac5c"
+  },
+  {
+   "doc_id": "privacy_pl:847132",
+   "section_idx": 0,
+   "text_sha1": "b964af5df225bf5b49ef95e46dd15d8693265d3d"
+  },
+  {
+   "doc_id": "privacy_pl:847132",
+   "section_idx": 1,
+   "text_sha1": "af4f4d9c86325f37971047d70424776c72f28393"
+  },
+  {
+   "doc_id": "privacy_pl:687226",
+   "section_idx": 0,
+   "text_sha1": "25137c430a45bbdbddca3471a0d86400ce9639c4"
+  },
+  {
+   "doc_id": "privacy_pl:687226",
+   "section_idx": 1,
+   "text_sha1": "4c8334fefc657811b187edd60104bb91d994e04b"
+  },
+  {
+   "doc_id": "privacy_pl:687226",
+   "section_idx": 2,
+   "text_sha1": "8328e77cc285a3b914caaf6d2b0d8edd479bce79"
+  },
+  {
+   "doc_id": "privacy_pl:687226",
+   "section_idx": 3,
+   "text_sha1": "b063d19bf6be1433b6d737c251549daa60717ea6"
+  },
+  {
+   "doc_id": "privacy_pl:687226",
+   "section_idx": 4,
+   "text_sha1": "aeee099935efbf12810434c15cab104d9dc38ef4"
+  },
+  {
+   "doc_id": "privacy_pl:687226",
+   "section_idx": 5,
+   "text_sha1": "0b538b5481d909b595529be9340b7698227fb777"
+  },
+  {
+   "doc_id": "privacy_pl:687226",
+   "section_idx": 6,
+   "text_sha1": "64ed9173381e454912cd55fe8173cdc9d3faa79e"
+  },
+  {
+   "doc_id": "privacy_pl:687226",
+   "section_idx": 7,
+   "text_sha1": "4be8faf51fb330317149bcc9730e1fe3425113df"
+  },
+  {
+   "doc_id": "privacy_pl:687226",
+   "section_idx": 8,
+   "text_sha1": "3478d03238cb7b7eab3df39c93fbedbc9366ebb6"
+  },
+  {
+   "doc_id": "privacy_pl:687226",
+   "section_idx": 9,
+   "text_sha1": "a035c698f585b6006456f84943132740a1a0b13c"
+  },
+  {
+   "doc_id": "privacy_pl:687226",
+   "section_idx": 10,
+   "text_sha1": "c1a3ec47048f62f2f198cea4012487e75679e0a5"
+  },
+  {
+   "doc_id": "privacy_pl:198423",
+   "section_idx": 0,
+   "text_sha1": "c9815335d9d39d1b16f0537f884d66228935bd67"
+  },
+  {
+   "doc_id": "privacy_pl:198423",
+   "section_idx": 1,
+   "text_sha1": "dc507fe9c35cd79baf5602fe345e5e04b13e883c"
+  },
+  {
+   "doc_id": "privacy_pl:198423",
+   "section_idx": 2,
+   "text_sha1": "16b719d02bbb7d74680a812629cca48fee8995dd"
+  },
+  {
+   "doc_id": "privacy_pl:463506",
+   "section_idx": 0,
+   "text_sha1": "46b66b917e58fa7be3e33ce73b2b52ca3b7bed47"
+  },
+  {
+   "doc_id": "privacy_pl:463506",
+   "section_idx": 1,
+   "text_sha1": "29dcadd6a291c5f45cc6225674271389b0d752d4"
+  },
+  {
+   "doc_id": "privacy_pl:463506",
+   "section_idx": 2,
+   "text_sha1": "dd66e61384176f13d34e6039472b67d3f73e6e48"
+  },
+  {
+   "doc_id": "privacy_pl:463506",
+   "section_idx": 3,
+   "text_sha1": "8fdbc5b70eb3be1a1339ea3820ff4603efff1807"
+  },
+  {
+   "doc_id": "privacy_pl:463506",
+   "section_idx": 4,
+   "text_sha1": "51611bd630c7d8b627ab7843e7997a63b84e4bd1"
+  },
+  {
+   "doc_id": "privacy_pl:463506",
+   "section_idx": 5,
+   "text_sha1": "ad8ee31f84ca6209f4e3bf40ee5d4a33382b3a27"
+  },
+  {
+   "doc_id": "privacy_pl:463506",
+   "section_idx": 6,
+   "text_sha1": "4f12d2ac71872976893a406e5b3570ef6fac0fb0"
+  },
+  {
+   "doc_id": "privacy_pl:463506",
+   "section_idx": 7,
+   "text_sha1": "eef8792c4429219be931779080ea3b409130c8e6"
+  },
+  {
+   "doc_id": "privacy_pl:463506",
+   "section_idx": 8,
+   "text_sha1": "96ed5587fbdc5e9f8e448f40066e4aed3da4b40a"
+  },
+  {
+   "doc_id": "privacy_pl:463506",
+   "section_idx": 9,
+   "text_sha1": "36eb670894f26c2ede2ee6486901486970ec0bc1"
+  },
+  {
+   "doc_id": "privacy_pl:463506",
+   "section_idx": 10,
+   "text_sha1": "df309c79eb5f180c9c6bcd312ab87f1ee9dd8347"
+  },
+  {
+   "doc_id": "privacy_pl:463506",
+   "section_idx": 11,
+   "text_sha1": "cdfa46da321c43bf09ae907d5a54ebbd63e2900a"
+  },
+  {
+   "doc_id": "privacy_pl:463506",
+   "section_idx": 12,
+   "text_sha1": "dd27b2458c691aaf45159e82d1e2f5bf5961ce09"
+  },
+  {
+   "doc_id": "privacy_pl:463506",
+   "section_idx": 13,
+   "text_sha1": "0d9e64a592707c97df6d014a68458740a5437d01"
+  },
+  {
+   "doc_id": "privacy_pl:463506",
+   "section_idx": 14,
+   "text_sha1": "a759d777b3d9a9ed50b113197654d8679c00efeb"
+  },
+  {
+   "doc_id": "privacy_pl:463506",
+   "section_idx": 15,
+   "text_sha1": "cca78cf39fd4769b72a0bb80e1f4b528b840d0e3"
+  },
+  {
+   "doc_id": "privacy_pl:463506",
+   "section_idx": 16,
+   "text_sha1": "c9bcab4d19e9f851dfd9805d217d8e7d745e250d"
+  },
+  {
+   "doc_id": "privacy_pl:463506",
+   "section_idx": 17,
+   "text_sha1": "cfa4bd614771d462a0388fc281153b791f8aaac0"
+  },
+  {
+   "doc_id": "privacy_pl:463506",
+   "section_idx": 18,
+   "text_sha1": "a3574b9adca801202b3f7d683582026b5ce45263"
+  },
+  {
+   "doc_id": "privacy_pl:463506",
+   "section_idx": 19,
+   "text_sha1": "2bd3f55444991c75c437bbe11cc62fe89c673fb3"
+  },
+  {
+   "doc_id": "privacy_pl:463506",
+   "section_idx": 20,
+   "text_sha1": "2f8f3c8139550aec2e89d4dab5ec7a0f8fb45eae"
+  },
+  {
+   "doc_id": "privacy_pl:463506",
+   "section_idx": 21,
+   "text_sha1": "015a6bc1e7e1a19d9b477787bec18a4ced7af235"
+  },
+  {
+   "doc_id": "privacy_pl:463506",
+   "section_idx": 22,
+   "text_sha1": "218b9181fb988044f9ae5783121334bb18104a46"
+  },
+  {
+   "doc_id": "privacy_pl:1021761",
+   "section_idx": 0,
+   "text_sha1": "d6640f20d7c08063aae12ae6a8f323bc007817f5"
+  },
+  {
+   "doc_id": "privacy_pl:1021761",
+   "section_idx": 1,
+   "text_sha1": "08fabfb1445331ae368fb73a44060b307507ed6c"
+  },
+  {
+   "doc_id": "privacy_pl:1021761",
+   "section_idx": 2,
+   "text_sha1": "f0b6f29f65261d3e621993505371fe233d09787d"
+  },
+  {
+   "doc_id": "privacy_pl:1021761",
+   "section_idx": 3,
+   "text_sha1": "c12fed2c8817191383b632b2d9a9bfa4658aceee"
+  },
+  {
+   "doc_id": "privacy_pl:1021761",
+   "section_idx": 4,
+   "text_sha1": "4fc8d8175dcddfceae3061f462112361122ba6f6"
+  },
+  {
+   "doc_id": "privacy_pl:1021761",
+   "section_idx": 5,
+   "text_sha1": "0cb9a52dd096c3a93b5ef891802feeb139cdc12c"
+  },
+  {
+   "doc_id": "privacy_pl:1021761",
+   "section_idx": 6,
+   "text_sha1": "d7ebff3a8bd9f1574b1feba3c84aceac81d79f24"
+  },
+  {
+   "doc_id": "privacy_pl:1021761",
+   "section_idx": 7,
+   "text_sha1": "9fb4b6b72608d999309a787803ae384bc17e278a"
+  },
+  {
+   "doc_id": "privacy_pl:1021761",
+   "section_idx": 8,
+   "text_sha1": "0ed359e4a9bdd1a2094e2d66ef5c2acd24e670c3"
+  },
+  {
+   "doc_id": "privacy_pl:1021761",
+   "section_idx": 9,
+   "text_sha1": "bc7580d76da6a456d370970b5d5dfbccd860923b"
+  },
+  {
+   "doc_id": "privacy_pl:1021761",
+   "section_idx": 10,
+   "text_sha1": "5ac24fd9cc52fd0fec5a6fb02725d53ee88d98e9"
+  },
+  {
+   "doc_id": "privacy_pl:1021761",
+   "section_idx": 11,
+   "text_sha1": "228a4889646d4172403ef16bbd51c23abf7be4bc"
+  },
+  {
+   "doc_id": "privacy_pl:1021761",
+   "section_idx": 12,
+   "text_sha1": "65bb2fd686650db36ca20c5446a0304898674b1c"
+  },
+  {
+   "doc_id": "privacy_pl:1021761",
+   "section_idx": 13,
+   "text_sha1": "b5bfbc23f85a1a316388af41da4423d64800cfea"
+  },
+  {
+   "doc_id": "privacy_pl:1021761",
+   "section_idx": 14,
+   "text_sha1": "8558297d8329e6cafe5a7f1e861aeecb8bb93b5a"
+  },
+  {
+   "doc_id": "privacy_pl:1021761",
+   "section_idx": 15,
+   "text_sha1": "2ba303562a95f57ceffe55b62ecad21ad8bc4aed"
+  },
+  {
+   "doc_id": "privacy_pl:1021761",
+   "section_idx": 16,
+   "text_sha1": "fbe640acf968c5e8f2a4ee5a72de0451c52e703c"
+  },
+  {
+   "doc_id": "privacy_pl:1021761",
+   "section_idx": 17,
+   "text_sha1": "d28922bf14e0496124808412ca5d84f93f1e80c6"
+  },
+  {
+   "doc_id": "privacy_pl:1021761",
+   "section_idx": 18,
+   "text_sha1": "7fbe4111923cc6b0ad05153af842806c0fff9337"
+  },
+  {
+   "doc_id": "privacy_pl:1021761",
+   "section_idx": 19,
+   "text_sha1": "ead40bbb75c34dc6d4fdb048f59f7ca47981c4a1"
+  },
+  {
+   "doc_id": "privacy_pl:1021761",
+   "section_idx": 20,
+   "text_sha1": "25ba6fe6c75af95d9062fafe2b5c0bd07f7f6ef1"
+  },
+  {
+   "doc_id": "privacy_pl:1021761",
+   "section_idx": 21,
+   "text_sha1": "406ff0794ea078cecc18048d2df2fdd3cfd5730f"
+  },
+  {
+   "doc_id": "privacy_pl:1021761",
+   "section_idx": 22,
+   "text_sha1": "28f719e1c28290e277d3a0c61b4b36b460ad0b0b"
+  },
+  {
+   "doc_id": "privacy_pl:1021761",
+   "section_idx": 23,
+   "text_sha1": "160005650a184c68f6841f59fbadaddd580d375a"
+  },
+  {
+   "doc_id": "privacy_pl:1021761",
+   "section_idx": 24,
+   "text_sha1": "849e1b8f59024e482d7ebb72ab5293cd1dc227a3"
+  },
+  {
+   "doc_id": "privacy_pl:1021761",
+   "section_idx": 25,
+   "text_sha1": "93f5a663d7ace2a2ad982fafa1745d842e6c2d90"
+  },
+  {
+   "doc_id": "privacy_pl:1021761",
+   "section_idx": 26,
+   "text_sha1": "74a711182053e1742a90df6ccaf9f8996f79777a"
+  },
+  {
+   "doc_id": "privacy_pl:1021761",
+   "section_idx": 27,
+   "text_sha1": "15757f8efcbe31a11903fb42d92afb787f1461cf"
+  },
+  {
+   "doc_id": "privacy_pl:1021761",
+   "section_idx": 28,
+   "text_sha1": "c7b4c8e1cc9ae099865d141d1427be8495f85d79"
+  },
+  {
+   "doc_id": "privacy_pl:1021761",
+   "section_idx": 29,
+   "text_sha1": "b7ba03c5f8c5bdf19ddd802e8d3c8590dc90951d"
+  },
+  {
+   "doc_id": "privacy_pl:1021761",
+   "section_idx": 30,
+   "text_sha1": "438547fe2f2dec65bedd0f97ec3b7d46eb18461e"
+  },
+  {
+   "doc_id": "privacy_pl:785410",
+   "section_idx": 0,
+   "text_sha1": "148e20511c4b4d62d378e9c1835cd1ec8a343497"
+  },
+  {
+   "doc_id": "privacy_pl:785410",
+   "section_idx": 1,
+   "text_sha1": "d15521610c99958c5d4af4d5e00de575893483af"
+  },
+  {
+   "doc_id": "privacy_pl:785410",
+   "section_idx": 2,
+   "text_sha1": "dd9d29f45a61bedb9b7d3533303b216dbf1a93cf"
+  },
+  {
+   "doc_id": "privacy_pl:785410",
+   "section_idx": 3,
+   "text_sha1": "bb8e30bfe7dc3414cc2ae9d8176ca8e6ed1eed5a"
+  },
+  {
+   "doc_id": "privacy_pl:785410",
+   "section_idx": 4,
+   "text_sha1": "db7a2a861df073e27add79a7b9efe24a764e4381"
+  },
+  {
+   "doc_id": "privacy_pl:785410",
+   "section_idx": 5,
+   "text_sha1": "ce0f08aadfa363fff5fa79cbd76668596264de88"
+  },
+  {
+   "doc_id": "privacy_pl:785410",
+   "section_idx": 6,
+   "text_sha1": "8984295682fd9982a2b03a4e7b29f0aca33d2d5f"
+  },
+  {
+   "doc_id": "privacy_pl:785410",
+   "section_idx": 7,
+   "text_sha1": "9ee400a9ed018621a4fd897b5bcc30c96beb4151"
+  },
+  {
+   "doc_id": "privacy_pl:785410",
+   "section_idx": 8,
+   "text_sha1": "32da8387a644546ce39fc7f79f8eb8a0f4aba46e"
+  },
+  {
+   "doc_id": "privacy_pl:306248",
+   "section_idx": 0,
+   "text_sha1": "11b336041ea489a12644e2a355c9bb3a527bd278"
+  },
+  {
+   "doc_id": "privacy_pl:306248",
+   "section_idx": 1,
+   "text_sha1": "b1168764a948b9d9986230b33f14b9ea893bf09a"
+  },
+  {
+   "doc_id": "privacy_pl:306248",
+   "section_idx": 2,
+   "text_sha1": "605cddd4ef19e8d69c58ad7d765eba1bc3bb35ed"
+  },
+  {
+   "doc_id": "privacy_pl:306248",
+   "section_idx": 3,
+   "text_sha1": "bed49147f8f229c972d6b2e0ed7d9383fd9b359f"
+  },
+  {
+   "doc_id": "privacy_pl:306248",
+   "section_idx": 4,
+   "text_sha1": "32e7fb88b53559e0396b5225cec3274cfacbb29e"
+  },
+  {
+   "doc_id": "privacy_pl:306248",
+   "section_idx": 5,
+   "text_sha1": "8c6e3f486fd64f2d518acce5abedc3c51ad9dcc0"
+  },
+  {
+   "doc_id": "privacy_pl:306248",
+   "section_idx": 6,
+   "text_sha1": "2419ee2f4e8f5d4d8c8400c63b6506eef5595e3f"
+  },
+  {
+   "doc_id": "privacy_pl:306248",
+   "section_idx": 7,
+   "text_sha1": "4769b3647621b92d042d4803a73016775cbbf691"
+  },
+  {
+   "doc_id": "privacy_pl:306248",
+   "section_idx": 8,
+   "text_sha1": "a105949795006c5764eda094fab5966dde33a396"
+  },
+  {
+   "doc_id": "privacy_pl:306248",
+   "section_idx": 9,
+   "text_sha1": "13a16b32ffe80763accb5d66033f7f8b447f2379"
+  },
+  {
+   "doc_id": "privacy_pl:306248",
+   "section_idx": 10,
+   "text_sha1": "2a6701e75964a7de12892d1e60d4ce3454495438"
+  },
+  {
+   "doc_id": "privacy_pl:306248",
+   "section_idx": 11,
+   "text_sha1": "394738de76800c2a836910054702d3dc6ddba396"
+  },
+  {
+   "doc_id": "privacy_pl:306248",
+   "section_idx": 12,
+   "text_sha1": "ab5fcbff21f9edb6d8d271309806a0c5c8c41c33"
+  },
+  {
+   "doc_id": "privacy_pl:306248",
+   "section_idx": 13,
+   "text_sha1": "5978ad587616aa48c5b76ca1b77e46103a894ab4"
+  },
+  {
+   "doc_id": "privacy_pl:306248",
+   "section_idx": 14,
+   "text_sha1": "ab5b753e8a4d4df066eee03990da31498665aa59"
+  },
+  {
+   "doc_id": "privacy_pl:306248",
+   "section_idx": 15,
+   "text_sha1": "4ca73bea517f9dd14ea2f76bebb66fb425f4f9a0"
+  },
+  {
+   "doc_id": "privacy_pl:306248",
+   "section_idx": 16,
+   "text_sha1": "37956b0d5a2cb2437ae6d31c71a147937387ac42"
+  },
+  {
+   "doc_id": "privacy_pl:306248",
+   "section_idx": 17,
+   "text_sha1": "246a39b4b386142f4056eb8c048b719e3af4b197"
+  },
+  {
+   "doc_id": "privacy_pl:306248",
+   "section_idx": 18,
+   "text_sha1": "9d271be5873ec38c504fc7d521765b9f21c7ccd0"
+  },
+  {
+   "doc_id": "privacy_pl:1009623",
+   "section_idx": 0,
+   "text_sha1": "ea98ec20dd2f7fd37cf4eb4980e59248dae0c6db"
+  },
+  {
+   "doc_id": "privacy_pl:1009623",
+   "section_idx": 1,
+   "text_sha1": "41f3735edb6ef481b1dd8747e2ba6f0931f1aefe"
+  },
+  {
+   "doc_id": "privacy_pl:1009623",
+   "section_idx": 2,
+   "text_sha1": "7cfd652d0951408eb86fe094c9dd6801bbdcb8ba"
+  },
+  {
+   "doc_id": "privacy_pl:1009623",
+   "section_idx": 3,
+   "text_sha1": "12eabc85b142e1d2bbbdbd5caa4ada9b72b265b0"
+  },
+  {
+   "doc_id": "privacy_pl:1009623",
+   "section_idx": 4,
+   "text_sha1": "a60e49499ee41ed9abfe0fa8c63a3665f27a506a"
+  },
+  {
+   "doc_id": "privacy_pl:1009623",
+   "section_idx": 5,
+   "text_sha1": "101a232042c145d8b6468dc3cb883b1c839b2720"
+  },
+  {
+   "doc_id": "privacy_pl:1009623",
+   "section_idx": 6,
+   "text_sha1": "2359425eef980411aae64e3839346f3f72cb08ab"
+  },
+  {
+   "doc_id": "privacy_pl:1009623",
+   "section_idx": 7,
+   "text_sha1": "368475b0b705d32328a5ad1505710b102157ec6c"
+  },
+  {
+   "doc_id": "privacy_pl:1009623",
+   "section_idx": 8,
+   "text_sha1": "4bef1f718edf707b4000749b9fb67b44bbcf6538"
+  },
+  {
+   "doc_id": "privacy_pl:1009623",
+   "section_idx": 9,
+   "text_sha1": "e8ebaa94c8c7f9e8fef2c241152851caca4aab01"
+  },
+  {
+   "doc_id": "privacy_pl:372076",
+   "section_idx": 0,
+   "text_sha1": "eebcd498b1c2e58551db68d544ad59d4a879e0f1"
+  },
+  {
+   "doc_id": "privacy_pl:372076",
+   "section_idx": 1,
+   "text_sha1": "3650dd23725506e5bd1056393828e691e839ed60"
+  },
+  {
+   "doc_id": "privacy_pl:372076",
+   "section_idx": 2,
+   "text_sha1": "fec176f2d82fc63636fd3438d58594a0e3f09605"
+  },
+  {
+   "doc_id": "privacy_pl:372076",
+   "section_idx": 3,
+   "text_sha1": "7042f376611e67ba6d376c0d0cb865b26693fefc"
+  },
+  {
+   "doc_id": "privacy_pl:372076",
+   "section_idx": 4,
+   "text_sha1": "9f343d47d267f092fa416fe7c3c9d97eceb45695"
+  },
+  {
+   "doc_id": "privacy_pl:372076",
+   "section_idx": 5,
+   "text_sha1": "ec0a9f4e0d545c862f1a02df08854c8d1e096a4d"
+  },
+  {
+   "doc_id": "privacy_pl:372076",
+   "section_idx": 6,
+   "text_sha1": "38fa0301b8e8611f47130ec5cc32350229892d5d"
+  },
+  {
+   "doc_id": "privacy_pl:372076",
+   "section_idx": 7,
+   "text_sha1": "8a3d24a9ed65c24854537339fd111117fa68d15b"
+  },
+  {
+   "doc_id": "privacy_pl:372076",
+   "section_idx": 8,
+   "text_sha1": "5a40d12b89265e6b8804f81e6f5a17b342dd554a"
+  },
+  {
+   "doc_id": "privacy_pl:989284",
+   "section_idx": 0,
+   "text_sha1": "52af03312d5903979776526a6e1eafce97e0d70d"
+  },
+  {
+   "doc_id": "privacy_pl:424562",
+   "section_idx": 0,
+   "text_sha1": "4e0348f58e170d135f90d755a607aaa900747e26"
+  },
+  {
+   "doc_id": "privacy_pl:424562",
+   "section_idx": 1,
+   "text_sha1": "fadd93e0c707e36fd99e0be448b9ab13491b7caf"
+  },
+  {
+   "doc_id": "privacy_pl:424562",
+   "section_idx": 2,
+   "text_sha1": "a940f1bff3d2a472ed1ec8aa0f8c27c07f9ace51"
+  },
+  {
+   "doc_id": "privacy_pl:424562",
+   "section_idx": 3,
+   "text_sha1": "d2a5fc47b089e52302d527dbdcd31223f08e0fc9"
+  },
+  {
+   "doc_id": "privacy_pl:424562",
+   "section_idx": 4,
+   "text_sha1": "1d8ac4e003f10976bb27f882e9cbbf254a92a430"
+  },
+  {
+   "doc_id": "privacy_pl:424562",
+   "section_idx": 5,
+   "text_sha1": "b13a39d0e649b77713dc101c87fbf4ec1893211c"
+  },
+  {
+   "doc_id": "privacy_pl:424562",
+   "section_idx": 6,
+   "text_sha1": "a269222fc0cd61fefd76346f953b5609f92f3422"
+  },
+  {
+   "doc_id": "privacy_pl:424562",
+   "section_idx": 7,
+   "text_sha1": "cff8ab261dd2bc7920f2650c696eac604cce87a7"
+  },
+  {
+   "doc_id": "privacy_pl:424562",
+   "section_idx": 8,
+   "text_sha1": "57b81495d4c8b70e727fc21a441c8e47910e2eb8"
+  },
+  {
+   "doc_id": "privacy_pl:424562",
+   "section_idx": 9,
+   "text_sha1": "5e8e2ce5c9d2aa1f571b525dbf73c3133d9bb51f"
+  },
+  {
+   "doc_id": "privacy_pl:424562",
+   "section_idx": 10,
+   "text_sha1": "96b075115dec845061fb0d0225e39ed2afcffdff"
+  },
+  {
+   "doc_id": "privacy_pl:424562",
+   "section_idx": 11,
+   "text_sha1": "99d03feece5804c7916a43efc0dbe4141e97bf16"
+  },
+  {
+   "doc_id": "privacy_pl:424562",
+   "section_idx": 12,
+   "text_sha1": "2c782a20cf67cab3781a679ed9a312d7fb217990"
+  },
+  {
+   "doc_id": "privacy_pl:424562",
+   "section_idx": 13,
+   "text_sha1": "1f9f9b7af127160a7dd3c79a44213e591843cc92"
+  },
+  {
+   "doc_id": "privacy_pl:424562",
+   "section_idx": 14,
+   "text_sha1": "1a29cbb1d1786cc4aa17902a25c1781329abfde8"
+  },
+  {
+   "doc_id": "privacy_pl:515536",
+   "section_idx": 0,
+   "text_sha1": "2226a7d6d5cbef0d89101d667990cde99d186107"
+  },
+  {
+   "doc_id": "privacy_pl:515536",
+   "section_idx": 1,
+   "text_sha1": "9ea484af6e0ed2fb737cf1089466d146529c14b2"
+  },
+  {
+   "doc_id": "privacy_pl:515536",
+   "section_idx": 2,
+   "text_sha1": "85062daaf1f0d8c736212c3a9bfea71456aa1b10"
+  },
+  {
+   "doc_id": "privacy_pl:515536",
+   "section_idx": 3,
+   "text_sha1": "3723ef9054c806284aa62febe82602dfb9b41a23"
+  },
+  {
+   "doc_id": "privacy_pl:515536",
+   "section_idx": 4,
+   "text_sha1": "b1c6501b15b89f55afb39403376b5183f4697685"
+  },
+  {
+   "doc_id": "privacy_pl:109385",
+   "section_idx": 0,
+   "text_sha1": "0fa900cf1b2bca4003a225d16c51781f5c3d55af"
+  },
+  {
+   "doc_id": "privacy_pl:109385",
+   "section_idx": 1,
+   "text_sha1": "a276f0a9df534b8069f88fd9dd62d926487ea47f"
+  },
+  {
+   "doc_id": "privacy_pl:109385",
+   "section_idx": 2,
+   "text_sha1": "05567cef1cd31afeb1cd96f3c851195fcd251b16"
+  },
+  {
+   "doc_id": "privacy_pl:109385",
+   "section_idx": 3,
+   "text_sha1": "7715723a62ee38014db20403ad6969c662fc6dbd"
+  },
+  {
+   "doc_id": "privacy_pl:109385",
+   "section_idx": 4,
+   "text_sha1": "8a60e8e0d1e023ccb08e1d9ef2a03c1c98915f3f"
+  },
+  {
+   "doc_id": "privacy_pl:981065",
+   "section_idx": 0,
+   "text_sha1": "fd03da42fbad660f02d616d936a43364ec8e6588"
+  },
+  {
+   "doc_id": "privacy_pl:981065",
+   "section_idx": 1,
+   "text_sha1": "e48a2cc567ab9f1f413355fbd04b2469377b94c4"
+  },
+  {
+   "doc_id": "privacy_pl:981065",
+   "section_idx": 2,
+   "text_sha1": "bae66408b3306c90c938d73bbd668ca18ec64ae9"
+  },
+  {
+   "doc_id": "privacy_pl:981065",
+   "section_idx": 3,
+   "text_sha1": "2ea4b138fd77f2a505083f7b0807108f62d6684e"
+  },
+  {
+   "doc_id": "privacy_pl:981065",
+   "section_idx": 4,
+   "text_sha1": "ca614b42404e39758587f6c678d2d5c726940e9a"
+  },
+  {
+   "doc_id": "privacy_pl:981065",
+   "section_idx": 5,
+   "text_sha1": "67e7d2c6cf2c725441c605a84e2044dbe553111d"
+  },
+  {
+   "doc_id": "privacy_pl:448901",
+   "section_idx": 0,
+   "text_sha1": "60598a39677aee12ab0b699ffd5cbf3b80a0f93a"
+  },
+  {
+   "doc_id": "privacy_pl:448901",
+   "section_idx": 1,
+   "text_sha1": "5bf03915f61500396ac2b089bc6b6bd83464fd3f"
+  },
+  {
+   "doc_id": "privacy_pl:448901",
+   "section_idx": 2,
+   "text_sha1": "5333ae7f0e55f3f90a5eab3a864e046a65b9b777"
+  },
+  {
+   "doc_id": "privacy_pl:576087",
+   "section_idx": 0,
+   "text_sha1": "d4be2a8ee5d9010bab2c06f66fbcb7a3a9ce281a"
+  },
+  {
+   "doc_id": "privacy_pl:576087",
+   "section_idx": 1,
+   "text_sha1": "96a0ce2076a622f2bebded9bc4ca3d8f08591f41"
+  },
+  {
+   "doc_id": "privacy_pl:576087",
+   "section_idx": 2,
+   "text_sha1": "a29c3a7bcf058864fce03a1dbd71c426e735362f"
+  },
+  {
+   "doc_id": "privacy_pl:576087",
+   "section_idx": 3,
+   "text_sha1": "97439f1085783ffb58a58f07408f9ea4c1ae9701"
+  },
+  {
+   "doc_id": "privacy_pl:576087",
+   "section_idx": 4,
+   "text_sha1": "4c598bc1633c37e52a41ccbbce5aa864ada04274"
+  },
+  {
+   "doc_id": "privacy_pl:576087",
+   "section_idx": 5,
+   "text_sha1": "3acd7f046c39653c18d588587c2a3b0e6a2aaaf9"
+  },
+  {
+   "doc_id": "privacy_pl:576087",
+   "section_idx": 6,
+   "text_sha1": "73127a0c4532da52d434730e9a2e181d024e556d"
+  },
+  {
+   "doc_id": "privacy_pl:576087",
+   "section_idx": 7,
+   "text_sha1": "6db410a62be05c4238743c1dca1302dfa4084e0e"
+  },
+  {
+   "doc_id": "privacy_pl:576087",
+   "section_idx": 8,
+   "text_sha1": "626e6cffd79b9bb64a85e71671f3086dce5758b6"
+  },
+  {
+   "doc_id": "privacy_pl:286164",
+   "section_idx": 0,
+   "text_sha1": "7222117361b1c46e5aac542c91377a8a5e6590d7"
+  },
+  {
+   "doc_id": "privacy_pl:286164",
+   "section_idx": 1,
+   "text_sha1": "d40514ac06405a949af18bb0ec1cb1c9ef978747"
+  },
+  {
+   "doc_id": "privacy_pl:286164",
+   "section_idx": 2,
+   "text_sha1": "664ac604ae6706f4213c3fb037062ace6e229029"
+  },
+  {
+   "doc_id": "privacy_pl:286164",
+   "section_idx": 3,
+   "text_sha1": "0a175982453175261e54cfdd7f29e201bc7488b3"
+  },
+  {
+   "doc_id": "privacy_pl:286164",
+   "section_idx": 4,
+   "text_sha1": "2d4cffa55ac49f96b5ec35af2139b69e38cc9282"
+  },
+  {
+   "doc_id": "privacy_pl:286164",
+   "section_idx": 5,
+   "text_sha1": "64ed9173381e454912cd55fe8173cdc9d3faa79e"
+  },
+  {
+   "doc_id": "privacy_pl:286164",
+   "section_idx": 6,
+   "text_sha1": "4be8faf51fb330317149bcc9730e1fe3425113df"
+  },
+  {
+   "doc_id": "privacy_pl:286164",
+   "section_idx": 7,
+   "text_sha1": "1f872ec80448be45ad2f595ea9ef3800108ea2a8"
+  },
+  {
+   "doc_id": "privacy_pl:286164",
+   "section_idx": 8,
+   "text_sha1": "3478d03238cb7b7eab3df39c93fbedbc9366ebb6"
+  },
+  {
+   "doc_id": "privacy_pl:286164",
+   "section_idx": 9,
+   "text_sha1": "c9277cbfad889959adfcc2c4af7b018e9d5d5fac"
+  },
+  {
+   "doc_id": "privacy_pl:286164",
+   "section_idx": 10,
+   "text_sha1": "d069b8f88f663b70501ecc20e50e7bcc07768b66"
+  },
+  {
+   "doc_id": "privacy_pl:286164",
+   "section_idx": 11,
+   "text_sha1": "54cdf91d0048ca5bc77332e6c4aa61af0dc85114"
+  },
+  {
+   "doc_id": "privacy_pl:286164",
+   "section_idx": 12,
+   "text_sha1": "0a795bd8728cbef732a44e313c4a7830d5f3524c"
+  },
+  {
+   "doc_id": "privacy_pl:286164",
+   "section_idx": 13,
+   "text_sha1": "02e8ba77bda86f3096b8a4e18f4bc0b8289d777c"
+  },
+  {
+   "doc_id": "privacy_pl:1017142",
+   "section_idx": 0,
+   "text_sha1": "dd1185001b47c76708ff23bf12ecf723c4041db2"
+  },
+  {
+   "doc_id": "privacy_pl:1017142",
+   "section_idx": 1,
+   "text_sha1": "51eab75233967d5c7203a4a2719b9d29be63ec51"
+  },
+  {
+   "doc_id": "privacy_pl:1017142",
+   "section_idx": 2,
+   "text_sha1": "eac148237782aa33a7ac879c492c66ea1046112c"
+  },
+  {
+   "doc_id": "privacy_pl:1017142",
+   "section_idx": 3,
+   "text_sha1": "68e4d20d07afa6ddb79b456bbd4e37555c45f77c"
+  },
+  {
+   "doc_id": "privacy_pl:1017142",
+   "section_idx": 4,
+   "text_sha1": "6875ab7ec8f7186dc9b47e25be11f441eab2b2d2"
+  },
+  {
+   "doc_id": "privacy_pl:464972",
+   "section_idx": 0,
+   "text_sha1": "0d82fa8ee5173620c385f39a4dc47be37fddfeb0"
+  },
+  {
+   "doc_id": "privacy_pl:464972",
+   "section_idx": 1,
+   "text_sha1": "81540565d533b263a8512746924ccb02f7d05f5c"
+  },
+  {
+   "doc_id": "privacy_pl:464972",
+   "section_idx": 2,
+   "text_sha1": "26b10256a75a34eff73862d4f5acb64f36a39b33"
+  },
+  {
+   "doc_id": "privacy_pl:735792",
+   "section_idx": 0,
+   "text_sha1": "7b89bc71b196bd313a51f5761e189e44c7b2b863"
+  },
+  {
+   "doc_id": "privacy_pl:735792",
+   "section_idx": 1,
+   "text_sha1": "d63491425aa7a03cb3780efeb61a959d4db7352d"
+  },
+  {
+   "doc_id": "privacy_pl:735792",
+   "section_idx": 2,
+   "text_sha1": "9835d42270d02318cda26a2e3a159070bdf00da4"
+  },
+  {
+   "doc_id": "privacy_pl:735792",
+   "section_idx": 3,
+   "text_sha1": "322c30c468c5bd3b073a752dac369f290bc22556"
+  },
+  {
+   "doc_id": "privacy_pl:735792",
+   "section_idx": 4,
+   "text_sha1": "1d6bd030f59a0193357463c7bae0efa013c38baa"
+  },
+  {
+   "doc_id": "privacy_pl:735792",
+   "section_idx": 5,
+   "text_sha1": "1fc18f2d9baab02b96b969b4f765e1a9f8027f16"
+  },
+  {
+   "doc_id": "privacy_pl:735792",
+   "section_idx": 6,
+   "text_sha1": "9d63e87846d15aaa8f5dc19c69698b0eb6e10f58"
+  },
+  {
+   "doc_id": "privacy_pl:735792",
+   "section_idx": 7,
+   "text_sha1": "f13d8557556790b0978dd1f6a88d77fc9d3279bd"
+  },
+  {
+   "doc_id": "privacy_pl:735792",
+   "section_idx": 8,
+   "text_sha1": "071b4992955ba926c9247de7864beec72fe9d548"
+  },
+  {
+   "doc_id": "privacy_pl:735792",
+   "section_idx": 9,
+   "text_sha1": "b602f604656395b15c799676cc36ba963e6618fb"
+  },
+  {
+   "doc_id": "privacy_pl:735792",
+   "section_idx": 10,
+   "text_sha1": "8f8201f4f89f8ef9c6090a771901b13a90a51a02"
+  },
+  {
+   "doc_id": "privacy_pl:735792",
+   "section_idx": 11,
+   "text_sha1": "f34cdf6e4ccdffe1ade1913d17950344dae93817"
+  },
+  {
+   "doc_id": "privacy_pl:735792",
+   "section_idx": 12,
+   "text_sha1": "79f349e9e0fef789f4f31b790c7970f7b467dd8f"
+  },
+  {
+   "doc_id": "privacy_pl:735792",
+   "section_idx": 13,
+   "text_sha1": "c39b74af9652a382f5abffd4b2777f24c1e3b1d3"
+  },
+  {
+   "doc_id": "privacy_pl:735792",
+   "section_idx": 14,
+   "text_sha1": "b09bf2055a8eb20d2da691ae9db933a1656690a4"
+  },
+  {
+   "doc_id": "privacy_pl:31318",
+   "section_idx": 0,
+   "text_sha1": "522073bda1d80d680b36360a0b9867e291fe8944"
+  },
+  {
+   "doc_id": "privacy_pl:792259",
+   "section_idx": 0,
+   "text_sha1": "4c18b9202af2bd7ab94d507ed120197dd61dc366"
+  },
+  {
+   "doc_id": "privacy_pl:792259",
+   "section_idx": 1,
+   "text_sha1": "686a1a1e8259ed5bca66b2b82bcc5c3295808a31"
+  },
+  {
+   "doc_id": "privacy_pl:792259",
+   "section_idx": 2,
+   "text_sha1": "f847e9f01dda4fd8c0b0b90e8be1d41f50f01ba3"
+  },
+  {
+   "doc_id": "privacy_pl:792259",
+   "section_idx": 3,
+   "text_sha1": "43dfca0bda22478b2bf0688156969de3289ca659"
+  },
+  {
+   "doc_id": "privacy_pl:792259",
+   "section_idx": 4,
+   "text_sha1": "fd91535f54e9b340e6e6fcbf3e49fc93c9d80a81"
+  },
+  {
+   "doc_id": "privacy_pl:792259",
+   "section_idx": 5,
+   "text_sha1": "c6c1ef676eb7738a9cc5ca79afeb59bf603608fd"
+  },
+  {
+   "doc_id": "privacy_pl:792259",
+   "section_idx": 6,
+   "text_sha1": "1aa98b2aebc771158796d8800039e0e16f694641"
+  },
+  {
+   "doc_id": "privacy_pl:792259",
+   "section_idx": 7,
+   "text_sha1": "3ad4f302902ef27b9f9f449f151c8d0e561bded4"
+  },
+  {
+   "doc_id": "privacy_pl:792259",
+   "section_idx": 8,
+   "text_sha1": "2c87045d5a5fb64494dd1d1197af3cfb6561abed"
+  },
+  {
+   "doc_id": "privacy_pl:792259",
+   "section_idx": 9,
+   "text_sha1": "d18cbaf71bca00988e7b811f15cae7a08363766c"
+  },
+  {
+   "doc_id": "privacy_pl:566354",
+   "section_idx": 0,
+   "text_sha1": "9802b384a580ae913de3b2467b8b34452f46e814"
+  },
+  {
+   "doc_id": "privacy_pl:566354",
+   "section_idx": 1,
+   "text_sha1": "1c45c8fa791e521014c2464d966e403a7236cd3c"
+  },
+  {
+   "doc_id": "privacy_pl:566354",
+   "section_idx": 2,
+   "text_sha1": "2590bdc61a0b632f27ce1e61c0cde3512fa2f31b"
+  },
+  {
+   "doc_id": "privacy_pl:132924",
+   "section_idx": 0,
+   "text_sha1": "b1a9569f3332f1d5c94642a3e31ed69d99e040f3"
+  },
+  {
+   "doc_id": "privacy_pl:132924",
+   "section_idx": 1,
+   "text_sha1": "22a1e4f73689e6599517b5911257524476dd7be0"
+  },
+  {
+   "doc_id": "privacy_pl:132924",
+   "section_idx": 2,
+   "text_sha1": "52486d3376ff03e102c65893562da5b5fa599fc8"
+  },
+  {
+   "doc_id": "privacy_pl:132924",
+   "section_idx": 3,
+   "text_sha1": "8386a6231cb42eca300651c87b81c2103d747c7c"
+  },
+  {
+   "doc_id": "privacy_pl:132924",
+   "section_idx": 4,
+   "text_sha1": "de829ade01418c75d42315836d6c7c26a2499906"
+  },
+  {
+   "doc_id": "privacy_pl:132924",
+   "section_idx": 5,
+   "text_sha1": "78ddaad22b3cc1f97b3fbcaef7cbe57e513b08c0"
+  },
+  {
+   "doc_id": "privacy_pl:132924",
+   "section_idx": 6,
+   "text_sha1": "5adf4bfbbc1cd81fc1aee97b8fcb1d10b5a45990"
+  },
+  {
+   "doc_id": "privacy_pl:132924",
+   "section_idx": 7,
+   "text_sha1": "7cf9e8382d59881bd80f090f8d5f3eaa7d965844"
+  },
+  {
+   "doc_id": "privacy_pl:132924",
+   "section_idx": 8,
+   "text_sha1": "ec8b14e1032eef92bb342b97e438835e0c668580"
+  },
+  {
+   "doc_id": "privacy_pl:132924",
+   "section_idx": 9,
+   "text_sha1": "6c841e2228a777c30a0be110afb9a3e2d186f0e5"
+  },
+  {
+   "doc_id": "privacy_pl:132924",
+   "section_idx": 10,
+   "text_sha1": "3aca602c5de583b441507fab5f064885d553e8f5"
+  },
+  {
+   "doc_id": "privacy_pl:325781",
+   "section_idx": 0,
+   "text_sha1": "ed8ab7c617e2302f70375e8019499c5ad92583e3"
+  },
+  {
+   "doc_id": "privacy_pl:325781",
+   "section_idx": 1,
+   "text_sha1": "3ce6221018d13e0efd699fdeb4900a45a6fc87a0"
+  },
+  {
+   "doc_id": "privacy_pl:325781",
+   "section_idx": 2,
+   "text_sha1": "fded5d4dc0b60bece6e34143d6fb6d27ea32cb7f"
+  },
+  {
+   "doc_id": "privacy_pl:325781",
+   "section_idx": 3,
+   "text_sha1": "044560c7d56dc859281a2fc2bbe8ec9b5b9b8ec5"
+  },
+  {
+   "doc_id": "privacy_pl:325781",
+   "section_idx": 4,
+   "text_sha1": "10a39f2eb55ac022c629415d315fb4579e3ec806"
+  },
+  {
+   "doc_id": "privacy_pl:325781",
+   "section_idx": 5,
+   "text_sha1": "94b8410ece1535ed17d7236a9ad48746de90f6b5"
+  },
+  {
+   "doc_id": "privacy_pl:325781",
+   "section_idx": 6,
+   "text_sha1": "09915943558fe5c543e377c55194054ed69e4bca"
+  },
+  {
+   "doc_id": "privacy_pl:325781",
+   "section_idx": 7,
+   "text_sha1": "4d588b763b0beb7acbc557e82d572ea8d0c6a810"
+  },
+  {
+   "doc_id": "privacy_pl:325781",
+   "section_idx": 8,
+   "text_sha1": "7a8a8a7a5ef9720d5badfe7aa0a85078a5241660"
+  },
+  {
+   "doc_id": "privacy_pl:325781",
+   "section_idx": 9,
+   "text_sha1": "ef36196852faeb0c6136b34b62d3a579237fe1db"
+  },
+  {
+   "doc_id": "privacy_pl:252242",
+   "section_idx": 0,
+   "text_sha1": "a3bf201eea6146b3a61bac1811d9b5f83f08828c"
+  },
+  {
+   "doc_id": "privacy_pl:252242",
+   "section_idx": 1,
+   "text_sha1": "bcc9f9a299cf1292379ff5860503b353269ec607"
+  },
+  {
+   "doc_id": "privacy_pl:252242",
+   "section_idx": 2,
+   "text_sha1": "5be6a55a2293e0e835a9173f69a579cae14919cb"
+  },
+  {
+   "doc_id": "privacy_pl:252242",
+   "section_idx": 3,
+   "text_sha1": "a280fd6a5e29928c47870159c1362520cc09aed7"
+  },
+  {
+   "doc_id": "privacy_pl:252242",
+   "section_idx": 4,
+   "text_sha1": "90638a7c3b144db9274b21b7b3b2132403479df9"
+  },
+  {
+   "doc_id": "privacy_pl:252242",
+   "section_idx": 5,
+   "text_sha1": "c8b5529847ed366abbc2abcc3331f4b34e8d69b9"
+  },
+  {
+   "doc_id": "privacy_pl:252242",
+   "section_idx": 6,
+   "text_sha1": "62a258d1e61e96e256285f27515b241cb857e9cc"
+  },
+  {
+   "doc_id": "privacy_pl:655579",
+   "section_idx": 0,
+   "text_sha1": "39fd4457a23e034e13f9829d91002e6abc568217"
+  },
+  {
+   "doc_id": "privacy_pl:655579",
+   "section_idx": 1,
+   "text_sha1": "b98ac16a4c96bc1ac8e60c2a621977c3f55ea239"
+  },
+  {
+   "doc_id": "privacy_pl:655579",
+   "section_idx": 2,
+   "text_sha1": "8a3af1db65e91cdf8e6010bdbe53487b72fb8f97"
+  },
+  {
+   "doc_id": "privacy_pl:655579",
+   "section_idx": 3,
+   "text_sha1": "d03d516b048da7a728943ce61d0ad838b103d472"
+  },
+  {
+   "doc_id": "privacy_pl:655579",
+   "section_idx": 4,
+   "text_sha1": "33f1e9321ccf4d7c5db69976c993a7b3de45d703"
+  },
+  {
+   "doc_id": "privacy_pl:655579",
+   "section_idx": 5,
+   "text_sha1": "142c3838ad93ac3859e757b605b3627ba4dd514b"
+  },
+  {
+   "doc_id": "privacy_pl:655579",
+   "section_idx": 6,
+   "text_sha1": "8baa44f8a175d467b112cd16bde75d382271e812"
+  },
+  {
+   "doc_id": "privacy_pl:655579",
+   "section_idx": 7,
+   "text_sha1": "20d49b4e242ec6810c17578842cc9b20df290db1"
+  },
+  {
+   "doc_id": "privacy_pl:655579",
+   "section_idx": 8,
+   "text_sha1": "3b5f0d4c4643a7f63e81e626e7437c5dbff57534"
+  },
+  {
+   "doc_id": "privacy_pl:655579",
+   "section_idx": 9,
+   "text_sha1": "3e8dd2ea613c190650d628a4a93d196e777ba9e3"
+  },
+  {
+   "doc_id": "privacy_pl:655579",
+   "section_idx": 10,
+   "text_sha1": "db402b1bec19e76d6be0f60c4e22db44d7aaa57d"
+  },
+  {
+   "doc_id": "privacy_pl:655579",
+   "section_idx": 11,
+   "text_sha1": "0e501cf32cb570426eb0df72608072da71c01061"
+  },
+  {
+   "doc_id": "privacy_pl:655579",
+   "section_idx": 12,
+   "text_sha1": "49ba8d46601809acf824f5d3ea6e1606672c908f"
+  },
+  {
+   "doc_id": "privacy_pl:655579",
+   "section_idx": 13,
+   "text_sha1": "b4043e6a998648705953c49d4fd552cff61da7ed"
+  },
+  {
+   "doc_id": "privacy_pl:655579",
+   "section_idx": 14,
+   "text_sha1": "f00568680603144b17df1e0620d4db41d95cb77c"
+  },
+  {
+   "doc_id": "privacy_pl:44609",
+   "section_idx": 0,
+   "text_sha1": "6fac5f872e71caa0034160740607ff464698ac52"
+  },
+  {
+   "doc_id": "privacy_pl:44609",
+   "section_idx": 1,
+   "text_sha1": "2d892a66aae45b1f6d1d692aac8fef899b058cb4"
+  },
+  {
+   "doc_id": "privacy_pl:44609",
+   "section_idx": 2,
+   "text_sha1": "c2befd5cd101e67f516cf99cc2db7392ed2b7190"
+  },
+  {
+   "doc_id": "privacy_pl:44609",
+   "section_idx": 3,
+   "text_sha1": "0091f8144dacf4008cd0ca3ab0e9f5d74d394116"
+  },
+  {
+   "doc_id": "privacy_pl:44609",
+   "section_idx": 4,
+   "text_sha1": "a1bea4a2f364e271da1858e319e75290aa9089fe"
+  },
+  {
+   "doc_id": "privacy_pl:44609",
+   "section_idx": 5,
+   "text_sha1": "9926956de0c2c0db4ae3abe671bfc29ab21aea3e"
+  },
+  {
+   "doc_id": "privacy_pl:44609",
+   "section_idx": 6,
+   "text_sha1": "823d9fe123c715f11a9df2fb96c807cbeca2e45f"
+  },
+  {
+   "doc_id": "privacy_pl:44609",
+   "section_idx": 7,
+   "text_sha1": "c02310a66fe9bc7c310cd6f3acdfb3984f784709"
+  },
+  {
+   "doc_id": "privacy_pl:974593",
+   "section_idx": 0,
+   "text_sha1": "7ef06b114f96985c0ca17f6d160e51fb4f7e6231"
+  },
+  {
+   "doc_id": "privacy_pl:974593",
+   "section_idx": 1,
+   "text_sha1": "fa771b47044e073321b9f050be629a0c93d4533f"
+  },
+  {
+   "doc_id": "privacy_pl:53376",
+   "section_idx": 0,
+   "text_sha1": "dfdafd93f23a9eb37664de7f0835d54e4bae26a1"
+  },
+  {
+   "doc_id": "privacy_pl:53376",
+   "section_idx": 1,
+   "text_sha1": "f3836ba0d1c9f49111f88c3dd9711a79a7515558"
+  },
+  {
+   "doc_id": "privacy_pl:53376",
+   "section_idx": 2,
+   "text_sha1": "fa22dc6ffd3084c14aa6b9fdfa6247ebdfd2b437"
+  },
+  {
+   "doc_id": "privacy_pl:53376",
+   "section_idx": 3,
+   "text_sha1": "0f2c5fac22c37a4209580b7e2a74ea10b56bb68e"
+  },
+  {
+   "doc_id": "privacy_pl:53376",
+   "section_idx": 4,
+   "text_sha1": "85dc2bbdebadd754c77f9882510999e4ff6ecf76"
+  },
+  {
+   "doc_id": "privacy_pl:53376",
+   "section_idx": 5,
+   "text_sha1": "da477489a9b33b46d05b1acee026d21191d6fc9e"
+  },
+  {
+   "doc_id": "privacy_pl:53376",
+   "section_idx": 6,
+   "text_sha1": "f1cda5cd1408c34d1f9ea6724b6d2b3289753895"
+  },
+  {
+   "doc_id": "privacy_pl:53376",
+   "section_idx": 7,
+   "text_sha1": "1634f4be1d851463f9f5cd558e18287be76e10ff"
+  },
+  {
+   "doc_id": "privacy_pl:356879",
+   "section_idx": 0,
+   "text_sha1": "21bdafba72af1059ae33ba65b1dbc080a989fe16"
+  },
+  {
+   "doc_id": "privacy_pl:356879",
+   "section_idx": 1,
+   "text_sha1": "b63ce609447af9f011c4527f78dc917dc3ba8168"
+  },
+  {
+   "doc_id": "privacy_pl:356879",
+   "section_idx": 2,
+   "text_sha1": "915cf0358ab498245380a33af1c312d379dcd094"
+  },
+  {
+   "doc_id": "privacy_pl:356879",
+   "section_idx": 3,
+   "text_sha1": "e01196a4ee55e2a8ed30f289e4df480793048970"
+  },
+  {
+   "doc_id": "privacy_pl:356879",
+   "section_idx": 4,
+   "text_sha1": "68c400b8dda1652d10665fee951f410a8c5787e7"
+  },
+  {
+   "doc_id": "privacy_pl:213436",
+   "section_idx": 0,
+   "text_sha1": "f3f2338e90865e5407ce53580659e065d9ecedba"
+  },
+  {
+   "doc_id": "privacy_pl:213436",
+   "section_idx": 1,
+   "text_sha1": "ee18d3e11afbe1d5f348ed3622a10c31299731b3"
+  },
+  {
+   "doc_id": "privacy_pl:213436",
+   "section_idx": 2,
+   "text_sha1": "0e5d284e168e4b0f50822a18a232f69ebd02e312"
+  },
+  {
+   "doc_id": "privacy_pl:213436",
+   "section_idx": 3,
+   "text_sha1": "19617670751c53404317443baf2362a2c7a61f09"
+  },
+  {
+   "doc_id": "privacy_pl:213436",
+   "section_idx": 4,
+   "text_sha1": "917845645e1c2141c5d616b5cd24990774222180"
+  },
+  {
+   "doc_id": "privacy_pl:213436",
+   "section_idx": 5,
+   "text_sha1": "209897360d84114c7399ef7a5f027b7e05c8c1a0"
+  },
+  {
+   "doc_id": "privacy_pl:213436",
+   "section_idx": 6,
+   "text_sha1": "9d41b6540ead5117f60f5626d4a0cfd23ca1ec37"
+  },
+  {
+   "doc_id": "privacy_pl:213436",
+   "section_idx": 7,
+   "text_sha1": "f2bca04756e8590c996ec735dd109e7fd8d15949"
+  },
+  {
+   "doc_id": "privacy_pl:213436",
+   "section_idx": 8,
+   "text_sha1": "5acbc98a0737fe00570f2d5744365f8917897c17"
+  },
+  {
+   "doc_id": "privacy_pl:213436",
+   "section_idx": 9,
+   "text_sha1": "7e6f3528a035e692719790973b876c55f90153e3"
+  },
+  {
+   "doc_id": "privacy_pl:614903",
+   "section_idx": 0,
+   "text_sha1": "7c9f317b826f6235fad878a1f63d838303c4ded8"
+  },
+  {
+   "doc_id": "privacy_pl:614903",
+   "section_idx": 1,
+   "text_sha1": "982a3c6ef6a6d1effcfe0cf08d8896930f47287e"
+  },
+  {
+   "doc_id": "privacy_pl:614903",
+   "section_idx": 2,
+   "text_sha1": "0a47a3e9d622596fbb60a33c7e7e0bb7e0777cc3"
+  },
+  {
+   "doc_id": "privacy_pl:614903",
+   "section_idx": 3,
+   "text_sha1": "e0b449a4ac0029fcfcf645b1ba3bbaa070b35426"
+  },
+  {
+   "doc_id": "privacy_pl:614903",
+   "section_idx": 4,
+   "text_sha1": "57720b5f03a920a4b139d37a2755df13677dbd59"
+  },
+  {
+   "doc_id": "privacy_pl:614903",
+   "section_idx": 5,
+   "text_sha1": "6607a029fcad4294a7830f2861df18b9ed99b019"
+  },
+  {
+   "doc_id": "privacy_pl:614903",
+   "section_idx": 6,
+   "text_sha1": "cd55e2e0e1ca474f0e8a94d4b7299f28e89c0b6c"
+  },
+  {
+   "doc_id": "privacy_pl:614903",
+   "section_idx": 7,
+   "text_sha1": "4c79f903da37063435813156c1f0251ef9009953"
+  },
+  {
+   "doc_id": "privacy_pl:614903",
+   "section_idx": 8,
+   "text_sha1": "4cd5cc27016a97cdb2f844806752ae7cdaddf36c"
+  },
+  {
+   "doc_id": "privacy_pl:614903",
+   "section_idx": 9,
+   "text_sha1": "cc6983388b80ae6a00e3087b88fad7f56447dfd3"
+  },
+  {
+   "doc_id": "privacy_pl:614903",
+   "section_idx": 10,
+   "text_sha1": "fe76f2cf02f568455fa8b77f73a95961e193a4f5"
+  },
+  {
+   "doc_id": "privacy_pl:614903",
+   "section_idx": 11,
+   "text_sha1": "8d7921511d4745d59d4ccf4dad2ce22258cdd309"
+  },
+  {
+   "doc_id": "privacy_pl:614903",
+   "section_idx": 12,
+   "text_sha1": "c74ffcd4e9b683dc15d7c9cca05d2ffe07b9555c"
+  },
+  {
+   "doc_id": "privacy_pl:614903",
+   "section_idx": 13,
+   "text_sha1": "392b88f0297bbecc96738ea25870f98271f13af3"
+  },
+  {
+   "doc_id": "privacy_pl:614903",
+   "section_idx": 14,
+   "text_sha1": "e764a8efe593754dfe6f8207d6dbc33424ebadf2"
+  },
+  {
+   "doc_id": "privacy_pl:614903",
+   "section_idx": 15,
+   "text_sha1": "1c8e32981d7b73e3c0795a8df33241b7579ed995"
+  },
+  {
+   "doc_id": "privacy_pl:614903",
+   "section_idx": 16,
+   "text_sha1": "da187d6540d4c116b8b313ea1703d6d6a1e0fff8"
+  },
+  {
+   "doc_id": "privacy_pl:614903",
+   "section_idx": 17,
+   "text_sha1": "b1b808867910f620ab190ba78cdda51f2b082a38"
+  },
+  {
+   "doc_id": "privacy_pl:614903",
+   "section_idx": 18,
+   "text_sha1": "130378dfcfc714e9a340c2973910d25f741e22da"
+  },
+  {
+   "doc_id": "privacy_pl:614903",
+   "section_idx": 19,
+   "text_sha1": "28ee5a718a2df7e0c5bcb7cf44e0146b601e79f9"
+  },
+  {
+   "doc_id": "privacy_pl:614903",
+   "section_idx": 20,
+   "text_sha1": "e6952cca06e7c70403a5d512cff10b87be1b5006"
+  },
+  {
+   "doc_id": "privacy_pl:614903",
+   "section_idx": 21,
+   "text_sha1": "74cc3414fa8ba0317c275ff65c0311370d81e7f8"
+  },
+  {
+   "doc_id": "privacy_pl:614903",
+   "section_idx": 22,
+   "text_sha1": "3550beec2ab265c9c16b2865bfa98f6b34709215"
+  },
+  {
+   "doc_id": "privacy_pl:614903",
+   "section_idx": 23,
+   "text_sha1": "56f9ba2bf8bdd6d4cfc0e3f1f7555522f56a2524"
+  },
+  {
+   "doc_id": "privacy_pl:614903",
+   "section_idx": 24,
+   "text_sha1": "05a481af9b61c47be9a6674dc843a65e38721af8"
+  },
+  {
+   "doc_id": "privacy_pl:614903",
+   "section_idx": 25,
+   "text_sha1": "441129820908d40016418f571c5d72c17ff4189e"
+  },
+  {
+   "doc_id": "privacy_pl:614903",
+   "section_idx": 26,
+   "text_sha1": "f391fc5cb344f34ea70eff3124994388744e3b7d"
+  },
+  {
+   "doc_id": "privacy_pl:62404",
+   "section_idx": 0,
+   "text_sha1": "a3302226d9c040b431904d86e0b8a88334ee447f"
+  },
+  {
+   "doc_id": "privacy_pl:62404",
+   "section_idx": 1,
+   "text_sha1": "a9a623de2ea18f7d8f435245dd3648f9d152673f"
+  },
+  {
+   "doc_id": "privacy_pl:62404",
+   "section_idx": 2,
+   "text_sha1": "a0dc4d6e177ad8f80180e13d6e709e12dd57de69"
+  },
+  {
+   "doc_id": "privacy_pl:62404",
+   "section_idx": 3,
+   "text_sha1": "cae2a2ae7f7a064b83e6a9c34838a3e3bb42c8e0"
+  },
+  {
+   "doc_id": "privacy_pl:894191",
+   "section_idx": 0,
+   "text_sha1": "cb695ebe4dacdbfd210004d1d58b60c15dfd20ba"
+  },
+  {
+   "doc_id": "privacy_pl:894191",
+   "section_idx": 1,
+   "text_sha1": "269563bd391afa96b58118ecdbb1c830cfa0f85e"
+  },
+  {
+   "doc_id": "privacy_pl:894191",
+   "section_idx": 2,
+   "text_sha1": "cd4e4650b9cea2cba4738f07e92aea14f29730fa"
+  },
+  {
+   "doc_id": "privacy_pl:894191",
+   "section_idx": 3,
+   "text_sha1": "b44fe13964baef7d8872030a08a36c9999c8d023"
+  },
+  {
+   "doc_id": "privacy_pl:894191",
+   "section_idx": 4,
+   "text_sha1": "30e36265bc13583240aa893950de95a970831de3"
+  },
+  {
+   "doc_id": "privacy_pl:894191",
+   "section_idx": 5,
+   "text_sha1": "8c02975f48fd793ba01dfa86ae37762fa7895fbc"
+  },
+  {
+   "doc_id": "privacy_pl:894191",
+   "section_idx": 6,
+   "text_sha1": "72a2d03dc529e5edf3c2f35497fe6bd492b519a4"
+  },
+  {
+   "doc_id": "privacy_pl:894191",
+   "section_idx": 7,
+   "text_sha1": "706f7bc18fdb6b0a90550b0d15f614523cacfdab"
+  },
+  {
+   "doc_id": "privacy_pl:894191",
+   "section_idx": 8,
+   "text_sha1": "1c98f1a6a1c382eb5a22bdfd72290331ef128174"
+  },
+  {
+   "doc_id": "privacy_pl:894191",
+   "section_idx": 9,
+   "text_sha1": "c80daa4f6d9f370df75541b4d78565a6f655271c"
+  },
+  {
+   "doc_id": "privacy_pl:894191",
+   "section_idx": 10,
+   "text_sha1": "75fdd2116901225b38c3abe34feca3334a8d0db4"
+  },
+  {
+   "doc_id": "privacy_pl:894191",
+   "section_idx": 11,
+   "text_sha1": "d0cdd8b7bc99a115dff7e1f05e2b3df3703b0e33"
+  },
+  {
+   "doc_id": "privacy_pl:752074",
+   "section_idx": 0,
+   "text_sha1": "9f83dd3e001af3cbbd3d4b4a84ecbafc42f3a3e1"
+  },
+  {
+   "doc_id": "privacy_pl:752074",
+   "section_idx": 1,
+   "text_sha1": "63abbdf547e2e9b4b2bea94b79db9a4f6bd3bf76"
+  },
+  {
+   "doc_id": "privacy_pl:752074",
+   "section_idx": 2,
+   "text_sha1": "a077c0ddf79d108e3c6b41f5133e819737218f62"
+  },
+  {
+   "doc_id": "privacy_pl:752074",
+   "section_idx": 3,
+   "text_sha1": "153febfad50b5285f49bbb1540df1aa3f03d85e0"
+  },
+  {
+   "doc_id": "privacy_pl:752074",
+   "section_idx": 4,
+   "text_sha1": "11e831ced4eabe2634371aadf6efd320be46e3dc"
+  },
+  {
+   "doc_id": "privacy_pl:752074",
+   "section_idx": 5,
+   "text_sha1": "6b6261c62f2f4aaac40a85fa80fa789198de9ec3"
+  },
+  {
+   "doc_id": "privacy_pl:752074",
+   "section_idx": 6,
+   "text_sha1": "2f2005fe27fa7d1e3523b67d916d0a9f71216d03"
+  },
+  {
+   "doc_id": "privacy_pl:752074",
+   "section_idx": 7,
+   "text_sha1": "18c379249cfface3b761da45b3c0a36330df1751"
+  },
+  {
+   "doc_id": "privacy_pl:752074",
+   "section_idx": 8,
+   "text_sha1": "f17a13b13a884d2210e53565bcca741556d2266a"
+  },
+  {
+   "doc_id": "privacy_pl:752074",
+   "section_idx": 9,
+   "text_sha1": "41ce22a35e01324db817ffc3fefafefbeb8ffc6b"
+  },
+  {
+   "doc_id": "privacy_pl:752074",
+   "section_idx": 10,
+   "text_sha1": "3d23150c1faa92608f641efadc2d62f2f56aad05"
+  },
+  {
+   "doc_id": "privacy_pl:752074",
+   "section_idx": 11,
+   "text_sha1": "bfb4e550f9bca128b2329466728524df296ef77f"
+  },
+  {
+   "doc_id": "privacy_pl:752074",
+   "section_idx": 12,
+   "text_sha1": "8a77661d862595f05277c6208694cc526ed7cba2"
+  },
+  {
+   "doc_id": "privacy_pl:752074",
+   "section_idx": 13,
+   "text_sha1": "e4afab84e5d0a15f745b4d02404b19bd38c57d1c"
+  },
+  {
+   "doc_id": "privacy_pl:752074",
+   "section_idx": 14,
+   "text_sha1": "a85b7bc71bba6dbfbc1eabcf1da8710a3966530d"
+  },
+  {
+   "doc_id": "privacy_pl:752074",
+   "section_idx": 15,
+   "text_sha1": "dd510e8f656edde8424eacbc564651291ab07265"
+  },
+  {
+   "doc_id": "privacy_pl:752074",
+   "section_idx": 16,
+   "text_sha1": "4195c57dc72dbe1551ab2db6318178e32b968a24"
+  },
+  {
+   "doc_id": "privacy_pl:752074",
+   "section_idx": 17,
+   "text_sha1": "f495adf2f0cdef82cba5e60019bd8d8bfcdb66b5"
+  },
+  {
+   "doc_id": "privacy_pl:890933",
+   "section_idx": 0,
+   "text_sha1": "1f8257731dd0ab9abe71db4b986b34556937ca4b"
+  },
+  {
+   "doc_id": "privacy_pl:890933",
+   "section_idx": 1,
+   "text_sha1": "c254e24d1bc2ca2dc5a72cbb30399b3fc2536d6d"
+  },
+  {
+   "doc_id": "privacy_pl:890933",
+   "section_idx": 2,
+   "text_sha1": "0b185becf14465eb2d4c6e72e9c885277f4fc94a"
+  },
+  {
+   "doc_id": "privacy_pl:890933",
+   "section_idx": 3,
+   "text_sha1": "951c752897593f2dae60ab73fbde3ec9806bf6d0"
+  },
+  {
+   "doc_id": "privacy_pl:890933",
+   "section_idx": 4,
+   "text_sha1": "92288a17f4cd2f5cdc96610257f277d9798aaccb"
+  },
+  {
+   "doc_id": "privacy_pl:552662",
+   "section_idx": 0,
+   "text_sha1": "7af4214c5c200efdfeb4e27ee72abd7a6675f82e"
+  },
+  {
+   "doc_id": "privacy_pl:552662",
+   "section_idx": 1,
+   "text_sha1": "4249203ee17b96be6dd57e954e5ef5e70128f601"
+  },
+  {
+   "doc_id": "privacy_pl:552662",
+   "section_idx": 2,
+   "text_sha1": "fcd6360541826502d1862ca9f020f96a43c490a4"
+  },
+  {
+   "doc_id": "privacy_pl:552662",
+   "section_idx": 3,
+   "text_sha1": "f0575a355f572d5cc8b36f4de553c120c6fd8f96"
+  },
+  {
+   "doc_id": "privacy_pl:552662",
+   "section_idx": 4,
+   "text_sha1": "ea3d7b47322867b4c41c4f782a7aba1b6cf8cbc7"
+  },
+  {
+   "doc_id": "privacy_pl:552662",
+   "section_idx": 5,
+   "text_sha1": "5312291c86ded0e5f98ae2e31c50274a5ed3ca06"
+  },
+  {
+   "doc_id": "privacy_pl:552662",
+   "section_idx": 6,
+   "text_sha1": "f0ddefa6e9a98e68e31947815196e4f3ce04e7b8"
+  },
+  {
+   "doc_id": "privacy_pl:552662",
+   "section_idx": 7,
+   "text_sha1": "0f7e217a75392f2b167075f70ec1b07014ae9047"
+  },
+  {
+   "doc_id": "privacy_pl:552662",
+   "section_idx": 8,
+   "text_sha1": "dbe18ec30cf4b618c8465e4dafb2944b6ea71936"
+  },
+  {
+   "doc_id": "privacy_pl:552662",
+   "section_idx": 9,
+   "text_sha1": "32407a0d3ca77c1254405c964c5ba486d309194d"
+  },
+  {
+   "doc_id": "privacy_pl:552662",
+   "section_idx": 10,
+   "text_sha1": "672812172e4f4f32d9b4631858adbd65f71d1e57"
+  },
+  {
+   "doc_id": "privacy_pl:552662",
+   "section_idx": 11,
+   "text_sha1": "bcd6e256a57281e83aa6a2ab4292cbad4b5f1444"
+  },
+  {
+   "doc_id": "privacy_pl:762712",
+   "section_idx": 0,
+   "text_sha1": "8cb62acec70fb86203525dca4809d7d49bb14845"
+  },
+  {
+   "doc_id": "privacy_pl:762712",
+   "section_idx": 1,
+   "text_sha1": "ebbc7b8cf30cde68c6becf9e01e2c5454a0ff970"
+  },
+  {
+   "doc_id": "privacy_pl:762712",
+   "section_idx": 2,
+   "text_sha1": "c20dac958f7f3a0586cde12f105274f9577e53fc"
+  },
+  {
+   "doc_id": "privacy_pl:762712",
+   "section_idx": 3,
+   "text_sha1": "144fee1f682c4914d1ec0973570983704f825e59"
+  },
+  {
+   "doc_id": "privacy_pl:762712",
+   "section_idx": 4,
+   "text_sha1": "a07d0f4d603dc7b9a3624de7e36805f2ab48931c"
+  },
+  {
+   "doc_id": "privacy_pl:762712",
+   "section_idx": 5,
+   "text_sha1": "a117e366bfcb456f951fa667f6e1b2f9e1547b0c"
+  },
+  {
+   "doc_id": "privacy_pl:762712",
+   "section_idx": 6,
+   "text_sha1": "be098a79935260220baef109713c1e6129f9c430"
+  },
+  {
+   "doc_id": "privacy_pl:762712",
+   "section_idx": 7,
+   "text_sha1": "3c3857df0ffd5a6026b8c87785f9b850e2c330d0"
+  },
+  {
+   "doc_id": "privacy_pl:762712",
+   "section_idx": 8,
+   "text_sha1": "0e9ec51abfa99d5c1556beaf980f75c039a8b267"
+  },
+  {
+   "doc_id": "privacy_pl:762712",
+   "section_idx": 9,
+   "text_sha1": "bedc1e2eee1c4956b720c0918f4df553063ec62b"
+  },
+  {
+   "doc_id": "privacy_pl:762712",
+   "section_idx": 10,
+   "text_sha1": "179e5df777b2035f0ecd91e1cf6544a8fc51912a"
+  },
+  {
+   "doc_id": "privacy_pl:762712",
+   "section_idx": 11,
+   "text_sha1": "0e412ebcd32528154ef2a624ecca9112ee8efbfc"
+  },
+  {
+   "doc_id": "privacy_pl:89081",
+   "section_idx": 0,
+   "text_sha1": "1f5b356e7ceacffb12639d75351d54bbbd74f835"
+  },
+  {
+   "doc_id": "privacy_pl:89081",
+   "section_idx": 1,
+   "text_sha1": "edb02c35107905ee79dad7f754fb71639964c9a3"
+  },
+  {
+   "doc_id": "privacy_pl:89081",
+   "section_idx": 2,
+   "text_sha1": "ac876b3d8c02bbefaed89aff4fc1204bf8ac78f5"
+  },
+  {
+   "doc_id": "privacy_pl:89081",
+   "section_idx": 3,
+   "text_sha1": "54709c3e6994f06bcef1d7ca30f440dacbd69945"
+  },
+  {
+   "doc_id": "privacy_pl:89081",
+   "section_idx": 4,
+   "text_sha1": "17014e32721d52e2098d518faa5932387a78983a"
+  },
+  {
+   "doc_id": "privacy_pl:89081",
+   "section_idx": 5,
+   "text_sha1": "65b57f256e8daf0c751b26eea24d4de7b7d7eb99"
+  },
+  {
+   "doc_id": "privacy_pl:248473",
+   "section_idx": 0,
+   "text_sha1": "5cfcf16bc865beeea9733b71055ba006bc405e34"
+  },
+  {
+   "doc_id": "privacy_pl:248473",
+   "section_idx": 1,
+   "text_sha1": "a36e1e7a7945ac96466f6e5d06278d60decbe9f9"
+  },
+  {
+   "doc_id": "privacy_pl:248473",
+   "section_idx": 2,
+   "text_sha1": "74c5e9e5983ac24ff76956836a4303ebfe46be1f"
+  },
+  {
+   "doc_id": "privacy_pl:248473",
+   "section_idx": 3,
+   "text_sha1": "f5fb536743732751a2454e4a33be6334a6b408ac"
+  },
+  {
+   "doc_id": "privacy_pl:248473",
+   "section_idx": 4,
+   "text_sha1": "887d6e7bd1f3bc572bb17c1a46eabefe6b8b86c3"
+  },
+  {
+   "doc_id": "privacy_pl:248473",
+   "section_idx": 5,
+   "text_sha1": "126eb8ec768eacfa967d0a55a117ea2643a9aae7"
+  },
+  {
+   "doc_id": "privacy_pl:248473",
+   "section_idx": 6,
+   "text_sha1": "0a30b60b14f51bc874d47073edfa28ebb6820375"
+  },
+  {
+   "doc_id": "privacy_pl:248473",
+   "section_idx": 7,
+   "text_sha1": "766e32aaa9fafe0835591234c86a7cc9af10e50f"
+  },
+  {
+   "doc_id": "privacy_pl:248473",
+   "section_idx": 8,
+   "text_sha1": "501499b46285e1496c723c88d287537d3229077e"
+  },
+  {
+   "doc_id": "privacy_pl:473358",
+   "section_idx": 0,
+   "text_sha1": "a40ab11340491432b56ccffe9afebdbb6f1dd863"
+  },
+  {
+   "doc_id": "privacy_pl:473358",
+   "section_idx": 1,
+   "text_sha1": "b0ae6631092e3dd5c7f3c64715403ef509e6f7ef"
+  },
+  {
+   "doc_id": "privacy_pl:9463",
+   "section_idx": 0,
+   "text_sha1": "e8de4db220e0c45df85036ffe89bef407e1c3bfd"
+  },
+  {
+   "doc_id": "privacy_pl:9463",
+   "section_idx": 1,
+   "text_sha1": "2970754209e08e9f9a0a5b5ff04e3566ad1dc05a"
+  },
+  {
+   "doc_id": "privacy_pl:9463",
+   "section_idx": 2,
+   "text_sha1": "052cf410aff04d3669d396c1a6141edbb5e37156"
+  },
+  {
+   "doc_id": "privacy_pl:760402",
+   "section_idx": 0,
+   "text_sha1": "9f208fda6095a899179ade4bbe5eea033a994f42"
+  },
+  {
+   "doc_id": "privacy_pl:760402",
+   "section_idx": 1,
+   "text_sha1": "b3b8f212166529749ba7d6accb75dde9cd45ae2e"
+  },
+  {
+   "doc_id": "privacy_pl:760402",
+   "section_idx": 2,
+   "text_sha1": "83cffc591c13018e075f4d10890917a761fcff0d"
+  },
+  {
+   "doc_id": "privacy_pl:760402",
+   "section_idx": 3,
+   "text_sha1": "425a0c4bbaf5919fceb4ef169e39e3508b290eb1"
+  },
+  {
+   "doc_id": "privacy_pl:760402",
+   "section_idx": 4,
+   "text_sha1": "d5e5e940e83da51b247a4c62d526f198a67afa77"
+  },
+  {
+   "doc_id": "privacy_pl:792461",
+   "section_idx": 0,
+   "text_sha1": "befa5ee81f5f64e0f20b220e9c18190fd75369f1"
+  },
+  {
+   "doc_id": "privacy_pl:792461",
+   "section_idx": 1,
+   "text_sha1": "18ccf80c657c874a3d52a87859b6bda064446cd6"
+  },
+  {
+   "doc_id": "privacy_pl:792461",
+   "section_idx": 2,
+   "text_sha1": "bf5038f95d237b4a0fa5c24ea88780080f5fd59c"
+  },
+  {
+   "doc_id": "privacy_pl:792461",
+   "section_idx": 3,
+   "text_sha1": "66a0a20d3a9fed83fa5816ddd5935d2adaeddbde"
+  },
+  {
+   "doc_id": "privacy_pl:792461",
+   "section_idx": 4,
+   "text_sha1": "e3e64c0cb57ef9dc4f6a4e550b6fa2fbc62ae6cc"
+  },
+  {
+   "doc_id": "privacy_pl:792461",
+   "section_idx": 5,
+   "text_sha1": "6b63db6bf54d8a6a284fd94b15bc061cfa995eef"
+  },
+  {
+   "doc_id": "privacy_pl:793974",
+   "section_idx": 0,
+   "text_sha1": "c9296c21ad8eaaaa78f983cbdec7baeb30c5f7eb"
+  },
+  {
+   "doc_id": "privacy_pl:793974",
+   "section_idx": 1,
+   "text_sha1": "65ac4b3d0c2b8037623ce692be7a29a4e3140418"
+  },
+  {
+   "doc_id": "privacy_pl:793974",
+   "section_idx": 2,
+   "text_sha1": "a51f014d583e0eda9ae98682eb4888ba6401add9"
+  },
+  {
+   "doc_id": "privacy_pl:793974",
+   "section_idx": 3,
+   "text_sha1": "9a5da5ebb0f7a45d6809d655694976417ac60571"
+  },
+  {
+   "doc_id": "privacy_pl:793974",
+   "section_idx": 4,
+   "text_sha1": "a912c8ef28595959eb7aed4ef26f9da74a1e5522"
+  },
+  {
+   "doc_id": "privacy_pl:793974",
+   "section_idx": 5,
+   "text_sha1": "432083d90de955db282196dfe394cf57a5d0332d"
+  },
+  {
+   "doc_id": "privacy_pl:793974",
+   "section_idx": 6,
+   "text_sha1": "478597fa777c89d111126b8809389fcc547be6d6"
+  },
+  {
+   "doc_id": "privacy_pl:793974",
+   "section_idx": 7,
+   "text_sha1": "6abd18e1cbc4a922b43784bdb23481e558006035"
+  },
+  {
+   "doc_id": "privacy_pl:454222",
+   "section_idx": 0,
+   "text_sha1": "b8f39f2effeae4cb621665df1388a875be6768c8"
+  },
+  {
+   "doc_id": "privacy_pl:454222",
+   "section_idx": 1,
+   "text_sha1": "95c16b52b2e1e00ea623f1db6536470ffdaec03b"
+  },
+  {
+   "doc_id": "privacy_pl:454222",
+   "section_idx": 2,
+   "text_sha1": "261fb13ddb1e8e8db88ab99fc233887537774949"
+  },
+  {
+   "doc_id": "privacy_pl:454222",
+   "section_idx": 3,
+   "text_sha1": "a1924d4f147b8aedfb51919aae0f8877c17dbb6f"
+  },
+  {
+   "doc_id": "privacy_pl:972416",
+   "section_idx": 0,
+   "text_sha1": "7c30d3712742178f985c2d91ebd58c1eb364f5a8"
+  },
+  {
+   "doc_id": "privacy_pl:972416",
+   "section_idx": 1,
+   "text_sha1": "3cf0da7b63a203007221a67684c87f80f1364f1c"
+  },
+  {
+   "doc_id": "privacy_pl:972416",
+   "section_idx": 2,
+   "text_sha1": "bf5c42b773f08f539436da75cb543f2947b63eda"
+  },
+  {
+   "doc_id": "privacy_pl:972416",
+   "section_idx": 3,
+   "text_sha1": "f731faa09cbc16890f1ea6449892425c8d990e84"
+  },
+  {
+   "doc_id": "privacy_pl:972416",
+   "section_idx": 4,
+   "text_sha1": "1cbc48b426ded14167a5db40353dee1923ac2331"
+  },
+  {
+   "doc_id": "privacy_pl:475363",
+   "section_idx": 0,
+   "text_sha1": "965ba05535b698617691cf2f638ec96075db3a82"
+  },
+  {
+   "doc_id": "privacy_pl:475363",
+   "section_idx": 1,
+   "text_sha1": "e565a94f4499e0f1f76bc8fdd5f93966cca1c9b8"
+  },
+  {
+   "doc_id": "privacy_pl:468123",
+   "section_idx": 0,
+   "text_sha1": "2926d6f4f1982a85448b30db734d21c31d9dfffc"
+  },
+  {
+   "doc_id": "privacy_pl:468123",
+   "section_idx": 1,
+   "text_sha1": "a4f56933a8c3d51a2abf917bc6076126dbe06306"
+  },
+  {
+   "doc_id": "privacy_pl:468123",
+   "section_idx": 2,
+   "text_sha1": "b24a00ba86e35ef0890434a3072eed72fd2293ec"
+  },
+  {
+   "doc_id": "privacy_pl:468123",
+   "section_idx": 3,
+   "text_sha1": "eade94447d0c8a59762b054338a5075a35166b63"
+  },
+  {
+   "doc_id": "privacy_pl:468123",
+   "section_idx": 4,
+   "text_sha1": "762f5eab354303bc39b76925cd08063246e122db"
+  },
+  {
+   "doc_id": "privacy_pl:468123",
+   "section_idx": 5,
+   "text_sha1": "aebd4398f9fdfc9cdcbadd875ca19eb2427b9249"
+  },
+  {
+   "doc_id": "privacy_pl:468123",
+   "section_idx": 6,
+   "text_sha1": "26e073e39f059e0f7a01a373b7b5e2ecae4c0fbd"
+  },
+  {
+   "doc_id": "privacy_pl:468123",
+   "section_idx": 7,
+   "text_sha1": "684b83115450b3643c80c2966888869b8ef7e5a2"
+  },
+  {
+   "doc_id": "privacy_pl:468123",
+   "section_idx": 8,
+   "text_sha1": "8815881306912b6e91b34338862b5e7d513f33ed"
+  },
+  {
+   "doc_id": "privacy_pl:679783",
+   "section_idx": 0,
+   "text_sha1": "0e59546b7dba13c7689b02f701912be0ec083a7a"
+  },
+  {
+   "doc_id": "privacy_pl:679783",
+   "section_idx": 1,
+   "text_sha1": "da5223834b2499d21665f56e0b1273fde41f3b20"
+  },
+  {
+   "doc_id": "privacy_pl:679783",
+   "section_idx": 2,
+   "text_sha1": "b6dd5694e9d4bb0b340f356c3bf4f15f8dbf184c"
+  },
+  {
+   "doc_id": "privacy_pl:679783",
+   "section_idx": 3,
+   "text_sha1": "0b2be0c80f14a9743309e84ff8c9738f001ebfb5"
+  },
+  {
+   "doc_id": "privacy_pl:679783",
+   "section_idx": 4,
+   "text_sha1": "336d60366ef2b6ed74c40198cb9ec9dc41884912"
+  },
+  {
+   "doc_id": "privacy_pl:679783",
+   "section_idx": 5,
+   "text_sha1": "029eff4304c4bb26c5a15988bf3f50b855870ad1"
+  },
+  {
+   "doc_id": "privacy_pl:679783",
+   "section_idx": 6,
+   "text_sha1": "5af42f473ce35aaf99a24c448a69e79dde3f1419"
+  },
+  {
+   "doc_id": "privacy_pl:679783",
+   "section_idx": 7,
+   "text_sha1": "7d88266ea2f1d6269e11cf805c26172348ed8653"
+  },
+  {
+   "doc_id": "privacy_pl:679783",
+   "section_idx": 8,
+   "text_sha1": "20568e5fd1d66553d3a6a824d3433ea6fb461b39"
+  },
+  {
+   "doc_id": "privacy_pl:679783",
+   "section_idx": 9,
+   "text_sha1": "8e2630dc4d16fa21f330878251a183c5f61b0f70"
+  },
+  {
+   "doc_id": "privacy_pl:1065800",
+   "section_idx": 0,
+   "text_sha1": "51d8a53d4549226b8edde654dff1d4106e40e3ec"
+  },
+  {
+   "doc_id": "privacy_pl:1065800",
+   "section_idx": 1,
+   "text_sha1": "04cf51a99363f7b4d70ee861a09f803385895ec3"
+  },
+  {
+   "doc_id": "privacy_pl:1065800",
+   "section_idx": 2,
+   "text_sha1": "c73e4d8153442f1aeb85623d9e0cb63460e8c307"
+  },
+  {
+   "doc_id": "privacy_pl:1065800",
+   "section_idx": 3,
+   "text_sha1": "a031837afe22b873f65291b88ee9f242e2a01bae"
+  },
+  {
+   "doc_id": "privacy_pl:1065800",
+   "section_idx": 4,
+   "text_sha1": "bc677df2f5f54e31c27b7b275c214a44a26fb34e"
+  },
+  {
+   "doc_id": "privacy_pl:1065800",
+   "section_idx": 5,
+   "text_sha1": "b6b3c97c8a043c91046a3ae3ca1c5ffa978e4be8"
+  },
+  {
+   "doc_id": "privacy_pl:1065800",
+   "section_idx": 6,
+   "text_sha1": "f58e64164f150f1e5c040b2c0a3f9ba34ff27370"
+  },
+  {
+   "doc_id": "privacy_pl:1065800",
+   "section_idx": 7,
+   "text_sha1": "cabba8576e62721da89c585d6f09572e8b3d2db6"
+  },
+  {
+   "doc_id": "privacy_pl:1065800",
+   "section_idx": 8,
+   "text_sha1": "4ee0ed6a732a6ca7282df57c74bf9c9d5a8de4c5"
+  },
+  {
+   "doc_id": "privacy_pl:1065800",
+   "section_idx": 9,
+   "text_sha1": "4186605554c81eb6274cccaa125f9e668284c3b8"
+  },
+  {
+   "doc_id": "privacy_pl:1065800",
+   "section_idx": 10,
+   "text_sha1": "9cd580db98de48ec313a3104cd64ffc4b2a67215"
+  },
+  {
+   "doc_id": "privacy_pl:1065800",
+   "section_idx": 11,
+   "text_sha1": "fe0d06870b799cc69dadf7165f18049bb15bf22d"
+  },
+  {
+   "doc_id": "privacy_pl:1065800",
+   "section_idx": 12,
+   "text_sha1": "cb2f98a4cec1d6e7b4159204f2d3d1c515279a9e"
+  },
+  {
+   "doc_id": "privacy_pl:1065800",
+   "section_idx": 13,
+   "text_sha1": "3c99cb029843c4e6b959bf95ed324a523ac7c766"
+  },
+  {
+   "doc_id": "privacy_pl:1065800",
+   "section_idx": 14,
+   "text_sha1": "f5d2cde9ccade2d7d57c66b2de983d8b82da25e7"
+  },
+  {
+   "doc_id": "privacy_pl:1065800",
+   "section_idx": 15,
+   "text_sha1": "c96b958b1df0276dc40235077c2f396f0a09ef51"
+  },
+  {
+   "doc_id": "privacy_pl:1065800",
+   "section_idx": 16,
+   "text_sha1": "cab568bb37fae99439e650657e1070bb165d19c7"
+  },
+  {
+   "doc_id": "privacy_pl:1065800",
+   "section_idx": 17,
+   "text_sha1": "3a51c6f409fb06381fe45c74326de356d24ca9b5"
+  },
+  {
+   "doc_id": "privacy_pl:78310",
+   "section_idx": 0,
+   "text_sha1": "5bd762be69252c57a653df0f3c4456b8e9259bd4"
+  },
+  {
+   "doc_id": "privacy_pl:416860",
+   "section_idx": 0,
+   "text_sha1": "4d00b845303f83ffaa581805bd81e12c60aeb92b"
+  },
+  {
+   "doc_id": "privacy_pl:416860",
+   "section_idx": 1,
+   "text_sha1": "e4d1470e2ad09da27c450c5cc8bb8a5593cfa5fb"
+  },
+  {
+   "doc_id": "privacy_pl:416860",
+   "section_idx": 2,
+   "text_sha1": "988100bfeb1ba9dbbe1f296354dabdaac263c19c"
+  },
+  {
+   "doc_id": "privacy_pl:416860",
+   "section_idx": 3,
+   "text_sha1": "7c1e3547282601ef6368f4e1b16cff10609894db"
+  },
+  {
+   "doc_id": "privacy_pl:416860",
+   "section_idx": 4,
+   "text_sha1": "e6757b76e59435dbfa3bd78043d731956f418008"
+  },
+  {
+   "doc_id": "privacy_pl:416860",
+   "section_idx": 5,
+   "text_sha1": "42375a5d034363da3c56266ea8f9aed387903d78"
+  },
+  {
+   "doc_id": "privacy_pl:416860",
+   "section_idx": 6,
+   "text_sha1": "290a41a713b5ecf80d720ae5264c89417ea6519d"
+  },
+  {
+   "doc_id": "privacy_pl:416860",
+   "section_idx": 7,
+   "text_sha1": "4fee2a0b83d43001eba5fed8c1570817a157be7d"
+  },
+  {
+   "doc_id": "privacy_pl:416860",
+   "section_idx": 8,
+   "text_sha1": "456429f0a1422956f4be2ab81dcc217633fc3384"
+  },
+  {
+   "doc_id": "privacy_pl:416860",
+   "section_idx": 9,
+   "text_sha1": "ad4e51d403f05bc4f4f3c35add96a173dd973d11"
+  },
+  {
+   "doc_id": "privacy_pl:775535",
+   "section_idx": 0,
+   "text_sha1": "6b89e51d6a4c28c79b132cf646e579dc2ee504ba"
+  },
+  {
+   "doc_id": "privacy_pl:775535",
+   "section_idx": 1,
+   "text_sha1": "94f51b012db546707e5ce7953c1cb41f62e11ef5"
+  },
+  {
+   "doc_id": "privacy_pl:775535",
+   "section_idx": 2,
+   "text_sha1": "43744f9925046e05175b7a8d04067260cdd05499"
+  },
+  {
+   "doc_id": "privacy_pl:775535",
+   "section_idx": 3,
+   "text_sha1": "7852236d9b9e7b248878e222b0b4e7491e3d78ab"
+  },
+  {
+   "doc_id": "privacy_pl:775535",
+   "section_idx": 4,
+   "text_sha1": "cbbf51f1d882f51f82960579bcda463445d20255"
+  },
+  {
+   "doc_id": "privacy_pl:775535",
+   "section_idx": 5,
+   "text_sha1": "5661532d587e7d6f3ddc328beceb19663e0eccd9"
+  },
+  {
+   "doc_id": "privacy_pl:775535",
+   "section_idx": 6,
+   "text_sha1": "728d973acc85e7f9d67383ca5127a8ae90ef4da8"
+  },
+  {
+   "doc_id": "privacy_pl:775535",
+   "section_idx": 7,
+   "text_sha1": "b3e7c8ba3ce596c18874e05a68f03f78f6f1bb7d"
+  },
+  {
+   "doc_id": "privacy_pl:342689",
+   "section_idx": 0,
+   "text_sha1": "8dbfff6f69a2735cdba439ba948f7bb3bf1a3f54"
+  },
+  {
+   "doc_id": "privacy_pl:342689",
+   "section_idx": 1,
+   "text_sha1": "d23727e036ab34ba037c02783514063a9bb3398f"
+  },
+  {
+   "doc_id": "privacy_pl:342689",
+   "section_idx": 2,
+   "text_sha1": "c621bef98fc29a001821368ffed472097ef56844"
+  },
+  {
+   "doc_id": "privacy_pl:342689",
+   "section_idx": 3,
+   "text_sha1": "e1c843dbc95eed5bf8b8390cb2c97afe07ddbaae"
+  },
+  {
+   "doc_id": "privacy_pl:342689",
+   "section_idx": 4,
+   "text_sha1": "0ecfd38fff8d0ff85dd01ad4a1bb19c851fc3038"
+  },
+  {
+   "doc_id": "privacy_pl:342689",
+   "section_idx": 5,
+   "text_sha1": "8c5d35e0863dd91a8c7044d3633c4eb8091d798e"
+  },
+  {
+   "doc_id": "privacy_pl:342689",
+   "section_idx": 6,
+   "text_sha1": "689eda1c2945deeb8e79b1260873ed52d430654a"
+  },
+  {
+   "doc_id": "privacy_pl:342689",
+   "section_idx": 7,
+   "text_sha1": "ffa6b6d3d8626001d0ff2a126be64d8f3eff1db7"
+  },
+  {
+   "doc_id": "privacy_pl:252244",
+   "section_idx": 0,
+   "text_sha1": "a3bf201eea6146b3a61bac1811d9b5f83f08828c"
+  },
+  {
+   "doc_id": "privacy_pl:252244",
+   "section_idx": 1,
+   "text_sha1": "bcc9f9a299cf1292379ff5860503b353269ec607"
+  },
+  {
+   "doc_id": "privacy_pl:252244",
+   "section_idx": 2,
+   "text_sha1": "5be6a55a2293e0e835a9173f69a579cae14919cb"
+  },
+  {
+   "doc_id": "privacy_pl:252244",
+   "section_idx": 3,
+   "text_sha1": "a280fd6a5e29928c47870159c1362520cc09aed7"
+  },
+  {
+   "doc_id": "privacy_pl:252244",
+   "section_idx": 4,
+   "text_sha1": "90638a7c3b144db9274b21b7b3b2132403479df9"
+  },
+  {
+   "doc_id": "privacy_pl:252244",
+   "section_idx": 5,
+   "text_sha1": "c8b5529847ed366abbc2abcc3331f4b34e8d69b9"
+  },
+  {
+   "doc_id": "privacy_pl:252244",
+   "section_idx": 6,
+   "text_sha1": "62a258d1e61e96e256285f27515b241cb857e9cc"
+  },
+  {
+   "doc_id": "privacy_pl:963230",
+   "section_idx": 0,
+   "text_sha1": "15e49466ab527e7528ccd06c7d33659627e4c788"
+  },
+  {
+   "doc_id": "privacy_pl:963230",
+   "section_idx": 1,
+   "text_sha1": "720a93d114b55632b52550516ba94fa57bd3e161"
+  },
+  {
+   "doc_id": "privacy_pl:963230",
+   "section_idx": 2,
+   "text_sha1": "e6f82d2446ec136c91afe6966b8164615a0c526b"
+  },
+  {
+   "doc_id": "privacy_pl:963230",
+   "section_idx": 3,
+   "text_sha1": "051bf8d8a1f5bf5f361568f5e780bbb2e343e56b"
+  },
+  {
+   "doc_id": "privacy_pl:963230",
+   "section_idx": 4,
+   "text_sha1": "cff8288cfec5fed6dd89c9e1a662989874d5a36f"
+  },
+  {
+   "doc_id": "privacy_pl:963230",
+   "section_idx": 5,
+   "text_sha1": "0fdd09f5634b8af764453c53187db498ece66e45"
+  },
+  {
+   "doc_id": "privacy_pl:963230",
+   "section_idx": 6,
+   "text_sha1": "a78f3edb81cb6f5727ae6cf8b1d9cf7b555fd68e"
+  },
+  {
+   "doc_id": "privacy_pl:963230",
+   "section_idx": 7,
+   "text_sha1": "a3c5ae2148d52aab3f83b4996e6cddd34578f9c5"
+  },
+  {
+   "doc_id": "privacy_pl:989197",
+   "section_idx": 0,
+   "text_sha1": "483b652f9cadfa9320e4dbe8450ec951a0a8f23b"
+  },
+  {
+   "doc_id": "privacy_pl:578394",
+   "section_idx": 0,
+   "text_sha1": "b067ffe610f7e9f185b5d81242c095e6d385c2ff"
+  },
+  {
+   "doc_id": "privacy_pl:578394",
+   "section_idx": 1,
+   "text_sha1": "9b4ee640620501441307149076fe83e5209b5d38"
+  },
+  {
+   "doc_id": "privacy_pl:578394",
+   "section_idx": 2,
+   "text_sha1": "683a5cffae676bffc9ec0669f1a08e4010713398"
+  },
+  {
+   "doc_id": "privacy_pl:578394",
+   "section_idx": 3,
+   "text_sha1": "9cf2c3a2ff5603a86ae32766761a4fb0866de1dd"
+  },
+  {
+   "doc_id": "privacy_pl:578394",
+   "section_idx": 4,
+   "text_sha1": "ee4e0f7c2cdc87f6f6b86c1602e4086057738cbb"
+  },
+  {
+   "doc_id": "privacy_pl:578394",
+   "section_idx": 5,
+   "text_sha1": "8a3d1c3dcd455b25046332c9c0f1bdd91e0744c0"
+  },
+  {
+   "doc_id": "privacy_pl:945643",
+   "section_idx": 0,
+   "text_sha1": "ccd80482ec57462f1a9c691d1b9405b18c99abec"
+  },
+  {
+   "doc_id": "privacy_pl:945643",
+   "section_idx": 1,
+   "text_sha1": "00aeed949749a2494361ddc5b6e04cc259604759"
+  },
+  {
+   "doc_id": "privacy_pl:945643",
+   "section_idx": 2,
+   "text_sha1": "5868a47bbc71bfa1f32384940f97e9f2d8a5f9a3"
+  },
+  {
+   "doc_id": "privacy_pl:945643",
+   "section_idx": 3,
+   "text_sha1": "45dc89c4d4369cffb2c80a4e7f3b503d1ea28881"
+  },
+  {
+   "doc_id": "privacy_pl:945643",
+   "section_idx": 4,
+   "text_sha1": "1933a901ddc4d55c7f964f6619828e1dc6557eb9"
+  },
+  {
+   "doc_id": "privacy_pl:945643",
+   "section_idx": 5,
+   "text_sha1": "4e3995bc008b9ce2fc2dfef82a0f61401ba760c4"
+  },
+  {
+   "doc_id": "privacy_pl:945643",
+   "section_idx": 6,
+   "text_sha1": "88ac2f2d3e0b280b1662c9df02a8ace7a12e7941"
+  },
+  {
+   "doc_id": "privacy_pl:945643",
+   "section_idx": 7,
+   "text_sha1": "0dc7a90a6f8562f4afcd6c699d2526ff98df97f6"
+  },
+  {
+   "doc_id": "privacy_pl:945643",
+   "section_idx": 8,
+   "text_sha1": "25a6d4e32921081584d1a20be402ff5d8b0ad84c"
+  },
+  {
+   "doc_id": "privacy_pl:945643",
+   "section_idx": 9,
+   "text_sha1": "bec4da17fdd1ca36758735066bf0ea83a5516504"
+  },
+  {
+   "doc_id": "privacy_pl:945643",
+   "section_idx": 10,
+   "text_sha1": "715a78de658e5038d30ba43d319cc21f590a376e"
+  },
+  {
+   "doc_id": "privacy_pl:945643",
+   "section_idx": 11,
+   "text_sha1": "bdaf58d9135067be95ade8daeecf940ca77a1f93"
+  },
+  {
+   "doc_id": "privacy_pl:945643",
+   "section_idx": 12,
+   "text_sha1": "82cd87e7863cb9499c4544dbab0edffda267dfad"
+  },
+  {
+   "doc_id": "privacy_pl:945643",
+   "section_idx": 13,
+   "text_sha1": "01fc0acc10731e9fefaf16c8da106543f49d1e90"
+  },
+  {
+   "doc_id": "privacy_pl:945643",
+   "section_idx": 14,
+   "text_sha1": "ad70bce69ad51aef7d27a101f440a24c2937cd53"
+  },
+  {
+   "doc_id": "privacy_pl:945643",
+   "section_idx": 15,
+   "text_sha1": "04ce426eea799bc0726bacd1ebeab2c724f057d1"
+  },
+  {
+   "doc_id": "privacy_pl:750125",
+   "section_idx": 0,
+   "text_sha1": "168a186e92ec421f14380785f5075c9eb94060ee"
+  },
+  {
+   "doc_id": "privacy_pl:750125",
+   "section_idx": 1,
+   "text_sha1": "cc216e4d121a64a9c18b4de0214645b94ba7b97d"
+  },
+  {
+   "doc_id": "privacy_pl:750125",
+   "section_idx": 2,
+   "text_sha1": "e9572e10a5657151d620efff99e37b2f149dd434"
+  },
+  {
+   "doc_id": "privacy_pl:750125",
+   "section_idx": 3,
+   "text_sha1": "9c661ec2adb5450400271b5bbbf243f3482df6f5"
+  },
+  {
+   "doc_id": "privacy_pl:750125",
+   "section_idx": 4,
+   "text_sha1": "3a704438b40e75e2e7df42d6d234208d9ac166dc"
+  },
+  {
+   "doc_id": "privacy_pl:569751",
+   "section_idx": 0,
+   "text_sha1": "61b2fc44c88b00aba56210874fde6b0fd2221461"
+  },
+  {
+   "doc_id": "privacy_pl:569751",
+   "section_idx": 1,
+   "text_sha1": "23394e924b58610d91bd842dce8cde3b36f99830"
+  },
+  {
+   "doc_id": "privacy_pl:611581",
+   "section_idx": 0,
+   "text_sha1": "9d1b12b9d9b03745bbf10d0a6be798cc1b58b103"
+  },
+  {
+   "doc_id": "privacy_pl:611581",
+   "section_idx": 1,
+   "text_sha1": "a8acaec6812800ba16e60b375bf0483cbdf609bd"
+  },
+  {
+   "doc_id": "privacy_pl:611581",
+   "section_idx": 2,
+   "text_sha1": "40dcb89daf1ec4490732eee1ddf0bd93e239f20b"
+  },
+  {
+   "doc_id": "privacy_pl:611581",
+   "section_idx": 3,
+   "text_sha1": "feda81371aa69b80f8b27811fac064840be1e485"
+  },
+  {
+   "doc_id": "privacy_pl:611581",
+   "section_idx": 4,
+   "text_sha1": "a6bcbbad5ae1845286370ff61d3205977bf5bdbc"
+  },
+  {
+   "doc_id": "privacy_pl:611581",
+   "section_idx": 5,
+   "text_sha1": "cf5c12a34b415bd24f9ac7f2adfcc710087726dd"
+  },
+  {
+   "doc_id": "privacy_pl:348699",
+   "section_idx": 0,
+   "text_sha1": "5db3299b984e8722a1e2bd54d30befc1f3d31b1e"
+  },
+  {
+   "doc_id": "privacy_pl:348699",
+   "section_idx": 1,
+   "text_sha1": "ed507e9c4a3f4bf6163e14ed73e7b92386d1b477"
+  },
+  {
+   "doc_id": "privacy_pl:348699",
+   "section_idx": 2,
+   "text_sha1": "e50b0b0ca9553c8f127c9b3d97cf501e0b62d0e1"
+  },
+  {
+   "doc_id": "privacy_pl:348699",
+   "section_idx": 3,
+   "text_sha1": "eaa0077cce70b1a5d25a281a6e1b9727b2ee69c4"
+  },
+  {
+   "doc_id": "privacy_pl:348699",
+   "section_idx": 4,
+   "text_sha1": "3f0a0668aad3d348a33bf8d142d44d911be49a06"
+  },
+  {
+   "doc_id": "privacy_pl:348699",
+   "section_idx": 5,
+   "text_sha1": "dab896fba848638372bddf04a0452f729efcbc71"
+  },
+  {
+   "doc_id": "privacy_pl:348699",
+   "section_idx": 6,
+   "text_sha1": "fc869bb5dce6214aaeb0c3e2e5c63856abf0f661"
+  },
+  {
+   "doc_id": "privacy_pl:348699",
+   "section_idx": 7,
+   "text_sha1": "dc56ad3b94f62fe89a1c09836d837f39cd06abbf"
+  },
+  {
+   "doc_id": "privacy_pl:348699",
+   "section_idx": 8,
+   "text_sha1": "34ee89cfde880f90a77c0525d859ffb1a1180c13"
+  },
+  {
+   "doc_id": "privacy_pl:348699",
+   "section_idx": 9,
+   "text_sha1": "21fbfae9ee04ea5c882e82dad76f7048a2796cab"
+  },
+  {
+   "doc_id": "privacy_pl:444571",
+   "section_idx": 0,
+   "text_sha1": "3cfb537f2a9cd0a013241f5e0f5121a2989d7343"
+  },
+  {
+   "doc_id": "privacy_pl:444571",
+   "section_idx": 1,
+   "text_sha1": "627a9940cfe055da568b987ccebf5c25545dd9fe"
+  },
+  {
+   "doc_id": "privacy_pl:444571",
+   "section_idx": 2,
+   "text_sha1": "b40e7dbb0d8cfcb935a8bb4acfd0dd4962445264"
+  },
+  {
+   "doc_id": "privacy_pl:444571",
+   "section_idx": 3,
+   "text_sha1": "5732b1b3d7c5815478ba115430d79528b4d6a79e"
+  },
+  {
+   "doc_id": "privacy_pl:444571",
+   "section_idx": 4,
+   "text_sha1": "bb71a660595900cf188ad39572a925d2eb41b53b"
+  },
+  {
+   "doc_id": "privacy_pl:444571",
+   "section_idx": 5,
+   "text_sha1": "9eec08f70d4aacf48453996c331e189fedbcc9d3"
+  },
+  {
+   "doc_id": "privacy_pl:444571",
+   "section_idx": 6,
+   "text_sha1": "364c2150e5840b6d1788cac6b667cbfd9c78f30a"
+  },
+  {
+   "doc_id": "privacy_pl:444571",
+   "section_idx": 7,
+   "text_sha1": "8897461e8c4be85aee0553f3fced0b47b6f4e336"
+  },
+  {
+   "doc_id": "privacy_pl:444571",
+   "section_idx": 8,
+   "text_sha1": "aff881346fbaebf082b39745de642fab332a2d80"
+  },
+  {
+   "doc_id": "privacy_pl:444571",
+   "section_idx": 9,
+   "text_sha1": "9070b22c4ec4a745d77d9ab62a297fb6210a4882"
+  },
+  {
+   "doc_id": "privacy_pl:444571",
+   "section_idx": 10,
+   "text_sha1": "195ef7101cb5124b9becce50d3e1843f8248c206"
+  },
+  {
+   "doc_id": "privacy_pl:444571",
+   "section_idx": 11,
+   "text_sha1": "711a651f2bacd6e9ae3113d8a8dd8fb3bad3b1c3"
+  },
+  {
+   "doc_id": "privacy_pl:444571",
+   "section_idx": 12,
+   "text_sha1": "103b08a47401945c435ffc8e8ba437a5629eeaa1"
+  },
+  {
+   "doc_id": "privacy_pl:444571",
+   "section_idx": 13,
+   "text_sha1": "5d1743d698b156862aa8021ff802f0119c41a229"
+  },
+  {
+   "doc_id": "privacy_pl:413733",
+   "section_idx": 0,
+   "text_sha1": "7a2399c038e2c4c59120434076289f4f207ba70d"
+  },
+  {
+   "doc_id": "privacy_pl:413733",
+   "section_idx": 1,
+   "text_sha1": "df4d0d46457e751585b3ff922aea3b3ae110ab51"
+  },
+  {
+   "doc_id": "privacy_pl:413733",
+   "section_idx": 2,
+   "text_sha1": "e335b7533757262b074d2937165ca20e2123f604"
+  },
+  {
+   "doc_id": "privacy_pl:413733",
+   "section_idx": 3,
+   "text_sha1": "bc04372234c2447bedc60d13216e0c668466acd2"
+  },
+  {
+   "doc_id": "privacy_pl:413733",
+   "section_idx": 4,
+   "text_sha1": "64ed9173381e454912cd55fe8173cdc9d3faa79e"
+  },
+  {
+   "doc_id": "privacy_pl:413733",
+   "section_idx": 5,
+   "text_sha1": "a9e0885cb5b73da840cd633ef688f27f8b18df53"
+  },
+  {
+   "doc_id": "privacy_pl:413733",
+   "section_idx": 6,
+   "text_sha1": "ba26f81075b2ed66be68e6fedf10feb4838455ef"
+  },
+  {
+   "doc_id": "privacy_pl:413733",
+   "section_idx": 7,
+   "text_sha1": "da340d6c1b7bf60e8b7ed862de8d3f441cbaf1f1"
+  },
+  {
+   "doc_id": "privacy_pl:931953",
+   "section_idx": 0,
+   "text_sha1": "c5a75874061c1a6fcdd01e9a3e403d950e36175d"
+  },
+  {
+   "doc_id": "privacy_pl:931953",
+   "section_idx": 1,
+   "text_sha1": "17f2caa1444db3ff367aaa340900da232472b6f1"
+  },
+  {
+   "doc_id": "privacy_pl:931953",
+   "section_idx": 2,
+   "text_sha1": "89f57da2527220bc413ef39b161c82bc1f937e49"
+  },
+  {
+   "doc_id": "privacy_pl:670918",
+   "section_idx": 0,
+   "text_sha1": "1f3cc32c23956f3bef6d234da89985ac87f46aa8"
+  },
+  {
+   "doc_id": "privacy_pl:670918",
+   "section_idx": 1,
+   "text_sha1": "c025867f052af2bf9b61ed2d3c6a1c8cb26b4147"
+  },
+  {
+   "doc_id": "privacy_pl:670918",
+   "section_idx": 2,
+   "text_sha1": "917051b57fe4349992c41923fac5f070e8c35cb5"
+  },
+  {
+   "doc_id": "privacy_pl:670918",
+   "section_idx": 3,
+   "text_sha1": "9ee80b4fbe7223a7832ca40c0a592ea8abdfdcb2"
+  },
+  {
+   "doc_id": "privacy_pl:670918",
+   "section_idx": 4,
+   "text_sha1": "1a05337e3cc4f433fcac0dc47b6f84eea48afaec"
+  },
+  {
+   "doc_id": "privacy_pl:670918",
+   "section_idx": 5,
+   "text_sha1": "9f0667ead645e5c52b5876d097b7a3476cf1c09e"
+  },
+  {
+   "doc_id": "privacy_pl:670918",
+   "section_idx": 6,
+   "text_sha1": "94d6a1347613b5febe3b6b226d334ce7358b0a97"
+  },
+  {
+   "doc_id": "privacy_pl:670918",
+   "section_idx": 7,
+   "text_sha1": "e51e5dd9348bd3426efdc406aba1702acfd90a1d"
+  },
+  {
+   "doc_id": "privacy_pl:670918",
+   "section_idx": 8,
+   "text_sha1": "3bec557075ce1784e81e60e09862c7195bab412d"
+  },
+  {
+   "doc_id": "privacy_pl:670918",
+   "section_idx": 9,
+   "text_sha1": "4a863af28e9c0e35f32b5787853c3d42c50173df"
+  },
+  {
+   "doc_id": "privacy_pl:670918",
+   "section_idx": 10,
+   "text_sha1": "35101d728209b4b7d30cd111ef2752b467393201"
+  },
+  {
+   "doc_id": "privacy_pl:670918",
+   "section_idx": 11,
+   "text_sha1": "afd43d02a0c6690ddb82b91899257b06c5935956"
+  },
+  {
+   "doc_id": "privacy_pl:670918",
+   "section_idx": 12,
+   "text_sha1": "65d0794826e483a00c0229234b6c6f681ac4a017"
+  },
+  {
+   "doc_id": "privacy_pl:670918",
+   "section_idx": 13,
+   "text_sha1": "b6649a59d929ecc142a88ad16954eb30e646af48"
+  },
+  {
+   "doc_id": "privacy_pl:618437",
+   "section_idx": 0,
+   "text_sha1": "08f72ceb017bb43f43769122c64b9101fa3a59de"
+  },
+  {
+   "doc_id": "privacy_pl:618437",
+   "section_idx": 1,
+   "text_sha1": "320cb028af6d63c5f0e1d7a5f1ce8435441124c5"
+  },
+  {
+   "doc_id": "privacy_pl:618437",
+   "section_idx": 2,
+   "text_sha1": "8c790ef87320afc83eebd7346a8c86189c183eb9"
+  },
+  {
+   "doc_id": "privacy_pl:618437",
+   "section_idx": 3,
+   "text_sha1": "743ce5144f68b169d561df4229e93efc7cc36437"
+  },
+  {
+   "doc_id": "privacy_pl:618437",
+   "section_idx": 4,
+   "text_sha1": "1fd2e697990f0495b8de030d954dee7e7c10ba1f"
+  },
+  {
+   "doc_id": "privacy_pl:618437",
+   "section_idx": 5,
+   "text_sha1": "22e08edb5759574b7cb05f65a4cd93e5a3684346"
+  },
+  {
+   "doc_id": "privacy_pl:618437",
+   "section_idx": 6,
+   "text_sha1": "134f06d23aa04b084fd2fb28a0d26ca4e08a1305"
+  },
+  {
+   "doc_id": "privacy_pl:618437",
+   "section_idx": 7,
+   "text_sha1": "a724547becaae3e9bf1bd024a11be4960552daee"
+  },
+  {
+   "doc_id": "privacy_pl:618437",
+   "section_idx": 8,
+   "text_sha1": "62e57987304b79758aff87813da69b00d43a6aea"
+  },
+  {
+   "doc_id": "privacy_pl:618437",
+   "section_idx": 9,
+   "text_sha1": "fd5692d554edd56aaace399aa2b0596a9ad09f02"
+  },
+  {
+   "doc_id": "privacy_pl:618437",
+   "section_idx": 10,
+   "text_sha1": "f93ed12311101b7f0054177cd4d60c447529a0eb"
+  },
+  {
+   "doc_id": "privacy_pl:618437",
+   "section_idx": 11,
+   "text_sha1": "80d476cf85c3a96a59e509cb49eab79adaed8397"
+  },
+  {
+   "doc_id": "privacy_pl:618437",
+   "section_idx": 12,
+   "text_sha1": "46c38b652e6768a3b98a10f8761d60bb381099e4"
+  },
+  {
+   "doc_id": "privacy_pl:618437",
+   "section_idx": 13,
+   "text_sha1": "9fd88eee2d6121ed1d8d5e0ce6cd4db5badabbc4"
+  },
+  {
+   "doc_id": "privacy_pl:937132",
+   "section_idx": 0,
+   "text_sha1": "4225d65f65ccf49c1aaaa6d1d5259d81bc611a9a"
+  },
+  {
+   "doc_id": "privacy_pl:937132",
+   "section_idx": 1,
+   "text_sha1": "4c92fa8f7a934b7b90bda6881116fc645d531bfc"
+  },
+  {
+   "doc_id": "privacy_pl:937132",
+   "section_idx": 2,
+   "text_sha1": "40254c5f76e55d7bb5275b2cf0043f0363364014"
+  },
+  {
+   "doc_id": "privacy_pl:937132",
+   "section_idx": 3,
+   "text_sha1": "560dd79d54d52a2b30750def344f117e722a0d30"
+  },
+  {
+   "doc_id": "privacy_pl:937132",
+   "section_idx": 4,
+   "text_sha1": "1ba31deef810c27d7f319d4e511722c60f4b073b"
+  },
+  {
+   "doc_id": "privacy_pl:937132",
+   "section_idx": 5,
+   "text_sha1": "acb9dda3dc3ffc3b03f2044b6bd2a4c9f9bae79e"
+  },
+  {
+   "doc_id": "privacy_pl:937132",
+   "section_idx": 6,
+   "text_sha1": "d9267bd9fc5e94ff8f3bc4ab93d641c0db427b4c"
+  },
+  {
+   "doc_id": "privacy_pl:937132",
+   "section_idx": 7,
+   "text_sha1": "d10f806ddb2242b94ff36c7009c4bed2c8b39201"
+  },
+  {
+   "doc_id": "privacy_pl:937132",
+   "section_idx": 8,
+   "text_sha1": "16a499947e2004cd23e14ccda6cb2ab73b10a346"
+  },
+  {
+   "doc_id": "privacy_pl:937132",
+   "section_idx": 9,
+   "text_sha1": "3aa28a81683917751a050f8a9f746dc9d0cebb3d"
+  },
+  {
+   "doc_id": "privacy_pl:937132",
+   "section_idx": 10,
+   "text_sha1": "7339bb2e24adde1ca735911ba5fb10e0ba5c212b"
+  },
+  {
+   "doc_id": "privacy_pl:937132",
+   "section_idx": 11,
+   "text_sha1": "6d36e25cad45d65d04431836d21fe9dcf8cb80bf"
+  },
+  {
+   "doc_id": "privacy_pl:222203",
+   "section_idx": 0,
+   "text_sha1": "7a539ecdbe84f387b8414a59b78423f96ca3b1b2"
+  },
+  {
+   "doc_id": "privacy_pl:222203",
+   "section_idx": 1,
+   "text_sha1": "01128cad3fee80969a5dc727c75870ae2a5a4acb"
+  },
+  {
+   "doc_id": "privacy_pl:222203",
+   "section_idx": 2,
+   "text_sha1": "c982ada6dec47334a2b8a186489b4b199ed2aa57"
+  },
+  {
+   "doc_id": "privacy_pl:222203",
+   "section_idx": 3,
+   "text_sha1": "620f0c9c3750b7a4c8324791925255ed115082df"
+  },
+  {
+   "doc_id": "privacy_pl:222203",
+   "section_idx": 4,
+   "text_sha1": "b7d4f2eaae6a905eb39afebca97bad93dc4d9dac"
+  },
+  {
+   "doc_id": "privacy_pl:222203",
+   "section_idx": 5,
+   "text_sha1": "e95a113cdac9aa6ac02f32d452c3512d2a57fa4d"
+  },
+  {
+   "doc_id": "privacy_pl:222203",
+   "section_idx": 6,
+   "text_sha1": "f07afc76ac79981497f4ccd38fd85cf63c97677e"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 0,
+   "text_sha1": "d0b156d89eb2e6792e21ee3461fbd54d58c5a8fd"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 1,
+   "text_sha1": "adf821260f0f9860ce6ff328b9c59986fd14faf2"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 2,
+   "text_sha1": "8a648ab45e1572281b0de0a5c81fd2905065e593"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 3,
+   "text_sha1": "c9792b89a8c1faae48c0288c8b2be010258bb483"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 4,
+   "text_sha1": "c8340dcb79290dcbd1fb6c6809f14fd830be3710"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 5,
+   "text_sha1": "61d0a57fe0aebb3b87340effa33ad9e77e59c7ae"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 6,
+   "text_sha1": "99656da2fec35580098800954ae3a7c06c6c4bc5"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 7,
+   "text_sha1": "36c090693bccab6382671ca66ede32d87932d630"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 8,
+   "text_sha1": "648bbe7ef0a26b47fb43f385327cf1d542f26cc8"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 9,
+   "text_sha1": "c47cd1db2cea5138a430450ec541431045eec927"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 10,
+   "text_sha1": "829d2a1be28f457432e04e49e539af5b5916fce7"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 11,
+   "text_sha1": "626a11b6a254a2672e903963d3d753d08819acac"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 12,
+   "text_sha1": "8852b9521117d80491b7844a284e5146eafd4e61"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 13,
+   "text_sha1": "34611795d68a91cf4734b5d7bdc29fc38a87d743"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 14,
+   "text_sha1": "7f52f6e5a341ada455b70e30ae6aad90ba0b6a44"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 15,
+   "text_sha1": "db1e770835b111bd92bec4bbccb9ded08a93c088"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 16,
+   "text_sha1": "8e80a368729136898507168b6ff436aa1d14de74"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 17,
+   "text_sha1": "2905430b7f76cfad7015d6121fff84c2475d26e3"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 18,
+   "text_sha1": "4a1d39ca4f75703ff23f656bd716cef3153465e1"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 19,
+   "text_sha1": "b11ddd09f6cb6312e90efa26eb06f34b9a369fd8"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 20,
+   "text_sha1": "3e9c411a4a99e2f8948b60fb4278646ca8b38dec"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 21,
+   "text_sha1": "3cc29bab638d08c27d91fa265d009b46a1ccea6f"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 22,
+   "text_sha1": "4ace2bb941ac1cb8b5c84de9dea167821f87e58c"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 23,
+   "text_sha1": "dc4ecb6fbe5ef43390d5b393eb3aaa878bda84b5"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 24,
+   "text_sha1": "a0f098da1f354ace343382c2d05da872fa238f66"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 25,
+   "text_sha1": "53b041e30b04ea57937ee67f471711221b67f85f"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 26,
+   "text_sha1": "02ac25ae23fbd70e237f924e02f9dfc29a486721"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 27,
+   "text_sha1": "61b7836023caf7a6b40faaef2ba2a57832645fa1"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 28,
+   "text_sha1": "85b4964f319efb00aa4b234f50654ed2db3ac625"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 29,
+   "text_sha1": "1a2071df8beb16ea33b7b8e1a90ad8f884202010"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 30,
+   "text_sha1": "5333178fd4580256059c0163b1064079365f78b2"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 31,
+   "text_sha1": "e64890f402a14d8e35b3f2dee27bfff46429397f"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 32,
+   "text_sha1": "aa2a06e5f66281d7fc2c40716ca2189bf782e6c2"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 33,
+   "text_sha1": "0470662d60885e63334252da091b45cbe6714a73"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 34,
+   "text_sha1": "e8a58651d85ecef5ec18f1a78f6fbe1d651aa192"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 35,
+   "text_sha1": "d54c8d1d6607416d94d26bb7cece59ea2506549a"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 36,
+   "text_sha1": "6a0ff6a96142f7db3cc81db13c732c175180e08d"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 37,
+   "text_sha1": "eb553720e34a9838b9fc0e8d8dd9d7ef2922bd13"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 38,
+   "text_sha1": "1e74c9be979fc6a026bc8e04ec2b548b3473c56e"
+  },
+  {
+   "doc_id": "privacy_pl:391493",
+   "section_idx": 39,
+   "text_sha1": "409499dffb066370bdd6cf8c66a1228b46769cbb"
+  },
+  {
+   "doc_id": "privacy_pl:798462",
+   "section_idx": 0,
+   "text_sha1": "bc708a7bc976c5aa4d73b7d5af71a7541f0a5fb8"
+  },
+  {
+   "doc_id": "privacy_pl:798462",
+   "section_idx": 1,
+   "text_sha1": "15d7a6fd3731424aae9305b7f3672768b01ca5c6"
+  },
+  {
+   "doc_id": "privacy_pl:798462",
+   "section_idx": 2,
+   "text_sha1": "6f4e92dc2d1f30893aefd5f25b981a9f0dbd8c67"
+  },
+  {
+   "doc_id": "privacy_pl:798462",
+   "section_idx": 3,
+   "text_sha1": "3dee7062f48d933106182047d0c32613976078f1"
+  },
+  {
+   "doc_id": "privacy_pl:798462",
+   "section_idx": 4,
+   "text_sha1": "41422aeba5e186164db4cdc9d90590558f9970f9"
+  },
+  {
+   "doc_id": "privacy_pl:798462",
+   "section_idx": 5,
+   "text_sha1": "1a80b3eb88f1098e7f3cca920841b369375812ac"
+  },
+  {
+   "doc_id": "privacy_pl:798462",
+   "section_idx": 6,
+   "text_sha1": "2451ee99c415095675d0545ff62497ff380f50e2"
+  },
+  {
+   "doc_id": "privacy_pl:798462",
+   "section_idx": 7,
+   "text_sha1": "d606006041743347275f63b70563386ecad6f08f"
+  },
+  {
+   "doc_id": "privacy_pl:798462",
+   "section_idx": 8,
+   "text_sha1": "7660e93f855b275c8a92d9bf92add1b40746393d"
+  },
+  {
+   "doc_id": "privacy_pl:798462",
+   "section_idx": 9,
+   "text_sha1": "1af989339fc5fdaeec004161a9c50d69a5f5d9d5"
+  },
+  {
+   "doc_id": "privacy_pl:798462",
+   "section_idx": 10,
+   "text_sha1": "60702af5b7420b9d7e5fb268981c7e3b07b42fad"
+  },
+  {
+   "doc_id": "privacy_pl:798462",
+   "section_idx": 11,
+   "text_sha1": "ff3e36638681d68077774ec7f7f81ac06f9bd191"
+  },
+  {
+   "doc_id": "privacy_pl:798462",
+   "section_idx": 12,
+   "text_sha1": "b37bfd3f2198adecec0f77da252a81bf756cc7ab"
+  },
+  {
+   "doc_id": "privacy_pl:798462",
+   "section_idx": 13,
+   "text_sha1": "a8d84eac91290c4903476a3c8bbb43253ba2f259"
+  },
+  {
+   "doc_id": "privacy_pl:798462",
+   "section_idx": 14,
+   "text_sha1": "dafa263bc09a664dddecca8f948ff60477210c33"
+  },
+  {
+   "doc_id": "privacy_pl:798462",
+   "section_idx": 15,
+   "text_sha1": "0204c73409e5d816d2905f101b34f162a4ef1e9e"
+  },
+  {
+   "doc_id": "privacy_pl:798462",
+   "section_idx": 16,
+   "text_sha1": "3fb8ce43e40335a9ecc16ae28a6973bf31a14c58"
+  },
+  {
+   "doc_id": "privacy_pl:798462",
+   "section_idx": 17,
+   "text_sha1": "c5316821d9103089de0b55ef96dfea9b45e6412a"
+  },
+  {
+   "doc_id": "privacy_pl:798462",
+   "section_idx": 18,
+   "text_sha1": "1afdd222cce7b09a10b1ef457278e9843204b825"
+  },
+  {
+   "doc_id": "privacy_pl:882344",
+   "section_idx": 0,
+   "text_sha1": "26801c11fc97e640d7e3656d536492ed6ada5ce9"
+  },
+  {
+   "doc_id": "privacy_pl:882344",
+   "section_idx": 1,
+   "text_sha1": "e5cc36d47f9ebd36e47aad74e3bb8dfd68295165"
+  },
+  {
+   "doc_id": "privacy_pl:882344",
+   "section_idx": 2,
+   "text_sha1": "391793737e3ccd68046e5d6db1c5f252dcdf9fa9"
+  },
+  {
+   "doc_id": "privacy_pl:882344",
+   "section_idx": 3,
+   "text_sha1": "1b8c7ee70aa8c1cd61168d8db49cc6df89b45a07"
+  },
+  {
+   "doc_id": "privacy_pl:882344",
+   "section_idx": 4,
+   "text_sha1": "106488e15c5f14894e491148049966c7b7defbef"
+  },
+  {
+   "doc_id": "privacy_pl:882344",
+   "section_idx": 5,
+   "text_sha1": "19ac54a0e3e612cc9cdddd15be02f9759a4e0996"
+  },
+  {
+   "doc_id": "privacy_pl:882344",
+   "section_idx": 6,
+   "text_sha1": "b8d6ab9de9576f91a94dd7d30544c369da89fd55"
+  },
+  {
+   "doc_id": "privacy_pl:882344",
+   "section_idx": 7,
+   "text_sha1": "74aa360b23945c2684343d9d7ce1aec9b54a68ba"
+  },
+  {
+   "doc_id": "privacy_pl:882344",
+   "section_idx": 8,
+   "text_sha1": "d0011bce670287415e58bf4ebafbadcfeccf19ce"
+  },
+  {
+   "doc_id": "privacy_pl:882344",
+   "section_idx": 9,
+   "text_sha1": "215c14dfbf0eb7cd9c0ef4b0fbe507db2333c0b4"
+  },
+  {
+   "doc_id": "privacy_pl:882344",
+   "section_idx": 10,
+   "text_sha1": "6a34fa7cb3295624c458d64a01cf4b4c49377279"
+  },
+  {
+   "doc_id": "privacy_pl:882344",
+   "section_idx": 11,
+   "text_sha1": "d0b60142fa3c90d3e164a9111a2bd90387ed767a"
+  },
+  {
+   "doc_id": "privacy_pl:882344",
+   "section_idx": 12,
+   "text_sha1": "7925a2393e37cd0c81e4cbcf1ba21a16dc9d1c2e"
+  },
+  {
+   "doc_id": "privacy_pl:882344",
+   "section_idx": 13,
+   "text_sha1": "fdc26ae7337071bba6acdbb11e7a5644670ea75d"
+  },
+  {
+   "doc_id": "privacy_pl:882344",
+   "section_idx": 14,
+   "text_sha1": "12f41955b8bdf977c4c0f60f3c1e2615c497b012"
+  },
+  {
+   "doc_id": "privacy_pl:882344",
+   "section_idx": 15,
+   "text_sha1": "a592066cf3de5feafaf025c8c173134152ca1d19"
+  },
+  {
+   "doc_id": "privacy_pl:882344",
+   "section_idx": 16,
+   "text_sha1": "10692ecb73622842555ba5a7576156aa1245f138"
+  },
+  {
+   "doc_id": "privacy_pl:882344",
+   "section_idx": 17,
+   "text_sha1": "09767ff3efe7a3bf2e6b762dffe198d94572b65c"
+  },
+  {
+   "doc_id": "privacy_pl:22312",
+   "section_idx": 0,
+   "text_sha1": "fa42aa7a4a22e2449f942992d33fb55d8eccb05f"
+  },
+  {
+   "doc_id": "privacy_pl:22312",
+   "section_idx": 1,
+   "text_sha1": "16c195961ea62cd65b7cc37c18046e2503ad6ea8"
+  },
+  {
+   "doc_id": "privacy_pl:22312",
+   "section_idx": 2,
+   "text_sha1": "d16bc7a1ff581a9bdad7c821510b07349af37ada"
+  },
+  {
+   "doc_id": "privacy_pl:22312",
+   "section_idx": 3,
+   "text_sha1": "34cd7919d6c9a3d32056cd1699e7630e63614a2d"
+  },
+  {
+   "doc_id": "privacy_pl:22312",
+   "section_idx": 4,
+   "text_sha1": "3e9a772b7069046c418bb80d28efc7f620f0e5df"
+  },
+  {
+   "doc_id": "privacy_pl:22312",
+   "section_idx": 5,
+   "text_sha1": "b2dadadb24cb35e1c8130849d167394370d713ac"
+  },
+  {
+   "doc_id": "privacy_pl:22312",
+   "section_idx": 6,
+   "text_sha1": "ae40e2352114226abe0dd3b000a3df518d94059e"
+  },
+  {
+   "doc_id": "privacy_pl:22312",
+   "section_idx": 7,
+   "text_sha1": "34f6f10a0d1808522075cfa52d8ceb32c3bed57d"
+  },
+  {
+   "doc_id": "privacy_pl:22312",
+   "section_idx": 8,
+   "text_sha1": "f92a58df344f023430b98a52757a145612a2a48f"
+  },
+  {
+   "doc_id": "privacy_pl:22312",
+   "section_idx": 9,
+   "text_sha1": "9926ca986f6cdea37d0cf0aea2a276f3b29fe7b8"
+  },
+  {
+   "doc_id": "privacy_pl:22312",
+   "section_idx": 10,
+   "text_sha1": "0a18f76ffcfb0ecaed59e2aaa5e821c32c3f5a68"
+  },
+  {
+   "doc_id": "privacy_pl:1043358",
+   "section_idx": 0,
+   "text_sha1": "55ba6edecda76e2418041fda3cf950ee545e60f0"
+  },
+  {
+   "doc_id": "privacy_pl:1043358",
+   "section_idx": 1,
+   "text_sha1": "c71121ebff5c27209b38bdab20820cb34989bd48"
+  },
+  {
+   "doc_id": "privacy_pl:1043358",
+   "section_idx": 2,
+   "text_sha1": "80818cf8745d36fb795265f1e117ed1b88fd473e"
+  },
+  {
+   "doc_id": "privacy_pl:365877",
+   "section_idx": 0,
+   "text_sha1": "45877e773c01fa89826a455d4dac156db49f6f6c"
+  },
+  {
+   "doc_id": "privacy_pl:365877",
+   "section_idx": 1,
+   "text_sha1": "9e11e9ef390f25b8c9b3f5a2a3ea336ec70f8ef6"
+  },
+  {
+   "doc_id": "privacy_pl:365877",
+   "section_idx": 2,
+   "text_sha1": "90d06d19f81b149302232a6452968d4795a578a9"
+  },
+  {
+   "doc_id": "privacy_pl:365877",
+   "section_idx": 3,
+   "text_sha1": "9089da2b838bc21dfd9d5ad1f8c02bb595472ae5"
+  },
+  {
+   "doc_id": "privacy_pl:365877",
+   "section_idx": 4,
+   "text_sha1": "047c3e824e49a20762fe91bec2b1499ed095dbb0"
+  },
+  {
+   "doc_id": "privacy_pl:365877",
+   "section_idx": 5,
+   "text_sha1": "bf4166b6e17c90d002d1b160c10073ed0aaba5e4"
+  },
+  {
+   "doc_id": "privacy_pl:526141",
+   "section_idx": 0,
+   "text_sha1": "2a2c186ecb34d013a1087a81103c7e21fe70a5ae"
+  },
+  {
+   "doc_id": "privacy_pl:526141",
+   "section_idx": 1,
+   "text_sha1": "8a582c53baa355a2cfe8ea04904d8a20f07fe52c"
+  },
+  {
+   "doc_id": "privacy_pl:526141",
+   "section_idx": 2,
+   "text_sha1": "907310c86f6b111a7470a86a54fd506109beef07"
+  },
+  {
+   "doc_id": "privacy_pl:526141",
+   "section_idx": 3,
+   "text_sha1": "a26b3c993cf98774107032cf5c740a62613fa66e"
+  },
+  {
+   "doc_id": "privacy_pl:526141",
+   "section_idx": 4,
+   "text_sha1": "dafa63b987ca8c6c30b2ced0dc77aca487b8725b"
+  },
+  {
+   "doc_id": "privacy_pl:526141",
+   "section_idx": 5,
+   "text_sha1": "e9155b11ef6b6480c44e89329e40eb681319c8eb"
+  },
+  {
+   "doc_id": "privacy_pl:526141",
+   "section_idx": 6,
+   "text_sha1": "0e5dc183eee435bfbeeca7870db8bd6447f2fac1"
+  },
+  {
+   "doc_id": "privacy_pl:526141",
+   "section_idx": 7,
+   "text_sha1": "f45ecbb0fb5e74b6db752d7ba6864c54d5b89c88"
+  },
+  {
+   "doc_id": "privacy_pl:526141",
+   "section_idx": 8,
+   "text_sha1": "71bb323e8830aae0e4648cc150fb8ceaed5be172"
+  },
+  {
+   "doc_id": "privacy_pl:526141",
+   "section_idx": 9,
+   "text_sha1": "2969a7f544923db558a2d80ee7d191d371fbb7a2"
+  },
+  {
+   "doc_id": "privacy_pl:526141",
+   "section_idx": 10,
+   "text_sha1": "52d3745947372d1a0dfd67429be16812c9bd4832"
+  },
+  {
+   "doc_id": "privacy_pl:526141",
+   "section_idx": 11,
+   "text_sha1": "2366437719383ed9e49320a545bc183e1e0c333f"
+  },
+  {
+   "doc_id": "privacy_pl:526141",
+   "section_idx": 12,
+   "text_sha1": "1ecf747f8d5c42e25bfcf7ac0d69782c191698da"
+  },
+  {
+   "doc_id": "privacy_pl:526141",
+   "section_idx": 13,
+   "text_sha1": "45788c42238c1dc7ffea27d826b194a3dfe52883"
+  },
+  {
+   "doc_id": "privacy_pl:526141",
+   "section_idx": 14,
+   "text_sha1": "d114598bd7f1894436093d7f0d445b25d1d2fa94"
+  },
+  {
+   "doc_id": "privacy_pl:526141",
+   "section_idx": 15,
+   "text_sha1": "27516b62f278209d1a813d9ee8d6b3de60d9524f"
+  },
+  {
+   "doc_id": "privacy_pl:526141",
+   "section_idx": 16,
+   "text_sha1": "f53375fb33dd13b817c3d182ab2208ff264a378b"
+  },
+  {
+   "doc_id": "privacy_pl:526141",
+   "section_idx": 17,
+   "text_sha1": "12a8bce8516fff499009c8d66d2db2583ad6053f"
+  },
+  {
+   "doc_id": "privacy_pl:526141",
+   "section_idx": 18,
+   "text_sha1": "6d8cafca3413974af08a9081fa597b28a04660e0"
+  },
+  {
+   "doc_id": "privacy_pl:235193",
+   "section_idx": 0,
+   "text_sha1": "e4b6f895d40ffa70a886ec3155c839cde2c67aba"
+  },
+  {
+   "doc_id": "privacy_pl:235193",
+   "section_idx": 1,
+   "text_sha1": "bde021fcceab52790f38d5d4b0cdb82a55884645"
+  },
+  {
+   "doc_id": "privacy_pl:235193",
+   "section_idx": 2,
+   "text_sha1": "0b488c248e59481d8ac1083f20e66a7f9c500131"
+  },
+  {
+   "doc_id": "privacy_pl:235193",
+   "section_idx": 3,
+   "text_sha1": "2fe21e1c4e0744d49c4010ce2ed2cb39d5235811"
+  },
+  {
+   "doc_id": "privacy_pl:235193",
+   "section_idx": 4,
+   "text_sha1": "c4d1a6fc43877df03c3fa40b6cfaf9cb609c13e3"
+  },
+  {
+   "doc_id": "privacy_pl:235193",
+   "section_idx": 5,
+   "text_sha1": "e53dd41b7023e47047467afa040e25de98ea78fe"
+  },
+  {
+   "doc_id": "privacy_pl:235193",
+   "section_idx": 6,
+   "text_sha1": "b0ea4c08429adf4c34f4b5ccb1d8e99b3dda3a86"
+  },
+  {
+   "doc_id": "privacy_pl:235193",
+   "section_idx": 7,
+   "text_sha1": "b53e8ba6b1d8fde823520deff8416ebf2165daf9"
+  },
+  {
+   "doc_id": "privacy_pl:235193",
+   "section_idx": 8,
+   "text_sha1": "73a444c8d66f3766d8ad3e81c0055dd59846fc61"
+  },
+  {
+   "doc_id": "privacy_pl:235193",
+   "section_idx": 9,
+   "text_sha1": "d03189232782bf32463b7bc2b9a274e7ef93fa9a"
+  },
+  {
+   "doc_id": "privacy_pl:235193",
+   "section_idx": 10,
+   "text_sha1": "18dbb25529e429554991cc783893c0aa5f6a11d5"
+  },
+  {
+   "doc_id": "privacy_pl:235193",
+   "section_idx": 11,
+   "text_sha1": "884cd48736379e60d3d64f62068af58da8439a5e"
+  },
+  {
+   "doc_id": "privacy_pl:235193",
+   "section_idx": 12,
+   "text_sha1": "fdd6a1a686bf61af83c6f2a5ecbabf547b79c997"
+  },
+  {
+   "doc_id": "privacy_pl:235193",
+   "section_idx": 13,
+   "text_sha1": "827bcbb30482652336f7b58e0b0a8078a7640e8f"
+  },
+  {
+   "doc_id": "privacy_pl:1037660",
+   "section_idx": 0,
+   "text_sha1": "e62a3d369fafcd18ca5581007296fa07a6195bb1"
+  },
+  {
+   "doc_id": "privacy_pl:1037660",
+   "section_idx": 1,
+   "text_sha1": "ad58bf46e4537c2b086e5cc8b29f2f2fdc07868b"
+  },
+  {
+   "doc_id": "privacy_pl:1037660",
+   "section_idx": 2,
+   "text_sha1": "124b4ce1ab505f3d0ea213fcefcff55faf08074f"
+  },
+  {
+   "doc_id": "privacy_pl:1037660",
+   "section_idx": 3,
+   "text_sha1": "9b2844a13a060d2423d38c74ad12443f2e892e6a"
+  },
+  {
+   "doc_id": "privacy_pl:1037660",
+   "section_idx": 4,
+   "text_sha1": "f7f9a5145b3dc0bbaa9c93b58e5b04675b14d942"
+  },
+  {
+   "doc_id": "privacy_pl:1037660",
+   "section_idx": 5,
+   "text_sha1": "9a997822b024b7eac928523792fc762792296ef9"
+  },
+  {
+   "doc_id": "privacy_pl:1037660",
+   "section_idx": 6,
+   "text_sha1": "8686453da4d2c6a6890cc2229d01090eb7065708"
+  },
+  {
+   "doc_id": "privacy_pl:325170",
+   "section_idx": 0,
+   "text_sha1": "de8850229d52b90c152d28e2b4cfc21b686d0e60"
+  },
+  {
+   "doc_id": "privacy_pl:325170",
+   "section_idx": 1,
+   "text_sha1": "3d83e9534348877ae72c0ca431a51d4d47813715"
+  },
+  {
+   "doc_id": "privacy_pl:325170",
+   "section_idx": 2,
+   "text_sha1": "d969f7f54a985e1a57b3b5e6b3b2cb4a64b20fbd"
+  },
+  {
+   "doc_id": "privacy_pl:325170",
+   "section_idx": 3,
+   "text_sha1": "a285396d6849f5e9d9770a45ce316fd1808cb826"
+  },
+  {
+   "doc_id": "privacy_pl:325170",
+   "section_idx": 4,
+   "text_sha1": "b962c8da937033ff448105491e0f616ab771ec63"
+  },
+  {
+   "doc_id": "privacy_pl:325170",
+   "section_idx": 5,
+   "text_sha1": "3852c509fb8df24b3933b25ed24324d46b8bf714"
+  },
+  {
+   "doc_id": "privacy_pl:325170",
+   "section_idx": 6,
+   "text_sha1": "11a32364dbc140058f936982530e2af3e1bb7341"
+  },
+  {
+   "doc_id": "privacy_pl:325170",
+   "section_idx": 7,
+   "text_sha1": "88deeb62d0628680f50b8027891c6fb52aace6cc"
+  },
+  {
+   "doc_id": "privacy_pl:412141",
+   "section_idx": 0,
+   "text_sha1": "0be69094c33fda7094b18d50743ec5dce92808c5"
+  },
+  {
+   "doc_id": "privacy_pl:412141",
+   "section_idx": 1,
+   "text_sha1": "116c1e0074aa54e9a2d92c6dc97a697d6e1bfc76"
+  },
+  {
+   "doc_id": "privacy_pl:412141",
+   "section_idx": 2,
+   "text_sha1": "2cd6bcde4a30ce51b050c8dec498cab0485d0a77"
+  },
+  {
+   "doc_id": "privacy_pl:412141",
+   "section_idx": 3,
+   "text_sha1": "6b9365ad4646df3c81f96041edb7cc363650c08a"
+  },
+  {
+   "doc_id": "privacy_pl:412141",
+   "section_idx": 4,
+   "text_sha1": "ae799eac6cf1d28c38f65c44915600ca31a927de"
+  },
+  {
+   "doc_id": "privacy_pl:412141",
+   "section_idx": 5,
+   "text_sha1": "6a5e54c6cd858dfed6668aaec526a236335df07f"
+  },
+  {
+   "doc_id": "privacy_pl:412141",
+   "section_idx": 6,
+   "text_sha1": "1f9f618d8b1496520239fb8a2b2d031b183fcb67"
+  },
+  {
+   "doc_id": "privacy_pl:412141",
+   "section_idx": 7,
+   "text_sha1": "f056184401a31d93eb50bc994ef0874b963bd228"
+  },
+  {
+   "doc_id": "privacy_pl:412141",
+   "section_idx": 8,
+   "text_sha1": "bb082c68f8d440dea3f84c05eb2c0814b2d87f4a"
+  },
+  {
+   "doc_id": "privacy_pl:412141",
+   "section_idx": 9,
+   "text_sha1": "8cf17224965b22bc71150d87533684540b6dfaf5"
+  },
+  {
+   "doc_id": "privacy_pl:412141",
+   "section_idx": 10,
+   "text_sha1": "a2796fa73df7fcaad52aaf90615c2aff8df48279"
+  },
+  {
+   "doc_id": "privacy_pl:412141",
+   "section_idx": 11,
+   "text_sha1": "91b26f302a9dcbdacd06a49035a1c62c8a6e5600"
+  },
+  {
+   "doc_id": "privacy_pl:412141",
+   "section_idx": 12,
+   "text_sha1": "f5527054ceaa8c5b67ba8d189ff7b2b79f5c4da9"
+  },
+  {
+   "doc_id": "privacy_pl:412141",
+   "section_idx": 13,
+   "text_sha1": "8f71239b66f0817c0e0dfa58c1933dd5a0a72ee2"
+  },
+  {
+   "doc_id": "privacy_pl:412141",
+   "section_idx": 14,
+   "text_sha1": "479a8f71c23a81ef5766c34f09ad354a4d056d82"
+  },
+  {
+   "doc_id": "privacy_pl:412141",
+   "section_idx": 15,
+   "text_sha1": "d97e2ca072ea893774944df0f183d6744f6de50e"
+  },
+  {
+   "doc_id": "privacy_pl:412141",
+   "section_idx": 16,
+   "text_sha1": "de334ac83a5dba000ca3b1a2b4616d408a464bed"
+  },
+  {
+   "doc_id": "privacy_pl:412141",
+   "section_idx": 17,
+   "text_sha1": "95eb40d9ee69c881068a17a25842eb39011a5fee"
+  },
+  {
+   "doc_id": "privacy_pl:412141",
+   "section_idx": 18,
+   "text_sha1": "4485f016c5fd81f2c5c1618222e680b6f0536d39"
+  },
+  {
+   "doc_id": "privacy_pl:673166",
+   "section_idx": 0,
+   "text_sha1": "c68dd48271b40473f33a01443ea95879a99989b2"
+  },
+  {
+   "doc_id": "privacy_pl:673166",
+   "section_idx": 1,
+   "text_sha1": "11fe7e297f04b257f53343d3fc787bea15e28548"
+  },
+  {
+   "doc_id": "privacy_pl:673166",
+   "section_idx": 2,
+   "text_sha1": "9cd41ab49849a4855e11e9ffca7911e768bf2b15"
+  },
+  {
+   "doc_id": "privacy_pl:673166",
+   "section_idx": 3,
+   "text_sha1": "d63050a1b71f6df9b1744331ae7239de6749cd54"
+  },
+  {
+   "doc_id": "privacy_pl:673166",
+   "section_idx": 4,
+   "text_sha1": "6a9477d6ce0dec0184b7a4018ce6998df37ba03c"
+  },
+  {
+   "doc_id": "privacy_pl:673166",
+   "section_idx": 5,
+   "text_sha1": "5959922301550d58a56458e46e313940bcc4c54c"
+  },
+  {
+   "doc_id": "privacy_pl:673166",
+   "section_idx": 6,
+   "text_sha1": "ff0962bd0d32cd9cb1ea0b5a2a6e43b25e134434"
+  },
+  {
+   "doc_id": "privacy_pl:673166",
+   "section_idx": 7,
+   "text_sha1": "ff9186613357328b9870cdfe9d1cb8b0dfed919f"
+  },
+  {
+   "doc_id": "privacy_pl:673166",
+   "section_idx": 8,
+   "text_sha1": "3d481355b7b09d5f91d898cb7bdb34e2f49744ac"
+  },
+  {
+   "doc_id": "privacy_pl:673166",
+   "section_idx": 9,
+   "text_sha1": "8c7c03188a0d4f67ad521aef3d02f592ce87c895"
+  },
+  {
+   "doc_id": "privacy_pl:906190",
+   "section_idx": 0,
+   "text_sha1": "4fde1dc5b0ab5994f8341bbb209142cdfcc208c0"
+  },
+  {
+   "doc_id": "privacy_pl:906190",
+   "section_idx": 1,
+   "text_sha1": "b77e58b78681e6530392b5ca9a1eb66a8a2bc00b"
+  },
+  {
+   "doc_id": "privacy_pl:906190",
+   "section_idx": 2,
+   "text_sha1": "8525b09274ab8332bac904bd87b1eb9a8765b88e"
+  },
+  {
+   "doc_id": "privacy_pl:906190",
+   "section_idx": 3,
+   "text_sha1": "81764222bbfbb22dc42630a972fe2c87c0e3e2d7"
+  },
+  {
+   "doc_id": "privacy_pl:906190",
+   "section_idx": 4,
+   "text_sha1": "eb23085f5a534181caa4e3f5ea55bf0f7db9dddb"
+  },
+  {
+   "doc_id": "privacy_pl:906190",
+   "section_idx": 5,
+   "text_sha1": "0483fca4ce6727eb5e10eb3e6054937c4eefc15d"
+  },
+  {
+   "doc_id": "privacy_pl:906190",
+   "section_idx": 6,
+   "text_sha1": "21d51eedef8cf968627d67f018f9d5280bc93757"
+  },
+  {
+   "doc_id": "privacy_pl:906190",
+   "section_idx": 7,
+   "text_sha1": "bfa16d90111ae8b63480c57c4e0b7ece47dad592"
+  },
+  {
+   "doc_id": "privacy_pl:906190",
+   "section_idx": 8,
+   "text_sha1": "673437af773673ca4390ac5285ee5513e9f9f663"
+  },
+  {
+   "doc_id": "privacy_pl:906190",
+   "section_idx": 9,
+   "text_sha1": "b99cfb197aa1b303786bdddbc39a7f5c1e1640fe"
+  },
+  {
+   "doc_id": "privacy_pl:906190",
+   "section_idx": 10,
+   "text_sha1": "bc36de521976f9d5b42f9a36919e9af50ceb6ba5"
+  },
+  {
+   "doc_id": "privacy_pl:906190",
+   "section_idx": 11,
+   "text_sha1": "5e423682b89fa3b15348a7e882679168741ebfdb"
+  },
+  {
+   "doc_id": "privacy_pl:211208",
+   "section_idx": 0,
+   "text_sha1": "a7c1c1e74d12648db358bb33ccc02dc52539736f"
+  },
+  {
+   "doc_id": "privacy_pl:211208",
+   "section_idx": 1,
+   "text_sha1": "eafa92cd010dce1f6912fd47084f5a2b53045e24"
+  },
+  {
+   "doc_id": "privacy_pl:211208",
+   "section_idx": 2,
+   "text_sha1": "396743d0657cdf3c6bce704a881be3608f32e223"
+  },
+  {
+   "doc_id": "privacy_pl:211208",
+   "section_idx": 3,
+   "text_sha1": "e4c1ccab58445b4fb59f665f15027dfeb87fdcbb"
+  },
+  {
+   "doc_id": "privacy_pl:211208",
+   "section_idx": 4,
+   "text_sha1": "163e8d2e71d9ae0595f417996fe010118148e750"
+  },
+  {
+   "doc_id": "privacy_pl:211208",
+   "section_idx": 5,
+   "text_sha1": "aee5e3f1462b01a1a1fb6f09acc46b5abf2ffac3"
+  },
+  {
+   "doc_id": "privacy_pl:211208",
+   "section_idx": 6,
+   "text_sha1": "eadf85dd980cf51f527f5cfe9bd470bd473c8631"
+  },
+  {
+   "doc_id": "privacy_pl:211208",
+   "section_idx": 7,
+   "text_sha1": "fe6f1852f16cc93941469f3aa96556c1fb5bc916"
+  },
+  {
+   "doc_id": "privacy_pl:211208",
+   "section_idx": 8,
+   "text_sha1": "f73ad22e85a25831afba35f4bd9937d79438e948"
+  },
+  {
+   "doc_id": "privacy_pl:211208",
+   "section_idx": 9,
+   "text_sha1": "50f3c864e32108a856a6751d6cbf1c8ad09145ca"
+  },
+  {
+   "doc_id": "privacy_pl:211208",
+   "section_idx": 10,
+   "text_sha1": "62d9f2baa421fa567deb69a3622942854b8c9c34"
+  },
+  {
+   "doc_id": "privacy_pl:211208",
+   "section_idx": 11,
+   "text_sha1": "16d97f986f7074fa1f4e91547293f2b9903a89f9"
+  },
+  {
+   "doc_id": "privacy_pl:211208",
+   "section_idx": 12,
+   "text_sha1": "04791eb3e96e159b153839b086959363ab75be44"
+  },
+  {
+   "doc_id": "privacy_pl:211208",
+   "section_idx": 13,
+   "text_sha1": "08eac93ce915fa0fdaa08d7d72bfb6ef4995a7ad"
+  },
+  {
+   "doc_id": "privacy_pl:211208",
+   "section_idx": 14,
+   "text_sha1": "a52f461d4084890f9ebb5cc77ed582a397cfe92a"
+  },
+  {
+   "doc_id": "privacy_pl:211208",
+   "section_idx": 15,
+   "text_sha1": "e7cd79b2245a8013759e3ca6434e06a2b6165388"
+  },
+  {
+   "doc_id": "privacy_pl:211208",
+   "section_idx": 16,
+   "text_sha1": "3066c5bc139c4900d75f86c31964164078b1c89a"
+  },
+  {
+   "doc_id": "privacy_pl:211208",
+   "section_idx": 17,
+   "text_sha1": "7f4c6d97c4434b900f99f1db3c2a39981e9e278e"
+  },
+  {
+   "doc_id": "privacy_pl:211208",
+   "section_idx": 18,
+   "text_sha1": "6ce8b4a98230c3c3e08597de12dbdd8ae040ed1d"
+  },
+  {
+   "doc_id": "privacy_pl:624410",
+   "section_idx": 0,
+   "text_sha1": "d84425157467dab49ae53d7275eddedeb36262e3"
+  },
+  {
+   "doc_id": "privacy_pl:624410",
+   "section_idx": 1,
+   "text_sha1": "f268fd15689507580294a2706b478b34ba81f3d6"
+  },
+  {
+   "doc_id": "privacy_pl:624410",
+   "section_idx": 2,
+   "text_sha1": "4361e34bc0ee34dc01135c18abfff64876dd032c"
+  },
+  {
+   "doc_id": "privacy_pl:624410",
+   "section_idx": 3,
+   "text_sha1": "28ad78d9758d2161ce37c6546d830917b6baeada"
+  },
+  {
+   "doc_id": "privacy_pl:624410",
+   "section_idx": 4,
+   "text_sha1": "782cff47c9a8a8bb16173efb77f1b01cc7b02a23"
+  },
+  {
+   "doc_id": "privacy_pl:624410",
+   "section_idx": 5,
+   "text_sha1": "7e1b3d5e3cb98f5a3e3224eb5d0d20b8a0b3112a"
+  },
+  {
+   "doc_id": "privacy_pl:624410",
+   "section_idx": 6,
+   "text_sha1": "20b2f99dbfbbd52bd3bc07040e20666365aedee2"
+  },
+  {
+   "doc_id": "privacy_pl:624410",
+   "section_idx": 7,
+   "text_sha1": "c83aabfc2c3a9720d4605a4d6af6b4c090e00457"
+  },
+  {
+   "doc_id": "privacy_pl:624410",
+   "section_idx": 8,
+   "text_sha1": "9270557ef906858708cb55b93bb6216783fbdfce"
+  },
+  {
+   "doc_id": "privacy_pl:624410",
+   "section_idx": 9,
+   "text_sha1": "f554caf3e3074bb31dfd2565e47b1acd2180bda0"
+  },
+  {
+   "doc_id": "privacy_pl:624410",
+   "section_idx": 10,
+   "text_sha1": "b3678f9a328f70463be11e86d7b5ea035cefea1f"
+  },
+  {
+   "doc_id": "privacy_pl:624410",
+   "section_idx": 11,
+   "text_sha1": "e20c6d84ca8a748743bfa53f6d68434f719fdb66"
+  },
+  {
+   "doc_id": "privacy_pl:624410",
+   "section_idx": 12,
+   "text_sha1": "250b472688f1819eeb75979046ed803ec2e07577"
+  },
+  {
+   "doc_id": "privacy_pl:624410",
+   "section_idx": 13,
+   "text_sha1": "8490094237294daf963315473590a56a75a9003a"
+  },
+  {
+   "doc_id": "privacy_pl:624410",
+   "section_idx": 14,
+   "text_sha1": "b9aaae20c1cb6cce9eec9c68165b76e897d7ddec"
+  },
+  {
+   "doc_id": "privacy_pl:473343",
+   "section_idx": 0,
+   "text_sha1": "cd892437a59261f88ccf0d84847e76a6a0647c8f"
+  },
+  {
+   "doc_id": "privacy_pl:473343",
+   "section_idx": 1,
+   "text_sha1": "700e506d232b3508adc41e55df46a30fcc5ca767"
+  },
+  {
+   "doc_id": "privacy_pl:509173",
+   "section_idx": 0,
+   "text_sha1": "519b7db01232ac90808fe10b75f75202974b870c"
+  },
+  {
+   "doc_id": "privacy_pl:509173",
+   "section_idx": 1,
+   "text_sha1": "8fddb44b9decfacc8b6e1ddecaef8c8c2827019e"
+  },
+  {
+   "doc_id": "privacy_pl:111692",
+   "section_idx": 0,
+   "text_sha1": "bf8351ad1e0c0ac1d6e5ef41915ba12e6887a268"
+  },
+  {
+   "doc_id": "privacy_pl:111692",
+   "section_idx": 1,
+   "text_sha1": "92297ccc393c824b76b996d33e1fac6ad338d597"
+  },
+  {
+   "doc_id": "privacy_pl:111692",
+   "section_idx": 2,
+   "text_sha1": "b3760c0bc1cc3ccf742ed8e1fd18a218aad95598"
+  },
+  {
+   "doc_id": "privacy_pl:111692",
+   "section_idx": 3,
+   "text_sha1": "29276307d3e49d21f06882f32a602cbf2e85e6fe"
+  },
+  {
+   "doc_id": "privacy_pl:111692",
+   "section_idx": 4,
+   "text_sha1": "6f73334d09abba6f7d5d692fe6002f3ea58f438a"
+  },
+  {
+   "doc_id": "privacy_pl:111692",
+   "section_idx": 5,
+   "text_sha1": "5780ca5438301baad623dc67c44a8eee65e2b99c"
+  },
+  {
+   "doc_id": "privacy_pl:111692",
+   "section_idx": 6,
+   "text_sha1": "acaa17c67104de65fab3d66253842d3605cf907e"
+  },
+  {
+   "doc_id": "privacy_pl:111692",
+   "section_idx": 7,
+   "text_sha1": "a6990583c05f08a5e39ec289d7f01a771828cf8c"
+  },
+  {
+   "doc_id": "privacy_pl:476299",
+   "section_idx": 0,
+   "text_sha1": "94dcb429258e91d33ea771647839a5e0483a1b42"
+  },
+  {
+   "doc_id": "privacy_pl:476299",
+   "section_idx": 1,
+   "text_sha1": "851021713b2585167e4ec0e356729675a9d1e04b"
+  },
+  {
+   "doc_id": "privacy_pl:476299",
+   "section_idx": 2,
+   "text_sha1": "2a9d021756713b707dc09044ece2ad830d4ab6d1"
+  },
+  {
+   "doc_id": "privacy_pl:476299",
+   "section_idx": 3,
+   "text_sha1": "dbc9fc5ae571a71705bd1cfc300b4a9e486f5e3f"
+  },
+  {
+   "doc_id": "privacy_pl:476299",
+   "section_idx": 4,
+   "text_sha1": "6421531165f9654554eb3f01464136a783a8495c"
+  },
+  {
+   "doc_id": "privacy_pl:476299",
+   "section_idx": 5,
+   "text_sha1": "7b872edb30fad62700f68f4d76996d35663e958d"
+  },
+  {
+   "doc_id": "privacy_pl:476299",
+   "section_idx": 6,
+   "text_sha1": "19d9e4ba19c08e9c65f2f7de60e27afba09d0f4d"
+  },
+  {
+   "doc_id": "privacy_pl:476299",
+   "section_idx": 7,
+   "text_sha1": "9ad440503856bbd2698717fd0f5fc6cae88cdc62"
+  },
+  {
+   "doc_id": "privacy_pl:476299",
+   "section_idx": 8,
+   "text_sha1": "19e6633c834faf11640641be44e450bd6e17ce2a"
+  },
+  {
+   "doc_id": "privacy_pl:476299",
+   "section_idx": 9,
+   "text_sha1": "e3d08b0a929601b7d1936b6c70c76ba201e3088b"
+  },
+  {
+   "doc_id": "privacy_pl:540421",
+   "section_idx": 0,
+   "text_sha1": "e4f438c56528a07566996dcf862aa6318078f915"
+  },
+  {
+   "doc_id": "privacy_pl:540421",
+   "section_idx": 1,
+   "text_sha1": "4b6561dd332fea2f24d88ad1b4b2b34af457fe6e"
+  },
+  {
+   "doc_id": "privacy_pl:540421",
+   "section_idx": 2,
+   "text_sha1": "1e472f0c8588c03665429a52706ae67953d183ad"
+  },
+  {
+   "doc_id": "privacy_pl:540421",
+   "section_idx": 3,
+   "text_sha1": "b86b8e33511896249a0d361628af38dd9ab82635"
+  },
+  {
+   "doc_id": "privacy_pl:540421",
+   "section_idx": 4,
+   "text_sha1": "eaee71fea04a236ea76b6d1405c134f41786b5df"
+  },
+  {
+   "doc_id": "privacy_pl:540421",
+   "section_idx": 5,
+   "text_sha1": "a8359e795af9500eafb18934e081a79973f015e2"
+  },
+  {
+   "doc_id": "privacy_pl:540421",
+   "section_idx": 6,
+   "text_sha1": "df62fb90cd772cbb558044fa60d1778e886d9684"
+  },
+  {
+   "doc_id": "privacy_pl:540421",
+   "section_idx": 7,
+   "text_sha1": "558e18f069649f164bd9bc388ef5269248f4e255"
+  },
+  {
+   "doc_id": "privacy_pl:540421",
+   "section_idx": 8,
+   "text_sha1": "3ccb3da7bd45fe70ec53997932f720af509876b1"
+  },
+  {
+   "doc_id": "privacy_pl:540421",
+   "section_idx": 9,
+   "text_sha1": "bdb5a3d6f6c66119913880d64dec8a5260787e79"
+  },
+  {
+   "doc_id": "privacy_pl:540421",
+   "section_idx": 10,
+   "text_sha1": "af4c1d5e205db3392ae68d3dfa35b8e41c0134d5"
+  },
+  {
+   "doc_id": "privacy_pl:540421",
+   "section_idx": 11,
+   "text_sha1": "46fa83ff3c86f5eaa227a1be94d9b43470793488"
+  },
+  {
+   "doc_id": "privacy_pl:540421",
+   "section_idx": 12,
+   "text_sha1": "f554caf3e3074bb31dfd2565e47b1acd2180bda0"
+  },
+  {
+   "doc_id": "privacy_pl:540421",
+   "section_idx": 13,
+   "text_sha1": "4c873baa349365ead71f9515f4e6affbce8677e7"
+  },
+  {
+   "doc_id": "privacy_pl:540421",
+   "section_idx": 14,
+   "text_sha1": "9b1802db034ef542617cb7ad41546d572561d7b4"
+  },
+  {
+   "doc_id": "privacy_pl:540421",
+   "section_idx": 15,
+   "text_sha1": "e732b9b1f87bd2a91300129a99b1f5c585151d43"
+  },
+  {
+   "doc_id": "privacy_pl:540421",
+   "section_idx": 16,
+   "text_sha1": "bc35ae0192d16a1f94b0eb9386654b647dd8bc41"
+  },
+  {
+   "doc_id": "privacy_pl:540421",
+   "section_idx": 17,
+   "text_sha1": "51b0891b221fa737d943a7998bc9ef22f3b1a994"
+  },
+  {
+   "doc_id": "privacy_pl:540421",
+   "section_idx": 18,
+   "text_sha1": "3c3c5ba82ef808c378d3abdc9db96198ec97eae2"
+  },
+  {
+   "doc_id": "privacy_pl:540421",
+   "section_idx": 19,
+   "text_sha1": "4f36e05513529d1cbc91490a82aeac8e586044e5"
+  },
+  {
+   "doc_id": "privacy_pl:540421",
+   "section_idx": 20,
+   "text_sha1": "9dea7dd20d69677a60abd5e7905c7ce5b4d683d4"
+  },
+  {
+   "doc_id": "privacy_pl:540421",
+   "section_idx": 21,
+   "text_sha1": "0bfdb10a5c5bf40a36418732de46639cd17654fb"
+  },
+  {
+   "doc_id": "privacy_pl:540421",
+   "section_idx": 22,
+   "text_sha1": "1aa932f5621b59d851f779069a0924d9143a511e"
+  },
+  {
+   "doc_id": "privacy_pl:540421",
+   "section_idx": 23,
+   "text_sha1": "9f27af14d12d4a76aa485bda0c8355b408efcd63"
+  },
+  {
+   "doc_id": "privacy_pl:27116",
+   "section_idx": 0,
+   "text_sha1": "f9e556a51053b3e86e64ed9a8a6a181c67392943"
+  },
+  {
+   "doc_id": "privacy_pl:27116",
+   "section_idx": 1,
+   "text_sha1": "91daf7ba2d8ec3290f78bf4057b096cbc938aae5"
+  },
+  {
+   "doc_id": "privacy_pl:27116",
+   "section_idx": 2,
+   "text_sha1": "c4e9195ce2adfeba259c6d552706714a446b96db"
+  },
+  {
+   "doc_id": "privacy_pl:27116",
+   "section_idx": 3,
+   "text_sha1": "6fc35607b03fa6bacf8a30710b62fb960ef503c5"
+  },
+  {
+   "doc_id": "privacy_pl:27116",
+   "section_idx": 4,
+   "text_sha1": "53d5f94c03ac47a9d1b568d53fb147c1ab85eb21"
+  },
+  {
+   "doc_id": "privacy_pl:27116",
+   "section_idx": 5,
+   "text_sha1": "268a815eddb1ac563cec689cd5b88f9d3f97f391"
+  },
+  {
+   "doc_id": "privacy_pl:27116",
+   "section_idx": 6,
+   "text_sha1": "69fe3ef4982323c1807d2547e0bb2e1c71543b48"
+  },
+  {
+   "doc_id": "privacy_pl:27116",
+   "section_idx": 7,
+   "text_sha1": "d16648fc93a8a8688f2108493e0d83a8a1c8295e"
+  },
+  {
+   "doc_id": "privacy_pl:27116",
+   "section_idx": 8,
+   "text_sha1": "92e5a413082ede5a2fe01d41d5bce114161a504f"
+  },
+  {
+   "doc_id": "privacy_pl:27116",
+   "section_idx": 9,
+   "text_sha1": "791940710fae94fc14988b3ebd9f388b1bf7dd58"
+  },
+  {
+   "doc_id": "privacy_pl:27116",
+   "section_idx": 10,
+   "text_sha1": "96873416c88f09ebf1c3e9aa08239d1deb4e0175"
+  },
+  {
+   "doc_id": "privacy_pl:27116",
+   "section_idx": 11,
+   "text_sha1": "e028fbabebc10836dc81117337c04ccc0d3b4b62"
+  },
+  {
+   "doc_id": "privacy_pl:27116",
+   "section_idx": 12,
+   "text_sha1": "720b6fca9858595cec514f8487be8431de0db052"
+  },
+  {
+   "doc_id": "privacy_pl:27116",
+   "section_idx": 13,
+   "text_sha1": "7a1c461327b81d5450b49cecc663be465b24aef4"
+  },
+  {
+   "doc_id": "privacy_pl:27116",
+   "section_idx": 14,
+   "text_sha1": "2afd40ff19fcd60c667defd436c61f9e2c7a66b4"
+  },
+  {
+   "doc_id": "privacy_pl:27116",
+   "section_idx": 15,
+   "text_sha1": "645716218f617d65606a6a77815d47a77473d43d"
+  },
+  {
+   "doc_id": "privacy_pl:27116",
+   "section_idx": 16,
+   "text_sha1": "1c95113111a16939ab24853b45ea60b96f53738f"
+  },
+  {
+   "doc_id": "privacy_pl:27116",
+   "section_idx": 17,
+   "text_sha1": "bb5ea58f583e0dd7689c41257fc5d6a795d9a235"
+  },
+  {
+   "doc_id": "privacy_pl:27116",
+   "section_idx": 18,
+   "text_sha1": "7801a17f563e88d05f31c7bbcf8877c36de2db60"
+  },
+  {
+   "doc_id": "privacy_pl:27116",
+   "section_idx": 19,
+   "text_sha1": "8fcc2ed6dc1665a3d3b18a37e073202f4f3426da"
+  },
+  {
+   "doc_id": "privacy_pl:27116",
+   "section_idx": 20,
+   "text_sha1": "08fc34b4cf0b8f4c7a24b63c2db5bb39d0ad1473"
+  },
+  {
+   "doc_id": "privacy_pl:27116",
+   "section_idx": 21,
+   "text_sha1": "902419464e9df6024b54f2b090161390434e744e"
+  },
+  {
+   "doc_id": "privacy_pl:27116",
+   "section_idx": 22,
+   "text_sha1": "f9f3b22b4c578763abb20ed0ba915673a3fa862a"
+  },
+  {
+   "doc_id": "privacy_pl:27116",
+   "section_idx": 23,
+   "text_sha1": "e0277cf1250cd7926e954e4c439108f742fdb599"
+  }
+ ],
+ "documents_selection": {
+  "seed": 1234,
+  "documents": 150,
+  "pool": 2448,
+  "split": "dev",
+  "sources": [
+   "privacy_pl"
+  ]
+ }
 }

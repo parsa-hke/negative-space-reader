@@ -9,6 +9,9 @@
            set takes distil.label_sets.annotated_per_document sections from each of randomly drawn whole annotated
            documents, the teacher set comes from the others. Otherwise: human set from dev documents outside the schema-induction sample, teacher set
            from train; one section per document; both stratified by position and length (packs/presence_labels.py)
+  select_documents (Phase 5, document-level presence) whole dev documents, every section, as the `documents`
+           set of label_sets.json (distil.label_sets.documents_per_genre; stratified by year and category; only
+           sources the indexed corpus has; never the induction sample, other label sets or test)
   teacher_labels (4.1) the two-pass teacher (prompts label_presence + label_presence_check) over the label sets;
            every type of the schema is labelled; writes teacher_labels_<genre>.jsonl (source teacher:<route>)
   score    (4.2) teacher labels vs a reference (OPP-115 labels, or the human set read back from the page), per type,
@@ -177,6 +180,49 @@ def run_select(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
                                    "human": sets["human"], "teacher": sets["teacher"]}, indent=1) + "\n",
                        encoding="utf-8")
         print(f"[select {genre}] human {len(sets['human'])}, teacher {len(sets['teacher'])} -> {out}", flush=True)
+    return metrics
+
+
+def run_select_documents(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
+    """Whole documents for document-level presence: `documents_per_genre` dev documents (stratified by year and
+    category), every section of each, added to label_sets.json as the `documents` set. Only documents from sources
+    that the indexed corpus (train split) also has, so they are segmented like the documents whose profiles the
+    calibration will be applied to; never the schema-induction sample, another label set's documents, or test."""
+    import hashlib
+
+    from data.schema import Document
+    from data.splits import load_manifest
+    from packs.presence_labels import sample_documents
+
+    lcfg = cfg["distil"]["label_sets"]
+    metrics: dict[str, Any] = {}
+    for genre in _genres(cfg):
+        out = _path(cfg["paths"]["packs"]) / genre / "label_sets.json"
+        sets = json.loads(out.read_text(encoding="utf-8")) if out.exists() else {"genre": genre}
+        if "documents" in sets and not cfg["distil"].get("overwrite_label_sets"):
+            raise FileExistsError(f"{out} has a documents set; label sets are fixed once chosen")
+        split = load_manifest(_path(cfg["paths"]["splits"]) / f"{genre}.json")
+        processed = _path(cfg["paths"]["data_processed"]) / genre
+        docs = list(read_jsonl(processed / "documents.jsonl", Document))
+        indexed_sources = {d.source for d in docs if split.get(d.id) == "train"}
+        sample_path = _path(lcfg["exclude_sample"].format(genre=genre))
+        excluded = set(json.loads(sample_path.read_text(encoding="utf-8"))) if sample_path.exists() else set()
+        excluded |= {r["doc_id"] for name, refs in sets.items() if isinstance(refs, list) for r in refs}
+        pool = [{"id": d.id, "date": d.date, "category": d.category} for d in docs
+                if split.get(d.id) == "dev" and d.source in indexed_sources and d.id not in excluded]
+        chosen = set(sample_documents(pool, n=lcfg["documents_per_genre"], seed=cfg["splits"]["seed"]))
+        if any(split.get(d) == "test" for d in chosen):
+            raise ValueError("the documents set would read the sealed test split")
+        refs = [{"doc_id": sec.doc_id, "section_idx": sec.idx, "text_sha1": hashlib.sha1(sec.text.encode("utf-8")).hexdigest()}
+                for sec in read_jsonl(processed / "sections.jsonl", Section) if sec.doc_id in chosen]
+        sets["documents"] = refs
+        sets["documents_selection"] = {"seed": cfg["splits"]["seed"], "documents": len(chosen), "pool": len(pool),
+                                       "split": "dev", "sources": sorted(indexed_sources)}
+        out.write_text(json.dumps(sets, indent=1) + "\n", encoding="utf-8")
+        metrics.update({f"{genre}/documents_documents": len(chosen), f"{genre}/documents_sections": len(refs),
+                        f"{genre}/documents_pool": len(pool)})
+        print(f"[select_documents {genre}] {len(chosen)} documents, {len(refs)} sections (pool {len(pool)}) -> {out}",
+              flush=True)
     return metrics
 
 
@@ -629,9 +675,16 @@ def run_cascade(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
     return metrics
 
 
-def run_profiles(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
-    import platform
+def profile_table_path(cfg: dict[str, Any], pf: dict[str, Any], genre: str) -> Path:
+    """The prevalence table of a profiles run: reports/tables for the pack's own profiles; next to the profiles for a
+    run that writes them elsewhere (smoke, a Colab check), so it never overwrites the corpus table."""
+    name = f"profile_prevalence_{genre}.csv"
+    return _path(pf["out"].format(genre=genre)) / name if pf.get("out") else _path(cfg["paths"]["tables"]) / name
 
+
+def _presence_model(cfg: dict[str, Any], genre: str, colbert: Any, splits: list[str], limit: int | None) -> dict[str, Any]:
+    """The pack's lean presence model (linear heads on the stored section embeddings + ColBERT prototypes, combined
+    by cascade.json) and the documents of the given splits with their sections: shared by profiles and section_probs."""
     import numpy as np
 
     from data.schema import Document
@@ -639,48 +692,63 @@ def run_profiles(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
     from engine.classifier import LinearHeads
     from engine.embed import EmbeddingStore, embedding_slug, text_sha1
     from engine.presence import Cascade, PrototypeScorer
+
+    mode = cfg["presence"].get("train_labels", "teacher")
+    packs = _path(cfg["paths"]["packs"]) / genre
+    schema = load_schema(cfg, genre)
+    types = [t["id"] for t in schema["types"]]
+    heads = LinearHeads.load(packs / "classifier" / f"linear_{mode}")
+    model = Cascade.load(packs / "cascade.json")
+    if heads.types != types or model.types != types:
+        raise ValueError(f"{genre}: classifier or cascade types differ from the schema; rerun heads and cascade")
+    scorer = PrototypeScorer.from_pack(colbert, packs / "prototypes", len(types),
+                                       min_sentence_chars=cfg["segment"]["min_sentence_chars"])
+    split = load_manifest(_path(cfg["paths"]["splits"]) / f"{genre}.json")
+    wanted = {d for d, sp in split.items() if sp in splits}
+    if any(split.get(d) == "test" for d in wanted):
+        raise ValueError("presence over the sealed test split is not part of the indexed corpus")
+    processed = _path(cfg["paths"]["data_processed"]) / genre
+    docs = [{"id": d.id, "split": split[d.id], "category": d.category, "date": d.date}
+            for d in read_jsonl(processed / "documents.jsonl", Document) if d.id in wanted]
+    docs = docs[: limit or None]
+    keep = {d["id"] for d in docs}
+    sections: dict[str, list[tuple[int, str]]] = defaultdict(list)
+    for sec in read_jsonl(processed / "sections.jsonl", Section):
+        if sec.doc_id in keep:
+            sections[sec.doc_id].append((sec.idx, sec.text))
+    store = EmbeddingStore.load(_path(cfg["paths"]["embeddings"]) / embedding_slug(cfg["models"]["embedder"])
+                                / genre / "sections")
+    row_of = {h: i for i, h in enumerate(store.sha1)}
+
+    def score(batch: list[str]) -> Any:
+        idx = [row_of.get(text_sha1(t)) for t in batch]
+        if any(i is None for i in idx):
+            raise ValueError(f"{genre}: {sum(i is None for i in idx)} sections have no stored embedding")
+        clf = heads.predict_proba(store.vectors[idx])
+        proto = scorer.score(batch)
+        return model.predict(clf, proto, np.full(clf.shape, np.nan))
+
+    return {"types": types, "model": model, "docs": docs, "sections": sections, "score": score, "packs": packs}
+
+
+def run_profiles(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
+    import platform
+
+    import numpy as np
+
     from packs.profiles import build_profiles, read_profiles
 
     pc = cfg["presence"]
     if (pc.get("cascade") or {}).get("reranker"):
         raise NotImplementedError("profiles with the reranker are not built in the lean tier (decision record 005)")
-    mode = pc.get("train_labels", "teacher")
     colbert = load_colbert(cfg)
     pf = cfg["distil"].get("profiles") or {}
     metrics: dict[str, Any] = {"machine": f"{platform.machine()} {platform.system()}", "device": colbert.device}
     for genre in _genres(cfg):
-        packs = _path(cfg["paths"]["packs"]) / genre
-        schema = load_schema(cfg, genre)
-        types = [t["id"] for t in schema["types"]]
-        heads = LinearHeads.load(packs / "classifier" / f"linear_{mode}")
-        model = Cascade.load(packs / "cascade.json")
-        if heads.types != types or model.types != types:
-            raise ValueError(f"{genre}: classifier or cascade types differ from the schema; rerun heads and cascade")
-        scorer = PrototypeScorer.from_pack(colbert, packs / "prototypes", len(types),
-                                           min_sentence_chars=cfg["segment"]["min_sentence_chars"])
-        split = load_manifest(_path(cfg["paths"]["splits"]) / f"{genre}.json")
-        wanted = {d for d, s in split.items() if s in pf.get("splits", ["train"])}
-        processed = _path(cfg["paths"]["data_processed"]) / genre
-        docs = [{"id": d.id, "split": split[d.id], "category": d.category, "date": d.date}
-                for d in read_jsonl(processed / "documents.jsonl", Document) if d.id in wanted]
-        docs = docs[: pf.get("limit") or None]
-        keep = {d["id"] for d in docs}
-        texts: dict[str, list[str]] = defaultdict(list)
-        for sec in read_jsonl(processed / "sections.jsonl", Section):
-            if sec.doc_id in keep:
-                texts[sec.doc_id].append(sec.text)
-        store = EmbeddingStore.load(_path(cfg["paths"]["embeddings"]) / embedding_slug(cfg["models"]["embedder"])
-                                    / genre / "sections")
-        row_of = {h: i for i, h in enumerate(store.sha1)}
-
-        def score(batch: list[str]) -> Any:
-            idx = [row_of.get(text_sha1(t)) for t in batch]
-            if any(i is None for i in idx):
-                raise ValueError(f"{genre}: {sum(i is None for i in idx)} sections have no stored embedding")
-            clf = heads.predict_proba(store.vectors[idx])
-            proto = scorer.score(batch)
-            return model.predict(clf, proto, np.full(clf.shape, np.nan))
-
+        pm = _presence_model(cfg, genre, colbert, pf.get("splits", ["train"]), pf.get("limit"))
+        types, model, docs, packs, score = pm["types"], pm["model"], pm["docs"], pm["packs"], pm["score"]
+        texts = {d: [t for _, t in secs] for d, secs in pm["sections"].items()}
+        texts = defaultdict(list, texts)
         out = _path(pf["out"].format(genre=genre)) if pf.get("out") else packs / "profiles"
         res = build_profiles(docs, lambda d: texts[d], score, types, model.threshold, out,
                              chunk_documents=pf.get("chunk_documents", 500),
@@ -694,7 +762,31 @@ def run_profiles(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
         prevalence = [{"type_id": t, "documents_with_type": int(c), "prevalence": round(float(c) / max(1, len(df)), 4)}
                       for t, c in zip(types, bits.sum(0))]
         if prevalence:
-            _write_table(_path(cfg["paths"]["tables"]) / f"profile_prevalence_{genre}.csv", prevalence)
+            _write_table(profile_table_path(cfg, pf, genre), prevalence)
+    return metrics
+
+
+def run_section_probs(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
+    """Every section's presence probabilities for the given splits (default train + dev) ->
+    packs/<genre>/section_probs/part-*.parquet: the input of document-level presence (fitted on whole labelled dev
+    documents, applied to the train split's profiles). One GPU pass; calibration is refitted on the Mac."""
+    import platform
+
+    from packs.profiles import build_section_probs
+
+    if (cfg["presence"].get("cascade") or {}).get("reranker"):
+        raise NotImplementedError("section probabilities with the reranker are not built in the lean tier")
+    colbert = load_colbert(cfg)
+    sc = cfg["distil"].get("section_probs") or {}
+    metrics: dict[str, Any] = {"machine": f"{platform.machine()} {platform.system()}", "device": colbert.device}
+    for genre in _genres(cfg):
+        pm = _presence_model(cfg, genre, colbert, sc.get("splits", ["train", "dev"]), sc.get("limit"))
+        out = _path(sc["out"].format(genre=genre)) if sc.get("out") else pm["packs"] / "section_probs"
+        res = build_section_probs(pm["docs"], lambda d: pm["sections"][d], pm["score"], pm["types"], out,
+                                  chunk_documents=sc.get("chunk_documents", 500),
+                                  log=lambda m: print(f"[section_probs {genre}] {m}", flush=True))
+        metrics.update({f"{genre}/{k}": v for k, v in res.items()})
+        metrics[f"{genre}/documents"] = len(pm["docs"])
     return metrics
 
 
@@ -735,6 +827,8 @@ def main(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
         return run_labels(cfg, run_dir)
     if stage == "select":
         return run_select(cfg, run_dir)
+    if stage == "select_documents":
+        return run_select_documents(cfg, run_dir)
     if stage == "teacher_labels":
         return run_teacher_labels(cfg, run_dir)
     if stage == "score":
@@ -747,6 +841,8 @@ def main(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
         return run_cascade(cfg, run_dir)
     if stage == "profiles":
         return run_profiles(cfg, run_dir)
+    if stage == "section_probs":
+        return run_section_probs(cfg, run_dir)
     if stage == "gate":
         return run_gate(cfg, run_dir)
     raise NotImplementedError(f"distil stage {stage!r} is implemented later in Phase 4")

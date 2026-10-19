@@ -32,3 +32,27 @@ def test_build_profiles_resumes_by_chunk(tmp_path):
     assert list(df["doc_id"]) == [f"d{i}" for i in range(7)] and df["bit_x"].tolist() == [1] * 7
     assert df["prob_y"].round(2).tolist() == [0.2] * 7 and df["sections"].tolist() == [2] * 7
     assert isinstance(df, pd.DataFrame)
+
+
+def test_section_probabilities_are_stored_per_section_and_resume(tmp_path):
+    from packs.profiles import build_section_probs
+
+    docs = [{"id": f"d{i}", "split": "train" if i < 4 else "dev"} for i in range(5)]
+    sections = {f"d{i}": [(j, f"text {i} {j}") for j in range(i % 3 + 1)] for i in range(5)}
+    calls = []
+
+    def score(texts):
+        calls.append(len(texts))
+        return np.array([[0.1 * int(t[-1]), 0.5] for t in texts])
+
+    out = tmp_path / "section_probs"
+    m = build_section_probs(docs, lambda d: sections[d], score, ["x", "y"], out, chunk_documents=2)
+    assert m["parts_written"] == 3 and m["sections_scored"] == sum(len(v) for v in sections.values())
+    calls.clear()
+    assert build_section_probs(docs, lambda d: sections[d], score, ["x", "y"], out, chunk_documents=2)["parts_written"] == 0
+    assert calls == []
+    df = read_profiles(out)
+    assert len(df) == 9 and set(df.columns) == {"doc_id", "split", "section_idx", "prob_x", "prob_y"}
+    d2 = df[df.doc_id == "d2"].sort_values("section_idx")
+    assert d2["section_idx"].tolist() == [0, 1, 2] and np.allclose(d2["prob_x"], [0.0, 0.1, 0.2])
+    assert df[df.doc_id == "d4"]["split"].iloc[0] == "dev" and df["prob_x"].dtype == np.float32
