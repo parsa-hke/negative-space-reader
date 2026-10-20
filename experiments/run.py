@@ -41,6 +41,7 @@ TASKS: dict[str, str] = {
     "distil": "experiments.distil:main",
     "train_mam": "experiments.train_mam:main",
     "bench": "experiments.bench:main",
+    "analyse": "experiments.analyse:main",
     "baselines": "experiments.baselines:main",
     "drift": "experiments.drift:main",
     "serve": "app.gradio_app:main",

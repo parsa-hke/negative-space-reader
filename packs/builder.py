@@ -234,7 +234,7 @@ def analyse_gate(cfg: dict[str, Any], genre: str, *, pack: Any = None) -> dict[s
 
     from data.schema import Document, Section, read_jsonl
     from data.splits import load_manifest
-    from engine.pipeline import analyse
+    from engine.pipeline import analyse, document_markdown
     from packs.spec import GenrePack
 
     g = (cfg.get("build") or {}).get("analyse_gate") or {}
@@ -256,8 +256,7 @@ def analyse_gate(cfg: dict[str, Any], genre: str, *, pack: Any = None) -> dict[s
     for s in read_jsonl(processed / "sections.jsonl", Section):
         if s.doc_id in keep:
             secs[s.doc_id].append(s)
-    texts = {d.id: (f"# {d.title}\n\n" if d.title else "") + "\n\n".join((f"## {s.heading}\n" if s.heading else "") + s.text
-                                                                       for s in secs[d.id]) for d in docs}
+    texts = {d.id: document_markdown(d, secs[d.id]) for d in docs}
     analyse(texts[docs[0].id], pack, top_k=10, explain_mode="template")  # warm-up: first calls load kernels
     rows = []
     for d in docs:

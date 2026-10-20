@@ -77,6 +77,12 @@ def segment(text: str, scfg: dict[str, Any]) -> list[tuple[str | None, str]]:
     return [(r.heading, r.text) for r in raw if r.text.strip()]
 
 
+def document_markdown(doc: Any, sections: list[Any]) -> str:
+    """A corpus document rebuilt as the Markdown an upload would be (title, then each section under its heading)."""
+    return (f"# {doc.title}\n\n" if doc.title else "") + "\n\n".join(
+        (f"## {s.heading}\n" if s.heading else "") + s.text for s in sections)
+
+
 def analyse(text_or_path: str | Path, pack: Any, *, title: str | None = None, category: str | None = None,
             entity_id: str | None = None, date_window: tuple[str | None, str | None] | None = None,
             top_k: int | None = None, explain_mode: str | None = None, teacher: Any = None) -> Report:

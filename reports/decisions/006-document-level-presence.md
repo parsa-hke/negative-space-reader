@@ -79,3 +79,11 @@ limitations stated in 82.7% of papers. Across the indexed corpus, v2 moves `limi
   evaluation half) and understates some rare ones (`generates_synthetic_data` 15% vs 36%).
 - Upgrade: more labelled documents, hand labels, or a full-tier section model; the document model is refitted in
   seconds from the stored section probabilities (`distil.stage: doc_presence`, or the pack builder).
+
+## Addendum 2026-10-20: papers labels restored from the cache
+
+The papers judge labels were lost on the Mac (a hub pull replaced the finished file with a partial copy pushed
+mid-run; `hub_sync` fixed) and rebuilt from the teacher cache at no cost. Sections with duplicated text now share one
+answer (13,703 labels vs 13,698). Refitted on the restored labels, the same model is chosen; papers eval-half macro F1
+**0.788** (above: 0.789), ECE **0.020** (0.019), prevalence error 0.094 (unchanged). The papers profiles v2 in use are
+those of the refit (0.13% of bits differ from the first v2). Privacy is unaffected.

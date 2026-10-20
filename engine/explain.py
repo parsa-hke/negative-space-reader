@@ -30,6 +30,35 @@ def template(absence: dict[str, Any], card: dict[str, Any], evidence: list[dict[
 
 EXPLAIN_FIELDS = ("explanation", "rationale", "suggested_wording", "explanation_mode")
 
+_STOP = set("""a an the and or but nor of to in on at by for from with as into onto about over under than then that this
+these those there here it its they them their we us our you your he she his her i me my is are was were be been being
+do does did have has had can could may might will would shall should must not no any all some each such other more
+most also only if when where which who whom whose what how why so too very own same just""".split())
+# The prompt asks for "what peers typically state" in general terms: these framing words are expected, not content.
+_FRAMING = set("""peer peers typically usually often commonly generally state states stated statement statements say
+says said comparable similar document documents mention mentions mentioned describe describes explain explains note
+notes indicate indicates provide provides include includes""".split())
+
+
+def unsupported_words(text: str, sources: list[str]) -> list[str]:
+    """The content words of text (teacher-written) that no source contains, in order of appearance: the check of
+    plan 5.8 that a teacher explanation stays within the quoted peer sentences. Lenient by design (it flags, it does
+    not judge): words are compared on their first five letters (so "deletes" matches "deleted"), numbers exactly;
+    [placeholders], stop words and the prompt's framing words are ignored."""
+    import re
+
+    def words(s: str) -> list[str]:
+        return re.findall(r"[a-z0-9]+", re.sub(r"\[[^\]]*\]", " ", s.lower()))
+
+    key = lambda w: w if w.isdigit() else w[:5]  # noqa: E731
+    have = {key(w) for s in sources for w in words(s)}
+    out: list[str] = []
+    for w in words(text):
+        if w in _STOP or w in _FRAMING or (len(w) < 3 and not w.isdigit()) or key(w) in have or w in out:
+            continue
+        out.append(w)
+    return out
+
 
 def render_explain_prompt(absence: dict[str, Any], card: dict[str, Any], genre: dict[str, Any], quotes: list[dict[str, Any]]) -> str:
     from models.teacher import PROMPTS

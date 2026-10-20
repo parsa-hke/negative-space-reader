@@ -7,7 +7,8 @@ Colab share one store).
 
 Bundles are defined in configs/base.yaml (`hub.bundles`): include/exclude patterns relative to the repository root
 (fnmatch, `*` crosses folders), or `archive: <folder>` for a folder of many small files, which travels as one
-tar.gz under archives/. Push uploads only files whose content differs from the hub's copy (git blob sha1 for small
+tar.gz under archives/. Pull never replaces a local file that differs from the hub's copy and was modified after
+the hub's last commit of it (it is kept and reported; push it). Push uploads only files whose content differs from the hub's copy (git blob sha1 for small
 files, sha256 for LFS files), in commits of bounded size, and never deletes anything on the hub. runs/log.csv is
 merged rather than overwritten (push_log / pull_log): the hub keeps the union of every machine's rows, and each
 machine appends the rows it lacks. Credentials come from the logged-in Hugging Face client (HF_TOKEN or `hf auth
@@ -80,6 +81,35 @@ def _remote(api: Any, repo_id: str) -> dict[str, Any]:
         return {}
 
 
+def _same(path: Path, r: Any) -> bool:
+    """A local file has the content of the hub's entry (git blob sha1 for small files, sha256 for LFS files)."""
+    if r.size != path.stat().st_size:
+        return False
+    g, s = _file_hashes(path)
+    return getattr(r, "blob_id", None) == g or bool(getattr(r, "lfs", None) and r.lfs.sha256 == s)
+
+
+def _literal(rel: str) -> str:
+    """An fnmatch pattern matching exactly this path (snapshot_download filters with fnmatch)."""
+    return "".join(f"[{c}]" if c in "*?[" else c for c in rel)
+
+
+def newer_local(root: Path, remote: dict[str, Any], bundle: dict[str, Any]) -> list[str]:
+    """Bundle files on the hub whose local copy differs and was modified after the hub's last commit of the file: a
+    pull must not replace them (2026-10-20: a push during a running job put a partial file on the hub, and a later
+    pull replaced the finished local file with it). Push them instead. An older local copy is replaced as before."""
+    include, exclude = bundle.get("include", []), bundle.get("exclude", [])
+    keep = []
+    for rel, r in sorted(remote.items()):
+        p = root / rel
+        if not (_matches(rel, include) and not _matches(rel, exclude)) or not p.is_file():
+            continue
+        date = getattr(getattr(r, "last_commit", None), "date", None)
+        if date is not None and p.stat().st_mtime > date.timestamp() and not _same(p, r):
+            keep.append(rel)
+    return keep
+
+
 def _archive(folder: Path) -> bytes:
     import gzip
 
@@ -123,11 +153,9 @@ def _plan(api: Any, repo_id: str, root: Path, bundles: dict[str, Any], names: li
         for rel in select(root, b):
             p = (root / rel).resolve()
             r = remote.get(rel)
-            if r is not None and r.size == p.stat().st_size:
-                g, s = _file_hashes(p)
-                if getattr(r, "blob_id", None) == g or (getattr(r, "lfs", None) and r.lfs.sha256 == s):
-                    matched += 1
-                    continue
+            if r is not None and _same(p, r):
+                matched += 1
+                continue
             todo.append((rel, str(p), p.stat().st_size, r is None))
     return todo, matched
 
@@ -234,7 +262,9 @@ def _snapshot(repo_id: str, root: Path, include: list[str], exclude: list[str]) 
 
 
 def pull(api: Any, repo_id: str, root: Path, bundles: dict[str, Any], names: list[str]) -> dict[str, Any]:
-    pulled = []
+    """Download the bundles. A local file newer than the hub's differing copy is kept and reported (newer_local)."""
+    pulled, kept = [], []
+    remote = None
     for name in names:
         b = bundles[name]
         if "archive" in b:
@@ -246,9 +276,14 @@ def pull(api: Any, repo_id: str, root: Path, bundles: dict[str, Any], names: lis
                 tar.extractall(dest, filter="data")  # the "data" filter refuses absolute paths and links out of dest
             pulled.append(name)
             continue
-        _snapshot(repo_id, root, [p if p.endswith("*") else p for p in b.get("include", [])], b.get("exclude", []))
+        remote = _remote(api, repo_id) if remote is None else remote
+        keep = newer_local(root, remote, b)
+        kept += keep
+        _snapshot(repo_id, root, list(b.get("include", [])), list(b.get("exclude", [])) + [_literal(k) for k in keep])
         pulled.append(name)
-    return {"pulled": pulled}
+    if kept:
+        print(f"[hub_sync] kept {len(kept)} local files newer than the hub's copy (push them): {kept[:20]}", flush=True)
+    return {"pulled": pulled, "kept_local": kept}
 
 
 def main() -> None:

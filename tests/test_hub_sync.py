@@ -1,6 +1,7 @@
 """experiments/hub_sync.py: bundles of files between this repo and the private HF dataset repo (no network here)."""
 
 import csv
+import datetime
 import hashlib
 import io
 import json
@@ -8,6 +9,8 @@ import tarfile
 from types import SimpleNamespace
 
 from experiments import hub_sync as H
+
+NOW = datetime.datetime.now(datetime.timezone.utc)
 
 BUNDLES = {"data": {"include": ["data/processed/*"], "exclude": ["data/processed/_backup*"]},
            "cache": {"archive": ".cache/negspace/teacher"}}
@@ -27,14 +30,15 @@ def make_repo(root):
 
 class FakeApi:
     def __init__(self):
-        self.files, self.commits = {}, []
+        self.files, self.commits, self.dates = {}, [], {}
 
     def create_repo(self, *a, **k):
         pass
 
     def list_repo_tree(self, repo_id, repo_type, recursive, expand):
         for p, data in self.files.items():
-            yield SimpleNamespace(path=p, size=len(data), lfs=None, blob_id=H.git_blob_sha1_bytes(data))
+            yield SimpleNamespace(path=p, size=len(data), lfs=None, blob_id=H.git_blob_sha1_bytes(data),
+                                  last_commit=SimpleNamespace(date=self.dates.get(p, NOW)))
 
     def create_commit(self, repo_id, repo_type, operations, commit_message):
         self.commits.append([op.path_in_repo for op in operations])
@@ -133,3 +137,30 @@ def test_status_reports_differences_without_committing(tmp_path):
     (tmp_path / "data" / "processed" / "g" / "a.jsonl").write_text("one, edited\n")
     s = H.status(api, "u/r", tmp_path, BUNDLES, ["data"])
     assert s["differs"] == 1 and s["missing_on_hub"] == 0 and s["files"] == ["data/processed/g/a.jsonl"]
+
+
+def test_pull_keeps_local_files_written_after_the_hubs_copy(tmp_path, monkeypatch):
+    """2026-10-20: a push during a running job put an empty labels file on the hub; a later pull replaced the
+    finished local file with it. A local file that differs from the hub's and is newer than the hub's commit of it is
+    now kept (and reported); an older local file is still replaced, so a Colab job's new artefacts arrive."""
+    import fnmatch
+    import os
+
+    make_repo(tmp_path)
+    g = tmp_path / "data" / "processed" / "g"
+    (g / "c[1].jsonl").write_text("local\n")
+    api = FakeApi()
+    api.files = {"data/processed/g/a.jsonl": b"", "data/processed/g/b.jsonl": b"hub two\n",
+                 "data/processed/g/c[1].jsonl": b"hub\n", "data/processed/g/d.jsonl": b"new\n"}
+    hub = datetime.datetime(2026, 10, 19, 20, 31, tzinfo=datetime.timezone.utc)
+    api.dates = dict.fromkeys(api.files, hub)
+    for name, offset in (("a.jsonl", 600), ("b.jsonl", -600), ("c[1].jsonl", 600)):
+        os.utime(g / name, (hub.timestamp() + offset,) * 2)
+    seen = {}
+    monkeypatch.setattr(H, "_snapshot", lambda repo_id, root, include, exclude: seen.update(exclude=exclude))
+    out = H.pull(api, "u/r", tmp_path, BUNDLES, ["data"])
+    assert out["kept_local"] == ["data/processed/g/a.jsonl", "data/processed/g/c[1].jsonl"]
+    ignored = lambda rel: any(fnmatch.fnmatch(rel, p) for p in seen["exclude"])  # noqa: E731
+    assert ignored("data/processed/g/a.jsonl") and ignored("data/processed/g/c[1].jsonl")
+    assert not ignored("data/processed/g/b.jsonl") and not ignored("data/processed/g/d.jsonl")
+    assert ignored("data/processed/_backup_x/old.jsonl")  # the bundle's own excludes still apply

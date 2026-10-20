@@ -15,7 +15,7 @@ describes_method_details,0.987,1.0,1.0,1.0,0.957
 fine_tunes_pretrained_model,0.273,0.267,0.36,0.24,0.323
 describes_data_augmentation,0.187,0.147,0.413,0.147,0.247
 gives_illustrative_example,0.527,0.547,0.947,0.6,0.549
-describes_datasets,0.9,0.88,0.507,0.987,0.893
+describes_datasets,0.893,0.867,0.507,0.987,0.893
 reports_dataset_statistics,0.647,0.64,0.613,0.573,0.583
 describes_data_split,0.587,0.533,0.6,0.667,0.601
 describes_preprocessing,0.653,0.613,0.72,0.747,0.659
@@ -25,7 +25,7 @@ describes_evaluation_metrics,0.74,0.72,0.627,0.893,0.778
 specifies_hyperparameters,0.78,0.76,0.68,0.893,0.783
 uses_baselines,0.687,0.64,0.533,0.813,0.704
 specifies_compute_resources,0.327,0.253,0.36,0.307,0.352
-names_software_and_libraries,0.507,0.547,0.813,0.413,0.468
+names_software_and_libraries,0.5,0.533,0.813,0.413,0.468
 reports_computational_cost,0.507,0.48,0.32,0.467,0.509
 reports_variance_or_significance,0.427,0.427,0.52,0.307,0.403
 reports_experimental_results,0.867,0.867,0.64,0.987,0.867

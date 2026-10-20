@@ -2,6 +2,65 @@
 
 Date, what was done, what was found (negative findings included). Newest first.
 
+## 2026-10-20 — Phase 5 closed: gate 5.9 passed, teacher-mode check, a lost label file restored
+
+**Checks (HANDOFF):** pytest 394 passed (HANDOFF said 393); the "uncommitted" Phase 5 work was already committed and
+pushed as `c7c1781`, so `git status` was clean. `hub_sync pull --bundles runs,packs`: evidence 45 privacy / 29 papers
+parts, as expected.
+
+**Gate 5.9 passed** (pack builder, `build.adopt=true`): `sentence_evidence` adopted, every other stage skipped,
+`analyse_gate` run on 5 held-out dev documents per genre on the M5 (MPS), template explanations, after one warm-up
+call. Privacy (`pack_privacy_adopt_s0`): max **1.98 s** (17 sections), median 0.69 s. Papers
+(`pack_papers_restored_s0`): max **3.31 s** (32 sections), median 3.07 s, embedding ≈ 85% of the time; the
+query-time fixes of 2026-10-19 (batch 4, stored sentences) hold, no further speed-up needed. Task 5.1's Mac timing
+from the same runs: 15.0 / 10.2 sections/s at query time. A report by eye (`privacy_pl:172230`, a 3.2k-character
+policy): the top absences (automatic usage data 94% of peers, browser cookie controls 76%, third-party links 78%, ...)
+are genuinely absent (no mention of cookies, IP addresses or browsers); quotes fit their types, two weak picks (an
+affiliates quote about "Requested Service Providers", a personalisation quote mostly about marketing). Cosmetic:
+`count` is a float in the Report (188.0). Side note: base.yaml's three seeds made the first privacy build log two
+no-op runs (`pack_privacy_adopt_s1`, `_s2`); later builds pass `run.seeds=[0]`.
+
+**Negative finding: `hub_sync pull` overwrote a finished file with a partial one.** The first papers build failed
+(`pack_papers_adopt_s0`: `doc_presence` no longer skipped, then "need at least one array"): the papers judge labels
+`runs/judge_docs_haiku_s0/teacher_labels_papers.jsonl` were **empty** on the Mac. Timeline from file times and hub
+commit dates: the runs bundle was pushed at 00:31 while the papers batch was still running (empty file on the hub);
+the run finished at 00:40; both manifests were recorded at 00:46 with the complete file; a runs pull at 00:49 replaced
+it with the hub's empty copy (`snapshot_download` replaces any local file that differs from the hub's). Profiles v2
+and decision record 006 were built before 00:49 and are valid; every pack artefact still matched its manifest (all
+stages checked, both genres); nothing else was lost. **Fix (test first, `tests/test_hub_sync.py`):** pull keeps a
+local file that differs from the hub's copy and was modified after the hub's last commit of it, and reports it
+(`kept_local`, push it); an older local copy is still replaced, so new Colab artefacts arrive. Checked read-only
+against the hub: today it would keep only the two updated manifests.
+
+**Restore from the teacher cache** (no API spend): run `judge_docs_papers_from_cache_s0`, the same stage with an
+unusable API key so that a cache miss fails instead of paying: 5,668 of 5,668 calls from the cache, 0 failures,
+13,703 labels (original 13,698). The difference: sections whose text occurs more than once share one cache entry, so
+every copy gets one answer, where the batch answered each copy. Measured on privacy, whose original file is intact
+(`judge_docs_privacy_from_cache_s0`): all 15 differing rows are such duplicates; 3 of 1,393 sections have different
+labels (5,419 vs 5,420). Refit on the restored papers labels (`doc_presence_papers_cache_check_s0`, outputs restored
+afterwards): the same model is chosen (all five features, C 1.0); eval-half macro F1 0.789 → 0.788, ECE 0.019 →
+0.020. The restored file replaced the empty one (note `restored_from_cache.json` in the run folder) and the papers
+pack was rebuilt (`doc_presence` and the gate rerun, the rest skipped): **papers profiles v2 now reproduce from the
+cache**; 846 of 663,358 bits flip (0.13%), largest prevalence shift 1.2 points (`names_software_and_libraries`),
+29.70 → 29.68 types per paper. Decision record 006 has an addendum.
+
+**5.8 teacher mode, one real call** (new task `analyse`, `experiments/analyse.py`, `configs/analyse.yaml`, test
+first: analyses named corpus documents, one Report JSON each, and in teacher mode lists the words of the teacher's
+text found in neither the quotes it was given nor the type card, `engine/explain.py` `unsupported_words`). Run
+`explain_teacher_privacy_s0`: `privacy_pl:172230`, top 5, Qwen2.5-72B via OpenRouter (DeepInfra fp8, pinned),
+prompt `explain` v1:3ea55796474c, 2,157 + 462 tokens ≈ **$0.001**, 8.7 s with the calls. By eye: no invented fact,
+number, law or period; rationales restate the quotes in general terms; three of five suggested wordings copy peer
+sentences verbatim (faithful, but a product would show them as peer text, not as the tool's wording); one rationale
+("advise users to review the privacy policies of those sites") comes from the type's definition, which the prompt
+includes, not from its quotes; one wording ends with a bracketed instruction instead of a placeholder. The check flags
+3 function words (`including`, `options`, `certain`). The check is lenient (first five letters) and the definition
+counts as a source, so it catches invented specifics, not paraphrase drift.
+
+**Plan:** 5.1-5.9 ticked with their records; **§0.2 #14 edited** to record the evidence retrieval change of
+2026-10-19 (each peer's best sentence under the full presence model, stored by `sentence_evidence`, instead of the
+prototype index); the decision itself (up to five peer sentences with document ids, template explanation) is
+unchanged. `engine/pipeline.py` `document_markdown` is shared by the gate and the new task. Tests: 397 passed.
+
 ## 2026-10-19 — Phase 5 session 1: checks, Colab path fixed
 
 **Checks (HANDOFF):** pytest 329 passed; privacy schema v1, 58 types; papers schema v2, 47 types. **Hub vs Mac:**

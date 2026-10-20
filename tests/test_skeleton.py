@@ -59,7 +59,8 @@ def test_every_module_imports():
 def test_every_task_target_is_importable():
     from experiments.run import TASKS, resolve_task
 
-    assert set(TASKS) == {"build_data", "build_pack", "embed", "induce", "distil", "train_mam", "bench", "baselines", "drift", "serve"}
+    assert set(TASKS) == {"build_data", "build_pack", "embed", "induce", "distil", "train_mam", "bench", "analyse", "baselines",
+                          "drift", "serve"}
     for task in TASKS:
         assert callable(resolve_task(task))
 

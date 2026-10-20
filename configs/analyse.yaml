@@ -1,0 +1,10 @@
+# Analyse named corpus documents with a pack (experiments/analyse.py; plan 5.6, 5.8). One Report JSON per document
+# in the run directory. Teacher explanations: --overlay openrouter --set explain.mode=teacher (the plan's teacher,
+# Qwen2.5-72B; only the peer quotes are sent, never the document).
+#   python -m experiments.run --config configs/analyse.yaml --name explain_teacher_privacy --overlay openrouter \
+#       --set pack=privacy --set 'analyse.doc_ids=[privacy_pl:172230]' --set explain.mode=teacher --set 'run.seeds=[0]'
+inherit: base.yaml
+task: analyse
+pack: null                        # privacy | papers
+analyse:
+  doc_ids: []                     # corpus document ids (data/processed/<genre>/documents.jsonl)

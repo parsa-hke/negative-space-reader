@@ -187,6 +187,92 @@
    },
    "adopted": true,
    "at": "2026-10-20T00:45:59"
+  },
+  "sentence_evidence": {
+   "inputs": "bb7d92ffaa6d2ea4",
+   "settings": "b2564051935773a5",
+   "outputs": {
+    "packs/privacy/evidence/part-00000.parquet": "08c279d05d28ec5e",
+    "packs/privacy/evidence/part-00001.parquet": "f9ebd6006ece4880",
+    "packs/privacy/evidence/part-00002.parquet": "e932de05d5466d8d",
+    "packs/privacy/evidence/part-00003.parquet": "9d4c9f8a517e30fb",
+    "packs/privacy/evidence/part-00004.parquet": "9d1a7a7579b1a0b5",
+    "packs/privacy/evidence/part-00005.parquet": "1aeb8cb5e5e7e166",
+    "packs/privacy/evidence/part-00006.parquet": "9232669b6d51b75f",
+    "packs/privacy/evidence/part-00007.parquet": "c51ca280fb64a6b5",
+    "packs/privacy/evidence/part-00008.parquet": "d7c1e3c150c4b765",
+    "packs/privacy/evidence/part-00009.parquet": "40c77437c3857d38",
+    "packs/privacy/evidence/part-00010.parquet": "4e2404bb49dc264c",
+    "packs/privacy/evidence/part-00011.parquet": "6f48d0c1e3d211f5",
+    "packs/privacy/evidence/part-00012.parquet": "dcf52e940d80bcc4",
+    "packs/privacy/evidence/part-00013.parquet": "1f3134ff89af0525",
+    "packs/privacy/evidence/part-00014.parquet": "60ee0c213b588d69",
+    "packs/privacy/evidence/part-00015.parquet": "b1771549638b7940",
+    "packs/privacy/evidence/part-00016.parquet": "177541bee4e5b62b",
+    "packs/privacy/evidence/part-00017.parquet": "1fb8b743f70873cf",
+    "packs/privacy/evidence/part-00018.parquet": "8030bd2747029516",
+    "packs/privacy/evidence/part-00019.parquet": "9eae1ef1d305160e",
+    "packs/privacy/evidence/part-00020.parquet": "f1d7541465d3d378",
+    "packs/privacy/evidence/part-00021.parquet": "30fe78de6c003d1e",
+    "packs/privacy/evidence/part-00022.parquet": "21f74f406e25642a",
+    "packs/privacy/evidence/part-00023.parquet": "b81e35c91a530e7d",
+    "packs/privacy/evidence/part-00024.parquet": "02bf9b276db4ba27",
+    "packs/privacy/evidence/part-00025.parquet": "a7639f4f6a59f651",
+    "packs/privacy/evidence/part-00026.parquet": "ea1a9ff82b83008d",
+    "packs/privacy/evidence/part-00027.parquet": "77aee9fc4011ce2b",
+    "packs/privacy/evidence/part-00028.parquet": "b6b12ca237ac21a5",
+    "packs/privacy/evidence/part-00029.parquet": "0dbddc7fc2c85efa",
+    "packs/privacy/evidence/part-00030.parquet": "e86aa31a5ed7de33",
+    "packs/privacy/evidence/part-00031.parquet": "64d2b41981c8bc03",
+    "packs/privacy/evidence/part-00032.parquet": "db2f5f1243b96bc9",
+    "packs/privacy/evidence/part-00033.parquet": "0c0975d606123c0c",
+    "packs/privacy/evidence/part-00034.parquet": "372b5420b94bb478",
+    "packs/privacy/evidence/part-00035.parquet": "3b1787ecc7462dda",
+    "packs/privacy/evidence/part-00036.parquet": "28eeb85c506781cc",
+    "packs/privacy/evidence/part-00037.parquet": "fb794fc139edef01",
+    "packs/privacy/evidence/part-00038.parquet": "95a88a32a8c24663",
+    "packs/privacy/evidence/part-00039.parquet": "e784dcd8a070aab4",
+    "packs/privacy/evidence/part-00040.parquet": "383bad3d63eca69b",
+    "packs/privacy/evidence/part-00041.parquet": "b4369e1fd6a83543",
+    "packs/privacy/evidence/part-00042.parquet": "66f2d17f84a8432b",
+    "packs/privacy/evidence/part-00043.parquet": "88ed644c6982a93f",
+    "packs/privacy/evidence/part-00044.parquet": "9ca7b5bbf37795ce"
+   },
+   "adopted": true,
+   "at": "2026-10-20T19:06:32"
+  },
+  "analyse_gate": {
+   "inputs": "76f6d1ee2803ba43",
+   "settings": "10bbe6490f7f8381",
+   "outputs": {
+    "reports/tables/analyse_gate_privacy.csv": "ab75b48cb1ce3e6f"
+   },
+   "adopted": false,
+   "metrics": {
+    "documents": 5,
+    "max_seconds": 1.98,
+    "median_seconds": 0.69,
+    "max_sections": 17,
+    "gate": "pass",
+    "limit_seconds": 10,
+    "median_timings": {
+     "read": 0.0,
+     "segment": 0.001,
+     "embed": 0.504,
+     "presence": 0.222,
+     "document_presence": 0.0,
+     "cohort": 0.007,
+     "expectation": 0.0,
+     "rank": 0.0,
+     "evidence": 0.0,
+     "explain": 0.0
+    },
+    "machine": "arm64 Darwin arm",
+    "device": "mps",
+    "evidence": "stored sentences",
+    "presence": "document model"
+   },
+   "at": "2026-10-20T19:06:52"
   }
  },
  "genre": "privacy",
@@ -199,5 +285,5 @@
   "student": "answerdotai/ModernBERT-large"
  },
  "schema_version": 1,
- "updated": "2026-10-20T00:45:59"
+ "updated": "2026-10-20T19:06:52"
 }
