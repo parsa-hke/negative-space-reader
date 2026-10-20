@@ -802,6 +802,46 @@ def run_section_probs(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
     return metrics
 
 
+def labelled_documents(cfg: dict[str, Any], genre: str) -> dict[str, Any]:
+    """The whole labelled documents of decision record 006 (label set `documents`, judge labels in
+    presence.labels.documents; a document states t when some labelled section does), those with every section labelled
+    and every section's stored probabilities: documents, by_doc (doc_id -> (n_sections, T)), Y (documents x types),
+    the fit / eval halves (ids and rows) and the stored section probabilities. Shared by doc_presence and the bench's
+    false-alarm reference (§0.2 #15)."""
+    import numpy as np
+
+    from engine.doc_presence import split_documents
+    from packs.profiles import read_profiles
+    from packs.schema_versions import project_labels, projection
+
+    packs = _path(cfg["paths"]["packs"]) / genre
+    schema = load_schema(cfg, genre)
+    types = [t["id"] for t in schema["types"]]
+    proj = projection(schema)
+    cols = [f"prob_{t}" for t in types]
+    sp = read_profiles(packs / "section_probs")
+    refs = json.loads((packs / "label_sets.json").read_text(encoding="utf-8"))["documents"]
+    labelled_docs = {r["doc_id"] for r in refs}
+    n_sections = defaultdict(int)
+    for r in refs:
+        n_sections[r["doc_id"]] += 1
+    rows: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for line in open(_path(cfg["presence"]["labels"]["documents"].format(genre=genre)), encoding="utf-8"):
+        r = json.loads(line)
+        if r["doc_id"] in labelled_docs:
+            rows[r["doc_id"]].append(r)
+    # a document counts only when every section was labelled: a failed section could hide a statement
+    complete = sorted(d for d in labelled_docs if len(rows[d]) == n_sections[d] and not any(r.get("failed") for r in rows[d]))
+    by_doc = {d: g.sort_values("section_idx")[cols].to_numpy(np.float64) for d, g in sp[sp.doc_id.isin(complete)].groupby("doc_id")}
+    complete = [d for d in complete if d in by_doc and len(by_doc[d]) == n_sections[d]]
+    Y = np.array([[int(any(project_labels(r, proj)["labels"].get(t, 0) for r in rows[d])) for t in types]
+                  for d in complete])
+    fit, ev = split_documents(complete, seed=cfg["presence"].get("reference_split_seed", 1234))
+    return {"types": types, "documents": complete, "by_doc": by_doc, "Y": Y, "fit": fit, "eval": ev,
+            "fit_rows": [complete.index(d) for d in fit], "eval_rows": [complete.index(d) for d in ev],
+            "section_probs": sp}
+
+
 def run_doc_presence(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
     """Document-level presence (engine/doc_presence.py): fitted on the whole labelled documents (label set
     `documents`, labels in presence.labels.documents; a document states t when some labelled section does) from every
@@ -813,9 +853,7 @@ def run_doc_presence(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
     probability); the v1 profiles are moved to packs/<genre>/profiles_v1."""
     import numpy as np
 
-    from engine.doc_presence import ALL_FEATURES, FEATURES, DocPresence, evaluate, split_documents
-    from packs.profiles import read_profiles
-    from packs.schema_versions import project_labels, projection
+    from engine.doc_presence import ALL_FEATURES, FEATURES, DocPresence, evaluate
 
     dc = cfg["distil"].get("doc_presence") or {}
     min_pos, C_grid = dc.get("min_positives", 5), tuple(dc.get("C_grid", (0.03, 0.1, 0.3, 1.0, 3.0)))
@@ -825,27 +863,9 @@ def run_doc_presence(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
         packs = _path(cfg["paths"]["packs"]) / genre
         schema = load_schema(cfg, genre)
         types = [t["id"] for t in schema["types"]]
-        proj = projection(schema)
-        cols = [f"prob_{t}" for t in types]
-        sp = read_profiles(packs / "section_probs")
-        refs = json.loads((packs / "label_sets.json").read_text(encoding="utf-8"))["documents"]
-        labelled_docs = {r["doc_id"] for r in refs}
-        n_sections = defaultdict(int)
-        for r in refs:
-            n_sections[r["doc_id"]] += 1
-        rows: dict[str, list[dict[str, Any]]] = defaultdict(list)
-        for line in open(_path(cfg["presence"]["labels"]["documents"].format(genre=genre)), encoding="utf-8"):
-            r = json.loads(line)
-            if r["doc_id"] in labelled_docs:
-                rows[r["doc_id"]].append(r)
-        # a document counts only when every section was labelled: a failed section could hide a statement
-        complete = sorted(d for d in labelled_docs if len(rows[d]) == n_sections[d] and not any(r.get("failed") for r in rows[d]))
-        by_doc = {d: g.sort_values("section_idx")[cols].to_numpy(np.float64) for d, g in sp[sp.doc_id.isin(complete)].groupby("doc_id")}
-        complete = [d for d in complete if d in by_doc and len(by_doc[d]) == n_sections[d]]
-        Y = np.array([[int(any(project_labels(r, proj)["labels"].get(t, 0) for r in rows[d])) for t in types]
-                      for d in complete])
-        fit, ev = split_documents(complete, seed=cfg["presence"].get("reference_split_seed", 1234))
-        fi, ei = [complete.index(d) for d in fit], [complete.index(d) for d in ev]
+        L = labelled_documents(cfg, genre)
+        sp, complete, by_doc, Y, fit, ev = L["section_probs"], L["documents"], L["by_doc"], L["Y"], L["fit"], L["eval"]
+        fi, ei = L["fit_rows"], L["eval_rows"]
         threshold = np.array(json.loads((packs / "cascade.json").read_text())["threshold"])
         best = np.stack([by_doc[d].max(0) for d in complete])
         table = [{"variant": "v1: best section >= section threshold", "cv_log_loss_fit": None, "C": None, **evaluate(Y[ei], best[ei], best[ei] >= threshold,

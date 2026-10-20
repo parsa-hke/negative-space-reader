@@ -5,9 +5,25 @@ task: bench
 run:
   seeds: [0]                      # every bench stage is deterministic given bench.seed
 
+rank:
+  use_severity_weights: false     # the bench ranks with w = 1 (§0.2 #1 default); the weighted ranking is an ablation
+
 bench:
   stage: probs                    # probs (GPU: Colab job bench_probs_v1) | synth | eval
   seed: 2026                      # the bench's order of test documents and its instance draws (not the run seed)
+  tables_dir: null                # reports/tables for the recorded runs; null = the run folder (smoke never overwrites)
   probs:
     limit: null                   # the first N test documents in the bench order (smoke)
     chunk_documents: 250          # one Parquet part per chunk; finished parts are skipped on a rerun
+  synth:                          # stage synth (6.1): verified deletions -> <run>/<genre>/instances.jsonl, edited.jsonl, arrays.npz
+    probs: runs/bench_probs_v1_s0/{genre}   # the probs stage's output
+    min_section_chars: null       # an edited section shorter than this is dropped; null = segment.min_section_chars
+    max_removed_share: 0.5        # an edit may remove at most this share of the document's characters
+    sentence_rounds: 8            # while a target is still present: its next most likely carriers go too ...
+    sentences_per_round: 5        # ... this many per round, only sentences with P >= min_carrier_prob
+    min_carrier_prob: 0.02
+    section_rounds: 5             # ... then the whole section that now scores it highest, at most this many times
+    attempts_per_document: 3      # a rejected draw is retried with new targets (per-type acceptance is reported)
+  eval:                           # stage eval (6.3)
+    synth: runs/bench_synth_v1_s0/{genre}   # the synth stage's output
+    systems: null                 # null = genre_uniform, level1 (baselines a, b) + absence_only, random (reference rows)
