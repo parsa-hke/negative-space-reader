@@ -682,9 +682,19 @@ def profile_table_path(cfg: dict[str, Any], pf: dict[str, Any], genre: str) -> P
     return _path(pf["out"].format(genre=genre)) / name if pf.get("out") else _path(cfg["paths"]["tables"]) / name
 
 
-def _presence_model(cfg: dict[str, Any], genre: str, colbert: Any, splits: list[str], limit: int | None) -> dict[str, Any]:
+def wanted_documents(split: dict[str, str], splits: list[str], *, allow_test: bool = False) -> set[str]:
+    """The documents of the given splits. The sealed test split is refused unless asked for: only the bench (plan 6.1)
+    scores it, into its run folder, never into a pack."""
+    if "test" in splits and not allow_test:
+        raise ValueError("presence over the sealed test split is not part of the indexed corpus")
+    return {d for d, sp in split.items() if sp in splits}
+
+
+def _presence_model(cfg: dict[str, Any], genre: str, colbert: Any, splits: list[str], limit: int | None, *,
+                    allow_test: bool = False, order: Any = None) -> dict[str, Any]:
     """The pack's lean presence model (linear heads on the stored section embeddings + ColBERT prototypes, combined
-    by cascade.json) and the documents of the given splits with their sections: shared by profiles and section_probs."""
+    by cascade.json) and the documents of the given splits with their sections: shared by profiles, section_probs and
+    the bench. order(ids) -> ids reorders the documents before the limit applies."""
     import numpy as np
 
     from data.schema import Document
@@ -704,12 +714,13 @@ def _presence_model(cfg: dict[str, Any], genre: str, colbert: Any, splits: list[
     scorer = PrototypeScorer.from_pack(colbert, packs / "prototypes", len(types),
                                        min_sentence_chars=cfg["segment"]["min_sentence_chars"])
     split = load_manifest(_path(cfg["paths"]["splits"]) / f"{genre}.json")
-    wanted = {d for d, sp in split.items() if sp in splits}
-    if any(split.get(d) == "test" for d in wanted):
-        raise ValueError("presence over the sealed test split is not part of the indexed corpus")
+    wanted = wanted_documents(split, splits, allow_test=allow_test)
     processed = _path(cfg["paths"]["data_processed"]) / genre
     docs = [{"id": d.id, "split": split[d.id], "category": d.category, "date": d.date}
             for d in read_jsonl(processed / "documents.jsonl", Document) if d.id in wanted]
+    if order is not None:
+        pos = {d: i for i, d in enumerate(order([d["id"] for d in docs]))}
+        docs.sort(key=lambda d: pos[d["id"]])
     docs = docs[: limit or None]
     keep = {d["id"] for d in docs}
     sections: dict[str, list[tuple[int, str]]] = defaultdict(list)

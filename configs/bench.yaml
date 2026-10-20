@@ -1,3 +1,13 @@
-# OmitBench runs (plan §6.3, §9.3).
+# OmitBench runs (plan §6.1-6.3, §9.3). Stages: experiments/bench.py.
 inherit: base.yaml
 task: bench
+
+run:
+  seeds: [0]                      # every bench stage is deterministic given bench.seed
+
+bench:
+  stage: probs                    # probs (GPU: Colab job bench_probs_v1) | synth | eval
+  seed: 2026                      # the bench's order of test documents and its instance draws (not the run seed)
+  probs:
+    limit: null                   # the first N test documents in the bench order (smoke)
+    chunk_documents: 250          # one Parquet part per chunk; finished parts are skipped on a rerun
