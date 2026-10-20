@@ -1,0 +1,59 @@
+genre,regime,system,metric,value,ci_low,ci_high,n
+privacy,revision,genre_uniform,recall@1,0.173,0.159,0.187,1678
+privacy,revision,genre_uniform,recall@5,0.602,0.58,0.625,1678
+privacy,revision,genre_uniform,recall@10,0.831,0.813,0.848,1678
+privacy,revision,genre_uniform,mrr,0.523,0.504,0.543,1678
+privacy,revision,genre_uniform,ndcg@10,0.57,0.553,0.587,1678
+privacy,revision,genre_uniform,candidates,36.07,,,1678
+privacy,revision,level1,recall@1,0.167,0.152,0.183,1678
+privacy,revision,level1,recall@5,0.592,0.568,0.614,1678
+privacy,revision,level1,recall@10,0.827,0.807,0.846,1678
+privacy,revision,level1,mrr,0.507,0.488,0.527,1678
+privacy,revision,level1,ndcg@10,0.558,0.541,0.576,1678
+privacy,revision,level1,candidates,36.07,,,1678
+privacy,revision,absence_only,recall@1,0.0,0.0,0.0,1678
+privacy,revision,absence_only,recall@5,0.007,0.004,0.012,1678
+privacy,revision,absence_only,recall@10,0.036,0.028,0.044,1678
+privacy,revision,absence_only,mrr,0.049,0.047,0.052,1678
+privacy,revision,absence_only,ndcg@10,0.015,0.012,0.019,1678
+privacy,revision,absence_only,candidates,36.07,,,1678
+privacy,revision,random,recall@1,0.035,0.029,0.042,1678
+privacy,revision,random,recall@5,0.147,0.133,0.161,1678
+privacy,revision,random,recall@10,0.292,0.274,0.31,1678
+privacy,revision,random,mrr,0.195,0.183,0.206,1678
+privacy,revision,random,ndcg@10,0.166,0.155,0.176,1678
+privacy,revision,random,candidates,36.07,,,1678
+privacy,revision,level1 - genre_uniform,recall@1,-0.006,-0.017,0.005,1678
+privacy,revision,level1 - genre_uniform,recall@5,-0.01,-0.023,0.002,1678
+privacy,revision,level1 - genre_uniform,recall@10,-0.004,-0.016,0.007,1678
+privacy,revision,level1 - genre_uniform,mrr,-0.016,-0.025,-0.007,1678
+privacy,revision,level1 - genre_uniform,ndcg@10,-0.011,-0.019,-0.004,1678
+privacy,revision_all_added,genre_uniform,recall@1,0.059,0.053,0.066,2672
+privacy,revision_all_added,genre_uniform,recall@5,0.29,0.278,0.303,2672
+privacy,revision_all_added,genre_uniform,recall@10,0.518,0.502,0.532,2672
+privacy,revision_all_added,genre_uniform,mrr,0.413,0.398,0.427,2672
+privacy,revision_all_added,genre_uniform,ndcg@10,0.375,0.363,0.386,2672
+privacy,revision_all_added,genre_uniform,candidates,33.23,,,2672
+privacy,revision_all_added,level1,recall@1,0.056,0.05,0.062,2672
+privacy,revision_all_added,level1,recall@5,0.281,0.268,0.293,2672
+privacy,revision_all_added,level1,recall@10,0.514,0.498,0.528,2672
+privacy,revision_all_added,level1,mrr,0.402,0.387,0.416,2672
+privacy,revision_all_added,level1,ndcg@10,0.368,0.356,0.38,2672
+privacy,revision_all_added,level1,candidates,33.23,,,2672
+privacy,revision_all_added,absence_only,recall@1,0.01,0.008,0.013,2672
+privacy,revision_all_added,absence_only,recall@5,0.045,0.04,0.052,2672
+privacy,revision_all_added,absence_only,recall@10,0.117,0.106,0.128,2672
+privacy,revision_all_added,absence_only,mrr,0.142,0.132,0.151,2672
+privacy,revision_all_added,absence_only,ndcg@10,0.086,0.079,0.094,2672
+privacy,revision_all_added,absence_only,candidates,33.23,,,2672
+privacy,revision_all_added,random,recall@1,0.031,0.027,0.036,2672
+privacy,revision_all_added,random,recall@5,0.17,0.16,0.18,2672
+privacy,revision_all_added,random,recall@10,0.333,0.318,0.346,2672
+privacy,revision_all_added,random,mrr,0.283,0.272,0.295,2672
+privacy,revision_all_added,random,ndcg@10,0.228,0.219,0.238,2672
+privacy,revision_all_added,random,candidates,33.23,,,2672
+privacy,revision_all_added,level1 - genre_uniform,recall@1,-0.003,-0.008,0.001,2672
+privacy,revision_all_added,level1 - genre_uniform,recall@5,-0.009,-0.017,-0.002,2672
+privacy,revision_all_added,level1 - genre_uniform,recall@10,-0.004,-0.012,0.004,2672
+privacy,revision_all_added,level1 - genre_uniform,mrr,-0.011,-0.018,-0.005,2672
+privacy,revision_all_added,level1 - genre_uniform,ndcg@10,-0.006,-0.011,-0.003,2672

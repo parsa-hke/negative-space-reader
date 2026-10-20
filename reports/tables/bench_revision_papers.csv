@@ -1,0 +1,59 @@
+genre,regime,system,metric,value,ci_low,ci_high,n
+papers,revision,genre_uniform,recall@1,0.165,0.121,0.216,137
+papers,revision,genre_uniform,recall@5,0.674,0.611,0.739,137
+papers,revision,genre_uniform,recall@10,0.897,0.851,0.937,137
+papers,revision,genre_uniform,mrr,0.536,0.48,0.591,137
+papers,revision,genre_uniform,ndcg@10,0.6,0.557,0.645,137
+papers,revision,genre_uniform,candidates,18.91,,,137
+papers,revision,level1,recall@1,0.211,0.16,0.268,137
+papers,revision,level1,recall@5,0.781,0.722,0.838,137
+papers,revision,level1,recall@10,0.942,0.907,0.97,137
+papers,revision,level1,mrr,0.601,0.542,0.656,137
+papers,revision,level1,ndcg@10,0.669,0.625,0.71,137
+papers,revision,level1,candidates,18.91,,,137
+papers,revision,absence_only,recall@1,0.009,0.0,0.025,137
+papers,revision,absence_only,recall@5,0.016,0.0,0.038,137
+papers,revision,absence_only,recall@10,0.087,0.047,0.134,137
+papers,revision,absence_only,mrr,0.082,0.066,0.103,137
+papers,revision,absence_only,ndcg@10,0.036,0.018,0.058,137
+papers,revision,absence_only,candidates,18.91,,,137
+papers,revision,random,recall@1,0.088,0.046,0.134,137
+papers,revision,random,recall@5,0.343,0.271,0.409,137
+papers,revision,random,recall@10,0.56,0.488,0.629,137
+papers,revision,random,mrr,0.323,0.265,0.377,137
+papers,revision,random,ndcg@10,0.334,0.284,0.381,137
+papers,revision,random,candidates,18.91,,,137
+papers,revision,level1 - genre_uniform,recall@1,0.046,-0.023,0.111,137
+papers,revision,level1 - genre_uniform,recall@5,0.107,0.046,0.166,137
+papers,revision,level1 - genre_uniform,recall@10,0.044,0.011,0.079,137
+papers,revision,level1 - genre_uniform,mrr,0.065,0.003,0.118,137
+papers,revision,level1 - genre_uniform,ndcg@10,0.069,0.029,0.103,137
+papers,revision_all_added,genre_uniform,recall@1,0.101,0.075,0.13,226
+papers,revision_all_added,genre_uniform,recall@5,0.474,0.43,0.522,226
+papers,revision_all_added,genre_uniform,recall@10,0.779,0.742,0.819,226
+papers,revision_all_added,genre_uniform,mrr,0.473,0.428,0.521,226
+papers,revision_all_added,genre_uniform,ndcg@10,0.504,0.472,0.54,226
+papers,revision_all_added,genre_uniform,candidates,17.61,,,226
+papers,revision_all_added,level1,recall@1,0.116,0.089,0.148,226
+papers,revision_all_added,level1,recall@5,0.516,0.471,0.559,226
+papers,revision_all_added,level1,recall@10,0.83,0.791,0.864,226
+papers,revision_all_added,level1,mrr,0.51,0.465,0.556,226
+papers,revision_all_added,level1,ndcg@10,0.552,0.518,0.587,226
+papers,revision_all_added,level1,candidates,17.61,,,226
+papers,revision_all_added,absence_only,recall@1,0.068,0.041,0.099,226
+papers,revision_all_added,absence_only,recall@5,0.208,0.17,0.25,226
+papers,revision_all_added,absence_only,recall@10,0.343,0.297,0.392,226
+papers,revision_all_added,absence_only,mrr,0.296,0.258,0.337,226
+papers,revision_all_added,absence_only,ndcg@10,0.231,0.198,0.266,226
+papers,revision_all_added,absence_only,candidates,17.61,,,226
+papers,revision_all_added,random,recall@1,0.089,0.06,0.119,226
+papers,revision_all_added,random,recall@5,0.301,0.257,0.346,226
+papers,revision_all_added,random,recall@10,0.578,0.533,0.625,226
+papers,revision_all_added,random,mrr,0.389,0.345,0.435,226
+papers,revision_all_added,random,ndcg@10,0.366,0.331,0.401,226
+papers,revision_all_added,random,candidates,17.61,,,226
+papers,revision_all_added,level1 - genre_uniform,recall@1,0.015,-0.021,0.054,226
+papers,revision_all_added,level1 - genre_uniform,recall@5,0.041,-0.003,0.086,226
+papers,revision_all_added,level1 - genre_uniform,recall@10,0.051,0.019,0.08,226
+papers,revision_all_added,level1 - genre_uniform,mrr,0.036,-0.005,0.077,226
+papers,revision_all_added,level1 - genre_uniform,ndcg@10,0.048,0.024,0.071,226
