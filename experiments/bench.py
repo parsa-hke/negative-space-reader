@@ -8,6 +8,7 @@
   revision_probs  section probabilities and document vectors of every revision version (6.3b; GPU or the Mac)
   revision        OmitBench-revision instances (bench/revision.py) and (a), (b) on them -> revision_bench_<genre>.csv,
                   bench_revision_<genre>.csv
+  diagnose        cohort diagnosis after gate 6.6 (decision record 007) -> cohort_diagnosis_<genre>.csv
 
 Tables go to bench.tables_dir (reports/tables for the recorded runs) or, when it is null, to the run folder, so that a
 smoke run never overwrites a reported table.
@@ -628,6 +629,158 @@ def run_revision(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
     return metrics
 
 
+def one_per_entity(peers: list[str], entity_of: dict[str, Any], k: int) -> list[str]:
+    """The first k peers with at most one document per entity (the nearest snapshot of each site)."""
+    seen, out = set(), []
+    for p in peers:
+        e = entity_of.get(p, p)
+        if e not in seen:
+            seen.add(e)
+            out.append(p)
+            if len(out) == k:
+                break
+    return out
+
+
+def run_diagnose(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
+    """Cohort diagnosis after gate 6.6 (decision record 007). For each cohort variant in bench.diagnose.variants
+    (title/abstract weight of the document vector, category filter, k, one snapshot per entity, bits or mean
+    probability), two measurements, with bootstrap CIs:
+      presence   how well the cohort's prevalence predicts which types an untouched test document states (its
+                 document-level presence bits): Brier score and within-document AUC, against genre prevalence;
+      leak       recall@5 on OmitBench-synthetic when the cohort is retrieved with the edited document's vector (what
+                 the system sees) and with the original document's vector (before the deletion), each paired with
+                 genre prevalence, and their difference: how much of the cohort's gain the deletion itself removes.
+    Variants with another title weight use document vectors rebuilt from the stored section and title vectors (for
+    the edited documents, the section mean recovered from the stored vector). -> cohort_diagnosis_<genre>.csv."""
+    import copy
+
+    import numpy as np
+
+    from bench.metrics import bootstrap, bootstrap_mean, paired_bootstrap, recall_at_k, within_document_auc
+    from engine.cohort import CohortRetriever
+    from engine.doc_presence import DocPresence
+    from engine.embed import EmbeddingStore, document_vector, embedding_slug, section_mean_vector
+    from engine.expectation import ProfileStore, level1
+    from engine.index import load_index, make_index
+    from experiments.distil import _write_table, load_schema
+    from packs.builder import document_vectors
+    from packs.profiles import read_profiles
+
+    bc = cfg["bench"]
+    dc = bc.get("diagnose") or {}
+    boot = dict(n_boot=bc.get("bootstrap_samples", 1000), ci=bc.get("ci", 0.95), seed=bc["seed"])
+    w0 = cfg["models"]["embedder"].get("title_abstract_weight", 0.5)
+    tables = _path(bc["tables_dir"]) if bc.get("tables_dir") else Path(run_dir)
+    metrics: dict[str, Any] = {}
+    for genre in _genres(cfg):
+        packs = _path(cfg["paths"]["packs"]) / genre
+        types = [t["id"] for t in load_schema(cfg, genre)["types"]]
+        cols = [f"prob_{t}" for t in types]
+        profiles = ProfileStore.load(packs / "profiles", types)
+        index = load_index(packs / "index", backend=(cfg.get("index") or {}).get("backend"))
+        entity_of = {d: index.payloads[index.pos[d]].get("entity_id") for d in index.ids}
+        emb = _path(cfg["paths"]["embeddings"]) / embedding_slug(cfg["models"]["embedder"]) / genre
+        T = EmbeddingStore.load(emb / "titles")
+        title_of = {d: T.vectors[i] for i, d in enumerate(T.ids)}
+        indexes: dict[float, Any] = {w0: index}
+        test_vec: dict[float, dict[str, Any]] = {}
+        payload_of: dict[str, Any] = {}
+
+        def vectors(w: float) -> None:
+            if w in test_vec:
+                return
+            c = copy.deepcopy(cfg)
+            c["models"]["embedder"]["title_abstract_weight"] = w
+            ids, X, pay, _ = document_vectors(c, genre, ["test"])
+            test_vec[w] = dict(zip(ids, X))
+            payload_of.update(dict(zip(ids, pay)))
+            if w not in indexes:
+                tr, Xtr, ptr, _ = document_vectors(c, genre, list((cfg.get("index") or {}).get("splits", ["train"])))
+                ix = make_index((cfg.get("index") or {}).get("backend", "faiss"), Xtr.shape[1])
+                ix.add(tr, Xtr, ptr)
+                indexes[w] = ix
+
+        def expectation(var: dict[str, Any], vec: Any, entity: Any, category: Any) -> Any:
+            k = var.get("k", (cfg.get("cohort") or {}).get("k", 200))
+            dedup = var.get("one_per_entity", False)
+            r = CohortRetriever(indexes[var.get("title_abstract_weight", w0)], k=k * (3 if dedup else 1),
+                                category_filter=var.get("category_filter", True))
+            peers = [h.id for h in r.retrieve(np.asarray(vec, dtype=np.float32), entity_id=entity, category=category).peers]
+            if dedup:
+                peers = one_per_entity(peers, entity_of, k)
+            return level1(profiles, peers, use=var.get("profile", "bit"))["prevalence"]
+
+        def uniform(var: dict[str, Any]) -> Any:
+            return (profiles.bits if var.get("profile", "bit") == "bit" else profiles.probs).mean(0).astype(float)
+
+        # untouched test documents: their own document-level presence
+        sp = read_profiles(_path(dc["probs"].format(genre=genre)) / "section_probs")
+        doc_model = DocPresence.load(packs / "doc_presence.json")
+        P = {d: doc_model.predict_proba(g.sort_values("section_idx")[cols].to_numpy(np.float64)) for d, g in sp.groupby("doc_id")}
+        vectors(w0)
+        pool = sorted(d for d in P if d in test_vec[w0])
+        rng = np.random.default_rng(bc["seed"])
+        docs = [pool[i] for i in sorted(rng.choice(len(pool), size=min(dc.get("presence_documents", 800), len(pool)), replace=False))]
+        Y = np.stack([(P[d] >= 0.5).astype(int) for d in docs])
+        inst = [json.loads(l) for l in open(_path(dc["synth"].format(genre=genre)) / "instances.jsonl", encoding="utf-8")]
+        arr = np.load(_path(dc["synth"].format(genre=genre)) / "arrays.npz")
+        regimes = dc.get("leak_regimes", ["single_type", "whole_section"])
+        table = []
+
+        def brier_auc(E: Any) -> tuple[Any, Any]:
+            return (bootstrap(lambda ix: float(((E[ix] - Y[ix]) ** 2).mean()), len(docs), **boot),
+                    bootstrap(lambda ix: within_document_auc(E[ix], Y[ix]), len(docs), **boot))
+
+        for name, var in [("genre_uniform", {})] + list(dc["variants"].items()):
+            w = var.get("title_abstract_weight", w0)
+            vectors(w)
+            if name == "genre_uniform":
+                E = np.tile(uniform({}), (len(docs), 1))
+            else:
+                E = np.stack([expectation(var, test_vec[w][d], payload_of[d].get("entity_id"), payload_of[d].get("category"))
+                              for d in docs])
+            (b, blo, bhi), (a, alo, ahi) = brier_auc(E)
+            row = {"genre": genre, "variant": name, "title_abstract_weight": w, "category_filter": var.get("category_filter", True),
+                   "k": var.get("k", (cfg.get("cohort") or {}).get("k", 200)), "one_per_entity": var.get("one_per_entity", False),
+                   "profile": var.get("profile", "bit"), "post_hoc": bool(var.get("post_hoc", False)),
+                   "presence_documents": len(docs), "brier": round(b, 4), "brier_ci": f"[{blo:.4f}, {bhi:.4f}]",
+                   "within_doc_auc": round(a, 4), "within_doc_auc_ci": f"[{alo:.4f}, {ahi:.4f}]"}
+            metrics[f"{genre}/{name}/within_doc_auc"] = round(a, 4)
+            if name != "genre_uniform":
+                for regime in regimes:
+                    rec: dict[str, list[float]] = {"uniform": [], "edited": [], "original": []}
+                    u = uniform(var)
+                    for k_, i in enumerate(inst):
+                        if i["regime"] != regime:
+                            continue
+                        p = arr["p_doc"][k_].astype(float)
+                        bits = (p >= 0.5).astype(int)
+                        gt = set(i["ground_truth"])
+                        tv = title_of.get(i["doc_id"]) if i.get("title") else None
+                        edited = arr["doc_vector"][k_]
+                        if w != w0:  # the edited document's vector at weight w, from its recovered section mean
+                            edited = document_vector(section_mean_vector(edited, tv, title_abstract_weight=w0)[None], tv,
+                                                     title_abstract_weight=w)
+                        for src, vec in (("edited", edited), ("original", test_vec[w][i["doc_id"]])):
+                            e = expectation(var, vec, i.get("entity_id"), i.get("category"))
+                            rec[src].append(recall_at_k(_ranked(types, e, p, bits, np.ones(len(types)), True), gt, 5))
+                        rec["uniform"].append(recall_at_k(_ranked(types, u, p, bits, np.ones(len(types)), True), gt, 5))
+                    de, do = paired_bootstrap(rec["edited"], rec["uniform"], **boot), paired_bootstrap(rec["original"], rec["uniform"], **boot)
+                    leak = paired_bootstrap(rec["original"], rec["edited"], **boot)
+                    row.update({f"{regime}/uniform_recall@5": round(float(np.mean(rec["uniform"])), 4),
+                                f"{regime}/edited_minus_uniform": f"{de['diff']:+.4f} [{de['ci_low']:+.4f}, {de['ci_high']:+.4f}]",
+                                f"{regime}/original_minus_uniform": f"{do['diff']:+.4f} [{do['ci_low']:+.4f}, {do['ci_high']:+.4f}]",
+                                f"{regime}/leak_original_minus_edited": f"{leak['diff']:+.4f} [{leak['ci_low']:+.4f}, {leak['ci_high']:+.4f}]"})
+                    metrics[f"{genre}/{name}/{regime}/edited_minus_uniform"] = round(de["diff"], 4)
+                    metrics[f"{genre}/{name}/{regime}/original_minus_uniform"] = round(do["diff"], 4)
+            print(f"[diagnose {genre}] {name}: brier {b:.4f} within-doc AUC {a:.4f}", flush=True)
+            table.append(row)
+        keys = list(dict.fromkeys(k for r in table for k in r))
+        _write_table(tables / f"cohort_diagnosis_{genre}.csv", [{k: r.get(k) for k in keys} for r in table])
+    return metrics
+
+
 def main(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
     stage = (cfg.get("bench") or {}).get("stage")
     if stage == "probs":
@@ -640,4 +793,6 @@ def main(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
         return run_revision_probs(cfg, run_dir)
     if stage == "revision":
         return run_revision(cfg, run_dir)
-    raise ValueError(f"unknown bench.stage {stage!r} (probs | synth | eval | revision_probs | revision)")
+    if stage == "diagnose":
+        return run_diagnose(cfg, run_dir)
+    raise ValueError(f"unknown bench.stage {stage!r} (probs | synth | eval | revision_probs | revision | diagnose)")

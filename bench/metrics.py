@@ -56,6 +56,18 @@ def ece(p: np.ndarray, y: np.ndarray, *, bins: int = 15) -> float:
     return float(sum(abs(p[b == i].mean() - y[b == i].mean()) * (b == i).mean() for i in range(bins) if (b == i).any()))
 
 
+def within_document_auc(E: np.ndarray, Y: np.ndarray) -> float | None:
+    """Mean over documents of the AUC with which an expectation E (documents x types) ranks a document's present
+    types (Y = 1) above its absent ones; documents with no present or no absent type are skipped (None if all are).
+    The label-free check of how much a cohort knows about the documents it is retrieved for."""
+    out = []
+    for e, y in zip(np.asarray(E, dtype=float), np.asarray(Y, dtype=int)):
+        pos, neg = e[y == 1], e[y == 0]
+        if len(pos) and len(neg):
+            out.append(float((pos[:, None] > neg[None, :]).mean() + 0.5 * (pos[:, None] == neg[None, :]).mean()))
+    return float(np.mean(out)) if out else None
+
+
 def _resample(n: int, rng: np.random.Generator, groups: Sequence[Any] | None) -> np.ndarray:
     """Row indices of one bootstrap resample: of the rows, or of whole groups (e.g. every version of an entity)."""
     if groups is None:

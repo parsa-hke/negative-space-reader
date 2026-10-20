@@ -1,61 +1,59 @@
-# Session handoff — start Phase 6 (OmitBench-synthetic, first results)
+# Session handoff — finish Phase 6 (6.4 ablations, 6.5 error analysis), then Phase 7
 
-Written 2026-10-20 at the end of Phase 5 session 2. Read with: `CLAUDE.md`, `NEGATIVE_SPACE_PLAN.md` (§0.2 #1, #11,
-#13–#15, #19; Phase 6), `CHANGELOG.md` (entries 2026-10-20 and 2026-10-19), `reports/decisions/006-document-level-presence.md`
-(with its addendum). Replace this file at the end of the next session.
+Written 2026-10-21 at the end of the Phase 6 session. Read with: `CLAUDE.md`, `NEGATIVE_SPACE_PLAN.md` (§0.2 #9, #10,
+#15-#17; Phase 6 and 7), `CHANGELOG.md` (entries 2026-10-20/21), `reports/decisions/007-privacy-gate-and-the-deletion-leak.md`
+and `006-document-level-presence.md`. Replace this file at the end of the next session.
 
 ## Where things stand
 
-- **Phase 5 closed.** Gate 5.9 passed on the M5 (MPS): privacy max 1.98 s, papers max 3.31 s per document
-  (`reports/tables/analyse_gate_<genre>.csv`); both packs load from `packs/<genre>/pack.json`. Tasks 5.1–5.9 ticked.
-  §0.2 #14 edited to record the evidence retrieval change of 2026-10-19 (stored sentence evidence, not the prototype
-  index); no decision changed.
-- **5.8 teacher mode checked** on one policy (run `explain_teacher_privacy_s0`, 72B via OpenRouter, ≈ $0.001): no
-  invented specifics; suggested wordings often copy peer sentences verbatim (product note, not a bug).
-- **New task `analyse`** (`experiments/analyse.py`, `configs/analyse.yaml`): named corpus documents → one Report JSON
-  each in the run folder; teacher mode also lists unsupported words.
-- **Lost file restored:** a hub pull on 2026-10-20 00:49 had emptied `runs/judge_docs_haiku_s0/teacher_labels_papers.jsonl`.
-  Rebuilt from the teacher cache ($0, run `judge_docs_papers_from_cache_s0`); papers `doc_presence` and profiles v2
-  refitted (0.13% of bits changed; macro F1 0.789 → 0.788). `hub_sync pull` now keeps local files newer than the
-  hub's differing copy (test). CHANGELOG 2026-10-20 has the full account.
-- **To push (if not done at the end of this session):** git commit + push (authored by Parsa only, no Claude
-  co-author line), then `hub_sync push --bundles runs,packs`. **The hub still holds the empty papers labels file and
-  the first papers profiles v2 until that push; push before any Colab job pulls packs.**
-- Tests: 397 pass.
+- **OmitBench-synthetic built and run** (6.1-6.3 ticked). Instances: `runs/bench_synth_v1_s0/<genre>/` (instances.jsonl,
+  edited.jsonl, arrays.npz): privacy 500 / 500 / 500, papers 500 / **468** / 500 (single / three types / whole section).
+  Test-split probabilities: `runs/bench_probs_v1_s0/<genre>/`. Results: `reports/tables/bench_synth_<genre>.csv`.
+- **OmitBench-revision built and run** (6.3b ticked): privacy 1,678 instances, papers 137
+  (`reports/tables/revision_bench_<genre>.csv`, `bench_revision_<genre>.csv`; probabilities in
+  `runs/bench_revision_probs_v1_s0/`).
+- **Gate 6.6: papers pass** (recall@5 +0.108 [0.074, 0.141]), **privacy fail** (+0.011 [−0.010, 0.033]). Diagnosed
+  (`reports/tables/cohort_diagnosis_<genre>.csv`, decision record 007): weak privacy cohorts plus the **deletion leak**
+  (the edited document's own vector pulls its cohort toward peers that omit the type). **Parsa's decision:** report it
+  as a negative finding, keep §0.2 #9/#10, proceed to Phase 7. Task 6.6 stays unticked with the outcome recorded.
+- Stages in `experiments/bench.py` (`bench.stage`): probs, synth, eval, revision_probs, revision, diagnose; config
+  `configs/bench.yaml`. Always pass `--set bench.tables_dir=reports/tables` for recorded runs (default writes tables
+  to the run folder so smoke never overwrites them).
+- **Another session** (task "Fix Markdown round-trip segmentation drift") was working in this same checkout at the
+  end of this session: its changes to `data/segment.py`, `engine/pipeline.py`, the pack manifests, the analyse-gate
+  tables, `bench/synth.py` (docstring), `tests/test_segment_roundtrip.py`, its CHANGELOG entry and two
+  `gate_roundtrip_*` log rows were left **uncommitted** for that session. Check `git status` first: if they are
+  still uncommitted, review them with Parsa before committing.
+- Tests: 423 passed (429 with the round-trip session's test file).
 
-## Next session: Phase 6, in order
+## Next session, in order
 
-1. Checks below; `hub_sync status --bundles runs,packs` should show nothing differing (if the push was done).
-2. **Design 6.1 before coding** (propose to Parsa first): which sentences "carry" type *t* in a test document.
-   Test documents have **no stored section or sentence probabilities** (`section_probs` ran on train + dev only), and
-   the full presence model on sentences costs ≈ 9 ms/sentence on the Mac. Likely a Colab job (`section_probs` +
-   sentence probabilities over the test split, as `sentence_evidence_v1` did for train) before `bench/synth.py`.
-   Then verify every deletion by re-running presence on the edited document (the type must now be absent at
-   document level, `doc_presence`). Regimes: single type, three types, whole section; 500 instances each per genre.
-3. 6.2 `bench/metrics.py` (recall@k, MRR, nDCG@10, false alarms on untouched documents against the document-level
-   silver labels of decision record 006, ECE, bootstrap CIs), tests first.
-4. 6.3 baselines (a) genre-uniform prevalence, (b) level-1 cohort prevalence → `reports/tables/bench_synth_<genre>.csv`.
-5. 6.3b OmitBench-revision (privacy 4,029 / papers 343 revision pairs; time-windowed cohorts, §0.2 #19).
-6. Gate 6.6: level 1 beats genre-uniform on recall@5 outside the CI, both genres.
-
-Phase 6 ablations already recorded as candidates: mean probability instead of bits (`expectation.profile: prob`,
-bits saturate near-universal types); one snapshot per entity in privacy cohorts (88% distinct entities); k ∈ {20,
-50, 200, 1000}; category filter on/off.
+1. Checks below.
+2. **6.4 ablations** that only need the eval (minutes each): already covered by the diagnosis on the test bench
+   (k, category filter, title weight, one snapshot per entity, mean probability). Still open: severity weights on
+   (`rank.use_severity_weights: true`), and the figures (`reports/figures/`, regenerated by a script). Cascade vs
+   classifier-only presence needs the edited sections' embeddings, which synth did not store: either a Colab job that
+   re-embeds them (`edited.jsonl` has the texts) or record it as deferred. Lean vs full embedder needs a full-tier
+   pack: deferred unless a GPU session builds one.
+3. **6.5 error analysis** (`analysis/error_analysis.py`, test first): missed types, recurring false alarms, by
+   document length, date and category → `reports/tables/errors_<genre>.csv`. Use `runs/bench_eval_v1_s0/<genre>/per_instance.csv`.
+4. Optional synth improvement (before any new synth run): incremental parts, timestamps, documents tried, ETA in the
+   log (a 1 h 50 min Colab run could not be interrupted without losing everything).
+5. Then Phase 7 (7.1 Gradio app first; 7.3 frontier comparison uses 100 synthetic instances per genre).
 
 ## Watch
 
-- FAISS and PyTorch must not both initialise in one macOS process (libomp clash); `engine/index.py` loads FAISS only
-  for unfiltered approximate search. Keep it that way.
-- Never push a bundle while a job is still writing into it (the cause of today's lost file). Pull now protects newer
-  local files, but a push mid-run still puts a partial file on the hub.
-- Pass `--set 'run.seeds=[0]'` to deterministic stages (base.yaml runs three seeds).
-- Cosmetic: a Report's `count` is a float (188.0); the template formats it with `:g`.
-- Optional, if Parsa asks: related-work search (GDPR completeness checking of privacy policies, checklist
-  verification for papers, AbsenceBench and omission detection, set prediction) and a short novelty memo.
+- Never push a hub bundle while a job writes into it; `runs` was pushed at the end of this session.
+- FAISS and PyTorch must not both initialise in one macOS process (`engine/index.py` keeps FAISS for unfiltered
+  approximate search only).
+- `post_hoc_best` in `cohort_diagnosis_privacy.csv` was found by searching on the test bench: never report it as a
+  gate result or adopt it without a dev-set selection (decision record 007, options).
+- Commits are authored by Parsa only; no Claude co-author line.
 
 ## Checks before starting
 
 ```bash
-.venv/bin/python -m pytest -q        # expected: 397 passed
-git status --short                   # expected: clean if the commit was made at the end of 2026-10-20
+.venv/bin/python -m pytest -q        # expected: 423+ passed (429 with the round-trip test file)
+git status --short                   # see the note on the other session above
+.venv/bin/python -m experiments.hub_sync status --bundles runs,packs
 ```

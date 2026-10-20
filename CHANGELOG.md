@@ -2,6 +2,71 @@
 
 Date, what was done, what was found (negative findings included). Newest first.
 
+## 2026-10-20 / 21 — Phase 6: OmitBench-synthetic and -revision built and run; gate 6.6 passes for papers, fails for privacy
+
+**Checks (HANDOFF):** pytest 397 passed; git status clean; `hub_sync status --bundles runs,packs`: 712 matched, 0
+differ, 0 missing on the hub (the Phase 5 push had been done). As expected.
+
+**6.1 design (Parsa's choices, 2026-10-20).** Test documents had no stored section or sentence probabilities, so a
+new stage `bench.stage: probs` scores every test section and sentence with the pack's presence model and writes them
+to the run folder, never into a pack (`check_outside_packs`; `_presence_model` refuses the test split unless asked,
+`wanted_documents`). Colab job `bench_probs_v1` (A100, 23 min): privacy 3,097 documents / 185,276 sentences, papers
+1,746 / 500,330. A sentence carries t when its probability passes the cascade threshold (the threshold `analyse()`
+quotes evidence at); the edited document is verified with the document-level presence model (`doc_presence`, the type
+must drop below 0.5). Types are drawn uniformly from the document's present types; ground truth is every type that
+goes from present to absent (targets plus collateral); whole_section deletes every section carrying the sampled type;
+one document per entity per regime, in one seeded order (`bench.seed` 2026). The Mac measured the full presence model
+at 95 sentences/s (all test sentences ≈ 2 h), hence Colab.
+
+**Negative finding: a Markdown round trip does not reproduce the corpus segmentation.** `segment(document_markdown(..))`
+gave back the stored sections for 214 of 300 privacy and 34 of 300 papers test documents (headingless policies come
+back as one section; inner pseudo-headings split paper sections). Edits therefore work on the stored sections. Fixed
+in a separate session (its own entry).
+
+**Negative finding: in long papers a type cannot be deleted sentence by sentence.** Smoke (20 test documents per
+genre): privacy deletions verify easily, papers do not: `states_own_limitations` is stated in 13 of 23 sections and 35
+sentences of one paper, and with every section capped at P = 0.1 the document model still gives 0.71 (its per-type
+intercept carries the type's prevalence). Escalation added (tests first): the next most likely carriers (5 per round,
+P ≥ 0.02, up to 8 rounds), then whole sections (up to 5); at most 50% of the characters removed; up to 3 draws per
+document. A first schedule (halving the threshold) swept up too many weak sentences and was replaced.
+
+**6.1 run** (`bench_synth_v1`, Colab, 1 h 50 min, papers three_types nearly all of it): privacy 500 / 500 / 500
+(single / three types / whole section), papers 500 / **468** / 500: three_types tried every test paper (4,067 draws
+rejected for removing too much; Parsa: keep the rules and report the shortfall). Per-type acceptance in
+`reports/tables/bench_synth_acceptance_<genre>.csv`. Verified on the Mac: arrays aligned with the instances, every
+ground-truth type absent after its edit, one instance per entity per regime.
+
+**6.2** `bench/metrics.py` (tests first): recall@k, MRR, nDCG@10, false alarms, ECE, bootstrap CIs over documents,
+paired bootstrap, bootstrap over groups. **6.3** (`bench_eval_v1`, w = 1, `reports/tables/bench_synth_<genre>.csv`):
+recall@5 single_type, genre-uniform vs level 1: privacy 0.385 vs 0.396, papers 0.514 vs 0.622 (random 0.159 / 0.278).
+False alarms@5 on the 150 judge-labelled dev documents (out-of-fold document presence): privacy 0.205 vs 0.223, papers
+0.305 vs 0.341. ECE of P(expected) vs the judge: privacy 0.048 vs 0.067, papers 0.079 vs 0.091 (genre prevalence is
+better calibrated). **Benchmark artefact:** deleted targets end just under the presence threshold (median P(present)
+after the edit 0.32 / 0.45), so (1 − P) halves their score for both systems; absence-only recall@5 is 0.03-0.06.
+
+**6.3b OmitBench-revision** (`bench_revision_probs_v1` on the Mac, 1 h 46 min: 54,774 + 13,631 revision sections,
+34,501 newly embedded; `bench_revision_v1`): privacy 1,678 instances of 4,029 pairs (1999-2019), papers 137 of 343
+(2019-2022); genre-uniform uses the corpus prevalence of the same date window; bootstrap over entities. Recall@5 level
+1 − uniform: privacy −0.010 [−0.023, 0.002], papers +0.107 [0.046, 0.166]. The plan's filter selects pairs with the
+level-1 quantity (cohort prevalence ≥ 0.5), which favours level 1; a system-neutral variant (every added type):
+privacy −0.009 [−0.017, −0.002], papers +0.041 [−0.003, 0.086]. 34% of privacy's time-windowed cohorts fell back
+from the category filter.
+
+**Gate 6.6** (paired recall@5 difference on single_type, CI above zero): **papers pass** (+0.108 [0.074, 0.141]),
+**privacy fail** (+0.011 [−0.010, 0.033]). **Diagnosis** (stage `diagnose`, run `bench_diagnose_v1`,
+`reports/tables/cohort_diagnosis_<genre>.csv`, decision record 007): privacy cohorts carry little information about
+practices (Brier vs genre prevalence −3.4% for privacy, −20% for papers); the category filter and the title part of
+the document vector weaken them (without both, within-document AUC 0.880 → 0.915); and the deletion leaks into the
+cohort: retrieved from the original document's vector, the better cohort would give +0.069 [0.036, 0.102] on privacy
+single_type, from the edited one +0.013 [−0.020, 0.048]. A variant found by searching settings on the test bench
+reaches +0.081 and is reported as post hoc only. **Decision (Parsa, 2026-10-21):** the privacy failure is reported as a
+negative finding and Phase 7 proceeds; §0.2 #9 and #10 unchanged; plan task 6.6 edited first, 6.1-6.4 annotated.
+Exploratory versions of the diagnosis ran as scratch scripts first; every number above comes from the recorded run.
+
+**Also:** `hub_sync` worked as designed through two Colab jobs. Process lesson: the synth stage writes its outputs only
+at the end and logs no timestamps; a long Colab run cannot be interrupted without losing it (next session: incremental
+parts, timestamps, documents tried, ETA). Tests: 423 passed (429 with the round-trip session's new test file).
+
 ## 2026-10-20 — Phase 5 closed: gate 5.9 passed, teacher-mode check, a lost label file restored
 
 **Checks (HANDOFF):** pytest 394 passed (HANDOFF said 393); the "uncommitted" Phase 5 work was already committed and

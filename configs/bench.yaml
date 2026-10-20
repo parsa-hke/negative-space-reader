@@ -9,7 +9,7 @@ rank:
   use_severity_weights: false     # the bench ranks with w = 1 (§0.2 #1 default); the weighted ranking is an ablation
 
 bench:
-  stage: probs                    # probs (GPU: Colab job bench_probs_v1) | synth | eval | revision_probs | revision
+  stage: probs                    # probs (GPU: Colab job bench_probs_v1) | synth | eval | revision_probs | revision | diagnose
   seed: 2026                      # the bench's order of test documents and its instance draws (not the run seed)
   tables_dir: null                # reports/tables for the recorded runs; null = the run folder (smoke never overwrites)
   probs:
@@ -31,3 +31,20 @@ bench:
     probs: runs/bench_revision_probs_v1_s0/{genre}   # the revision_probs stage's output
     limit: null                   # revision_probs: the first N revision documents (smoke)
     chunk_documents: 250
+  diagnose:                       # stage diagnose (decision record 007): cohort variants on untouched test documents
+    probs: runs/bench_probs_v1_s0/{genre}   # test documents' section probabilities (their own presence)
+    synth: runs/bench_synth_v1_s0/{genre}   # OmitBench-synthetic instances (edited vs original document vectors)
+    presence_documents: 800       # untouched test documents drawn with bench.seed
+    leak_regimes: [single_type, whole_section]
+    variants:                     # each overrides the pack's cohort settings; listed before the run, except post_hoc
+      default: {}
+      no_category: {category_filter: false}
+      no_title: {title_abstract_weight: 0.0}
+      no_title_no_category: {title_abstract_weight: 0.0, category_filter: false}
+      k20: {k: 20}
+      k50: {k: 50}
+      k1000: {k: 1000}
+      one_per_entity: {one_per_entity: true}
+      mean_probability: {profile: prob}
+      post_hoc_best: {title_abstract_weight: 0.0, category_filter: false, k: 50, one_per_entity: true, profile: prob,
+                      post_hoc: true}   # found by searching settings on the test bench: not a gate result

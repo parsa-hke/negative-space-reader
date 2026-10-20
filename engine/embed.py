@@ -137,3 +137,22 @@ def document_vector(section_vectors: np.ndarray, title_vector: np.ndarray | None
         t = np.asarray(title_vector, dtype=np.float64)
         v = (1 - title_abstract_weight) * v + title_abstract_weight * t / max(np.linalg.norm(t), 1e-12)
     return (v / max(np.linalg.norm(v), 1e-12)).astype(np.float32)
+
+
+def section_mean_vector(doc_vector: np.ndarray, title_vector: np.ndarray | None, *,
+                        title_abstract_weight: float = 0.5) -> np.ndarray:
+    """The normalised mean of the section vectors, recovered from a document vector made by document_vector with the
+    same weight w: v is proportional to (1 - w) m + w t with m, t unit vectors, so m = (s v - w t) / (1 - w), where s
+    is the positive root of |s v - w t| = 1 - w. Lets a stored document vector be compared without its title part
+    (cohort diagnosis, decision record 007) when the section vectors themselves were not stored."""
+    v = np.asarray(doc_vector, dtype=np.float64)
+    v = v / max(np.linalg.norm(v), 1e-12)
+    w = float(title_abstract_weight)
+    if title_vector is None or not w:
+        return v.astype(np.float32)
+    t = np.asarray(title_vector, dtype=np.float64)
+    t = t / max(np.linalg.norm(t), 1e-12)
+    c = float(v @ t)
+    s = w * c + np.sqrt(max(w * w * c * c - w * w + (1 - w) ** 2, 0.0))
+    m = s * v - w * t
+    return (m / max(np.linalg.norm(m), 1e-12)).astype(np.float32)
