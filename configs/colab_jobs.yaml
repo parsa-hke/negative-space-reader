@@ -5,7 +5,7 @@
 #   run:  the experiments/run.py arguments; always --overlay colab, and --name = the job's name
 #   push: hub bundles to upload afterwards; then on the Mac: .venv/bin/python -m experiments.hub_sync pull --bundles <push>
 
-next: bench_probs_v1
+next: bench_synth_v1
 
 jobs:
   profiles_smoke_colab:
@@ -39,4 +39,12 @@ jobs:
     run: >-
       --config configs/bench.yaml --overlay colab --name bench_probs_v1
       --set bench.stage=probs --set 'run.seeds=[0]'
+    push: runs
+
+  bench_synth_v1:
+    what: "OmitBench-synthetic: verified deletions, 3 regimes x up to 500 instances per genre, every test document tried (~1 h)"
+    pull: data,embeddings,packs,runs
+    run: >-
+      --config configs/bench.yaml --overlay colab --name bench_synth_v1
+      --set bench.stage=synth --set 'run.seeds=[0]'
     push: runs

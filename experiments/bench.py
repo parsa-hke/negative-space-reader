@@ -398,7 +398,14 @@ def run_eval(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
             table.append({"genre": genre, "regime": "untouched_labelled", "system": s, "metric": "ece_expected",
                           "value": round(v, 4), "ci_low": round(lo, 4), "ci_high": round(hi, 4), "n": len(docs)})
             metrics[f"{genre}/ece_expected/{s}"] = round(v, 4)
+        p_after = [v for i in inst for t, v in i["p_after"].items() if t in i["targets"]]
+        if p_after:
+            table.append({"genre": genre, "regime": "all", "system": "instances", "metric": "target_p_present_after_median",
+                          "value": round(float(np.median(p_after)), 4), "ci_low": None, "ci_high": None, "n": len(p_after)})
         _write_table(tables / f"bench_synth_{genre}.csv", table)
+        acc = folder.parent / f"bench_synth_acceptance_{genre}.csv"
+        if acc.exists() and tables != folder.parent:  # the synth run's per-type acceptance, published with the results
+            (tables / acc.name).write_text(acc.read_text(encoding="utf-8"), encoding="utf-8")
         gate = metrics.get(f"{genre}/single_type/recall@5_diff")
         metrics[f"{genre}/gate_6_6"] = bool(gate and gate["ci_low"] > 0)
         metrics.update({f"{genre}/instances": len(inst), f"{genre}/labelled_documents": len(docs),
