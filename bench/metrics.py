@@ -56,11 +56,22 @@ def ece(p: np.ndarray, y: np.ndarray, *, bins: int = 15) -> float:
     return float(sum(abs(p[b == i].mean() - y[b == i].mean()) * (b == i).mean() for i in range(bins) if (b == i).any()))
 
 
+def _resample(n: int, rng: np.random.Generator, groups: Sequence[Any] | None) -> np.ndarray:
+    """Row indices of one bootstrap resample: of the rows, or of whole groups (e.g. every version of an entity)."""
+    if groups is None:
+        return rng.integers(0, n, size=n)
+    g = np.asarray(groups)
+    members = [np.flatnonzero(g == u) for u in np.unique(g)]
+    pick = rng.integers(0, len(members), size=len(members))
+    return np.concatenate([members[i] for i in pick])
+
+
 def bootstrap(stat: Callable[[np.ndarray], float], n: int, *, n_boot: int = 1000, ci: float = 0.95,
-              seed: int = 0) -> tuple[float, float, float]:
-    """(statistic on all n documents, percentile interval over n_boot resamples of the documents)."""
+              seed: int = 0, groups: Sequence[Any] | None = None) -> tuple[float, float, float]:
+    """(statistic on all n documents, percentile interval over n_boot resamples of the documents, or of whole
+    groups of rows when groups is given)."""
     rng = np.random.default_rng(seed)
-    vals = np.array([stat(rng.integers(0, n, size=n)) for _ in range(n_boot)])
+    vals = np.array([stat(_resample(n, rng, groups)) for _ in range(n_boot)])
     a = (1 - ci) / 2
     return float(stat(np.arange(n))), float(np.quantile(vals, a)), float(np.quantile(vals, 1 - a))
 
@@ -70,15 +81,15 @@ def bootstrap_mean(x: Sequence[float], **kw: Any) -> tuple[float, float, float]:
     return bootstrap(lambda idx: float(x[idx].mean()), len(x), **kw)
 
 
-def paired_bootstrap(a: Sequence[float], b: Sequence[float], **kw: Any) -> dict[str, float]:
+def paired_bootstrap(a: Sequence[float], b: Sequence[float], *, n_boot: int = 1000, ci: float = 0.95, seed: int = 0,
+                     groups: Sequence[Any] | None = None) -> dict[str, float]:
     """Mean of a - b over the same documents, its interval, and the share of resamples with a difference <= 0."""
     a, b = np.asarray(a, dtype=float), np.asarray(b, dtype=float)
     if a.shape != b.shape:
         raise ValueError(f"paired values differ in shape: {a.shape} vs {b.shape}")
     d = a - b
-    n_boot, ci, seed = kw.get("n_boot", 1000), kw.get("ci", 0.95), kw.get("seed", 0)
     rng = np.random.default_rng(seed)
-    means = np.array([d[rng.integers(0, len(d), size=len(d))].mean() for _ in range(n_boot)])
+    means = np.array([d[_resample(len(d), rng, groups)].mean() for _ in range(n_boot)])
     q = (1 - ci) / 2
     return {"diff": float(d.mean()), "ci_low": float(np.quantile(means, q)), "ci_high": float(np.quantile(means, 1 - q)),
             "p_not_better": float((means <= 0).mean()), "n": int(len(d))}

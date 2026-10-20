@@ -5,6 +5,9 @@
   synth   OmitBench-synthetic instances (6.1, bench/synth.py) -> <run>/<genre>/{instances.jsonl,edited.jsonl,arrays.npz}
           and the per-type acceptance table
   eval    baselines (a) genre-uniform and (b) level-1 cohort prevalence (6.3, bench/metrics.py) -> bench_synth_<genre>.csv
+  revision_probs  section probabilities and document vectors of every revision version (6.3b; GPU or the Mac)
+  revision        OmitBench-revision instances (bench/revision.py) and (a), (b) on them -> revision_bench_<genre>.csv,
+                  bench_revision_<genre>.csv
 
 Tables go to bench.tables_dir (reports/tables for the recorded runs) or, when it is null, to the run folder, so that a
 smoke run never overwrites a reported table.
@@ -267,6 +270,43 @@ def _ranked(types: list[str], expected: Any, p_doc: Any, bits: Any, weights: Any
     return [r["type"] for r in rank_absences(types, expected, p, bits, weights=weights, prevalence=expected, top_k=None)]
 
 
+def _summarise(rows: list[dict[str, Any]], genre: str, regimes: list[str], systems: list[str], names: list[str],
+               boot: dict[str, Any], metrics: dict[str, Any], groups: dict[str, Any] | None = None) -> list[dict[str, Any]]:
+    """Per (regime, system): every metric's mean with a bootstrap CI and the mean candidate count; per regime the paired
+    difference level1 - genre_uniform. groups (instance id -> group, e.g. entity) resamples whole groups."""
+    import numpy as np
+
+    from bench.metrics import bootstrap_mean, paired_bootstrap
+
+    table = []
+    for regime in regimes:
+        for s in systems:
+            sel = [r for r in rows if r["regime"] == regime and r["system"] == s]
+            if not sel:
+                continue
+            g = [groups[r["instance_id"]] for r in sel] if groups else None
+            for m in names:
+                v, lo, hi = bootstrap_mean([r[m] for r in sel], groups=g, **boot)
+                table.append({"genre": genre, "regime": regime, "system": s, "metric": m, "value": round(v, 4),
+                              "ci_low": round(lo, 4), "ci_high": round(hi, 4), "n": len(sel)})
+                metrics[f"{genre}/{regime}/{s}/{m}"] = round(v, 4)
+            table.append({"genre": genre, "regime": regime, "system": s, "metric": "candidates",
+                          "value": round(float(np.mean([r["candidates"] for r in sel])), 2), "ci_low": None,
+                          "ci_high": None, "n": len(sel)})
+        a = {r["instance_id"]: r for r in rows if r["regime"] == regime and r["system"] == "level1"}
+        b = {r["instance_id"]: r for r in rows if r["regime"] == regime and r["system"] == "genre_uniform"}
+        ids = sorted(a.keys() & b.keys())
+        for m in names if ids else []:
+            d = paired_bootstrap([a[x][m] for x in ids], [b[x][m] for x in ids],
+                                 groups=[groups[x] for x in ids] if groups else None, **boot)
+            table.append({"genre": genre, "regime": regime, "system": "level1 - genre_uniform", "metric": m,
+                          "value": round(d["diff"], 4), "ci_low": round(d["ci_low"], 4),
+                          "ci_high": round(d["ci_high"], 4), "n": d["n"]})
+            if m == "recall@5":
+                metrics[f"{genre}/{regime}/recall@5_diff"] = {k2: round(v2, 4) for k2, v2 in d.items()}
+    return table
+
+
 def run_eval(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
     """Baselines (a) genre-uniform and (b) level-1 cohort prevalence, plus reference rows, on OmitBench-synthetic
     (plan 6.3) -> per-instance results in the run folder, bench_synth_<genre>.csv (every metric with a bootstrap CI
@@ -278,7 +318,7 @@ def run_eval(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
 
     import numpy as np
 
-    from bench.metrics import bootstrap, bootstrap_mean, ece, false_alarm_rate, instance_metrics, paired_bootstrap
+    from bench.metrics import bootstrap, bootstrap_mean, ece, false_alarm_rate, instance_metrics
     from engine.cohort import CohortRetriever
     from engine.doc_presence import DocPresence
     from engine.expectation import ProfileStore, level1
@@ -334,30 +374,7 @@ def run_eval(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
                              **instance_metrics(ranked, gt, ks=ks, ndcg_k=ndcg_k), "top5": "|".join(ranked[:5])})
         _write_table(Path(run_dir) / genre / "per_instance.csv", rows)
         names = [f"recall@{k}" for k in ks] + ["mrr", f"ndcg@{ndcg_k}"]
-        table = []
-        for regime in bc["regimes"]:
-            for s in systems:
-                sel = [r for r in rows if r["regime"] == regime and r["system"] == s]
-                if not sel:
-                    continue
-                for m in names:
-                    v, lo, hi = bootstrap_mean([r[m] for r in sel], **boot)
-                    table.append({"genre": genre, "regime": regime, "system": s, "metric": m, "value": round(v, 4),
-                                  "ci_low": round(lo, 4), "ci_high": round(hi, 4), "n": len(sel)})
-                    metrics[f"{genre}/{regime}/{s}/{m}"] = round(v, 4)
-                table.append({"genre": genre, "regime": regime, "system": s, "metric": "candidates",
-                              "value": round(float(np.mean([r["candidates"] for r in sel])), 2), "ci_low": None,
-                              "ci_high": None, "n": len(sel)})
-            a = {r["instance_id"]: r for r in rows if r["regime"] == regime and r["system"] == "level1"}
-            b = {r["instance_id"]: r for r in rows if r["regime"] == regime and r["system"] == "genre_uniform"}
-            ids = sorted(a.keys() & b.keys())
-            for m in names if ids else []:
-                d = paired_bootstrap([a[x][m] for x in ids], [b[x][m] for x in ids], **boot)
-                table.append({"genre": genre, "regime": regime, "system": "level1 - genre_uniform", "metric": m,
-                              "value": round(d["diff"], 4), "ci_low": round(d["ci_low"], 4),
-                              "ci_high": round(d["ci_high"], 4), "n": d["n"]})
-                if m == "recall@5":
-                    metrics[f"{genre}/{regime}/recall@5_diff"] = {k2: round(v2, 4) for k2, v2 in d.items()}
+        table = _summarise(rows, genre, bc["regimes"], systems, names, boot, metrics)
         # ---- untouched labelled documents: false alarms and calibration of P(expected)
         L = labelled_documents(cfg, genre)
         dep = DocPresence.load(packs / "doc_presence.json")
@@ -414,6 +431,203 @@ def run_eval(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
     return metrics
 
 
+def run_revision_probs(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
+    """Every revision version's section probabilities and document vector (plan 6.3b): the versions of the pairs in
+    data/processed/<genre>/revisions.jsonl live in data/processed/<genre>/revisions/ (test entities, never indexed).
+    Sections already in the embedding store reuse their vectors; the rest are embedded here. -> <run>/<genre>/
+    section_probs/, doc_vectors.npz."""
+    from collections import defaultdict
+
+    import numpy as np
+
+    import engine.embed as E
+    from bench.probs import check_outside_packs
+    from data.schema import Document, Section, read_jsonl
+    from engine.classifier import LinearHeads
+    from engine.embed import EmbeddingStore, document_vector, embedding_slug, text_sha1
+    from engine.presence import Cascade, PrototypeScorer
+    from experiments.distil import load_colbert, load_schema
+    from packs.profiles import build_section_probs
+
+    rc = cfg["bench"].get("revision") or {}
+    colbert = load_colbert(cfg)
+    ecfg = cfg["models"]["embedder"]
+    embedder = E.Embedder(ecfg["id"], devices=[colbert.device], dtype=ecfg.get("dtype", "float16"),
+                          max_length=ecfg.get("max_length", 1024), batch_size=ecfg.get("batch_size", 32),
+                          normalize=True, revision=ecfg.get("revision"))
+    mode = cfg["presence"].get("train_labels", "teacher")
+    metrics: dict[str, Any] = {"machine": f"{platform.machine()} {platform.system()}", "device": colbert.device}
+    for genre in _genres(cfg):
+        out = Path(run_dir) / genre
+        packs = _path(cfg["paths"]["packs"]) / genre
+        check_outside_packs(out, packs.parent)
+        types = [t["id"] for t in load_schema(cfg, genre)["types"]]
+        heads, cascade = LinearHeads.load(packs / "classifier" / f"linear_{mode}"), Cascade.load(packs / "cascade.json")
+        scorer = PrototypeScorer.from_pack(colbert, packs / "prototypes", len(types),
+                                           min_sentence_chars=cfg["segment"]["min_sentence_chars"])
+        rev = _path(cfg["paths"]["data_processed"]) / genre / "revisions"
+        docs = [d for d in read_jsonl(rev / "documents.jsonl", Document)][: rc.get("limit") or None]
+        keep = {d.id for d in docs}
+        sections: dict[str, list[tuple[int, str]]] = defaultdict(list)
+        for s in read_jsonl(rev / "sections.jsonl", Section):
+            if s.doc_id in keep:
+                sections[s.doc_id].append((s.idx, s.text))
+        store = EmbeddingStore.load(_path(cfg["paths"]["embeddings"]) / embedding_slug(ecfg) / genre / "sections")
+        row_of = {h: i for i, h in enumerate(store.sha1)}
+        vecs: dict[str, np.ndarray] = {}
+        counts = {"reused": 0, "embedded": 0}
+
+        def score(texts: list[str]) -> Any:
+            missing = [t for t in dict.fromkeys(texts) if text_sha1(t) not in row_of and text_sha1(t) not in vecs]
+            if missing:
+                for t, v in zip(missing, np.asarray(embedder.encode(missing))):
+                    vecs[text_sha1(t)] = v.astype(np.float16)
+            counts["embedded"] += len(missing)
+            counts["reused"] += sum(text_sha1(t) in row_of for t in texts)
+            V = np.stack([store.vectors[row_of[h]] if (h := text_sha1(t)) in row_of else vecs[h].astype(np.float32)
+                          for t in texts])
+            for t, v in zip(texts, V):
+                vecs.setdefault(text_sha1(t), v.astype(np.float16))
+            clf = heads.predict_proba(V)
+            return cascade.predict(clf, scorer.score(texts), np.full(clf.shape, np.nan))
+
+        res = build_section_probs([{"id": d.id, "split": "revision"} for d in docs], lambda d: sections[d], score, types,
+                                  out / "section_probs", chunk_documents=rc.get("chunk_documents", 250),
+                                  log=lambda m: print(f"[revision probs {genre}] {m}", flush=True))
+        titled = [d for d in docs if d.title]
+        T = dict(zip([d.id for d in titled], np.asarray(embedder.encode([d.title for d in titled])))) if titled else {}
+        w = ecfg.get("title_abstract_weight", 0.5)
+        ids, X = [], []
+        for d in docs:
+            if not sections[d.id]:
+                continue
+            V = np.stack([vecs[text_sha1(t)].astype(np.float32) if text_sha1(t) in vecs else store.vectors[row_of[text_sha1(t)]]
+                          for _, t in sorted(sections[d.id])])
+            ids.append(d.id)
+            X.append(document_vector(V, T.get(d.id), title_abstract_weight=w))
+        np.savez_compressed(out / "doc_vectors.npz", ids=np.array(ids), X=np.asarray(X, dtype=np.float32))
+        metrics.update({f"{genre}/documents": len(docs), f"{genre}/sections_reused": counts["reused"],
+                        f"{genre}/sections_embedded": counts["embedded"], **{f"{genre}/{k}": v for k, v in res.items()}})
+    return metrics
+
+
+def run_revision(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
+    """OmitBench-revision (plan 6.3b): pairs whose newer version adds a type that at least min_added_prevalence of the
+    older version's peers dated before it already state (time-windowed cohort, §0.2 #16, #19); instance = the older
+    version with those types as ground truth. Also the system-neutral variant (every added type). Baselines (a) and
+    (b) and the reference rows on both, the corpus prevalence restricted to the same date window for (a); bootstrap over
+    entities. -> revision_bench_<genre>.csv (counts per year, prevalence of added types) and
+    bench_revision_<genre>.csv (metrics)."""
+    import datetime as dt
+    import zlib
+
+    import numpy as np
+
+    from bench.metrics import instance_metrics
+    from bench.revision import revision_instances
+    from engine.cohort import CohortRetriever
+    from engine.doc_presence import DocPresence
+    from engine.expectation import ProfileStore, level1
+    from engine.index import load_index
+    from experiments.distil import _write_table, load_schema
+    from packs.profiles import read_profiles
+
+    bc = cfg["bench"]
+    rc = bc.get("revision") or {}
+    ks, ndcg_k = bc.get("recall_ks", [1, 5, 10]), bc.get("ndcg_k", 10)
+    boot = dict(n_boot=bc.get("bootstrap_samples", 1000), ci=bc.get("ci", 0.95), seed=bc["seed"])
+    use = (cfg.get("expectation") or {}).get("profile", "bit")
+    z = (cfg.get("expectation") or {}).get("wilson_z", 1.96)
+    min_prev = (bc.get("real") or {}).get("min_added_prevalence", 0.5)
+    systems = list((bc.get("eval") or {}).get("systems") or SYSTEMS)
+    tables = _path(bc["tables_dir"]) if bc.get("tables_dir") else Path(run_dir)
+    metrics: dict[str, Any] = {}
+    for genre in _genres(cfg):
+        packs = _path(cfg["paths"]["packs"]) / genre
+        types = [t["id"] for t in load_schema(cfg, genre)["types"]]
+        cols = [f"prob_{t}" for t in types]
+        probs = _path(rc["probs"].format(genre=genre))
+        sp = read_profiles(probs / "section_probs")
+        doc_model = DocPresence.load(packs / "doc_presence.json")
+        p_doc = {d: doc_model.predict_proba(g.sort_values("section_idx")[cols].to_numpy(np.float64))
+                 for d, g in sp.groupby("doc_id")}
+        z_ = np.load(probs / "doc_vectors.npz")
+        vec = dict(zip([str(x) for x in z_["ids"]], z_["X"]))
+        meta = {json.loads(l)["id"]: json.loads(l) for l in
+                open(_path(cfg["paths"]["data_processed"]) / genre / "revisions" / "documents.jsonl", encoding="utf-8")}
+        pairs = [json.loads(l) for l in open(_path(cfg["paths"]["data_processed"]) / genre / "revisions.jsonl", encoding="utf-8")]
+        pairs = [p for p in pairs if p["old_doc_id"] in vec]
+        index = load_index(packs / "index", backend=(cfg.get("index") or {}).get("backend"))
+        retriever = CohortRetriever.from_config(index, cfg.get("cohort") or {})
+        profiles = ProfileStore.load(packs / "profiles", types)
+        M = (profiles.bits if use == "bit" else profiles.probs).astype(float)
+        dates = np.array([index.payloads[index.pos[d]].get("date") or "" for d in profiles.doc_ids])
+        order = np.argsort(dates, kind="stable")
+        cum = np.vstack([np.zeros(len(types)), np.cumsum(M[order], axis=0)])
+        sorted_dates = dates[order]
+
+        def before(date: str | None) -> str | None:
+            return (dt.date.fromisoformat(date[:10]) - dt.timedelta(days=1)).isoformat() if date else None
+
+        def uniform_before(date: str | None) -> Any:
+            n = int(np.searchsorted(sorted_dates, date[:10], side="left")) if date else len(sorted_dates)
+            return cum[n] / n if n else cum[-1] / len(sorted_dates)
+
+        cache: dict[str, tuple[Any, dict[str, Any]]] = {}
+
+        def cohort(pr: dict[str, Any]) -> Any:
+            d = pr["old_doc_id"]
+            if d not in cache:
+                coh = retriever.retrieve(vec[d], entity_id=pr["entity_id"], category=meta.get(d, {}).get("category"),
+                                         date_window=(None, before(pr.get("old_date"))))
+                e = level1(profiles, [h.id for h in coh.peers], z=z, use=use)
+                cache[d] = (e["prevalence"], {"n": e["n"], "fallback": coh.fallback})
+            return cache[d][0]
+
+        sets = {"revision": min_prev, "revision_all_added": None}
+        rows, counts, per_year = [], {}, []
+        for name, mp in sets.items():
+            inst, stats = revision_instances(pairs, p_doc, cohort, types, min_prevalence=mp)
+            counts[name] = stats
+            years: dict[Any, int] = {}
+            for i in inst:
+                years[i["year"]] = years.get(i["year"], 0) + 1
+            per_year += [{"genre": genre, "set": name, "year": y, "instances": n} for y, n in sorted(years.items(), key=lambda x: str(x[0]))]
+            for i in inst:
+                p = p_doc[i["doc_id"]]
+                bits = (p >= 0.5).astype(int)
+                gt = set(i["ground_truth"])
+                rng = np.random.default_rng([bc["seed"], zlib.crc32(i["instance_id"].encode())])
+                for s in systems:
+                    e, with_p = _expectations(s, uniform=uniform_before(i["old_date"]), cohort=cohort(
+                        {"old_doc_id": i["doc_id"], "entity_id": i["entity_id"], "old_date": i["old_date"]}),
+                        n_types=len(types), rng=rng)
+                    ranked = _ranked(types, e, p, bits, np.ones(len(types)), with_p)
+                    rows.append({"instance_id": i["instance_id"], "entity_id": i["entity_id"], "regime": name,
+                                 "system": s, "candidates": len(ranked), "ground_truth": len(gt),
+                                 **instance_metrics(ranked, gt, ks=ks, ndcg_k=ndcg_k), "top5": "|".join(ranked[:5])})
+            prev = np.array([v for i in inst for t, v in i["added_prevalence"].items() if t in i["ground_truth"]])
+            if len(prev):
+                metrics[f"{genre}/{name}/ground_truth_prevalence_quantiles"] = np.round(np.quantile(prev, [0.1, 0.25, 0.5, 0.75, 0.9]), 3).tolist()
+            metrics[f"{genre}/{name}/counts"] = stats
+        groups = {r["instance_id"]: r["entity_id"] for r in rows}
+        names = [f"recall@{k}" for k in ks] + ["mrr", f"ndcg@{ndcg_k}"]
+        table = _summarise(rows, genre, list(sets), systems, names, boot, metrics, groups=groups)
+        _write_table(tables / f"bench_revision_{genre}.csv", table)
+        if rows:
+            _write_table(Path(run_dir) / genre / "per_instance.csv", rows)
+        added_all = [v for i in revision_instances(pairs, p_doc, cohort, types, min_prevalence=None)[0]
+                     for v in i["added_prevalence"].values()]
+        bins = np.histogram(added_all, bins=10, range=(0, 1))[0] if added_all else np.zeros(10, int)
+        _write_table(tables / f"revision_bench_{genre}.csv",
+                     [{"genre": genre, "kind": "pairs", "set": n, "key": k, "value": v} for n, st in counts.items() for k, v in st.items()]
+                     + [{"genre": genre, "kind": "instances_per_year", "set": r["set"], "key": r["year"], "value": r["instances"]} for r in per_year]
+                     + [{"genre": genre, "kind": "added_type_prevalence_hist", "set": "all_added", "key": f"{k / 10:.1f}-{(k + 1) / 10:.1f}",
+                         "value": int(c)} for k, c in enumerate(bins)])
+        metrics[f"{genre}/cohort_fallback_share"] = round(float(np.mean([c[1]["fallback"] for c in cache.values()])), 4) if cache else None
+    return metrics
+
+
 def main(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
     stage = (cfg.get("bench") or {}).get("stage")
     if stage == "probs":
@@ -422,4 +636,8 @@ def main(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
         return run_synth(cfg, run_dir)
     if stage == "eval":
         return run_eval(cfg, run_dir)
-    raise ValueError(f"unknown bench.stage {stage!r} (probs | synth | eval)")
+    if stage == "revision_probs":
+        return run_revision_probs(cfg, run_dir)
+    if stage == "revision":
+        return run_revision(cfg, run_dir)
+    raise ValueError(f"unknown bench.stage {stage!r} (probs | synth | eval | revision_probs | revision)")

@@ -60,3 +60,14 @@ def test_paired_bootstrap_of_a_difference():
     assert noise["ci_low"] < 0 < noise["ci_high"]
     with pytest.raises(ValueError):
         paired_bootstrap(np.zeros(3), np.zeros(4))
+
+
+def test_grouped_bootstrap_resamples_whole_groups():
+    # 20 entities with 10 identical-valued instances each: resampling instances understates the uncertainty
+    groups = np.repeat(np.arange(20), 10)
+    x = np.repeat(np.random.default_rng(0).uniform(size=20), 10)
+    _, lo_i, hi_i = bootstrap_mean(x, n_boot=400, seed=0)
+    v, lo_g, hi_g = bootstrap_mean(x, n_boot=400, seed=0, groups=groups)
+    assert v == pytest.approx(x.mean()) and (hi_g - lo_g) > 2 * (hi_i - lo_i)
+    d = paired_bootstrap(x + 0.05, x, n_boot=100, seed=0, groups=groups)
+    assert d["diff"] == pytest.approx(0.05) and d["ci_low"] == pytest.approx(0.05)

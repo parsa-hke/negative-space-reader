@@ -9,7 +9,7 @@ rank:
   use_severity_weights: false     # the bench ranks with w = 1 (§0.2 #1 default); the weighted ranking is an ablation
 
 bench:
-  stage: probs                    # probs (GPU: Colab job bench_probs_v1) | synth | eval
+  stage: probs                    # probs (GPU: Colab job bench_probs_v1) | synth | eval | revision_probs | revision
   seed: 2026                      # the bench's order of test documents and its instance draws (not the run seed)
   tables_dir: null                # reports/tables for the recorded runs; null = the run folder (smoke never overwrites)
   probs:
@@ -27,3 +27,7 @@ bench:
   eval:                           # stage eval (6.3)
     synth: runs/bench_synth_v1_s0/{genre}   # the synth stage's output
     systems: null                 # null = genre_uniform, level1 (baselines a, b) + absence_only, random (reference rows)
+  revision:                       # stages revision_probs, revision (6.3b); bench.real.min_added_prevalence is the filter
+    probs: runs/bench_revision_probs_v1_s0/{genre}   # the revision_probs stage's output
+    limit: null                   # revision_probs: the first N revision documents (smoke)
+    chunk_documents: 250
