@@ -1,0 +1,14 @@
+# Second overlay for a Hugging Face ZeroGPU Space (Pro account; plan 7.1), applied after configs/space.yaml by the
+# bundle's app.py: models go to CUDA (fp16); the analyse handler is wrapped in `spaces.GPU`, so an H200 slice is
+# attached only while a document is embedded and scored (seconds), and everything else runs on the Space's CPU.
+# Cannot be exercised locally: ZeroGPU exists only on the Space. `python -m app.space_bundle --variant cpu` keeps the
+# CPU-only bundle.
+run:
+  device: cuda
+models:
+  embedder:
+    dtype: float16
+    query_batch_size: 8
+serve:
+  zerogpu: true
+  zerogpu_seconds: 60            # GPU time requested per analysis; a paper takes about a second on an H200

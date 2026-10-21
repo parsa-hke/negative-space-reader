@@ -53,3 +53,6 @@ packs/*/profiles_v1/
 packs/*/evidence/
 packs/*/doc_presence.json
 packs/*/cascade*.json
+
+# The Hugging Face Space bundle (python -m app.space_bundle): assembled, never committed here
+space/

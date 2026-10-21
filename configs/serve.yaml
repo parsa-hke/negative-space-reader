@@ -1,5 +1,6 @@
-# Gradio class demo (plan §7.1).
+# Gradio class demo (plan §7.1): python -m experiments.run --config configs/serve.yaml
 inherit: base.yaml
 task: serve
 run:
+  name: serve
   seeds: [0]

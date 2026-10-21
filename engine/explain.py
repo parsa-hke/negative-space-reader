@@ -98,3 +98,60 @@ def explain_absences(absences: list[dict[str, Any]], cards: dict[str, dict[str, 
         for (a, _), ans in zip(todo, answers):
             a.update(rationale=ans.rationale, suggested_wording=ans.suggested_wording, explanation_mode="teacher")
     return absences
+
+
+# ---------------------------------------------------------------- ghost placement (plan 7.1)
+# Words of a section_hint that say where, not what: the rest names the heading the type usually sits under.
+_WHERE = set("""under heading headings like near start beginning end first second half part document section sections
+next close before after towards toward""".split())
+
+
+def _tokens(s: str | None) -> list[str]:
+    import re
+
+    return [w for w in re.findall(r"[a-z]+", (s or "").lower()) if len(w) >= 3 and w not in _STOP]
+
+
+def ghost_position(hint: str | None, headings: list[str | None]) -> dict[str, Any]:
+    """Where a ghost paragraph for an absence goes, from its type's section_hint (schema text, any genre): after the
+    section whose heading best matches the words the hint names (compared on their first five letters, each weighted
+    by how few of the document's headings contain it, so a word in every heading counts little); without a match,
+    after the last section of the hinted part (near the start: the first section; first half; second half or near the
+    end: the last section; no hint: the last section). Returns {after: section index, how: heading | position,
+    heading: the matched heading or None}."""
+    import math
+
+    n = len(headings)
+    if n == 0:
+        return {"after": 0, "how": "position", "heading": None}
+    key = lambda w: w[:5]  # noqa: E731
+    wanted = {key(w) for w in _tokens(hint) if w not in _WHERE}
+    head_keys = [{key(w) for w in _tokens(h)} for h in headings]
+    df: dict[str, int] = {}
+    for ks in head_keys:
+        for w in ks:
+            df[w] = df.get(w, 0) + 1
+    best, best_w = None, 0.0
+    for i, ks in enumerate(head_keys):
+        w = sum(math.log(1 + n / df[x]) for x in ks & wanted)
+        if w > best_w:
+            best, best_w = i, w
+    if best is not None:
+        return {"after": best, "how": "heading", "heading": headings[best]}
+    h = (hint or "").lower()
+    if "start" in h or "beginning" in h:
+        after = 0
+    elif "first half" in h:
+        after = max(0, math.ceil(n / 2) - 1)
+    else:  # second half, near the end, or no hint
+        after = n - 1
+    return {"after": after, "how": "position", "heading": None}
+
+
+def place_ghosts(absences: list[dict[str, Any]], headings: list[str | None]) -> dict[int, list[dict[str, Any]]]:
+    """Section index -> the absences whose ghost goes after it, in rank order; each absence gets its `ghost` position."""
+    out: dict[int, list[dict[str, Any]]] = {}
+    for a in absences:
+        a["ghost"] = ghost_position(a.get("section_hint"), headings)
+        out.setdefault(a["ghost"]["after"], []).append(a)
+    return out

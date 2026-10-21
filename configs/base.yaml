@@ -433,6 +433,21 @@ baselines:
   models: []                      # filled in configs/baselines.yaml; API keys only via env vars
   runs_per_model: 3
   llm_gap_instances: 100          # plan §7.3
+  stage: candidate                # candidate: baseline (e) (7.3); (d) and (f) in Phase 9
+  synth_run: runs/bench_synth_v1_s0/{genre}   # OmitBench-synthetic instances and edited documents
+  compare_to: runs/bench_eval_v2_s0           # recorded level-1 and genre-uniform rankings of the same instances
+  regimes: [single_type]          # regimes the sample is drawn from
+  sample_seed: 2026
+  top_k: 10                       # the model returns at most this many absent types
+  max_tokens: 16000               # thinking + answer (thinking cannot be turned off on Claude Opus 5.5)
+  dry_run: false                  # true: render the prompts and estimate the cost; no model is called
+  tables_dir: null                # reports/tables for the recorded run
+  estimate:                       # dry_run's cost estimate (Claude Opus 5.5 list prices, 2026-10)
+    chars_per_token: 3.5
+    output_tokens: 2500           # per request, thinking included (a guess until the first batch reports usage)
+    usd_per_mtok_input: 4.0
+    usd_per_mtok_output: 20.0
+    batch_discount: 0.5
   batch_pricing: true             # use providers' batch endpoints where available
   rag_peers: 5                    # baseline (f): cohort peers in context; full = 20
   open_ended_mapping: embedding   # how (d) outputs map to schema types: embedding (lean) | teacher (full)
@@ -441,14 +456,29 @@ drift:
   windows: null                   # per genre, configs/drift.yaml
 
 onthefly:
-  pack_similarity_threshold: null # Phase 10.2
+  pack_similarity_threshold: null # Phase 10.2; null: auto-detect always picks the nearest pack (scores shown)
+  detect_neighbours: 10           # auto-detect: mean similarity of this many nearest indexed documents per pack
   cohort_documents: 100
 
-serve:
+serve:                            # app/gradio_app.py (plan 7.1), task serve
   host: 127.0.0.1
   port: 7860
   max_upload_mb: 20
-  store_uploads: false            # plan §0.2 #21: uploads are never stored
+  store_uploads: false            # plan §0.2 #21: uploads are never stored (the app refuses true)
+  packs: null                     # null: every genre in `genres`
+  examples_per_genre: 3           # test-split documents of 6-30 sections, drawn with run.seed
+  examples:                       # corpus examples, by document id (null: drawn with run.seed)
+    privacy: ["privacy_pl:36309"]
+    papers: ["unarxive:2111.00400"]
+  bench_examples:                 # OmitBench-synthetic instances with the cached 7.3 chat-model answers (app/examples.py)
+    privacy: ["single_type:privacy_pl:539904", "single_type:privacy_pl:67783"]
+    papers: ["single_type:unarxive:2107.07253", "single_type:unarxive:2107.14402"]
+  chat_runs:                      # recorded 7.3 runs whose per-instance lists the comparison panel shows
+    - {run: runs/llm_gap_candidate_opus_s0, label: "Claude Opus 5.5"}
+    - {run: runs/llm_gap_candidate_qwen_s0, label: "Qwen2.5-72B-Instruct"}
+  examples_dir: app/examples      # written by `python -m app.examples`; read by the app when present (no corpus needed)
+  allow_teacher: false            # true shows the opt-in, flagged teacher-rationale box (sends peer quotes off the machine)
+  allow_live_chat: false          # the comparison panel shows cached answers only; a live call is Phase 9 work
 
 tracking:
   wandb: false

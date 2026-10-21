@@ -1,0 +1,15 @@
+# Plan 7.3, baseline (e): Claude Opus 5.5 through the Anthropic API with the official SDK, by Message Batches (half
+# price). Key from ANTHROPIC_API_KEY (.env), never from a file here. Thinking cannot be turned off on Opus 5.5; effort
+# is set explicitly (the model's default is medium). Every response is cached on disk (a rerun is free).
+#   python -m experiments.run --config configs/baselines.yaml --overlay llm_gap_anthropic --name llm_gap_dry \
+#       --set baselines.dry_run=true --set 'run.seeds=[0]'
+models:
+  teacher:
+    backend: anthropic
+    id: claude-opus-5-5
+    api_key_env: ANTHROPIC_API_KEY
+    mode: batch
+    effort: medium
+    poll_s: 60
+    cache: true
+    max_tokens: 16000

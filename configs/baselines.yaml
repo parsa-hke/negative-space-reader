@@ -1,7 +1,8 @@
-# Frontier-model baselines (plan §0.2 #17). API keys are read from the env vars named here,
-# never written in configs. Model entries are added (and verified) in Phase 7.3.
+# Frontier-model baselines (plan §0.2 #17), task baselines (experiments/baselines.py). API keys are read from the
+# env vars named in the teacher route, never written in configs. 7.3, baseline (e), candidate list:
+#   --overlay llm_gap_anthropic (Claude Opus 5.5, Message Batches) or --overlay openrouter (the open teacher)
+#   --set baselines.dry_run=true first: prompts and cost estimate, no model called.
 inherit: base.yaml
 task: baselines
-baselines:
-  models: []
-  # - {name: <api model id>, backend: openai, base_url: <endpoint>, api_key_env: <ENV_VAR>}
+run:
+  seeds: [0]

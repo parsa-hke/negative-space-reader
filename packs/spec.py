@@ -16,6 +16,20 @@ from typing import Any
 import numpy as np
 
 
+def section_texts_or_none(index_dir: Path, sections_path: Path, *, has_store: bool) -> Any:
+    """The indexed documents' section texts, read from the corpus by offset; when the corpus is not on this machine
+    (a deployed demo ships the pack, not the corpus) and the pack has a stored evidence set, quotes come from the
+    store and no section text is read, so a callable that returns None stands in. Without a store the corpus is
+    required: the error names it."""
+    from packs.builder import SectionTexts
+
+    if Path(sections_path).is_file():
+        return SectionTexts.load(index_dir, sections_path)
+    if has_store:
+        return lambda doc_id, idx: None
+    raise FileNotFoundError(f"{sections_path} is needed for peer quotes: this pack has no stored evidence set")
+
+
 @dataclass
 class GenrePack:
     genre: str
@@ -91,9 +105,10 @@ class GenrePack:
         sections_path = _path(cfg["paths"]["data_processed"]) / genre / "sections.jsonl"
         store = (EvidenceStore.load(pack / "evidence", dict(zip(types, map(float, cascade.threshold))))
                  if any((pack / "evidence").glob("part-*.parquet")) else None)
+        section_texts = section_texts_or_none(pack / "index", sections_path, has_store=store is not None)
         return cls(genre=genre, cfg=cfg, schema=schema, types=types, heads=heads, cascade=cascade, scorer=scorer,
                    doc_model=doc_model, index=index, profiles=ProfileStore.load(pack / "profiles", types),
-                   best=load_best_sections(pack / "index"), section_texts=SectionTexts.load(pack / "index", sections_path),
+                   best=load_best_sections(pack / "index"), section_texts=section_texts,
                    prototypes=protos, embedder=embedder, evidence_store=store,
                    info={"schema_version": schema.get("version"), "embedder": ecfg["id"], "device": device,
                          "late_interaction": cfg["models"]["late_interaction"]["id"], "profiles_version": prof_version,

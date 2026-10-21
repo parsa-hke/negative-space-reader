@@ -9,6 +9,10 @@ index's embedder -> section presence (linear heads + prototypes, combined by cas
 (doc_presence.json; the v1 best-section rule when a pack has none, flagged) -> document vector -> cohort (never the
 document's own entity) -> level-1 expectation with Wilson intervals -> rank -> peer evidence -> template explanation.
 No LLM on this path, and the uploaded text is not stored.
+
+analyse() = score(prepare(..)) (plan 7.1): prepare() is the slow part, up to the document vector, done once per
+upload; score() is the rest, so the app re-ranks under other cohort settings (k, category filter, date window)
+without embedding the upload again.
 """
 
 from __future__ import annotations
@@ -92,29 +96,48 @@ def document_markdown(doc: Any, sections: list[Any]) -> str:
     return write_sections_markdown(doc.title, [(s.heading, s.text) for s in sections])
 
 
-def analyse(text_or_path: str | Path, pack: Any, *, title: str | None = None, category: str | None = None,
-            entity_id: str | None = None, date_window: tuple[str | None, str | None] | None = None,
-            top_k: int | None = None, explain_mode: str | None = None, teacher: Any = None) -> Report:
-    from engine.cohort import CohortRetriever
-    from engine.embed import document_vector
-    from engine.evidence import PeerEvidence
-    from engine.expectation import level1
-    from engine.explain import explain_absences
-    from engine.rank import rank_absences
+@dataclass
+class Prepared:
+    """The slow, per-upload part of analyse() (segment, embed, presence): computed once, re-scored under other cohort
+    settings by score(). Held in memory only (plan §0.2 #21: uploads are never stored)."""
+    sections: list[tuple[str | None, str]]
+    title: str | None
+    S: np.ndarray            # (sections, dim) section embeddings
+    vector: np.ndarray       # document vector (plan §0.2 #9)
+    P: np.ndarray            # (sections, T) section presence
+    p_doc: np.ndarray        # (T,) document presence
+    bits: np.ndarray         # (T,) present types
+    timings: dict[str, float]
 
-    cfg, T = pack.cfg, len(pack.types)
-    timings: dict[str, float] = {}
-    t0 = tick = time.perf_counter()
+
+@dataclass
+class Embedded:
+    """An upload segmented and embedded with a pack's embedder: shared by every pack with the same embedder and
+    segmentation settings (pack auto-detection embeds once)."""
+    sections: list[tuple[str | None, str]]
+    title: str | None
+    S: np.ndarray
+    title_vector: np.ndarray | None
+    embedder: str
+    timings: dict[str, float]
+
+
+def _timer(timings: dict[str, float]) -> Any:
+    tick = [time.perf_counter()]
 
     def lap(name: str) -> None:
-        nonlocal tick
         now = time.perf_counter()
-        timings[name] = round(now - tick, 3)
-        tick = now
+        timings[name] = round(now - tick[0], 3)
+        tick[0] = now
+    return lap
 
+
+def embed_upload(text_or_path: str | Path, pack: Any, *, title: str | None = None) -> Embedded:
+    timings: dict[str, float] = {}
+    lap = _timer(timings)
     text = read_document(text_or_path)
     lap("read")
-    secs = segment(text, cfg["segment"])
+    secs = segment(text, pack.cfg["segment"])
     if not secs:
         raise ValueError("the document has no text to analyse")
     if title is None:
@@ -122,10 +145,28 @@ def analyse(text_or_path: str | Path, pack: Any, *, title: str | None = None, ca
     lap("segment")
     texts = [t for _, t in secs]
     V = np.asarray(pack.embedder.encode(texts + ([title] if title else [])))
-    S, tv = V[:len(texts)], (V[len(texts)] if title else None)
     lap("embed")
+    return Embedded(sections=secs, title=title, S=V[:len(texts)], title_vector=V[len(texts)] if title else None,
+                    embedder=(getattr(pack, "info", {}) or {}).get("embedder", ""), timings=timings)
+
+
+def document_vector_of(embedded: Embedded, pack: Any) -> np.ndarray:
+    from engine.embed import document_vector
+
+    return document_vector(embedded.S, embedded.title_vector,
+                           title_abstract_weight=pack.cfg["models"]["embedder"].get("title_abstract_weight", 0.5))
+
+
+def prepare(text_or_path: str | Path, pack: Any, *, title: str | None = None, embedded: Embedded | None = None) -> Prepared:
+    """embedded: the upload already embedded by embed_upload (with this pack's embedder), else embedded here."""
+    if embedded is None:
+        embedded = embed_upload(text_or_path, pack, title=title)
+    t0 = time.perf_counter()
+    timings = dict(embedded.timings)
+    lap = _timer(timings)
+    secs, S = embedded.sections, embedded.S
     clf = pack.heads.predict_proba(S)
-    proto = pack.scorer.score(texts)
+    proto = pack.scorer.score([t for _, t in secs])
     P = pack.cascade.predict(clf, proto, np.full(clf.shape, np.nan))
     lap("presence")
     if pack.doc_model is not None:
@@ -135,9 +176,34 @@ def analyse(text_or_path: str | Path, pack: Any, *, title: str | None = None, ca
         p_doc = P.max(0)
         bits = (p_doc >= pack.cascade.threshold).astype(int)
     lap("document_presence")
-    vec = document_vector(S, tv, title_abstract_weight=cfg["models"]["embedder"].get("title_abstract_weight", 0.5))
-    coh = CohortRetriever.from_config(pack.index, cfg.get("cohort") or {}).retrieve(
-        vec, entity_id=entity_id, category=category, date_window=date_window)
+    vec = document_vector_of(embedded, pack)
+    lap("document_vector")
+    timings["prepare"] = round(sum(embedded.timings.values()) + time.perf_counter() - t0, 3)
+    return Prepared(sections=secs, title=embedded.title, S=S, vector=vec, P=P, p_doc=p_doc, bits=bits, timings=timings)
+
+
+def score(prepared: Prepared, pack: Any, *, category: str | None = None, entity_id: str | None = None,
+          date_window: tuple[str | None, str | None] | None = None, k: int | None = None,
+          category_filter: bool | None = None, top_k: int | None = None, explain_mode: str | None = None,
+          teacher: Any = None) -> Report:
+    """The fast part: cohort (k, category filter and date window override the config), expectation, rank, evidence,
+    explanation. Timings: prepare's laps, then this call's; total = prepare + score."""
+    from engine.cohort import CohortRetriever
+    from engine.evidence import PeerEvidence
+    from engine.expectation import level1
+    from engine.explain import explain_absences
+    from engine.rank import rank_absences
+
+    cfg, T = pack.cfg, len(pack.types)
+    secs, title, P, p_doc, bits = prepared.sections, prepared.title, prepared.P, prepared.p_doc, prepared.bits
+    timings: dict[str, float] = {k_: v for k_, v in prepared.timings.items() if k_ != "prepare"}
+    t0 = time.perf_counter()
+    lap = _timer(timings)
+
+    retriever = CohortRetriever.from_config(pack.index, cfg.get("cohort") or {})
+    if category_filter is not None:
+        retriever.category_filter = category_filter
+    coh = retriever.retrieve(prepared.vector, entity_id=entity_id, category=category, date_window=date_window, k=k)
     peers = [h.id for h in coh.peers]
     lap("cohort")
     e = level1(pack.profiles, peers, z=(cfg.get("expectation") or {}).get("wilson_z", 1.96),
@@ -193,10 +259,17 @@ def analyse(text_or_path: str | Path, pack: Any, *, title: str | None = None, ca
     present = [{"type": t, "p_present": float(p_doc[k]), "section": int(best_sec[k]), "heading": secs[int(best_sec[k])][0]}
                for k, t in enumerate(pack.types) if bits[k]]
     present.sort(key=lambda x: -x["p_present"])
-    timings["total"] = round(time.perf_counter() - t0, 3)
+    timings["total"] = round(prepared.timings.get("prepare", 0.0) + time.perf_counter() - t0, 3)
     cohort = {"k": coh.stats["k"], "n": coh.stats["n"], "fallback": coh.fallback, "filters": coh.filters_used,
               "stats": coh.stats, "nearest": [{"doc_id": h.id, "similarity": round(h.score, 4),
                                                "category": h.payload.get("category"), "date": h.payload.get("date")}
                                               for h in coh.peers[:10]]}
     return Report(genre=pack.genre, title=title, sections=len(secs), present=present, absences=absences, cohort=cohort,
                   timings=timings, pack={**pack.info, "types": T})
+
+
+def analyse(text_or_path: str | Path, pack: Any, *, title: str | None = None, category: str | None = None,
+            entity_id: str | None = None, date_window: tuple[str | None, str | None] | None = None,
+            top_k: int | None = None, explain_mode: str | None = None, teacher: Any = None) -> Report:
+    return score(prepare(text_or_path, pack, title=title), pack, category=category, entity_id=entity_id,
+                 date_window=date_window, top_k=top_k, explain_mode=explain_mode, teacher=teacher)

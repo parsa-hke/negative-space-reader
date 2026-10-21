@@ -1,75 +1,75 @@
-# Session handoff — Phase 6 closed (6.6 failed for privacy, recorded); Phase 7 starts with 7.1
+# Session handoff — 7.1 redesigned and verified (approval pending); 7.3 done
 
-Written 2026-10-21 at the end of the 6.4/6.5 session. Read with: `CLAUDE.md`, `NEGATIVE_SPACE_PLAN.md` (§0.2 #14,
-#20, #21, #23, #24; Phase 7), `CHANGELOG.md` (entries 2026-10-20/21 and 2026-10-21), decision record 007. Replace
-this file at the end of the next session.
+Written 2026-10-21 at the end of the first Phase 7 session. Read with: `CLAUDE.md`, `NEGATIVE_SPACE_PLAN.md` (§0.2 #14,
+#17, #21, #24; Phase 7), `CHANGELOG.md` (entry "2026-10-21 (afternoon)"), decision record 007. Replace this file at
+the end of the next session.
 
 ## Where things stand
 
-- **Phase 6:** 6.1-6.5 ticked; 6.6 unticked with its outcome recorded (papers pass, privacy fail; Parsa: report as a
-  negative finding, Phase 7 proceeds; §0.2 #9/#10 unchanged).
-- **6.4 this session:** severity-weight ablation `bench_ablation_severity_v2` → `reports/tables/ablation_severity_<genre>.csv`
-  (privacy: MRR up, false alarms up, gate still not passed; papers: no weights ≠ 1). Figures from
-  `python -m analysis.figures` → `reports/figures/{bench_recall5,level1_minus_uniform,cohort_diagnosis}.png`.
-  Cascade vs classifier-only presence **deferred (Parsa)**; full embedder not run (no full-tier pack).
-- **6.5 this session:** stage `bench.stage: errors` (`analysis/error_analysis.py`), run `bench_errors_v3` on
-  `bench_eval_v2` → `reports/tables/errors_<genre>.csv`. `bench_eval_v2` = `bench_eval_v1` plus
-  `<run>/<genre>/untouched.csv`; all recorded tables unchanged. Main finding: missed types are the rare ones
-  (Spearman of per-type recall@5 with prevalence 0.90 privacy, 0.56 papers).
-- **Synth stage:** progress lines (timestamp, documents tried, ETA), atomic checkpoints, `bench.synth.resume_from`;
-  checked with an interrupted smoke run.
-- **Uncommitted:** everything from this session **and** the Markdown round-trip session's changes (`data/segment.py`,
-  `engine/pipeline.py`, `bench/synth.py` docstring, pack manifests, analyse-gate tables, `tests/test_segment_roundtrip.py`,
-  its CHANGELOG entry, two `gate_roundtrip_*` log rows). Nothing was committed: Parsa reviews first. `bench/synth.py`,
-  `CHANGELOG.md` and `runs/log.csv` carry changes from both sessions.
-- **Hub:** `runs` not pushed since this session's runs; `packs/*/pack.json` differ from the hub (the round-trip
-  session's battery-power gate timings; rerun gate 5.9 on mains power for the report).
-- Tests: 441 passed.
+- **7.1 (not ticked, design awaiting Parsa's approval):** `app/gradio_app.py` redesigned per Parsa's brief (bold dark
+  design, animations, lens cursor and particle trail: `app/static/nsr.css`, `nsr.js`), pinned examples with the cached
+  7.3 chat-model answers (`app/examples.py` → `app/examples/*.json`, config `serve.examples`, `serve.bench_examples`,
+  `serve.chat_runs`, `serve.examples_dir`), the "compare with a chat model" switch (cached answers only;
+  `serve.allow_live_chat: false`), ghost click → Evidence, guided demo (five-step strip, narrated status with the numbers,
+  progress narration, challenge/reveal for benchmark examples) and the **About the project** tab (`app/about.py`;
+  numbers from `app/examples/results.json`, written by `python -m app.examples` via `app/content.py`; rerun it after any
+  table changes). Verified in the browser (CHANGELOG, evening entries 1-4). Launch: `python -m experiments.run --config configs/serve.yaml`; stop with Ctrl-C.
+  **Design approved (2026-10-21 evening).** **Space bundle ready, not uploaded:** `python -m app.space_bundle --clean`
+  → `space/` (305 MB, 149 MB LFS; corpus-free). Two variants: `--variant zerogpu` (default; Parsa's Pro account: H200
+  slice per analysis via `spaces.GPU`, untestable locally) and `--variant cpu` (verified by running `space/app.py`
+  locally: 4.6 s per paper). Proposal in CHANGELOG (night entries); waiting for Parsa's go-ahead on the Space name and
+  visibility; hardware `zero-a10g`/H200 ZeroGPU at creation (`create_repo(..., space_sdk="gradio", space_hardware=...)`).
+- **7.1 design (Parsa's palette, 2026-10-21 evening):** cream #FFF0C5 page; teal #359FA0 = absent; light teal #8AD6D1 =
+  evidence and text-carrying fills; orange #FF8C52 = action, severity, reveals; derived darker teal/orange for small text
+  (contrast); containers near-white with solid teal borders and one soft shadow (`--nsr-card`, `--nsr-line`,
+  `--nsr-shadow`). CSS variables keep their old names (`--nsr-lime` is the teal). Severity as a badge only when the weight is
+  not 1; 7/5 layout with Cohort and Evidence tabs; comparison panel full width below. No `backdrop-filter`/`transform`
+  on ancestors of Gradio dropdowns (it detaches their options list).
+- **7.3 (ticked):** recall@5 on 100 single_type instances per genre, privacy / papers: Opus 5.5 0.242 / 0.235
+  (`llm_gap_candidate_opus_s0`, ≈ $4.2), Qwen2.5-72B 0.137 / 0.181 (`llm_gap_candidate_qwen_s0`, ≈ $0.40), level 1
+  0.376 / 0.655, genre-uniform 0.375 / 0.465; both chat models below both corpus systems, paired CIs excluding zero.
+  Table `reports/tables/llm_gap_candidate_<genre>.csv`. Caveats and the Qwen catalogue-order finding in the CHANGELOG.
+  API keys are exported per command: `set -a; . ./.env; set +a` (OpenRouter: `export OPENROUTER_API_KEY="$OPEN_ROUTER_KEY"`).
+- **Gate 5.9 rerun on mains power:** privacy max 1.37 s, papers max 3.28 s; `packs/*/pack.json` and
+  `reports/tables/analyse_gate_<genre>.csv` updated.
+- **Hub:** runs and packs pushed at the end of the session (986 matched, 0 differ, 0 missing).
+- **Uncommitted:** everything from this session (Parsa reviews first; commits authored by Parsa only).
+- Tests: 476 passed.
+
+## Optional 7.3 follow-ups (ask Parsa; each a few dollars)
+
+1. Opus at effort high on the same instances (at medium it used ≈ 220 output tokens per answer, thinking included).
+2. Both chat models on the 150 untouched dev documents per genre: false alarms@5, as reported for the system.
 
 ## Next session, in order
 
 1. Checks below. Commit what Parsa approves (authored by Parsa only).
-2. **7.1 Gradio app**, once Parsa approves the design below (or a changed one).
-3. 7.3 frontier comparison (Claude Opus 5.5 via Message Batches, 100 synthetic instances per genre; prompt versioned
-   in `prompts/`), then 7.4 report via `analysis/tables.py`.
-
-## 7.1 design proposal (not yet approved)
-
-- **Engine split, no genre code:** `analyse()` becomes `prepare(text, pack)` (segment, embed, presence: the slow part,
-  cached per upload in the session) + `score(prepared, pack, cohort settings)` (cohort, expectation, rank, evidence:
-  fast), so the cohort controls re-rank without re-embedding. `analyse()` stays as `score(prepare(..))`.
-- **Ghost placement** (`engine/explain.py`, generic): a type's `section_hint` "under a heading like X" → after the
-  section whose heading best matches X (token overlap), else "first/second half" / "near the start" → after the last
-  section of that part; one ghost block per position, several absences stacked.
-- **Layout (Gradio Blocks):** input row (paste / upload .txt .md .html, pack dropdown with "auto", examples from the
-  test split of both genres via `document_markdown`); left 60%: the document as HTML with dashed ghost paragraphs
-  ("N% of peers like this one state X; this document does not", prevalence, severity weight); right 40%, two tabs:
-  **Cohort** (k, category filter, date-window slider, mean similarity, fallback flag) and **Evidence** (selected
-  absence: peer count, up to five peer sentences with document ids, the template explanation).
-- **Auto-detect:** both packs use the same embedder; pick the pack whose top-10 neighbours have the highest mean
-  similarity, show the margin; below a threshold say "no matching pack" (on-the-fly mode is Phase 10).
-- **Off by default, flagged when on (§0.2 #14, #21):** teacher rationale / suggested wording and "compare with a chat
-  model" (baseline (e)); both send text off the machine, need an API key, and are hidden on a public Space. The
-  chat-model toggle waits for the 7.3 prompt. Uploads are never stored (`serve.store_uploads: false`).
-- **Wording:** prevalence, never verdicts ("non-compliant", "missing", "deficient" do not appear).
-- **Tests:** ghost placement unit tests; the Blocks app built (not launched) on a tiny fake pack; `prepare`/`score`
-  equals `analyse` on one corpus document. Launch: `experiments/run.py --config configs/serve.yaml` (task `serve`).
-- **Open questions for Parsa:** is the 60/40 two-tab layout right? Severity shown as a number or as a badge? Should
-  the CPU Space ship both packs (memory and pack size to be checked)?
+2. Any 7.3 follow-up Parsa approves (the table keeps other models' rows; a rerun of a model replaces its own).
+3. Upload the Space once Parsa says where (`space/` is the complete repo content; LFS for `*.npy`): ZeroGPU first;
+   watch the build log for the `spaces` patch and the first analysis; if it fails, rebuild `--variant cpu` and upload
+   that. Time a policy and a paper on the Space, record both, then tick 7.1.
+4. 7.2 video, then 7.4 report via `analysis/tables.py`.
 
 ## Watch
 
 - Never push a hub bundle while a job writes into it.
 - FAISS and PyTorch must not both initialise in one macOS process.
-- `post_hoc_best` is not a gate result. Severity-weighted numbers are an ablation, not a gate result.
-- Synth checkpoints (`checkpoint.pkl`) are deleted when a run finishes; an interrupted run's checkpoint must be pushed
-  (`hub_sync push --bundles runs`) before the Colab runtime is gone, then resumed with `bench.synth.resume_from`.
+- `post_hoc_best` is not a gate result. Severity-weighted numbers are an ablation, not a gate result. The app ranks
+  with severity weights on (the config default); its numbers are not bench results.
+- `analyse()` is not bitwise reproducible on MPS (≈ 1e-9 in P(present)); compare reports with rounded floats.
+- The pane's stop button kills `serve` without SIGTERM: no metrics. Use Ctrl-C / SIGTERM.
+- `space/` is assembled, never committed; rebuild it after any code or pack change before uploading.
+- `app/examples/results.json` and `app/examples/*.json` are generated: rerun `python -m app.examples` when tables or runs change.
+- Gradio 6: a synthetic Textbox `input` event does not reach the backend (press a hidden button instead); `gr.Tabs(selected=)`
+  as a return value is ignored (`gr.update(selected=)`); theme fonts are `gr.themes.Font` objects; verify the app with the
+  browser pane visible (a hidden pane throttles timers and drops dropdown focus).
+- The first drawn privacy example is an adult site: pin examples before recording the video.
 - Commits are authored by Parsa only; no Claude co-author line.
 
 ## Checks before starting
 
 ```bash
-.venv/bin/python -m pytest -q        # expected: 441 passed
-git status --short                   # this session's and the round-trip session's changes, unless committed
-.venv/bin/python -m experiments.hub_sync status --bundles runs,packs
+.venv/bin/python -m pytest -q        # expected: 476 passed
+git status --short                   # this session's changes, unless committed
+.venv/bin/python -m experiments.hub_sync status --bundles runs,packs   # expected: 0 differ, 0 missing
 ```

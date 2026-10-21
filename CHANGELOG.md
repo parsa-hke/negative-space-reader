@@ -2,6 +2,261 @@
 
 Date, what was done, what was found (negative findings included). Newest first.
 
+## 2026-10-21 (night, 2) — 7.1: ZeroGPU variant of the Space bundle (Parsa has a Hugging Face Pro account)
+
+Pro accounts can create **ZeroGPU** Spaces: shared H200 slices attached only while a decorated function runs, at no
+charge beyond the subscription. Embedding is 90% of an analysis, so a paper should take about a second there instead
+of 15-30 s on a free CPU Space. **Code:** `serve.zerogpu: true` wraps the analyse handler in `spaces.GPU(duration=
+serve.zerogpu_seconds)` (the only handler that touches the models; re-ranking and the evidence panel stay on the
+CPU); `configs/space_zerogpu.yaml` (after `space.yaml`: `run.device cuda`, fp16, batch 8); `python -m app.space_bundle
+--variant zerogpu` (now the default) writes an `app.py` that imports `spaces` before torch, a `requirements.txt` with
+PyPI torch (CUDA build) and `spaces`, and both overlays; `--variant cpu` keeps the CPU bundle. **Not verified:**
+ZeroGPU exists only on the Space; locally the wrapper is tested with a fake `spaces` module and the bundle's `app.py`
+parses. Known risks to watch on the first build: the `spaces` patch must see the models' `.to("cuda")` at startup
+(it supports that), and the wrapped handler runs in a worker, so the per-analysis `record` list is not filled there
+(metrics only; the Space logs no run). Fallback if ZeroGPU misbehaves: the CPU bundle, unchanged. A template bug
+found by the tests: `app.py` holds f-strings, so the bundle fills it by token replacement, not `str.format`.
+Tests: 476.
+
+## 2026-10-21 (night) — 7.1: the Space bundle (assembled and run locally; nothing uploaded)
+
+**Approved by Parsa:** package for a Hugging Face CPU Space; propose before uploading. **Measured first** (Mac M5):
+what the app reads of each pack is `schema.yaml`, `pack.json`, `cascade.json`, `doc_presence.json`, `classifier/`,
+`prototypes/`, `profiles/`, `evidence/` and `index/{index.json, payloads.jsonl, vectors.npy, best_sections.npz}`:
+privacy 181 MB, papers 124 MB (section_probs, profiles_v1, drafts and label sets are training artefacts, left out).
+The only files over Hugging Face's 10 MB git limit are the two `vectors.npy` (91 + 58 MB → Git LFS). Models download
+from the Hub at start (Qwen3-Embedding-0.6B ≈ 1.2 GB, answerai-colbert-small-v1 ≈ 0.13 GB). **Memory** with both
+packs and fp32 models on CPU: 4.5 GB after loading, 6.1 GB peak during analyses (a free Space has 16 GB). **CPU
+timing** (run `space_cpu_timing_<genre>_s0`, `configs/analyse.yaml`, `run.device=cpu`): Etilize policy 1.8 s, FANS
+paper 5.6 s on 10 cores; with 2 threads 1.6 s / 6.2 s (embedding is 90% of it). A free Space's 2 x86 vCPUs are slower
+than an M5: expect roughly 4-8 s for a policy and 15-30 s for a paper; to be measured on the Space itself.
+
+**Code:** `packs/spec.py section_texts_or_none`: a pack with a stored evidence set loads without the corpus (the
+Space ships no `data/processed`); without a store the corpus is still required and the error says so.
+`app/gradio_app.py build_from_config` is shared by run.py's `serve` (non-blocking, logs a run) and the Space's
+`app.py` (blocking). `configs/space.yaml` overlay: CPU, fp32, 0.0.0.0, both packs, nothing that calls an API.
+**`app/space_bundle.py`** (`python -m app.space_bundle --clean`, tests `tests/test_space_bundle.py`) assembles
+`space/` (gitignored): the Python of app / engine / packs / data / experiments / models / bench / analysis, app's
+static assets and example files, configs, prompts, the pack subsets, and the Space's `app.py`, `README.md` (Space
+header: gradio 6.30.0, Python 3.11), `requirements.txt` (pins from this environment, PyTorch from the CPU wheel
+index) and `.gitattributes` (LFS for `*.npy`); `BUNDLE.json` records sizes. **Result:** 307 MB, 149 MB of it LFS; no
+missing artefact. **Run from inside `space/` with the project's interpreter:** loaded in 11.9 s on CPU, 6 examples;
+MarIA with the comparison on gave the same output as the dev app (mean similarity 0.781, 5 reveal badges, quotes from
+the stored evidence set, no prototype fallback) in 4.6 s. A first bundle copied `data/processed/splits` and
+`label_sets.json`; the copier now takes Python only from code directories (test added). Tests: 475.
+
+## 2026-10-21 (evening, 4) — 7.1: containers lifted off the background (Parsa: more contrast, everywhere)
+
+Every container, not only the About steps: surfaces are now near-white (`--nsr-card` rgba(255,252,242,0.92), inputs
+white) instead of a 3-5% teal tint on the cream; borders are solid teal at 60% alpha (`--nsr-line`, 1.5 px on cards,
+2 px dashed on ghosts) with a softer 30% line (`--nsr-line-soft`) for inner dividers; cards, steps, guide cells, tiles,
+columns, folds, callouts, banners and the results table carry one soft teal shadow (`--nsr-shadow`); ghosts and
+quotes sit on a light-teal tint (20-22%); bar and ring tracks are darker; the aurora is a little calmer (0.38). Checked
+in the pane on the demo (guide, input card) and About (steps). Tests 472.
+
+## 2026-10-21 (evening, 3) — 7.1: Parsa's palette (cream, teal, light teal, orange); the detached dropdown list fixed
+
+**Parsa:** the options list opened far from its field; use the Color Hunt palette #8AD6D1 / #359FA0 / #FFF0C5 / #FF8C52
+for the whole page. **Dropdown:** the card's `backdrop-filter` made it the containing block for Gradio's
+fixed-position options list, so the list's viewport coordinates were applied inside the card; removed (cards are
+now plain translucent cream), the list attaches to its field. **Palette** (`app/static/nsr.css`, variables kept
+under their old names): page #FFF0C5, inputs and cards #FFF8E6; teal #359FA0 for what is absent (ghost outlines,
+bars, ring meter, big numbers); light teal #8AD6D1 for evidence and for fills that carry text (rank badges, the
+selected tab); orange #FF8C52 for the Analyse button, severity and benchmark-reveal badges (dark text on them).
+None of the four reads as small text on cream (teal 3.2:1, orange 2.2:1), so small text uses derived shades: ink
+#12393a, secondary #2f6364, teal text #1d7374, orange text #b24a12 (all ≥ 4.5:1 on cream). Title gradient dark
+teal → teal → light teal → orange; aurora in light teal and orange at higher opacity; grain multiplied at 5%; the
+cursor ring is teal and turns orange over clickable things (no difference blend on a light page); trail particles in
+the palette with normal compositing. Gradio reloads once into `?__theme=light` (was dark); theme hues teal / orange /
+stone. Verified in the pane on Owens (ghosts, reveal badges, Evidence ring 87%, comparison) and the About results
+table. Tests unchanged (472).
+
+## 2026-10-21 (evening, 2) — 7.1: snappier cursor, guided demo, the About pages (project explained for any reader)
+
+**Parsa's changes:** (1) the cursor felt laggy; (2) make the demo more intuitive and better narrated; (3) the site is
+demo + information: problem, method, results, constraints, understandable by anyone.
+
+1. **Cursor:** the ring now closes 60% of the gap per frame (was 20%) and its hover transitions are 120 ms (were 200):
+   a hint of weight, no visible lag. The dot was always immediate.
+2. **Guided demo:** a five-step strip under the tabs (pick · analyse · read the ghosts · check the evidence · change the
+   peers or compare); a colour legend; an empty state in the reading pane showing what a ghost paragraph looks like
+   before anything is analysed; progress narration during analysis (`gr.Progress`: reading and embedding → detecting
+   statements in N sections → finding the 200 closest peers → placing the ghosts), which needed `prepare()` to take
+   the already-embedded upload; the status line is now a narration with the numbers ("Read 6 sections and found this
+   document's 200 closest peers among 22,300 privacy policies of the same category (education), mean similarity 0.76,
+   in 0.78 s. It states 20 of the catalogue's 58 kinds of statement; below are the 10 kinds …"). **Benchmark examples
+   are a challenge:** with the comparison off, the narration says how many kinds of statement were removed and asks
+   whether the ghosts caught them; turning the switch on reveals them, badges the ghosts of removed kinds ("removed by
+   the benchmark · found") and shows the three-column comparison. The switch now redraws document, narration and panel.
+3. **About the project** (top-level tab beside Demo; `app/about.py`): the problem (absence has no text to search for;
+   the research question), how it works in five steps with "more" folds (what a ghost says and does not; the score),
+   how well it works (three tests with tables and plain-language readings, the privacy negative finding and the leak
+   explained, speed and detector quality), where it falls short (seven limits), what it is not (the §0.2 #21 stance),
+   under the hood, glossary, credits. **Every number is copied from the recorded tables** by `app/content.py`
+   (`python -m app.examples` now also writes `app/examples/results.json` from corpus_stats, bench_synth, bench_revision,
+   cohort_diagnosis, llm_gap_candidate, analyse_gate and presence_gate); a missing table shows "not recorded", never a
+   typed number. Tests check the copy, the sections, and that no verdict word appears (the one sentence that names
+   "non-compliant" and "deficient" says the system never uses them).
+
+Verified in the pane: guide strip and empty state; Owens Community College (challenge line, then reveal: ours rank 1,
+Opus 3, Qwen none); Difficulty-Aware MT Evaluation (papers, 1.20 s; reveal badges on 3 ghosts, comparison ours rank 1
+with 3 of 4, Opus rank 1 with 3 of 4, Qwen none); About page: 8 sections, 3 tables, 0 "not recorded". Tests: 472
+(new: `tests/test_app_about.py`). **Open:** Parsa's approval, then the Space.
+
+## 2026-10-21 (evening) — 7.1: the demo redesigned (dark, animated, lens cursor), pinned examples, chat-model comparison
+
+**Parsa's brief:** a bold, modern, animated design with a custom cursor and mouse trail; deploy to a Space after approval.
+**Design** (`app/static/nsr.css`, `nsr.js`, loaded by `launch(css=, head=)`; the page reloads itself once with
+`?__theme=dark`): near-black void, aurora drift and film grain behind glass cards; Syne / DM Sans / JetBrains Mono
+(Google Fonts, system fallbacks offline); three accents with fixed meanings: lime = absent (ghosts, bars, the ring
+meter), cyan = evidence (quotes, similarity), magenta = action and severity. Motion: gradient sweep on the title,
+ghosts slide in staggered by rank and breathe, prevalence bars fill, the Evidence ring animates (`@property --p`),
+percentages count up; a lens cursor (ring + dot, grows over anything clickable) with an additive particle trail whose
+density follows pointer speed. Pointer devices only; all motion off under `prefers-reduced-motion`. The ui-ux-pro-max
+skill's palette (slate + blue) was too tame for the brief; its dark-OLED and research-typography guidance was kept.
+
+**Examples** (`app/examples.py`, `python -m app.examples` → `app/examples/<genre>.json`, 59 KB, tracked): per genre
+one corpus document (Etilize `privacy_pl:36309`, FANS `unarxive:2111.00400`) and two OmitBench-synthetic instances
+with the lists the 7.3 runs recorded (`serve.bench_examples`, `serve.chat_runs`): privacy RSsportscars
+`single_type:privacy_pl:539904` and Owens Community College `single_type:privacy_pl:67783`; papers MarIA
+`single_type:unarxive:2107.07253` and Difficulty-Aware MT Evaluation `single_type:unarxive:2107.14402`. Chosen by hand
+for readable titles among instances of 5-14 sections and 3-14k characters, not by outcome (Opus beats level 1 on
+RSsportscars, rank 1 vs 3). The app reads the files when present, so a Space needs neither the corpus nor the runs.
+
+**Chat-model comparison** (plan 7.1's toggle): a switch; for a benchmark example, three columns (this system, Claude
+Opus 5.5, Qwen2.5-72B) with the deleted types marked where a system found them and each column's first hit rank;
+for any other document, a note that cached answers exist only for benchmark examples and that a live call is off
+(`serve.allow_live_chat: false`; not implemented in the lean tier). Ghost paragraphs are clickable: the click fills a
+hidden textbox and presses a hidden button (`#nsr-pick-go`), which selects the absence and opens the Evidence tab.
+**Gradio 6 findings:** a synthetic `input` event on a Textbox does not reach the backend, a synthetic button click
+does; `gr.Tabs(selected=)` as a return value is ignored, `gr.update(selected=)` works; theme fonts must be
+`gr.themes.Font` objects (strings crash `launch`, first run failed and its folder was removed; `runs/log.csv` keeps
+the row); inactive Tab children are not rendered until the tab is shown. A hidden browser pane throttles the page's
+timers and drops dropdown focus: verify with the pane visible.
+
+**Verified in the pane** (Mac M5, MPS): hero, cursor and trail; RSsportscars (privacy, 10 sections, 0.55 s, 10 ghosts
+after their sections, comparison: ours rank 3 / Opus 1 / Qwen none of 3); MarIA with pack auto (papers chosen, 2.15 s,
+comparison: ours rank 1, 5 of 5 / Opus 2, 4 of 5 / Qwen 6, 1 of 5); Etilize (corpus, 0.91 s, the cached-only note);
+ghost click → Evidence tab with the ring at 51% and five quotes; re-rank; 375 px wide: no horizontal scroll. Tests: 469
+(new: `test_app_examples.py`, comparison panel, ghost click, category reset). **Open:** Parsa's approval of the
+design, then the Space (`serve.examples_dir` makes the data self-contained; pack sizes and CPU timing to check).
+
+## 2026-10-21 (afternoon, 3) — 7.3 closed: the open teacher (Qwen2.5-72B) is below Opus and both corpus systems
+
+**Approved by Parsa.** Route `configs/openrouter.yaml` (DeepInfra fp8, 32k context, pinned; key mapped from
+`OPEN_ROUTER_KEY`), `baselines.max_tokens=1024` (16,000 would not fit the context). Smoke
+`llm_gap_candidate_qwen_smoke_s0`; run `llm_gap_candidate_qwen_s0` (4.7 min): 1.10 M input and 18 k output tokens,
+≈ $0.40. **One papers prompt (≈ 34 k tokens) exceeds the route's context**: not truncated, scored as an empty
+ranking and counted (`papers/unanswered` 1). The stage now falls back to answering prompts one at a time when an item
+fails (answers already received come from the cache); test added. The table keeps the Opus rows (fix of the previous
+entry).
+
+| Recall@5 (same 100 instances) | Privacy | Papers |
+|---|---|---|
+| Qwen2.5-72B (open teacher) | 0.137 [0.090, 0.187] | 0.181 [0.126, 0.245] |
+| Claude Opus 5.5 | 0.242 | 0.235 |
+| Level 1 | 0.376 | 0.655 |
+| Genre-uniform | 0.375 | 0.465 |
+| Qwen − level 1 | −0.239 [−0.311, −0.160] | −0.473 [−0.569, −0.378] |
+| Qwen − genre-uniform | −0.238 [−0.304, −0.166] | −0.283 [−0.387, −0.182] |
+
+**Negative finding: Qwen does not rank.** 60 of 100 privacy and 69 of 99 papers lists are in catalogue order (Opus:
+0 of 100 in both), and only 87 / 80 lists are distinct: it filters the catalogue rather than ordering absences by how
+conspicuous they are, so recall@1 is near floor (0.042 / 0.022). Both chat models are below both corpus systems in
+both genres; the open teacher is below Opus (not tested paired). Plan 7.3 ticked. Tests: 466 passed.
+Hub: runs and packs pushed (no job running); status 986 matched, 0 differ, 0 missing.
+
+## 2026-10-21 (afternoon, 2) — 7.3: Claude Opus 5.5 on the candidate list, far below both corpus systems
+
+**Approved by Parsa** (one pass, 100 single_type instances per genre, effort medium). The key is exported from `.env`
+for the command (`set -a; . ./.env`): run.py does not read `.env` (the first smoke attempt failed on that, logged).
+Smoke `llm_gap_candidate_smoke_s0_20261021-115944-987469` (2 instances per genre, Messages API, ≈ $0.17). Run
+`llm_gap_candidate_opus_s0` (Message Batches, 12 min, 196 requests sent + 4 reused from the smoke cache): 1.88 M
+input and 44 k output tokens, ≈ $4.2 at batch list prices (not checked against the Console invoice). The dry run's
+estimate ($8) assumed 3.5 characters per token (measured ≈ 2.9) and 2,500 output tokens per request (measured ≈ 220:
+at effort medium the model thinks little). Every answer valid: 10 catalogue ids, none outside it.
+
+`reports/tables/llm_gap_candidate_<genre>.csv`, same 100 instances, MRR cut at 10 for every system, paired bootstrap:
+
+| | Privacy recall@5 | Papers recall@5 |
+|---|---|---|
+| Claude Opus 5.5 (candidate list) | 0.242 [0.185, 0.301] | 0.235 [0.172, 0.306] |
+| Level 1 (cohort prevalence) | 0.376 | 0.655 |
+| Genre-uniform prevalence | 0.375 | 0.465 |
+| Opus − level 1 | −0.133 [−0.198, −0.064] | −0.420 [−0.518, −0.325] |
+| Opus − genre-uniform | −0.132 [−0.199, −0.061] | −0.230 [−0.328, −0.129] |
+
+Recall@1 0.051 / 0.070 (level 1 0.098 / 0.189); MRR@10 0.339 / 0.275 (level 1 0.451 / 0.545). The gap is outside the
+CI against both systems in both genres. **Caveats for the report:** the instances were built and verified with the
+system's own presence model (the deleted type is "absent" by that model's judgement; the model judges presence by
+reading, and may count paraphrases left in the text as stated); one pass at effort medium (no run-to-run spread,
+little thinking); the open teacher not yet run.
+
+**Fix before the open teacher:** the stage overwrote `llm_gap_candidate_<genre>.csv`; it now keeps the other models'
+rows and replaces only its own (test added). Tests: 465 passed.
+
+## 2026-10-21 (afternoon) — Phase 7.1 Gradio app built and verified; 7.3 prompt and job proposed; gate 5.9 on mains power
+
+**Checks (HANDOFF):** pytest 441 passed, as expected. Two differences from HANDOFF, both resolved before this session:
+nothing was uncommitted (the round-trip and 6.4/6.5 work is in commits `10ab7a1` and `79fb84b`, authored by Parsa), and
+`hub_sync status --bundles runs,packs` gave 948 matched, 0 differ, 0 missing (runs and packs had been pushed).
+
+**7.1 engine split** (tests first, `tests/test_prepare_score.py`): `analyse()` is now `score(prepare(..))`.
+`embed_upload` (read, segment, embed) → `prepare` (presence, document presence, document vector: the slow part, once
+per upload) → `score` (cohort with k / category filter / date window overriding the config, expectation, rank,
+evidence, explanation). Checked on the real packs: on one test document per genre, prepare + score equals analyse to
+6 decimals; **analyse is not bitwise reproducible with itself on MPS** (P(present) differs by ≈ 1e-9 run to run: the
+ColBERT prototype scores; section embeddings are identical), so the check rounds floats.
+
+**Ghost placement** (`engine/explain.py` `ghost_position` / `place_ghosts`, `tests/test_ghosts.py`): from the type's
+section_hint only, no genre vocabulary: the heading that shares the most hint words (first five letters, each word
+weighted by log(1 + headings / headings containing it), so "privacy" in every privacy heading counts little), else
+the hinted part (near the start → after the first section; first half → after its last section; second half, near
+the end or no hint → after the last section). On the Etilize policy 9 of 10 ghosts are placed by position, most after
+the last section: the hints mostly name a half of the document, not a heading.
+
+**Auto-detect** (`engine/onthefly.py` `detect_pack`, `tests/test_onthefly.py`): the upload is embedded once per
+embedder and reused by `prepare`; the pack whose index holds the nearest 10 documents (mean similarity) wins, the
+margin is shown. `onthefly.pack_similarity_threshold` stays null (Phase 10), so a document of another genre is still
+assigned to the nearer pack. FANS paper: papers 0.827, privacy 0.522.
+
+**App** (`app/gradio_app.py`, task `serve`, `configs/serve.yaml`; `tests/test_gradio_app.py` builds the Blocks app on
+the small pack and calls its handlers): input row (paste, upload .txt/.md/.html, pack or auto, three test-split
+examples per genre via `document_markdown`), the document with dashed ghost paragraphs ("N% of peers like this one
+state X; this document does not", count of n, Wilson interval, severity badge only when the weight is not 1, where
+it was placed and one peer quote), Cohort tab (k, category filter, category, date window, re-rank without embedding
+again, similarity, fallback flag, nearest peers), Evidence tab (selected absence, quotes with document ids, prototype
+quotes marked as such, template explanation). An uploaded file is deleted once read and Gradio's cache is cleared
+every two minutes; `serve.store_uploads: true` is refused. Teacher rationale only behind `serve.allow_teacher`
+(default false), then off by default and flagged. No verdict words (tested). Not done: the chat-model toggle (waits for
+7.3), the CPU Space.
+
+**Verified in the browser pane** (run `serve_s0_20261021-114046-082824`, Mac M5 / MPS, loaded in 10.9 s): Etilize
+policy (`privacy_pl:36309`): 7 sections, 24 types stated, 10 ghosts, 0.74 s; re-rank at k 50 changes the cohort without
+re-embedding; FANS paper (`unarxive:2111.00400`) with auto: papers chosen, 8 sections, 2.20 s. **Bug found and fixed
+there:** the category of a privacy example carried over to the paper (category filter fell back); now a category not
+in the chosen pack resets to the document's own or none (test added). **Negative finding (for the report's error
+analysis):** the policy's top ghost, "opt out of communications" (70% of peers), is a false alarm: the policy gives an
+unsubscribe address; the document model gives P(present) 0.40. The first drawn privacy example is an adult site:
+pin examples with `serve.examples` before recording the 7.2 video. `preview_stop` kills the server without SIGTERM, so
+the first app run wrote neither metrics nor a log row (its folder, holding only config.yaml, was removed); SIGTERM
+and Ctrl-C are handled (check run `serve_s0`, logged ok). Stop the app with Ctrl-C to record its timings.
+
+**7.3 proposed, not run** (tests first, `tests/test_baselines.py`): prompt `prompts/llm_gap_candidate.md` v1
+(`v1:3c5f75db208f`): the catalogue (id: definition) before the document (a cached prefix per genre), the model
+returns at most 10 absent type ids, most conspicuous first, structured output restricted to the catalogue ids; the
+prompt never mentions edits. Stage `baselines.stage: candidate`: seeded sample (`sample_seed` 2026) of
+`llm_gap_instances` from `bench_synth_v1`, scored with `bench/metrics.py`, paired with level 1 and genre-uniform from
+`bench_eval_v2` (MRR cut at 10 for every system). Overlay `configs/llm_gap_anthropic.yaml` (Claude Opus 5.5, Message
+Batches, effort medium, responses cached). Dry run `llm_gap_candidate_dry_s0` (no API call): 100 single_type
+instances per genre, 1.84 M + 3.75 M prompt characters ≈ 0.53 M + 1.07 M input tokens; ≈ $3.55 + $4.64 at an assumed
+2,500 output tokens per request (thinking cannot be turned off on Opus 5.5).
+
+**Gate 5.9 on mains power** (`build.force=[analyse_gate]`, runs `gate59_mains_<genre>_s0`): privacy max 1.37 s, median
+0.35 s (battery: 2.32 / 0.75); papers max 3.28 s, median 3.11 s (battery: 8.15 / 7.1). `pack.json` and
+`analyse_gate_<genre>.csv` updated. Runs bundle pushed (no job running); `packs/*/pack.json` differ from the hub.
+Tests: 464 passed.
+
 ## 2026-10-21 — Phase 6.4 and 6.5 closed: severity ablation, figures, error analysis; synth checkpoints
 
 **Checks (HANDOFF):** pytest 429 passed (423 + the round-trip session's 6); `git status`: the round-trip session's

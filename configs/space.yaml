@@ -1,0 +1,19 @@
+# Overlay for the Hugging Face CPU Space (plan 7.1): python -m app.space_bundle assembles space/ with this overlay
+# applied by its app.py. CPU, fp32 (fp16 is not CPU-servable), bind on all interfaces, both packs, the pinned examples
+# and results files shipped with the bundle; no corpus and no runs on the Space (quotes come from the packs' stored
+# evidence). Nothing that calls an API is on.
+run:
+  device: cpu
+  seeds: [0]
+models:
+  embedder:
+    dtype: float32
+    query_batch_size: 4
+serve:
+  host: 0.0.0.0
+  port: 7860
+  packs: [privacy, papers]
+  examples_dir: app/examples
+  allow_teacher: false
+  allow_live_chat: false
+  store_uploads: false

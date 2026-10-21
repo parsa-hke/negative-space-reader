@@ -4,8 +4,24 @@
     {
       "name": "progress",
       "runtimeExecutable": ".venv/bin/python",
-      "runtimeArgs": ["-m", "analysis.progress_server", "--port", "8765"],
+      "runtimeArgs": [
+        "-m",
+        "analysis.progress_server",
+        "--port",
+        "8765"
+      ],
       "port": 8765
+    },
+    {
+      "name": "serve",
+      "runtimeExecutable": ".venv/bin/python",
+      "runtimeArgs": [
+        "-m",
+        "experiments.run",
+        "--config",
+        "configs/serve.yaml"
+      ],
+      "port": 7860
     }
   ]
 }
