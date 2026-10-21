@@ -2,7 +2,7 @@
 imports, the configs, the pinned examples and results files, and the subset of each pack the app reads, plus the
 Space's `app.py`, `README.md` (Space header), `requirements.txt` and `.gitattributes` (Git LFS for the vectors).
 
-    python -m app.space_bundle [--variant zerogpu|cpu] [--out space] [--clean]
+    python -m app.space_bundle [--variant cpu|zerogpu] [--out space] [--clean]
 
 It copies; it never uploads. What is left out, on purpose: the corpora (`data/processed`), runs, section_probs and
 profiles_v1 (training artefacts the app does not read), schema drafts, label sets, tests, the lab and Colab tooling.
@@ -119,9 +119,10 @@ def _copy_tree(src: Path, dst: Path, *, only_py: bool, exts: tuple[str, ...] = (
     return n
 
 
-def bundle(root: Path, out: Path, cfg: dict[str, Any], *, clean: bool = False, variant: str = "zerogpu") -> dict[str, Any]:
-    """Copy what the Space needs into `out`; return a manifest with file counts and sizes per part. variant: zerogpu
-    (a Pro account's Space: CUDA torch, the `spaces` package, both overlays) or cpu (the CPU wheel, one overlay)."""
+def bundle(root: Path, out: Path, cfg: dict[str, Any], *, clean: bool = False, variant: str = "cpu") -> dict[str, Any]:
+    """Copy what the Space needs into `out`; return a manifest with file counts and sizes per part. variant: cpu (the
+    default and the deployed one, 2026-10-21: no per-visitor GPU quota) or zerogpu (CUDA torch, the `spaces` package, both
+    overlays; faster, but ZeroGPU charges GPU time to each visitor's own allowance, which anonymous visitors exhaust fast)."""
     if variant not in ("zerogpu", "cpu"):
         raise ValueError(f"variant must be zerogpu or cpu, not {variant!r}")
     root, out = Path(root), Path(out)
@@ -208,7 +209,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--overlay", action="append", default=["configs/space.yaml"])
     p.add_argument("--out", default="space")
     p.add_argument("--clean", action="store_true")
-    p.add_argument("--variant", choices=["zerogpu", "cpu"], default="zerogpu")
+    p.add_argument("--variant", choices=["zerogpu", "cpu"], default="cpu")
     a = p.parse_args(argv)
     cfg = load_config(a.config, a.overlay)
     m = bundle(Path("."), Path(a.out), cfg, clean=a.clean, variant=a.variant)

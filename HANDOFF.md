@@ -6,11 +6,12 @@ the end of the next session.
 
 ## Where things stand
 
-- **7.1 (ticked):** live at https://huggingface.co/spaces/parsa-hke/negative-space-reader (public, ZeroGPU, Pro
-  account). Rebuild and re-upload after any change: `python -m app.space_bundle --clean` then
-  `HfApi().upload_folder(folder_path="space", repo_id="parsa-hke/negative-space-reader", repo_type="space")` (the
-  upload script of this session is not in the repo; the call is one line). Packaging facts in the CHANGELOG (night, 3):
-  Python 3.10 pins, pydantic range, LFS patterns. Timings on the Space: policy 1.95 s first call, paper 0.52 s / 0.28 s warm.
+- **7.1 (ticked):** live at https://huggingface.co/spaces/parsa-hke/negative-space-reader (public, **cpu-basic**; ZeroGPU
+  was tried and dropped the same evening: it charges each visitor's own GPU quota, so anonymous visitors hit "runs limit").
+  Rebuild and re-upload after any change: `python -m app.space_bundle --clean` (CPU variant is the default) then
+  `HfApi().upload_folder(folder_path="space", repo_id="parsa-hke/negative-space-reader", repo_type="space")`.
+  Packaging facts in the CHANGELOG (night, 3). Timings on cpu-basic: policy 9.6 s, paper 35.8 s (first calls); a paid
+  "CPU upgrade" (8 vCPU) would cut that 3-4× if the video needs it. The Space sleeps after 48 h idle (wakes in ~1 min).
 - **7.1 design (Parsa's palette, 2026-10-21 evening):** cream #FFF0C5 page; teal #359FA0 = absent; light teal #8AD6D1 =
   evidence and text-carrying fills; orange #FF8C52 = action, severity, reveals; derived darker teal/orange for small text
   (contrast); containers near-white with solid teal borders and one soft shadow (`--nsr-card`, `--nsr-line`,

@@ -45,18 +45,18 @@ def test_bundle_copies_what_the_app_reads_and_nothing_else(tmp_path):
     from app.space_bundle import bundle
 
     root = fake_project(tmp_path)
-    m = bundle(root, tmp_path / "space", {"genres": ["g"], "serve": {"packs": ["g"]}}, clean=True)
+    m = bundle(root, tmp_path / "space", {"genres": ["g"], "serve": {"packs": ["g"]}}, clean=True, variant="zerogpu")
     out = tmp_path / "space"
     assert (out / "app.py").is_file() and (out / "README.md").read_text().startswith("---\ntitle: Negative-Space Reader")
     assert "sdk: gradio" in (out / "README.md").read_text() and "faiss-cpu==" in (out / "requirements.txt").read_text()
     short = next(l for l in (out / "README.md").read_text().splitlines() if l.startswith("short_description:"))
     assert len(short.split(":", 1)[1].strip()) <= 60  # the Hub rejects longer ones
     app_py, req = (out / "app.py").read_text(), (out / "requirements.txt").read_text()
-    assert app_py.startswith('"""') and "import spaces" in app_py and '"configs/space_zerogpu.yaml"' in app_py  # zerogpu default
+    assert app_py.startswith('"""') and "import spaces" in app_py and '"configs/space_zerogpu.yaml"' in app_py
     assert "\nspaces\n" in req and "whl/cpu" not in req and m["variant"] == "zerogpu"
     assert "pydantic>=2.11.10,<=2.12.5" in req and "pydantic==" not in req
     assert "numpy==2.2.6" in req and "pandas==2.3.3" in req and 'python_version: "3.10"' in (out / "README.md").read_text()  # ZeroGPU builds on 3.10
-    cpu = bundle(root, tmp_path / "space_cpu", {"genres": ["g"]}, clean=True, variant="cpu")
+    cpu = bundle(root, tmp_path / "space_cpu", {"genres": ["g"]}, clean=True)  # cpu is the default
     cpu_app, cpu_req = (tmp_path / "space_cpu" / "app.py").read_text(), (tmp_path / "space_cpu" / "requirements.txt").read_text()
     assert "import spaces" not in cpu_app and "space_zerogpu" not in cpu_app and cpu_req.startswith("--extra-index-url") and cpu["overlays"] == ["configs/space.yaml"]
     assert "numpy==2.2.6" not in cpu_req and 'python_version: "3.11"' in (tmp_path / "space_cpu" / "README.md").read_text()

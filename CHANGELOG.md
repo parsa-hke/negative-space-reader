@@ -2,6 +2,20 @@
 
 Date, what was done, what was found (negative findings included). Newest first.
 
+## 2026-10-21 (night, 4) — The Space moved to CPU: ZeroGPU charges each visitor's own quota
+
+**Parsa, after trying the live Space:** "You have exceeded your ZeroGPU runs limit" after a few analyses. ZeroGPU bills
+GPU time to the *visitor's* account (anonymous visitors get a small run allowance; the owner's Pro allowance applies
+only when signed in), so a public class demo would fail for exactly the people it is for. **Decision (Parsa): CPU,
+hassle-free.** The Space's hardware is now `cpu-basic` (free, 2 vCPU, 16 GB) and runs the CPU bundle, which is the
+bundle's default variant again (`python -m app.space_bundle`; `--variant zerogpu` kept, with the quota caveat in its
+docstring). Hardware change via `HfApi.request_space_hardware`; one build (Python 3.11 image, CPU torch wheel), no
+errors; packs loaded on `cpu`. **Timings on cpu-basic** (status line, first calls): Etilize policy **9.6 s**, FANS paper
+**35.8 s** (Mac CPU 1.8 / 5.6 s; ZeroGPU 1.95 / 0.5 s). Results identical. The progress narration covers the wait;
+the About page's speed figures are the Mac's and say so. If the wait matters for the video or the demo, the paid
+"CPU upgrade" tier (8 vCPU) is a few cents an hour and a one-click change; not done. The ZeroGPU quota handling
+(a 20 s request and a plain-language error) was started and discarded when Parsa chose CPU.
+
 ## 2026-10-21 (night, 3) — 7.1 closed: the demo is live on a ZeroGPU Space
 
 **Committed first** (`fc6e4a9`, Parsa's authorship, Parsa's request), then `parsa-hke/negative-space-reader` created
