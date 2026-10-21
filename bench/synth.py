@@ -28,6 +28,7 @@ exactly, CHANGELOG 2026-10-20).
 from __future__ import annotations
 
 import re
+import time
 import zlib
 from collections import Counter
 from dataclasses import dataclass
@@ -227,21 +228,88 @@ def instance_rng(seed: int, regime: str, doc_id: str) -> np.random.Generator:
     return np.random.default_rng([seed, REGIMES.index(regime), zlib.crc32(doc_id.encode())])
 
 
+def eta_seconds(counts: dict[str, int], n: int, *, tried: int, total: int | None, elapsed: float) -> float | None:
+    """Seconds left: the open regime that needs the most documents at its acceptance so far (instances per document
+    tried), at the time per document so far, capped by the documents left; every document left while a regime has no
+    instance yet. None without a total and without a rate."""
+    if not tried:
+        return None
+    per_doc = elapsed / tried
+    left = None if total is None else max(total - tried, 0)
+    need = 0.0
+    for c in counts.values():
+        if c >= n:
+            continue
+        if c == 0:
+            if left is None:
+                return None
+            need = float(left)
+            break
+        need = max(need, (n - c) * tried / c)
+    if left is not None:
+        need = min(need, left)
+    return need * per_doc
+
+
+def _clock(seconds: float | None) -> str:
+    if seconds is None:
+        return "?"
+    m = int(round(seconds / 60))
+    return f"{m // 60}h{m % 60:02d}m"
+
+
 def build_bench(docs: Sequence[BenchDoc] | Any, regimes: Sequence[str], n: int, *, seed: int,
-                attempts_per_document: int = 1, log: Callable[[str], None] | None = None, **kw: Any) -> tuple[dict[str, list[dict[str, Any]]], dict[str, Counter]]:
+                attempts_per_document: int = 1, log: Callable[[str], None] | None = None,
+                total: int | None = None, progress_every_s: float = 60.0,
+                checkpoint: Callable[[dict[str, Any]], None] | None = None, checkpoint_every_s: float = 300.0,
+                state: dict[str, Any] | None = None,
+                **kw: Any) -> tuple[dict[str, list[dict[str, Any]]], dict[str, Counter]]:
     """Up to n verified instances per regime, drawn from docs in their order (the bench order), at most one document
     per entity per regime; a rejected draw is retried with new targets up to attempts_per_document times (this
-    favours types that can be deleted cleanly: per-type acceptance is reported). docs may be a sequence or a callable returning a fresh iterator. Returns the instances
-    and, per regime, the count of every outcome (ok and each rejection reason; same_entity for skipped snapshots)."""
+    favours types that can be deleted cleanly: per-type acceptance is reported). docs may be a sequence or a callable
+    returning a fresh iterator. Returns the instances and, per regime, the count of every outcome (ok and each
+    rejection reason; same_entity for skipped snapshots).
+
+    Long runs (CHANGELOG 2026-10-20/21: a 1 h 50 min Colab run could not be interrupted without losing it): every
+    progress_every_s, log gets a line with a timestamp, the documents tried (of total), the instances per regime and an
+    ETA (eta_seconds); every checkpoint_every_s (and after the last document), checkpoint receives the loop's whole
+    state. Passing that state back as state= skips the documents already tried and continues: every (document,
+    regime) draw has its own generator (instance_rng), so the result equals an uninterrupted run's."""
     for r in regimes:
         if r not in REGIMES:
             raise ValueError(f"unknown regime {r!r} ({', '.join(REGIMES)})")
-    out: dict[str, list[dict[str, Any]]] = {r: [] for r in regimes}
-    stats: dict[str, Counter] = {r: Counter() for r in regimes}
-    used: dict[str, set[str]] = {r: set() for r in regimes}
-    traces: dict[str, list[tuple[list[str], str]]] = {r: [] for r in regimes}
-    logged = 0
+    if state is not None:
+        if list(state["out"]) != list(regimes) or state["n"] != n or state["seed"] != seed:
+            raise ValueError("the checkpoint was made with other regimes, n or seed")
+        out, used, traces = state["out"], {r: set(v) for r, v in state["used"].items()}, state["traces"]
+        stats = {r: Counter(v) for r, v in state["stats"].items()}
+        tried, elapsed0 = state["tried"], state.get("elapsed", 0.0)
+    else:
+        out = {r: [] for r in regimes}
+        stats = {r: Counter() for r in regimes}
+        used = {r: set() for r in regimes}
+        traces = {r: [] for r in regimes}
+        tried, elapsed0 = 0, 0.0
+    t0 = time.perf_counter()
+    last_log = last_ckpt = t0
+    skip = tried
+
+    def snapshot() -> dict[str, Any]:
+        return {"n": n, "seed": seed, "tried": tried, "elapsed": elapsed0 + time.perf_counter() - t0, "out": out,
+                "stats": {r: dict(c) for r, c in stats.items()}, "used": {r: sorted(v) for r, v in used.items()},
+                "traces": traces}
+
+    def progress(now: float) -> str:
+        elapsed = elapsed0 + now - t0
+        eta = eta_seconds({r: len(out[r]) for r in regimes}, n, tried=tried, total=total, elapsed=elapsed)
+        return (f"{time.strftime('%Y-%m-%d %H:%M:%S')} docs {tried}/{total if total is not None else '?'} | "
+                + " ".join(f"{r} {len(out[r])}/{n}" for r in regimes)
+                + f" | {60 * tried / elapsed if elapsed else 0:.1f} docs/min, elapsed {_clock(elapsed)}, eta {_clock(eta)}")
+
     for d in (docs() if callable(docs) else docs):
+        if skip:
+            skip -= 1
+            continue
         open_regimes = [r for r in regimes if len(out[r]) < n]
         if not open_regimes:
             break
@@ -260,10 +328,18 @@ def build_bench(docs: Sequence[BenchDoc] | Any, regimes: Sequence[str], n: int, 
                 inst["instance_id"] = f"{r}:{d.id}"
                 out[r].append(inst)
                 used[r].add(ent)
-        done = sum(len(out[r]) for r in regimes)
-        if log and done and done % 100 == 0 and done != logged:
-            log(" ".join(f"{r} {len(out[r])}/{n}" for r in regimes))
-            logged = done
+        tried += 1
+        now = time.perf_counter()
+        if log and now - last_log >= progress_every_s:
+            log(progress(now))
+            last_log = now
+        if checkpoint and now - last_ckpt >= checkpoint_every_s:
+            checkpoint(snapshot())
+            last_ckpt = now
+    if log:
+        log(progress(time.perf_counter()) + " (done)")
+    if checkpoint:
+        checkpoint(snapshot())
     for r in regimes:  # per type: how often a draw including it was accepted / rejected, by reason
         stats[r + "/by_type"] = Counter(f"{t}|{reason}" for drawn, reason in traces[r] for t in drawn)
     return out, stats

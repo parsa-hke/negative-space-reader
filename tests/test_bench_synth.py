@@ -138,3 +138,47 @@ def test_rejected_draws_are_retried_with_new_targets():
     thrice, s3 = build_bench(docs, ["whole_section"], 12, max_removed_share=0.25, attempts_per_document=3, **kw)
     assert s1["whole_section"]["too_much_removed"] > 0 and len(thrice["whole_section"]) > len(once["whole_section"])
     assert all(i["targets"] != ["a"] for i in thrice["whole_section"])
+
+
+def test_an_interrupted_build_resumes_from_its_checkpoint_to_the_same_bench():
+    import pickle
+
+    docs = [doc(f"d{i}", entity=f"e{i // 2}") for i in range(10)]
+    rescore, doc_prob = fake_scoring(docs[0])
+    kw = dict(types=TYPES, thresholds=THR, rescore=rescore, doc_prob=doc_prob, seed=5, min_section_chars=5,
+              attempts_per_document=2)
+    full, full_stats = build_bench(docs, ["single_type", "three_types"], 4, **kw)
+    saved = []
+
+    def interrupted():
+        for k, d in enumerate(docs):
+            if k == 5:
+                raise KeyboardInterrupt
+            yield d
+
+    with pytest.raises(KeyboardInterrupt):
+        build_bench(interrupted, ["single_type", "three_types"], 4, checkpoint=lambda s: saved.append(pickle.dumps(s)),
+                    checkpoint_every_s=0, **kw)
+    state = pickle.loads(saved[-1])
+    assert state["tried"] == 5
+    resumed, stats = build_bench(docs, ["single_type", "three_types"], 4, state=state, **kw)
+    for r in ("single_type", "three_types"):
+        assert [i["instance_id"] for i in resumed[r]] == [i["instance_id"] for i in full[r]]
+        assert [i["targets"] for i in resumed[r]] == [i["targets"] for i in full[r]]
+        assert stats[r] == full_stats[r] and stats[r + "/by_type"] == full_stats[r + "/by_type"]
+
+
+def test_progress_lines_carry_a_timestamp_documents_tried_and_an_eta():
+    from bench.synth import eta_seconds
+
+    docs = [doc(f"d{i}", entity=f"e{i}") for i in range(6)]
+    rescore, doc_prob = fake_scoring(docs[0])
+    lines = []
+    build_bench(docs, ["single_type"], 3, types=TYPES, thresholds=THR, rescore=rescore, doc_prob=doc_prob, seed=5,
+                min_section_chars=5, log=lines.append, progress_every_s=0, total=len(docs))
+    assert lines and all("docs " in ln and "/6" in ln and "eta" in ln for ln in lines)
+    assert lines[0][:4].isdigit() and lines[0][10] == " "   # "YYYY-MM-DD HH:MM:SS ..."
+    # 2 of 3 instances from 4 of 10 documents at 10 s each: one more instance needs ~2 documents
+    assert eta_seconds({"r": 2}, 3, tried=4, total=10, elapsed=40) == pytest.approx(20)
+    assert eta_seconds({"r": 0}, 3, tried=4, total=10, elapsed=40) == pytest.approx(60)   # no rate yet: every document
+    assert eta_seconds({"r": 3}, 3, tried=4, total=10, elapsed=40) == 0

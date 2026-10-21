@@ -9,7 +9,7 @@ rank:
   use_severity_weights: false     # the bench ranks with w = 1 (§0.2 #1 default); the weighted ranking is an ablation
 
 bench:
-  stage: probs                    # probs (GPU: Colab job bench_probs_v1) | synth | eval | revision_probs | revision | diagnose
+  stage: probs                    # probs (GPU: Colab job bench_probs_v1) | synth | eval | revision_probs | revision | diagnose | errors
   seed: 2026                      # the bench's order of test documents and its instance draws (not the run seed)
   tables_dir: null                # reports/tables for the recorded runs; null = the run folder (smoke never overwrites)
   probs:
@@ -24,9 +24,16 @@ bench:
     min_carrier_prob: 0.02
     section_rounds: 5             # ... then the whole section that now scores it highest, at most this many times
     attempts_per_document: 3      # a rejected draw is retried with new targets (per-type acceptance is reported)
+    progress_every_s: 60          # a log line: timestamp, documents tried, instances per regime, docs/min, ETA
+    checkpoint_every_s: 300       # <run>/<genre>/checkpoint.pkl (atomic; deleted once the outputs are written)
+    resume_from: null             # an interrupted synth run's folder (runs/<name>_s0/{genre}): continue from its
+                                  # checkpoint into this run (same settings; the result equals an uninterrupted run)
   eval:                           # stage eval (6.3)
     synth: runs/bench_synth_v1_s0/{genre}   # the synth stage's output
     systems: null                 # null = genre_uniform, level1 (baselines a, b) + absence_only, random (reference rows)
+    table: bench_synth            # the table's name: <tables_dir>/<table>_<genre>.csv (an ablation names its own)
+    compare_to: null              # an ablation: a recorded eval run's folder (runs/bench_eval_v1_s0/{genre}); adds
+                                  # paired differences this run - reference per regime, system and metric
   revision:                       # stages revision_probs, revision (6.3b); bench.real.min_added_prevalence is the filter
     probs: runs/bench_revision_probs_v1_s0/{genre}   # the revision_probs stage's output
     limit: null                   # revision_probs: the first N revision documents (smoke)
@@ -48,3 +55,11 @@ bench:
       mean_probability: {profile: prob}
       post_hoc_best: {title_abstract_weight: 0.0, category_filter: false, k: 50, one_per_entity: true, profile: prob,
                       post_hoc: true}   # found by searching settings on the test bench: not a gate result
+  errors:                         # stage errors (6.5): error analysis of a recorded eval run -> errors_<genre>.csv
+    eval: runs/bench_eval_v2_s0/{genre}     # per_instance.csv and untouched.csv
+    synth: runs/bench_synth_v1_s0/{genre}   # the instances the eval ranked
+    systems: [genre_uniform, level1]
+    length_bins: 4                # quantile bins of the original document's characters (within each regime)
+    date_bins: 4                  # quantile bins of the document date, labelled by year range
+    min_category: 20              # categories with fewer instances in a regime are pooled as "other"
+    min_type_n: 15                # the recall-vs-prevalence correlation uses types with this many occurrences

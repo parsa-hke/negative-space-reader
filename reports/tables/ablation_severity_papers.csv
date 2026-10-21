@@ -1,0 +1,155 @@
+genre,regime,system,metric,value,ci_low,ci_high,n
+papers,single_type,genre_uniform,recall@1,0.162,0.137,0.19,500
+papers,single_type,genre_uniform,recall@5,0.514,0.481,0.552,500
+papers,single_type,genre_uniform,recall@10,0.785,0.756,0.814,500
+papers,single_type,genre_uniform,mrr,0.489,0.459,0.521,500
+papers,single_type,genre_uniform,ndcg@10,0.524,0.5,0.55,500
+papers,single_type,genre_uniform,candidates,19.37,,,500
+papers,single_type,level1,recall@1,0.198,0.169,0.225,500
+papers,single_type,level1,recall@5,0.622,0.587,0.655,500
+papers,single_type,level1,recall@10,0.893,0.873,0.914,500
+papers,single_type,level1,mrr,0.553,0.522,0.585,500
+papers,single_type,level1,ndcg@10,0.609,0.586,0.632,500
+papers,single_type,level1,candidates,19.37,,,500
+papers,single_type,absence_only,recall@1,0.023,0.013,0.036,500
+papers,single_type,absence_only,recall@5,0.042,0.028,0.057,500
+papers,single_type,absence_only,recall@10,0.148,0.125,0.174,500
+papers,single_type,absence_only,mrr,0.123,0.105,0.141,500
+papers,single_type,absence_only,ndcg@10,0.08,0.064,0.096,500
+papers,single_type,absence_only,candidates,19.37,,,500
+papers,single_type,random,recall@1,0.057,0.041,0.074,500
+papers,single_type,random,recall@5,0.278,0.249,0.308,500
+papers,single_type,random,recall@10,0.556,0.522,0.59,500
+papers,single_type,random,mrr,0.295,0.271,0.318,500
+papers,single_type,random,ndcg@10,0.311,0.292,0.333,500
+papers,single_type,random,candidates,19.37,,,500
+papers,single_type,level1 - genre_uniform,recall@1,0.036,0.007,0.065,500
+papers,single_type,level1 - genre_uniform,recall@5,0.108,0.074,0.141,500
+papers,single_type,level1 - genre_uniform,recall@10,0.109,0.084,0.135,500
+papers,single_type,level1 - genre_uniform,mrr,0.064,0.035,0.093,500
+papers,single_type,level1 - genre_uniform,ndcg@10,0.085,0.066,0.106,500
+papers,three_types,genre_uniform,recall@1,0.105,0.096,0.114,468
+papers,three_types,genre_uniform,recall@5,0.476,0.457,0.494,468
+papers,three_types,genre_uniform,recall@10,0.769,0.752,0.787,468
+papers,three_types,genre_uniform,mrr,0.723,0.695,0.751,468
+papers,three_types,genre_uniform,ndcg@10,0.668,0.65,0.687,468
+papers,three_types,genre_uniform,candidates,21.49,,,468
+papers,three_types,level1,recall@1,0.118,0.11,0.127,468
+papers,three_types,level1,recall@5,0.552,0.532,0.572,468
+papers,three_types,level1,recall@10,0.853,0.838,0.869,468
+papers,three_types,level1,mrr,0.766,0.739,0.792,468
+papers,three_types,level1,ndcg@10,0.744,0.728,0.761,468
+papers,three_types,level1,candidates,21.49,,,468
+papers,three_types,absence_only,recall@1,0.025,0.019,0.031,468
+papers,three_types,absence_only,recall@5,0.055,0.046,0.065,468
+papers,three_types,absence_only,recall@10,0.12,0.105,0.135,468
+papers,three_types,absence_only,mrr,0.257,0.226,0.287,468
+papers,three_types,absence_only,ndcg@10,0.108,0.094,0.122,468
+papers,three_types,absence_only,candidates,21.49,,,468
+papers,three_types,random,recall@1,0.048,0.04,0.055,468
+papers,three_types,random,recall@5,0.248,0.233,0.263,468
+papers,three_types,random,recall@10,0.503,0.484,0.523,468
+papers,three_types,random,mrr,0.496,0.465,0.526,468
+papers,three_types,random,ndcg@10,0.398,0.381,0.414,468
+papers,three_types,random,candidates,21.49,,,468
+papers,three_types,level1 - genre_uniform,recall@1,0.013,0.003,0.025,468
+papers,three_types,level1 - genre_uniform,recall@5,0.075,0.059,0.092,468
+papers,three_types,level1 - genre_uniform,recall@10,0.084,0.067,0.101,468
+papers,three_types,level1 - genre_uniform,mrr,0.043,0.016,0.072,468
+papers,three_types,level1 - genre_uniform,ndcg@10,0.076,0.059,0.091,468
+papers,whole_section,genre_uniform,recall@1,0.112,0.094,0.132,500
+papers,whole_section,genre_uniform,recall@5,0.495,0.465,0.525,500
+papers,whole_section,genre_uniform,recall@10,0.773,0.75,0.796,500
+papers,whole_section,genre_uniform,mrr,0.517,0.487,0.547,500
+papers,whole_section,genre_uniform,ndcg@10,0.537,0.515,0.559,500
+papers,whole_section,genre_uniform,candidates,20.72,,,500
+papers,whole_section,level1,recall@1,0.138,0.118,0.158,500
+papers,whole_section,level1,recall@5,0.564,0.533,0.596,500
+papers,whole_section,level1,recall@10,0.865,0.846,0.884,500
+papers,whole_section,level1,mrr,0.574,0.544,0.605,500
+papers,whole_section,level1,ndcg@10,0.613,0.591,0.636,500
+papers,whole_section,level1,candidates,20.72,,,500
+papers,whole_section,absence_only,recall@1,0.027,0.017,0.038,500
+papers,whole_section,absence_only,recall@5,0.053,0.039,0.07,500
+papers,whole_section,absence_only,recall@10,0.125,0.104,0.151,500
+papers,whole_section,absence_only,mrr,0.153,0.133,0.174,500
+papers,whole_section,absence_only,ndcg@10,0.084,0.069,0.102,500
+papers,whole_section,absence_only,candidates,20.72,,,500
+papers,whole_section,random,recall@1,0.044,0.034,0.057,500
+papers,whole_section,random,recall@5,0.252,0.226,0.278,500
+papers,whole_section,random,recall@10,0.517,0.487,0.548,500
+papers,whole_section,random,mrr,0.34,0.311,0.366,500
+papers,whole_section,random,ndcg@10,0.318,0.297,0.338,500
+papers,whole_section,random,candidates,20.72,,,500
+papers,whole_section,level1 - genre_uniform,recall@1,0.026,0.005,0.046,500
+papers,whole_section,level1 - genre_uniform,recall@5,0.069,0.042,0.098,500
+papers,whole_section,level1 - genre_uniform,recall@10,0.092,0.072,0.113,500
+papers,whole_section,level1 - genre_uniform,mrr,0.056,0.025,0.082,500
+papers,whole_section,level1 - genre_uniform,ndcg@10,0.076,0.057,0.093,500
+papers,untouched_labelled,genre_uniform,false_alarm@5,0.305,0.272,0.343,150
+papers,untouched_labelled,level1,false_alarm@5,0.341,0.305,0.381,150
+papers,untouched_labelled,absence_only,false_alarm@5,0.064,0.045,0.083,150
+papers,untouched_labelled,random,false_alarm@5,0.204,0.171,0.239,150
+papers,untouched_labelled,genre_uniform,ece_expected,0.079,0.068,0.092,150
+papers,untouched_labelled,level1,ece_expected,0.091,0.078,0.109,150
+papers,all,instances,target_p_present_after_median,0.453,,,2404
+papers,single_type,genre_uniform - reference,recall@1,0.0,0.0,0.0,500
+papers,single_type,genre_uniform - reference,recall@5,0.0,0.0,0.0,500
+papers,single_type,genre_uniform - reference,recall@10,0.0,0.0,0.0,500
+papers,single_type,genre_uniform - reference,mrr,0.0,0.0,0.0,500
+papers,single_type,genre_uniform - reference,ndcg@10,0.0,0.0,0.0,500
+papers,single_type,level1 - reference,recall@1,0.0,0.0,0.0,500
+papers,single_type,level1 - reference,recall@5,0.0,0.0,0.0,500
+papers,single_type,level1 - reference,recall@10,0.0,0.0,0.0,500
+papers,single_type,level1 - reference,mrr,0.0,0.0,0.0,500
+papers,single_type,level1 - reference,ndcg@10,0.0,0.0,0.0,500
+papers,single_type,absence_only - reference,recall@1,0.0,0.0,0.0,500
+papers,single_type,absence_only - reference,recall@5,0.0,0.0,0.0,500
+papers,single_type,absence_only - reference,recall@10,0.0,0.0,0.0,500
+papers,single_type,absence_only - reference,mrr,0.0,0.0,0.0,500
+papers,single_type,absence_only - reference,ndcg@10,0.0,0.0,0.0,500
+papers,single_type,random - reference,recall@1,0.0,0.0,0.0,500
+papers,single_type,random - reference,recall@5,0.0,0.0,0.0,500
+papers,single_type,random - reference,recall@10,0.0,0.0,0.0,500
+papers,single_type,random - reference,mrr,0.0,0.0,0.0,500
+papers,single_type,random - reference,ndcg@10,0.0,0.0,0.0,500
+papers,three_types,genre_uniform - reference,recall@1,0.0,0.0,0.0,468
+papers,three_types,genre_uniform - reference,recall@5,0.0,0.0,0.0,468
+papers,three_types,genre_uniform - reference,recall@10,0.0,0.0,0.0,468
+papers,three_types,genre_uniform - reference,mrr,0.0,0.0,0.0,468
+papers,three_types,genre_uniform - reference,ndcg@10,0.0,0.0,0.0,468
+papers,three_types,level1 - reference,recall@1,0.0,0.0,0.0,468
+papers,three_types,level1 - reference,recall@5,0.0,0.0,0.0,468
+papers,three_types,level1 - reference,recall@10,0.0,0.0,0.0,468
+papers,three_types,level1 - reference,mrr,0.0,0.0,0.0,468
+papers,three_types,level1 - reference,ndcg@10,0.0,0.0,0.0,468
+papers,three_types,absence_only - reference,recall@1,0.0,0.0,0.0,468
+papers,three_types,absence_only - reference,recall@5,0.0,0.0,0.0,468
+papers,three_types,absence_only - reference,recall@10,0.0,0.0,0.0,468
+papers,three_types,absence_only - reference,mrr,0.0,0.0,0.0,468
+papers,three_types,absence_only - reference,ndcg@10,0.0,0.0,0.0,468
+papers,three_types,random - reference,recall@1,0.0,0.0,0.0,468
+papers,three_types,random - reference,recall@5,0.0,0.0,0.0,468
+papers,three_types,random - reference,recall@10,0.0,0.0,0.0,468
+papers,three_types,random - reference,mrr,0.0,0.0,0.0,468
+papers,three_types,random - reference,ndcg@10,0.0,0.0,0.0,468
+papers,whole_section,genre_uniform - reference,recall@1,0.0,0.0,0.0,500
+papers,whole_section,genre_uniform - reference,recall@5,0.0,0.0,0.0,500
+papers,whole_section,genre_uniform - reference,recall@10,0.0,0.0,0.0,500
+papers,whole_section,genre_uniform - reference,mrr,0.0,0.0,0.0,500
+papers,whole_section,genre_uniform - reference,ndcg@10,0.0,0.0,0.0,500
+papers,whole_section,level1 - reference,recall@1,0.0,0.0,0.0,500
+papers,whole_section,level1 - reference,recall@5,0.0,0.0,0.0,500
+papers,whole_section,level1 - reference,recall@10,0.0,0.0,0.0,500
+papers,whole_section,level1 - reference,mrr,0.0,0.0,0.0,500
+papers,whole_section,level1 - reference,ndcg@10,0.0,0.0,0.0,500
+papers,whole_section,absence_only - reference,recall@1,0.0,0.0,0.0,500
+papers,whole_section,absence_only - reference,recall@5,0.0,0.0,0.0,500
+papers,whole_section,absence_only - reference,recall@10,0.0,0.0,0.0,500
+papers,whole_section,absence_only - reference,mrr,0.0,0.0,0.0,500
+papers,whole_section,absence_only - reference,ndcg@10,0.0,0.0,0.0,500
+papers,whole_section,random - reference,recall@1,0.0,0.0,0.0,500
+papers,whole_section,random - reference,recall@5,0.0,0.0,0.0,500
+papers,whole_section,random - reference,recall@10,0.0,0.0,0.0,500
+papers,whole_section,random - reference,mrr,0.0,0.0,0.0,500
+papers,whole_section,random - reference,ndcg@10,0.0,0.0,0.0,500

@@ -5,10 +5,12 @@
   synth   OmitBench-synthetic instances (6.1, bench/synth.py) -> <run>/<genre>/{instances.jsonl,edited.jsonl,arrays.npz}
           and the per-type acceptance table
   eval    baselines (a) genre-uniform and (b) level-1 cohort prevalence (6.3, bench/metrics.py) -> bench_synth_<genre>.csv
+          (or bench.eval.table, with bench.eval.compare_to for an ablation), <run>/<genre>/{per_instance,untouched}.csv
   revision_probs  section probabilities and document vectors of every revision version (6.3b; GPU or the Mac)
   revision        OmitBench-revision instances (bench/revision.py) and (a), (b) on them -> revision_bench_<genre>.csv,
                   bench_revision_<genre>.csv
   diagnose        cohort diagnosis after gate 6.6 (decision record 007) -> cohort_diagnosis_<genre>.csv
+  errors          error analysis of an eval run (6.5, analysis/error_analysis.py) -> errors_<genre>.csv
 
 Tables go to bench.tables_dir (reports/tables for the recorded runs) or, when it is null, to the run folder, so that a
 smoke run never overwrites a reported table.
@@ -16,7 +18,9 @@ smoke run never overwrites a reported table.
 
 from __future__ import annotations
 
+import csv
 import json
+import pickle
 import platform
 from pathlib import Path
 from typing import Any
@@ -184,6 +188,23 @@ def run_synth(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
             clf = heads.predict_proba(V)
             return cascade.predict(clf, scorer.score(texts), np.full(clf.shape, np.nan)), V
 
+        folder = Path(run_dir) / genre
+        folder.mkdir(parents=True, exist_ok=True)
+        state = None
+        if sc.get("resume_from"):  # an interrupted run's checkpoint (run folders are never reused)
+            ckpt = _path(sc["resume_from"].format(genre=genre)) / "checkpoint.pkl"
+            with open(ckpt, "rb") as f:
+                state = pickle.load(f)
+            if state.get("settings") != _synth_settings(cfg):
+                raise ValueError(f"{ckpt} was made with other synth settings")
+            print(f"[bench synth {genre}] resuming from {ckpt}: {state['tried']} documents tried", flush=True)
+
+        def save_checkpoint(st: dict[str, Any]) -> None:
+            tmp = folder / "checkpoint.pkl.tmp"
+            with open(tmp, "wb") as f:
+                pickle.dump({**st, "settings": _synth_settings(cfg)}, f, protocol=pickle.HIGHEST_PROTOCOL)
+            tmp.replace(folder / "checkpoint.pkl")
+
         out, stats = build_bench(
             docs, bc["regimes"], bc["instances_per_regime"], seed=bc["seed"], types=types,
             thresholds=np.asarray(cascade.threshold), rescore=rescore, doc_prob=doc_model.predict_proba,
@@ -192,9 +213,9 @@ def run_synth(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
             sentences_per_round=sc.get("sentences_per_round", 5), min_carrier_prob=sc.get("min_carrier_prob", 0.02),
             section_rounds=sc.get("section_rounds", 5), attempts_per_document=sc.get("attempts_per_document", 3),
             title_abstract_weight=ecfg.get("title_abstract_weight", 0.5),
-            log=lambda m: print(f"[bench synth {genre}] {m}", flush=True))
-        folder = Path(run_dir) / genre
-        folder.mkdir(parents=True, exist_ok=True)
+            log=lambda m: print(f"[bench synth {genre}] {m}", flush=True), total=len(docs),
+            progress_every_s=sc.get("progress_every_s", 60), checkpoint=save_checkpoint,
+            checkpoint_every_s=sc.get("checkpoint_every_s", 300), state=state)
         flat = [i for r in bc["regimes"] for i in out[r]]
         arrays = {"P", "p_doc", "doc_vector", "sections"}
         with open(folder / "instances.jsonl", "w", encoding="utf-8") as f:
@@ -240,7 +261,21 @@ def run_synth(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
                     f"{genre}/{r}/deleted_sections_mean": round(float(np.mean([len(i["deleted_sections"]) for i in inst])), 2)})
         metrics[f"{genre}/sections_rescored"] = calls["sections_rescored"]
         metrics[f"{genre}/seconds"] = round(time.perf_counter() - t0, 1)
+        if state is not None:
+            metrics[f"{genre}/resumed_from"] = {"run": str(sc["resume_from"].format(genre=genre)),
+                                                "documents_tried": state["tried"], "seconds_before": round(state["elapsed"], 1)}
+        (folder / "checkpoint.pkl").unlink(missing_ok=True)  # the outputs are complete; keep the runs bundle small
     return metrics
+
+
+def _synth_settings(cfg: dict[str, Any]) -> dict[str, Any]:
+    """What a synth checkpoint must share with the run that resumes it (everything but resume_from and logging)."""
+    bc = cfg["bench"]
+    sc = {k: v for k, v in (bc.get("synth") or {}).items()
+          if k not in ("resume_from", "progress_every_s", "checkpoint_every_s")}
+    return json.loads(json.dumps({"synth": sc, "regimes": bc["regimes"], "n": bc["instances_per_regime"],
+                                  "seed": bc["seed"], "segment": cfg["segment"], "presence": cfg["presence"],
+                                  "embedder": cfg["models"]["embedder"]}, sort_keys=True, default=str))
 
 
 SYSTEMS = ("genre_uniform", "level1", "absence_only", "random")  # (a), (b) of §0.2 #17, then two reference rows
@@ -305,6 +340,27 @@ def _summarise(rows: list[dict[str, Any]], genre: str, regimes: list[str], syste
                           "ci_high": round(d["ci_high"], 4), "n": d["n"]})
             if m == "recall@5":
                 metrics[f"{genre}/{regime}/recall@5_diff"] = {k2: round(v2, 4) for k2, v2 in d.items()}
+    return table
+
+
+def _compare_to_reference(rows: list[dict[str, Any]], reference: list[dict[str, Any]], genre: str, regimes: list[str],
+                          names: list[str], boot: dict[str, Any]) -> list[dict[str, Any]]:
+    """An ablation against a recorded eval run (plan 6.4): per (regime, system), the paired difference this run -
+    reference over the instances both ranked."""
+    from bench.metrics import paired_bootstrap
+
+    ref = {(r["regime"], r["system"], r["instance_id"]): r for r in reference}
+    table = []
+    for regime in regimes:
+        for s in dict.fromkeys(r["system"] for r in rows if r["regime"] == regime):
+            pairs = [(r, ref[(regime, s, r["instance_id"])]) for r in rows
+                     if r["regime"] == regime and r["system"] == s and (regime, s, r["instance_id"]) in ref]
+            for m in names if pairs else []:
+                # the reference was read back from per_instance.csv, which _write_table rounds to 3 decimals
+                d = paired_bootstrap([round(float(a[m]), 3) for a, _ in pairs], [float(b[m]) for _, b in pairs], **boot)
+                table.append({"genre": genre, "regime": regime, "system": f"{s} - reference", "metric": m,
+                              "value": round(d["diff"], 4), "ci_low": round(d["ci_low"], 4),
+                              "ci_high": round(d["ci_high"], 4), "n": d["n"]})
     return table
 
 
@@ -390,6 +446,7 @@ def run_eval(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
         docs = [d for d in L["documents"] if d in vec]
         Y = np.stack([L["Y"][L["documents"].index(d)] for d in docs])
         fa: dict[str, list[float]] = {s: [] for s in systems}
+        untouched: list[dict[str, Any]] = []  # per document and system, for the error analysis (6.5)
         E: dict[str, list[Any]] = {"genre_uniform": [], "level1": []}
         for n_doc, d in enumerate(docs):
             p_doc = oof[d]
@@ -401,8 +458,12 @@ def run_eval(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
             rng = np.random.default_rng([bc["seed"], zlib.crc32(d.encode())])
             for s in systems:
                 e, with_p = _expectations(s, uniform=uniform, cohort=cexp, n_types=len(types), rng=rng)
-                v = false_alarm_rate(_ranked(types, e, p_doc, bits, w, with_p), present, fa_k)
+                ranked = _ranked(types, e, p_doc, bits, w, with_p)
+                v = false_alarm_rate(ranked, present, fa_k)
                 fa[s].append(np.nan if v is None else v)
+                untouched.append({"doc_id": d, "system": s, "false_alarm": v, "top5": "|".join(ranked[:fa_k]),
+                                  "present": "|".join(sorted(present))})
+        _write_table(Path(run_dir) / genre / "untouched.csv", untouched)
         for s in systems:
             x = np.array(fa[s])
             x = x[~np.isnan(x)]
@@ -420,9 +481,15 @@ def run_eval(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
         if p_after:
             table.append({"genre": genre, "regime": "all", "system": "instances", "metric": "target_p_present_after_median",
                           "value": round(float(np.median(p_after)), 4), "ci_low": None, "ci_high": None, "n": len(p_after)})
-        _write_table(tables / f"bench_synth_{genre}.csv", table)
+        if ec.get("compare_to"):  # an ablation: paired differences against the recorded run's per-instance results
+            ref_file = _path(ec["compare_to"].format(genre=genre)) / "per_instance.csv"
+            with open(ref_file, newline="", encoding="utf-8") as f:
+                table += _compare_to_reference(rows, list(csv.DictReader(f)), genre, bc["regimes"], names, boot)
+            metrics[f"{genre}/compare_to"] = str(ref_file)
+        name = ec.get("table") or "bench_synth"
+        _write_table(tables / f"{name}_{genre}.csv", table)
         acc = folder.parent / f"bench_synth_acceptance_{genre}.csv"
-        if acc.exists() and tables != folder.parent:  # the synth run's per-type acceptance, published with the results
+        if name == "bench_synth" and acc.exists() and tables != folder.parent:  # the synth run's per-type acceptance
             (tables / acc.name).write_text(acc.read_text(encoding="utf-8"), encoding="utf-8")
         gate = metrics.get(f"{genre}/single_type/recall@5_diff")
         metrics[f"{genre}/gate_6_6"] = bool(gate and gate["ci_low"] > 0)
@@ -781,6 +848,66 @@ def run_diagnose(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
     return metrics
 
 
+def _document_lengths(sections_file: Path, doc_ids: set[str]) -> dict[str, int]:
+    """Characters of each wanted document's stored sections (one pass over sections.jsonl, parsing wanted lines only)."""
+    out: dict[str, int] = {}
+    prefix = '{"doc_id": "'
+    with open(sections_file, encoding="utf-8") as f:
+        for line in f:
+            d = line[len(prefix):line.index('"', len(prefix))] if line.startswith(prefix) else json.loads(line)["doc_id"]
+            if d in doc_ids:
+                out[d] = out.get(d, 0) + len(json.loads(line)["text"])
+    return out
+
+
+def run_errors(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
+    """Error analysis (plan 6.5, analysis/error_analysis.py) of a recorded eval run: missed types, distractors, false
+    alarms on the untouched labelled documents, and recall by document length, date and category ->
+    errors_<genre>.csv."""
+    from analysis.error_analysis import error_tables
+    from engine.expectation import ProfileStore
+    from experiments.distil import _write_table, load_schema
+
+    bc = cfg["bench"]
+    xc = bc.get("errors") or {}
+    boot = dict(n_boot=bc.get("bootstrap_samples", 1000), ci=bc.get("ci", 0.95), seed=bc["seed"])
+    tables = _path(bc["tables_dir"]) if bc.get("tables_dir") else Path(run_dir)
+    metrics: dict[str, Any] = {}
+    for genre in _genres(cfg):
+        ev, synth = _path(xc["eval"].format(genre=genre)), _path(xc["synth"].format(genre=genre))
+        inst = [json.loads(l) for l in open(synth / "instances.jsonl", encoding="utf-8")]
+        lengths = _document_lengths(_path(cfg["paths"]["data_processed"]) / genre / "sections.jsonl",
+                                    {i["doc_id"] for i in inst})
+        missing = sorted({i["doc_id"] for i in inst} - lengths.keys())
+        if missing:
+            raise ValueError(f"{genre}: {len(missing)} bench documents have no stored sections, e.g. {missing[:3]}")
+        inst = [{**i, "length": lengths[i["doc_id"]]} for i in inst]
+        with open(ev / "per_instance.csv", newline="", encoding="utf-8") as f:
+            ranked = list(csv.DictReader(f))
+        with open(ev / "untouched.csv", newline="", encoding="utf-8") as f:
+            untouched = list(csv.DictReader(f))
+        types = [t["id"] for t in load_schema(cfg, genre)["types"]]
+        profiles = ProfileStore.load(_path(cfg["paths"]["packs"]) / genre / "profiles", types)
+        use = (cfg.get("expectation") or {}).get("profile", "bit")
+        prevalence = dict(zip(types, (profiles.bits if use == "bit" else profiles.probs).mean(0).astype(float)))
+        rows = error_tables(genre, inst, ranked, untouched, systems=xc.get("systems") or ["genre_uniform", "level1"],
+                            regimes=bc["regimes"], boot=boot, length_bins=xc.get("length_bins", 4),
+                            date_bins=xc.get("date_bins", 4), min_category=xc.get("min_category", 20),
+                            prevalence=prevalence)
+        rec = {r["group"]: r["value"] for r in rows if r["analysis"] == "missed_type" and r["regime"] == "all"
+               and r["system"] == "level1" and r["metric"] == "recall@5" and r["n"] >= xc.get("min_type_n", 15)}
+        metrics[f"{genre}/types_with_min_n"] = len(rec)
+        if len(rec) > 2:  # how much of a type's recall its corpus prevalence explains (types seen often enough)
+            from scipy.stats import spearmanr
+
+            metrics[f"{genre}/spearman_type_recall5_vs_prevalence"] = round(float(spearmanr(
+                [rec[t] for t in rec], [prevalence[t] for t in rec]).statistic), 4)
+        _write_table(tables / f"errors_{genre}.csv", rows)
+        metrics.update({f"{genre}/rows": len(rows), f"{genre}/instances": len(inst), f"{genre}/untouched_documents":
+                        len({u["doc_id"] for u in untouched})})
+    return metrics
+
+
 def main(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
     stage = (cfg.get("bench") or {}).get("stage")
     if stage == "probs":
@@ -795,4 +922,6 @@ def main(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
         return run_revision(cfg, run_dir)
     if stage == "diagnose":
         return run_diagnose(cfg, run_dir)
-    raise ValueError(f"unknown bench.stage {stage!r} (probs | synth | eval | revision_probs | revision | diagnose)")
+    if stage == "errors":
+        return run_errors(cfg, run_dir)
+    raise ValueError(f"unknown bench.stage {stage!r} (probs | synth | eval | revision_probs | revision | diagnose | errors)")

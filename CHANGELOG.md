@@ -2,6 +2,61 @@
 
 Date, what was done, what was found (negative findings included). Newest first.
 
+## 2026-10-21 — Phase 6.4 and 6.5 closed: severity ablation, figures, error analysis; synth checkpoints
+
+**Checks (HANDOFF):** pytest 429 passed (423 + the round-trip session's 6); `git status`: the round-trip session's
+changes still uncommitted (as HANDOFF said; not committed in this session); `hub_sync status --bundles runs,packs`:
+890 matched, 2 differ (`packs/*/pack.json`, which hold that session's uncommitted battery-power gate timings), 0
+missing.
+
+**6.4 severity weights** (eval option `bench.eval.compare_to`: paired differences against a recorded run's
+per-instance results; `bench.eval.table` names the table; tests first). Run `bench_ablation_severity_v2` →
+`reports/tables/ablation_severity_<genre>.csv`. Papers has no weight ≠ 1 (47 types at 1.0): identical, as it must be.
+Privacy (16 of 58 types at 1.5), weighted − w = 1: level 1 recall@5 single_type +0.005 [−0.024, 0.032], MRR +0.040
+[0.014, 0.066], three_types recall@5 +0.031 [0.017, 0.045]. **Negative finding:** the weights raise false alarms@5
+on the untouched labelled documents (genre-uniform 0.205 → 0.245, level 1 0.223 → 0.243), and level 1 still does not
+beat genre-uniform on single_type (+0.017 [−0.001, 0.035]); the weighted ranking is not a gate result either way.
+`bench_ablation_severity_v1` (logged) compared freshly computed metrics with the reference CSV's 3-decimal values
+(±0.0005 noise); v2 rounds both sides alike and replaced its tables.
+
+**6.4 figures** (`python -m analysis.figures`, `tests/test_figures.py`; reads only the recorded tables):
+`reports/figures/bench_recall5.png` (recall@5 per regime and system), `level1_minus_uniform.png` (the gate quantity on
+the synthetic regimes and both revision variants; blue where the CI is above zero), `cohort_diagnosis.png`
+(within-document AUC per cohort variant; the deletion leak, edited vs original vector; post_hoc_best drawn hollow and
+labelled test-selected). **Deferred (Parsa):** cascade vs classifier-only presence end to end: only the edited
+sections would need embeddings (privacy 3,358 sections / 3.0 M characters, papers 11,195 / 14.8 M, Mac-sized), but
+the instances were verified with the cascade, so a classifier-only ranking meets edits chosen to fool the cascade;
+4.6 compared the two at section level.
+
+**6.5 error analysis** (`analysis/error_analysis.py`, tests first; stage `bench.stage: errors`). The eval stage now
+also writes `<run>/<genre>/untouched.csv` (the 150 labelled dev documents' top 5 and judge-present types); rerun as
+`bench_eval_v2`: every recorded table and metric identical to `bench_eval_v1`. Run `bench_errors_v3` →
+`reports/tables/errors_<genre>.csv` (v1: date bins labelled by year only, two papers bins read "2022-2022"; v2: added
+corpus prevalence; v3: the correlation below over types with ≥ 15 occurrences). Findings (level 1, all regimes):
+- **Missed types are the rare ones.** Per-type recall@5 against corpus prevalence, Spearman 0.90 (privacy, 57 types)
+  and 0.56 (papers, 40 types). Privacy: 13 of 58 types never reach the top 5 (median prevalence 0.10 vs 0.51), e.g.
+  `california_disclosure_rights`, `deletes_children_data_if_found`, `complies_with_laws_and_programs` (82
+  occurrences). Papers: `discusses_societal_impact_or_misuse` 0.05, `acknowledges_contributors` 0.08,
+  `generates_synthetic_data` 0.12 (prevalence 0.13-0.23). Papers types stated by every paper (`proposes_method`,
+  `motivates_problem`) occur 1-7 times: long papers state them everywhere, so they are hardly ever deletable.
+- **Recurring false alarms** (top 5 of untouched documents, in fact present): privacy `provides_third_party_links`
+  10 of 26 shown, `security_not_guaranteed` 9 of 26, `browser_cookie_controls` 11 of 41; papers
+  `assumption_and_distribution` 15 of 21, `refers_to_appendix` 16 of 32, `code_and_data_availability` 15 of 32.
+  On synthetic documents the most frequent non-ground-truth type in privacy's top 5 is
+  `reserves_right_to_change_policy` (34% of instances).
+- **By length** (single_type, level 1 − genre-uniform): papers gains most in the third length quartile (+0.187
+  [0.120, 0.261]) and least in the shortest (+0.071 [0.002, 0.133]); privacy's only bin with a CI above zero is the
+  shortest quartile (+0.042 [0.002, 0.086]). **By date:** no trend in either genre. **By category:** papers cs.CL
+  +0.101, cs.LG +0.112; privacy within ±0.09 in every site category, none with a CI above zero.
+
+**Synth stage, for the next long run** (tests first): every `progress_every_s` a log line with a timestamp,
+documents tried of total, instances per regime, docs/min and an ETA; every `checkpoint_every_s` an atomic
+`<run>/<genre>/checkpoint.pkl` (deleted once the outputs are written); `bench.synth.resume_from` continues an
+interrupted run into a new run folder (settings must match). Checked on the Mac: a smoke run interrupted with SIGINT
+after 4 documents (the last complete checkpoint had 3) and resumed gave byte-identical `instances.jsonl` and
+`edited.jsonl`; `arrays.npz` differs by at most 6e-8 in the cascade probabilities (ColBERT on MPS is not bitwise
+reproducible across batches; document vectors identical). Tests: 441 passed.
+
 ## 2026-10-20 / 21 — Phase 6: OmitBench-synthetic and -revision built and run; gate 6.6 passes for papers, fails for privacy
 
 **Checks (HANDOFF):** pytest 397 passed; git status clean; `hub_sync status --bundles runs,packs`: 712 matched, 0
