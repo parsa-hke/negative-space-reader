@@ -229,26 +229,26 @@
    "inputs": "ddd9d5d7561c50bd",
    "settings": "10bbe6490f7f8381",
    "outputs": {
-    "reports/tables/analyse_gate_papers.csv": "48175169a2e2a31e"
+    "reports/tables/analyse_gate_papers.csv": "e366a0639936ad2f"
    },
    "adopted": false,
    "metrics": {
     "documents": 5,
-    "max_seconds": 3.31,
-    "median_seconds": 3.07,
-    "max_sections": 32,
+    "max_seconds": 8.15,
+    "median_seconds": 7.1,
+    "max_sections": 31,
     "gate": "pass",
     "limit_seconds": 10,
     "median_timings": {
      "read": 0.0,
-     "segment": 0.009,
-     "embed": 2.615,
-     "presence": 0.376,
+     "segment": 0.0,
+     "embed": 6.078,
+     "presence": 0.983,
      "document_presence": 0.0,
-     "cohort": 0.005,
-     "expectation": 0.0,
+     "cohort": 0.019,
+     "expectation": 0.001,
      "rank": 0.0,
-     "evidence": 0.0,
+     "evidence": 0.001,
      "explain": 0.0
     },
     "machine": "arm64 Darwin arm",
@@ -256,7 +256,7 @@
     "evidence": "stored sentences",
     "presence": "document model"
    },
-   "at": "2026-10-20T19:26:49"
+   "at": "2026-10-20T20:43:02"
   }
  },
  "genre": "papers",
@@ -269,5 +269,5 @@
   "student": "answerdotai/ModernBERT-large"
  },
  "schema_version": 2,
- "updated": "2026-10-20T19:26:49"
+ "updated": "2026-10-20T20:43:02"
 }

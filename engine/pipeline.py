@@ -57,10 +57,10 @@ def read_document(text_or_path: str | Path) -> str:
 
 
 def guess_title(text: str) -> str | None:
-    """The first Markdown heading, else the first non-empty line (at most 200 characters)."""
+    """The first Markdown heading, else the first non-empty line that is not an HTML comment (at most 200 characters)."""
     import re
 
-    lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
+    lines = [ln.strip() for ln in text.splitlines() if ln.strip() and not re.match(r"^<!--.*-->$", ln.strip())]
     for ln in lines[:50]:
         m = re.match(r"^#{1,6}\s+(.+)$", ln)
         if m:
@@ -69,18 +69,27 @@ def guess_title(text: str) -> str | None:
 
 
 def segment(text: str, scfg: dict[str, Any]) -> list[tuple[str | None, str]]:
-    from data.segment import normalise_sections, segment_markdown, split_oversized
+    """Sections of an upload: the corpus's generic Markdown segmentation (data/segment.py), or, for Markdown that
+    carries its own sections (document_markdown's format), those sections as written, only oversized ones split."""
+    from data.segment import normalise_sections, read_sections_markdown, segment_markdown, split_oversized
 
-    raw = normalise_sections(segment_markdown(text, fallback_chars=scfg.get("fallback_section_chars", 1500)),
-                             min_chars=scfg.get("min_section_chars", 80), max_chars=scfg.get("max_section_chars", 8000))
+    marked = read_sections_markdown(text)
+    if marked is not None:
+        raw = marked[1]
+    else:
+        raw = normalise_sections(segment_markdown(text, fallback_chars=scfg.get("fallback_section_chars", 1500)),
+                                 min_chars=scfg.get("min_section_chars", 80), max_chars=scfg.get("max_section_chars", 8000))
     raw = split_oversized(raw, max_chars=scfg.get("max_section_chars", 8000))
     return [(r.heading, r.text) for r in raw if r.text.strip()]
 
 
 def document_markdown(doc: Any, sections: list[Any]) -> str:
-    """A corpus document rebuilt as the Markdown an upload would be (title, then each section under its heading)."""
-    return (f"# {doc.title}\n\n" if doc.title else "") + "\n\n".join(
-        (f"## {s.heading}\n" if s.heading else "") + s.text for s in sections)
+    """A corpus document rebuilt as Markdown (title, then each section under its heading) that segment() reads back
+    as the stored sections, so the query is segmented like its indexed peers (CHANGELOG 2026-10-20: re-segmenting
+    plain Markdown changed 25% of privacy and 89% of papers test documents)."""
+    from data.segment import write_sections_markdown
+
+    return write_sections_markdown(doc.title, [(s.heading, s.text) for s in sections])
 
 
 def analyse(text_or_path: str | Path, pack: Any, *, title: str | None = None, category: str | None = None,

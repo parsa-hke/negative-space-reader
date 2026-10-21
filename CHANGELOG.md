@@ -67,6 +67,54 @@ Exploratory versions of the diagnosis ran as scratch scripts first; every number
 at the end and logs no timestamps; a long Colab run cannot be interrupted without losing it (next session: incremental
 parts, timestamps, documents tried, ETA). Tests: 423 passed (429 with the round-trip session's new test file).
 
+## 2026-10-20 — A corpus document rebuilt as Markdown now segments back to its stored sections
+
+**Finding (Phase 6 session).** `analyse()` segments the Markdown it is given, while the indexed peers' profiles were
+built on the corpus's stored sections (`data/processed/<genre>/sections.jsonl`). A corpus document rebuilt by
+`engine/pipeline.document_markdown` and re-segmented by `segment` (gate 5.9, the `analyse` task, the Phase 7 demo
+examples) did not come back with its stored sections, so the query was segmented differently from its peers. Causes:
+(1) headingless policies (stored as `fallback_section_chars` chunks) came back as one section, because the `# Title`
+line counts as a heading and the fallback chunking never ran (`privacy_pl:1002201`: 6 sections → 1 of 7,854
+characters); (2) 145 of 300 paper titles span two lines, so the second line of `# Title` became text of the Abstract
+(`unarxive:1801.00632`, 1,336 → 1,366 characters); (3) lines inside paper sections that look like headings
+(`Parameterparameters`, `Definition 2 (Sectional curvature [cite])`) started new sections (23 → 26 sections). Plain
+Markdown cannot carry the stored segmentation in any case: on the same 300 papers, 238 sections contain blank lines,
+54 are under `min_section_chars` (re-segmenting merges them), and `clean_inline` is not idempotent (double spaces,
+edge pipes).
+
+**Fix (test first, `tests/test_segment_roundtrip.py`, 6 tests: a headingless chunked policy built with the
+loader's own segmentation, a headed policy with heading-like lines, pipes and `#`/`\` line starts, a paper with a
+two-line title, inner pseudo-headings, a blank line and a short section, documents without a title, a hand-edited
+export, and unmarked text).** `data/segment.py` gains `write_sections_markdown` / `read_sections_markdown`: Markdown
+that starts with the comment `<!-- negspace: sections -->`, the title as `# `, each section opened by `## heading`
+(or `<!-- section -->` when it has none), its text verbatim; a text line starting with `#`, `\` or `<!--` gets one
+backslash, which the reader removes. Rendered, it is ordinary Markdown. `document_markdown` writes it; `segment()`
+reads it (sections as written, only oversized ones split) and sends any text without the marker to the heuristic
+segmenter, unchanged, so uploads and the corpus loaders behave exactly as before. `guess_title` skips HTML-comment
+lines. No genre code.
+
+**Match rate (section texts identical, in order; first 300 test documents per genre, documents.jsonl order):**
+
+| genre | before | after |
+|---|---|---|
+| privacy | 224 / 300 (74.7%) | 300 / 300 |
+| papers | 34 / 300 (11.3%) | 300 / 300 |
+| privacy, whole test split | 2,358 / 3,097 (76.1%) | 3,097 / 3,097 |
+| papers, whole test split | 186 / 1,746 (10.7%) | 1,746 / 1,746 |
+
+Headings match too, except for 12 of 1,746 papers whose stored heading contains a line break (written on one line).
+Before, headings matched for 6 / 300 privacy and 0 / 300 papers (the title became the first section's heading).
+The finding quoted privacy 214 / 300; this count, with the old `document_markdown` reproduced exactly, is 224 / 300
+(possibly a different "first 300"); the papers count agrees. `bench/synth.py`'s docstring is updated: OmitBench
+still edits stored sections directly, which is now equivalent.
+
+**Gate 5.9 rerun** (`build.force=[analyse_gate]`, runs `gate_roundtrip_privacy_s0`, `gate_roundtrip_papers_s0`):
+**pass**, privacy max 2.32 s (17 sections), median 0.75 s; papers max 8.16 s (31 sections), median 7.10 s; limit
+10 s. Segmentation drops from 7–16 ms to under 1 ms per paper. Papers are slower than on 2026-10-20 (3.31 s max),
+but not because of this change: the Mac was on battery (42%), and an A/B on the same machine state embedding the old
+and the new section lists of two gate papers took the same time (4.7–6.4 s each). `reports/tables/analyse_gate_<genre>.csv`
+and the pack manifests now hold the battery-power timings; rerun on mains power for the report's numbers.
+
 ## 2026-10-20 — Phase 5 closed: gate 5.9 passed, teacher-mode check, a lost label file restored
 
 **Checks (HANDOFF):** pytest 394 passed (HANDOFF said 393); the "uncommitted" Phase 5 work was already committed and

@@ -8,6 +8,9 @@ Three entry points, all genre-agnostic (they look at text format, not at what th
   normalise_sections(...)       merge sections below min_section_chars, split those above max_section_chars
                                 at paragraph breaks (split_oversized, the split step alone, is used by the
                                 loaders whose sources already mark sections: unarXive, arXiv e-prints).
+  write_sections_markdown(...)  already-segmented sections (a corpus document) -> Markdown that
+  read_sections_markdown(text)  returns exactly those sections; marked by SECTIONS_MARKER, so uploads without
+                                it are untouched (engine.pipeline.document_markdown / segment; CHANGELOG 2026-10-20).
   split_sentences(text)         rule-based splitter with an abbreviation list. Chosen over pysbd (accurate but
                                 333 sentences/s on the M5, ~4 h for the corpus) and spaCy's sentencizer
                                 (50k/s but splits after "Sec.", "Fig.", "et al.,"); see CHANGELOG 2026-10-12.
@@ -194,6 +197,65 @@ def segment_markdown(text: str, *, fallback_chars: int = 1500) -> list[RawSectio
     if n_headings == 0 and merged:
         return chunk_paragraphs(merged[0].paragraphs, target_chars=fallback_chars)
     return merged
+
+
+# ------------------------------------------------------------------------------------ already-segmented Markdown
+SECTIONS_MARKER = "<!-- negspace: sections -->"
+_SECTION_BREAK = "<!-- section -->"
+_SECTION_HEADING = re.compile(r"^(#{1,6})\s+(.+?)\s*$")
+
+
+def write_sections_markdown(title: str | None, sections: list[tuple[str | None, str]]) -> str:
+    """Sections that are already segmented (a corpus document's stored sections) as Markdown that
+    read_sections_markdown returns unchanged: SECTIONS_MARKER first, the title as '# ', each section opened by
+    '## heading' (or '<!-- section -->' when it has none), its text verbatim. A text line that starts with '#', '\\'
+    or '<!--' gets one leading backslash, which the reader removes. Rendered, it is ordinary Markdown (the comments
+    are invisible). Headings and the title are written on one line (inner whitespace collapsed)."""
+    def one_line(s: str) -> str:
+        return " ".join(s.split())
+
+    out = [SECTIONS_MARKER]
+    if title and title.strip():
+        out.append(f"# {one_line(title)}\n")
+    for heading, text in sections:
+        body = "\n".join("\\" + ln if ln.startswith(("#", "\\")) or ln.lstrip().startswith("<!--") else ln for ln in text.split("\n"))
+        out.append((f"## {one_line(heading)}" if heading and heading.strip() else _SECTION_BREAK) + f"\n{body}\n")
+    return "\n".join(out)
+
+
+def read_sections_markdown(text: str) -> tuple[str | None, list[RawSection]] | None:
+    """Parse write_sections_markdown's format; None when the text does not start with SECTIONS_MARKER (then it is an
+    ordinary upload for segment_markdown). Any ATX heading after the title, or '<!-- section -->', starts a section;
+    text before the first one is a section without heading; blank lines inside a section are kept, trailing ones
+    dropped. Lenient to hand edits of an exported document."""
+    lines = text.replace("\r\n", "\n").replace("\r", "\n").split("\n")
+    first = next((i for i, ln in enumerate(lines) if ln.strip()), None)
+    if first is None or lines[first].strip() != SECTIONS_MARKER:
+        return None
+    title: str | None = None
+    sections: list[RawSection] = []
+    current: RawSection | None = None
+    for ln in lines[first + 1:]:
+        m = _SECTION_HEADING.match(ln)
+        if m and title is None and current is None and len(m.group(1)) == 1:
+            title = m.group(2)
+            continue
+        if m or ln.strip() == _SECTION_BREAK:
+            current = RawSection(heading=m.group(2) if m else None, paragraphs=[])
+            sections.append(current)
+            continue
+        if current is None:
+            if not ln.strip():
+                continue
+            current = RawSection(heading=None, paragraphs=[])
+            sections.append(current)
+        current.paragraphs.append(ln[1:] if ln.startswith("\\") else ln)
+    for s in sections:
+        while s.paragraphs and not s.paragraphs[-1].strip():
+            s.paragraphs.pop()
+        while s.paragraphs and not s.paragraphs[0].strip():
+            s.paragraphs.pop(0)
+    return title, [s for s in sections if s.paragraphs]
 
 
 def chunk_paragraphs(paragraphs: list[str], *, target_chars: int, heading: str | None = None) -> list[RawSection]:

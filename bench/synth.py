@@ -20,8 +20,9 @@ dropped (the corpus's segmentation drops such sections too).
 
 Ground truth is every type present before the edit and absent after it (Parsa, 2026-10-20): the sampled targets plus
 any type deleted along with them (collateral, recorded). Edits work on the stored sections, not on re-segmented
-Markdown: the corpus's sections are what the indexed peers' profiles were built from (a Markdown round trip
-segments 29% of privacy and 89% of papers test documents differently, CHANGELOG 2026-10-20).
+Markdown: the corpus's sections are what the indexed peers' profiles were built from (the old plain-Markdown round
+trip segmented 25% of privacy and 89% of papers test documents differently; document_markdown now round-trips
+exactly, CHANGELOG 2026-10-20).
 """
 
 from __future__ import annotations

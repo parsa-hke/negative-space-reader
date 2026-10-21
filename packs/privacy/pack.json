@@ -245,26 +245,26 @@
    "inputs": "76f6d1ee2803ba43",
    "settings": "10bbe6490f7f8381",
    "outputs": {
-    "reports/tables/analyse_gate_privacy.csv": "ab75b48cb1ce3e6f"
+    "reports/tables/analyse_gate_privacy.csv": "ff404526b3fe142b"
    },
    "adopted": false,
    "metrics": {
     "documents": 5,
-    "max_seconds": 1.98,
-    "median_seconds": 0.69,
+    "max_seconds": 2.32,
+    "median_seconds": 0.75,
     "max_sections": 17,
     "gate": "pass",
     "limit_seconds": 10,
     "median_timings": {
      "read": 0.0,
-     "segment": 0.001,
-     "embed": 0.504,
-     "presence": 0.222,
+     "segment": 0.0,
+     "embed": 0.604,
+     "presence": 0.142,
      "document_presence": 0.0,
-     "cohort": 0.007,
+     "cohort": 0.009,
      "expectation": 0.0,
      "rank": 0.0,
-     "evidence": 0.0,
+     "evidence": 0.001,
      "explain": 0.0
     },
     "machine": "arm64 Darwin arm",
@@ -272,7 +272,7 @@
     "evidence": "stored sentences",
     "presence": "document model"
    },
-   "at": "2026-10-20T19:06:52"
+   "at": "2026-10-20T20:42:00"
   }
  },
  "genre": "privacy",
@@ -285,5 +285,5 @@
   "student": "answerdotai/ModernBERT-large"
  },
  "schema_version": 1,
- "updated": "2026-10-20T19:06:52"
+ "updated": "2026-10-20T20:42:00"
 }
