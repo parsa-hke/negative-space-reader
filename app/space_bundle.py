@@ -20,7 +20,9 @@ CODE_DIRS = ["app", "engine", "packs", "data", "experiments", "models", "bench",
 PACK_FILES = ["schema.yaml", "pack.json", "cascade.json", "doc_presence.json"]
 PACK_DIRS = ["classifier", "prototypes", "profiles", "evidence"]
 INDEX_FILES = ["index.json", "payloads.jsonl", "vectors.npy", "best_sections.npz"]  # not sections.npz: no corpus on the Space
-LFS_PATTERNS = ["*.npy"]
+# every pattern the Hub stores as LFS and the bundle ships must be here: a Space checkout smudges only the patterns in
+# the repo's own .gitattributes (first build, 2026-10-21: .npz and .parquet arrived as pointer files and np.load failed)
+LFS_PATTERNS = ["*.npy", "*.npz", "*.parquet"]
 
 APP_PY = '''"""Negative-Space Reader on a Hugging Face Space: the demo of app/gradio_app.py with the overlays __OVERLAYS__ applied."""
 __SPACES_IMPORT__
@@ -50,11 +52,11 @@ colorFrom: green
 colorTo: yellow
 sdk: gradio
 sdk_version: {gradio_version}
-python_version: "3.11"
+python_version: "{python_version}"
 app_file: app.py
 pinned: false
 license: apache-2.0
-short_description: What a document conspicuously doesn't say, with peer evidence
+short_description: What a document conspicuously doesn't say
 ---
 
 # Negative-Space Reader
@@ -76,18 +78,27 @@ numpy=={numpy}
 pandas=={pandas}
 pyarrow=={pyarrow}
 PyYAML=={pyyaml}
-pydantic=={pydantic}
+pydantic>=2.11.10,<=2.12.5
 scikit-learn=={sklearn}
 '''
 
 
-def _pins() -> dict[str, str]:
+# ZeroGPU Spaces build on Python 3.10 whatever README.md's python_version says (build log, 2026-10-21): the latest
+# release of each pin that still supports 3.10 (checked against PyPI requires_python) replaces this environment's.
+PY310_PINS = {"numpy": "2.2.6", "pandas": "2.3.3", "pyarrow": "25.0.1", "sklearn": "1.7.2"}
+# pydantic is a range, not a pin: the Space builder installs gradio[oauth,mcp], whose mcp extra caps pydantic at 2.12.5.
+
+
+def _pins(*, py310: bool = False) -> dict[str, str]:
     import importlib.metadata as md
 
     want = {"torch": "torch", "sentence_transformers": "sentence-transformers", "transformers": "transformers", "faiss": "faiss-cpu",
             "gradio": "gradio", "numpy": "numpy", "pandas": "pandas", "pyarrow": "pyarrow", "pyyaml": "PyYAML", "pydantic": "pydantic",
             "sklearn": "scikit-learn"}
-    return {k: md.version(v) for k, v in want.items()}
+    pins = {k: md.version(v) for k, v in want.items()}
+    if py310:
+        pins.update(PY310_PINS)
+    return pins
 
 
 CODE_EXTS = {"app": (".py", ".css", ".js", ".json", ".md")}  # app/ carries its static assets and example files
@@ -168,19 +179,19 @@ def bundle(root: Path, out: Path, cfg: dict[str, Any], *, clean: bool = False, v
             else:
                 missing.append(f"packs/{g}/index/{name}")
         parts[f"packs/{g}"] = {"files": n, "bytes": size(dst)}
-    pins = _pins()
     zero = variant == "zerogpu"
+    pins = _pins(py310=zero)
     overlays = ["configs/space.yaml"] + (["configs/space_zerogpu.yaml"] if zero else [])
     app_py = APP_PY.replace("__OVERLAYS__", json.dumps(overlays)).replace(  # the template holds f-strings: no str.format
         "__SPACES_IMPORT__", "\nimport spaces  # noqa: F401  must come before torch on a ZeroGPU Space\n" if zero else "")
     (out / "app.py").write_text(app_py, encoding="utf-8")
-    (out / "README.md").write_text(README_MD.format(gradio_version=pins["gradio"]), encoding="utf-8")
+    (out / "README.md").write_text(README_MD.format(gradio_version=pins["gradio"], python_version="3.10" if zero else "3.11"), encoding="utf-8")
     (out / "requirements.txt").write_text(REQUIREMENTS.format(**pins, torch_index="" if zero else "--extra-index-url https://download.pytorch.org/whl/cpu\n",
                                                               spaces_req="\nspaces" if zero else ""), encoding="utf-8")
     (out / ".gitattributes").write_text("".join(f"{p} filter=lfs diff=lfs merge=lfs -text\n" for p in LFS_PATTERNS), encoding="utf-8")
     (out / ".gitignore").write_text("__pycache__/\n*.pyc\n.cache/\nruns/\n", encoding="utf-8")
     total = size(out)
-    lfs = sum(f.stat().st_size for f in out.rglob("*.npy"))
+    lfs = sum(f.stat().st_size for pat in LFS_PATTERNS for f in out.rglob(pat))
     manifest = {"out": str(out), "variant": variant, "overlays": overlays, "genres": genres, "parts": parts, "total_bytes": total,
                 "lfs_bytes": lfs, "missing": missing, "pins": pins}
     (out / "BUNDLE.json").write_text(json.dumps(manifest, indent=1) + "\n", encoding="utf-8")
@@ -204,7 +215,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"variant {m['variant']}: overlays {m['overlays']}")
     for k, v in m["parts"].items():
         print(f"{k:16s} {v['files']:5d} files {v['bytes'] / 1e6:8.1f} MB")
-    print(f"total {m['total_bytes'] / 1e6:.1f} MB, of which Git LFS (*.npy) {m['lfs_bytes'] / 1e6:.1f} MB; missing: {m['missing'] or 'none'}")
+    print(f"total {m['total_bytes'] / 1e6:.1f} MB, of which Git LFS ({', '.join(LFS_PATTERNS)}) {m['lfs_bytes'] / 1e6:.1f} MB; missing: {m['missing'] or 'none'}")
     return 1 if m["missing"] else 0
 
 

@@ -2,6 +2,30 @@
 
 Date, what was done, what was found (negative findings included). Newest first.
 
+## 2026-10-21 (night, 3) — 7.1 closed: the demo is live on a ZeroGPU Space
+
+**Committed first** (`fc6e4a9`, Parsa's authorship, Parsa's request), then `parsa-hke/negative-space-reader` created
+(public, Gradio, hardware `zero-a10g`, which is the ZeroGPU pool) and `space/` uploaded with `huggingface_hub`
+(`upload_folder`, 305 MB, 17 s). **Four builds to green**, each a packaging fact worth keeping:
+1. `short_description` in the Space header is capped at 60 characters.
+2. ZeroGPU images build on **Python 3.10** whatever `python_version` says: `numpy==2.4.6`, `pandas==3.0.6`,
+   `pyarrow==26.0.0`, `scikit-learn==1.9.1` have no 3.10 wheels. The zerogpu bundle now pins the latest releases that
+   support 3.10 (2.2.6, 2.3.3, 25.0.1, 1.7.2; checked against PyPI `requires_python`); our models are arrays and
+   JSON, not sklearn pickles, so the older scikit-learn is safe.
+3. The builder installs `gradio[oauth,mcp]`, whose `mcp` extra caps pydantic at 2.12.5: pydantic is a range now.
+4. The Hub stores `.npz` and `.parquet` as LFS, but a Space checkout smudges only the patterns in the repo's own
+   `.gitattributes`; with `*.npy` alone the npz and parquet files arrived as pointer text and `np.load` fell through
+   to its pickle path ("This file contains pickled (object) data"). `.gitattributes` now lists npy, npz, parquet.
+**Running:** both packs loaded in 13.4 s on `cuda` (the `spaces` patch accepted the models' `.to("cuda")` at
+startup: "ZeroGPU tensors packing 1.35 G"). **Timings on the Space** (status line, same documents as the CPU
+measurements): Etilize policy **1.95 s** on the first call (GPU attach included); FANS paper **0.52 s** first,
+**0.28 s** warm (Mac CPU: 1.8 s and 5.6 s; the papers gate on MPS: 3.3 s). Results identical to the local app
+(privacy: 200 peers, 172 entities, similarity 0.769, 24 types stated; papers: 0.741, 24 stated). URL:
+https://huggingface.co/spaces/parsa-hke/negative-space-reader. Plan 7.1 ticked. Not yet done: the Space is on the
+free ZeroGPU quota rules (visitors get a GPU-time allowance per day; the owner's Pro quota applies when logged in),
+and it sleeps after 48 h idle. The post-commit fixes (bundle pins, LFS patterns, tests, these notes) are uncommitted.
+Tests: 476.
+
 ## 2026-10-21 (night, 2) — 7.1: ZeroGPU variant of the Space bundle (Parsa has a Hugging Face Pro account)
 
 Pro accounts can create **ZeroGPU** Spaces: shared H200 slices attached only while a decorated function runs, at no

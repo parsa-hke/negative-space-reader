@@ -1,4 +1,4 @@
-# Session handoff — 7.1 redesigned and verified (approval pending); 7.3 done
+# Session handoff — 7.1 live on a ZeroGPU Space and ticked; 7.3 done; next 7.2 video and 7.4 report
 
 Written 2026-10-21 at the end of the first Phase 7 session. Read with: `CLAUDE.md`, `NEGATIVE_SPACE_PLAN.md` (§0.2 #14,
 #17, #21, #24; Phase 7), `CHANGELOG.md` (entry "2026-10-21 (afternoon)"), decision record 007. Replace this file at
@@ -6,19 +6,11 @@ the end of the next session.
 
 ## Where things stand
 
-- **7.1 (not ticked, design awaiting Parsa's approval):** `app/gradio_app.py` redesigned per Parsa's brief (bold dark
-  design, animations, lens cursor and particle trail: `app/static/nsr.css`, `nsr.js`), pinned examples with the cached
-  7.3 chat-model answers (`app/examples.py` → `app/examples/*.json`, config `serve.examples`, `serve.bench_examples`,
-  `serve.chat_runs`, `serve.examples_dir`), the "compare with a chat model" switch (cached answers only;
-  `serve.allow_live_chat: false`), ghost click → Evidence, guided demo (five-step strip, narrated status with the numbers,
-  progress narration, challenge/reveal for benchmark examples) and the **About the project** tab (`app/about.py`;
-  numbers from `app/examples/results.json`, written by `python -m app.examples` via `app/content.py`; rerun it after any
-  table changes). Verified in the browser (CHANGELOG, evening entries 1-4). Launch: `python -m experiments.run --config configs/serve.yaml`; stop with Ctrl-C.
-  **Design approved (2026-10-21 evening).** **Space bundle ready, not uploaded:** `python -m app.space_bundle --clean`
-  → `space/` (305 MB, 149 MB LFS; corpus-free). Two variants: `--variant zerogpu` (default; Parsa's Pro account: H200
-  slice per analysis via `spaces.GPU`, untestable locally) and `--variant cpu` (verified by running `space/app.py`
-  locally: 4.6 s per paper). Proposal in CHANGELOG (night entries); waiting for Parsa's go-ahead on the Space name and
-  visibility; hardware `zero-a10g`/H200 ZeroGPU at creation (`create_repo(..., space_sdk="gradio", space_hardware=...)`).
+- **7.1 (ticked):** live at https://huggingface.co/spaces/parsa-hke/negative-space-reader (public, ZeroGPU, Pro
+  account). Rebuild and re-upload after any change: `python -m app.space_bundle --clean` then
+  `HfApi().upload_folder(folder_path="space", repo_id="parsa-hke/negative-space-reader", repo_type="space")` (the
+  upload script of this session is not in the repo; the call is one line). Packaging facts in the CHANGELOG (night, 3):
+  Python 3.10 pins, pydantic range, LFS patterns. Timings on the Space: policy 1.95 s first call, paper 0.52 s / 0.28 s warm.
 - **7.1 design (Parsa's palette, 2026-10-21 evening):** cream #FFF0C5 page; teal #359FA0 = absent; light teal #8AD6D1 =
   evidence and text-carrying fills; orange #FF8C52 = action, severity, reveals; derived darker teal/orange for small text
   (contrast); containers near-white with solid teal borders and one soft shadow (`--nsr-card`, `--nsr-line`,
@@ -33,7 +25,8 @@ the end of the next session.
 - **Gate 5.9 rerun on mains power:** privacy max 1.37 s, papers max 3.28 s; `packs/*/pack.json` and
   `reports/tables/analyse_gate_<genre>.csv` updated.
 - **Hub:** runs and packs pushed at the end of the session (986 matched, 0 differ, 0 missing).
-- **Uncommitted:** everything from this session (Parsa reviews first; commits authored by Parsa only).
+- **Committed:** `fc6e4a9` (this session up to the Space upload). **Uncommitted:** the post-upload fixes in
+  `app/space_bundle.py`, `tests/test_space_bundle.py`, CHANGELOG, HANDOFF, plan (Parsa reviews; authored by Parsa only).
 - Tests: 476 passed.
 
 ## Optional 7.3 follow-ups (ask Parsa; each a few dollars)
@@ -45,9 +38,7 @@ the end of the next session.
 
 1. Checks below. Commit what Parsa approves (authored by Parsa only).
 2. Any 7.3 follow-up Parsa approves (the table keeps other models' rows; a rerun of a model replaces its own).
-3. Upload the Space once Parsa says where (`space/` is the complete repo content; LFS for `*.npy`): ZeroGPU first;
-   watch the build log for the `spaces` patch and the first analysis; if it fails, rebuild `--variant cpu` and upload
-   that. Time a policy and a paper on the Space, record both, then tick 7.1.
+3. 7.2: the walkthrough video on the Space (one policy, one paper; the benchmark reveal makes a good ending).
 4. 7.2 video, then 7.4 report via `analysis/tables.py`.
 
 ## Watch

@@ -49,13 +49,19 @@ def test_bundle_copies_what_the_app_reads_and_nothing_else(tmp_path):
     out = tmp_path / "space"
     assert (out / "app.py").is_file() and (out / "README.md").read_text().startswith("---\ntitle: Negative-Space Reader")
     assert "sdk: gradio" in (out / "README.md").read_text() and "faiss-cpu==" in (out / "requirements.txt").read_text()
+    short = next(l for l in (out / "README.md").read_text().splitlines() if l.startswith("short_description:"))
+    assert len(short.split(":", 1)[1].strip()) <= 60  # the Hub rejects longer ones
     app_py, req = (out / "app.py").read_text(), (out / "requirements.txt").read_text()
     assert app_py.startswith('"""') and "import spaces" in app_py and '"configs/space_zerogpu.yaml"' in app_py  # zerogpu default
     assert "\nspaces\n" in req and "whl/cpu" not in req and m["variant"] == "zerogpu"
+    assert "pydantic>=2.11.10,<=2.12.5" in req and "pydantic==" not in req
+    assert "numpy==2.2.6" in req and "pandas==2.3.3" in req and 'python_version: "3.10"' in (out / "README.md").read_text()  # ZeroGPU builds on 3.10
     cpu = bundle(root, tmp_path / "space_cpu", {"genres": ["g"]}, clean=True, variant="cpu")
     cpu_app, cpu_req = (tmp_path / "space_cpu" / "app.py").read_text(), (tmp_path / "space_cpu" / "requirements.txt").read_text()
     assert "import spaces" not in cpu_app and "space_zerogpu" not in cpu_app and cpu_req.startswith("--extra-index-url") and cpu["overlays"] == ["configs/space.yaml"]
-    assert (out / ".gitattributes").read_text().startswith("*.npy filter=lfs")
+    assert "numpy==2.2.6" not in cpu_req and 'python_version: "3.11"' in (tmp_path / "space_cpu" / "README.md").read_text()
+    attrs = (out / ".gitattributes").read_text()
+    assert all(f"{p} filter=lfs" in attrs for p in ("*.npy", "*.npz", "*.parquet"))
     assert (out / "app" / "static" / "nsr.css").is_file() and (out / "app" / "examples" / "g.json").is_file()
     assert (out / "engine" / "pipeline.py").is_file() and not (out / "engine" / "notes.txt").exists()
     assert (out / "packs" / "g" / "index" / "vectors.npy").is_file() and not (out / "packs" / "g" / "index" / "sections.npz").exists()
@@ -63,7 +69,7 @@ def test_bundle_copies_what_the_app_reads_and_nothing_else(tmp_path):
     for absent in ("packs/g/section_probs", "packs/g/profiles_v1", "packs/g/schema_draft.yaml", "data/processed", "tests", "packs/g/label_sets.json"):
         assert not (out / absent).exists(), absent
     assert (out / "packs" / "spec.py").is_file() and (out / "data" / "segment.py").is_file()
-    assert m["missing"] == [] and m["lfs_bytes"] == 100 and m["parts"]["packs/g"]["files"] >= 9
+    assert m["missing"] == [] and m["lfs_bytes"] == 100 + 100 + 10 + 10 + 10 and m["parts"]["packs/g"]["files"] >= 9  # npy + best_sections.npz + 3 parquet/npz
     assert json.loads((out / "BUNDLE.json").read_text())["genres"] == ["g"]
 
 
