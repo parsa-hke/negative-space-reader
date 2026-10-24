@@ -56,7 +56,9 @@ def escape(text: str) -> str:
     """Plain text -> LaTeX: specials escaped, symbols mapped; anything non-ASCII and unknown raises."""
     out = []
     for ch in text:
-        if ch in ESCAPES:
+        if ch == _LITERAL_STAR:
+            out.append("*")
+        elif ch in ESCAPES:
             out.append(ESCAPES[ch])
         elif ch in SYMBOLS:
             out.append(SYMBOLS[ch])
@@ -71,8 +73,12 @@ _INLINE = re.compile(r"(`[^`]+`|https?://[^\s)\]]+(?<![.,;:])|\*\*.+?\*\*(?!\*)|
 _CITE = re.compile(r"\[(\d+(?:, \d+)*)\]")
 
 
+_LITERAL_STAR = "\x00"  # a Markdown-escaped asterisk (\*), kept out of the emphasis matching
+
+
 def inline(text: str, *, cite: bool = True) -> str:
     """Markdown inline markup -> LaTeX runs; URLs become \\url, [n, m] become \\cite (bibliography keys r<n>)."""
+    text = text.replace("\\*", _LITERAL_STAR)
     out = []
     last = 0
     for m in _INLINE.finditer(text):
@@ -190,7 +196,7 @@ def convert(md: str) -> str:
                 body.append(r"\begin{abstract}")
                 in_abstract = True
             elif name.lower() == "references":
-                body.append(r"\section*{References}" + "\n" + r"\begin{thebibliography}{99}" + "\n" + r"\small")
+                body.append(r"\begin{thebibliography}{99}" + "\n" + r"\small")  # the environment prints the heading
                 in_bib = True
             elif re.match(r"^\d+\. ", name):
                 body.append(r"\section{" + inline(name.split(". ", 1)[1], cite=False) + "}")

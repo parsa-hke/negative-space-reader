@@ -486,11 +486,10 @@ What comes next follows from what failed: the masked-assertion model conditions 
 
 This project was built with Claude Code (Anthropic) as the engineering and writing assistant, under the rules recorded in the repository's \texttt{CLAUDE.md}. The assistant wrote and tested code, ran experiments through the project's single entry point, maintained the changelog, and drafted this report from the recorded tables; the author set the research question and the fixed design decisions, reviewed every result, made every decision recorded in the seven decision records (the lean architecture, the teacher served in the lab, the claim representation, the silver reference, the presence gate, document-level presence, and the privacy gate outcome), performed the human pass over both schemas, and approved every API spend. Large language models also appear inside the system: Qwen2.5 models induced the schema and labelled presence, Claude Haiku 5.5 served as the second judge, and Claude Opus 5.5 and Qwen2.5-72B were the compared chat models. Every prompt sent to any of them lives in the repository's \texttt{prompts/} folder with a version and a content hash, every run records the hashes of the prompts it rendered, and every teacher response is cached so that a rerun is reproducible. No text in this report was taken from the demo's pages or the repository's documents; the numbers were copied from the result tables by \texttt{analysis/tables.py} and were not typed by hand. Commits are authored by the author alone.
 
-\section*{References}
 \begin{thebibliography}{99}
 \small
 
-\bibitem{r1} T. H. Truong, T. Baldwin, K. Verspoor, and T. Cohn, ``Language models are not naysayers: An analysis of language models on negation benchmarks,'' in \emph{Proc. 12th Joint Conf. on Lexical and Computational Semantics (\textbackslash{}}SEM 2023)*, Toronto, Canada, 2023, pp. 101–114, doi: 10.18653/v1/2023.starsem-1.10.
+\bibitem{r1} T. H. Truong, T. Baldwin, K. Verspoor, and T. Cohn, ``Language models are not naysayers: An analysis of language models on negation benchmarks,'' in \emph{Proc. 12th Joint Conf. on Lexical and Computational Semantics (*SEM 2023)}, Toronto, Canada, 2023, pp. 101–114, doi: 10.18653/v1/2023.starsem-1.10.
 
 \bibitem{r2} M. M. Hossain, D. Chinnappa, and E. Blanco, ``An analysis of negation in natural language understanding corpora,'' in \emph{Proc. 60th Annu. Meeting of the Association for Computational Linguistics (Short Papers)}, Dublin, Ireland, 2022, pp. 716–723, doi: 10.18653/v1/2022.acl-short.81.
 

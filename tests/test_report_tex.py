@@ -52,6 +52,7 @@ def test_inline_escapes_and_maps_markup_urls_and_citations():
     assert inline("see [1, 2] and `a_b` at https://e.org/p_q.") == r"see \cite{r1,r2} and \texttt{a\_b} at \url{https://e.org/p_q}."
     assert inline("**bold *in***") == r"\textbf{bold \emph{in}}"
     assert inline("≥ × −", cite=False) == r"$\geq$ $\times$ $-$"
+    assert inline(r"in *Proc. (\*SEM 2023)*, x") == r"in \emph{Proc. (*SEM 2023)}, x"  # an escaped asterisk is literal
     with pytest.raises(ValueError):
         escape("a ☃ b")
 
@@ -67,6 +68,7 @@ def test_convert_builds_title_abstract_sections_floats_and_bibliography():
     assert r"\includegraphics[width=\linewidth]{figures/f.png}" in tex and figures_used(tex) == ["figures/f.png"]
     assert r"\bibitem{r1} A. Author, ``A paper,'' in \emph{Proc. X}, 2020, pp. 1–2." in tex
     assert tex.count(r"\bibitem") == 2 and r"\cite{r1,r2}" in tex
+    assert "References" not in tex  # thebibliography prints the heading itself
     assert tex.rstrip().endswith(r"\end{document}") and tex.count("{") == tex.count("}")
 
 
