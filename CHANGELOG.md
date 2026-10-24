@@ -139,6 +139,11 @@ longer wrap); the diagram's type enlarged (7.6 pt boxes, taller figure). Rebuilt
   README; `license` in `pyproject.toml`.
 - Rebuilt md, docx, tex, zip (14 tables, 6 figures).
 
+**Third compile (16 pages) read page by page:** Figure 4 still labelled the revision row "plan filter" (the label was in
+`analysis/figures.py`, now "peer filter"); the diagram's right-hand box clipped its text (box widened); the opening
+quote in Table 10 faced the wrong way (table cells now get LaTeX quote pairs too); the appendix lead of Table 12 now
+ends with a colon so it travels with its tables. Rebuilt figures, md, docx, tex, zip.
+
 Tests: 491 passed. Nothing further committed, no API call, the Space untouched, no §0.2 change.
 
 ## 2026-10-25 — Phase 7.4 and 7.5: the class report, built from the tables; `analysis/tables.py`; `.docx` export

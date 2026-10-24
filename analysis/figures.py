@@ -114,7 +114,7 @@ def draw_recall(tables: Path, out: Path) -> Path:
 def draw_differences(tables: Path, out: Path) -> Path:
     fig, axes = _figure(len(GENRES), 7.2, 2.6)
     rows_spec = [("bench_synth", r, r.replace("_", " ")) for r in REGIMES] + [
-        ("bench_revision", "revision", "revision (plan filter)"),
+        ("bench_revision", "revision", "revision (peer filter)"),
         ("bench_revision", "revision_all_added", "revision (every added type)")]
     for ax, genre in zip(axes, GENRES):
         ax.axvline(0, color=MUTED, lw=0.8)
@@ -278,10 +278,10 @@ def draw_pipeline(out: Path) -> Path:
     box(18, 7, 14, 8, "Embed sections\nwith the pack's\nembedder", query)
     box(35, 7, 14, 8, "P(present)\nper type", query, bold=True)
     box(52, 7, 15, 8, "Cohort\n200 nearest peers,\nsame category", query, bold=True)
-    box(69.5, 7, 15, 8, "score(t) =\nP(expected) ×\n(1 − P(present)) × w", query, bold=True)
-    box(87, 7, 11.5, 8, "Ghost paragraphs\n+ peer evidence\n+ template text", query)
-    arrow(15, 11, 18, 11); arrow(32, 11, 35, 11); arrow(49, 11, 52, 11); arrow(67, 11, 69.5, 11); arrow(84.5, 11, 87, 11)
-    arrow(90, 27, 92, 15, dashed=True)   # evidence -> output
+    box(69, 7, 14.5, 8, "score(t) =\nP(expected) ×\n(1 − P(present)) × w", query, bold=True)
+    box(85.5, 7, 13.5, 8, "Ghost paragraphs\n+ peer evidence\n+ template text", query)
+    arrow(15, 11, 18, 11); arrow(32, 11, 35, 11); arrow(49, 11, 52, 11); arrow(67, 11, 69, 11); arrow(83.5, 11, 85.5, 11)
+    arrow(90, 27, 92.5, 15, dashed=True)   # evidence -> output
     arrow(70, 27, 59.5, 15, dashed=True)  # profiles -> cohort prevalence
     arrow(50.5, 27, 56, 15, dashed=True)  # index -> cohort
     arrow(82, 40, 42, 15, dashed=True, rad=0.18)  # presence model -> P(present), around the profiles box

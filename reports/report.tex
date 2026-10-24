@@ -423,7 +423,7 @@ Table 10 sets each risk against its mitigation.
 \toprule
 risk & mitigation in place & still open \\
 \midrule
-a count read as a standard & the wording rule (''N\% of peers like this one state X''), evidence beside every number, no verdict word in the interface (tested) & a reader may still take a prevalence for a norm \\
+a count read as a standard & the wording rule (``N\% of peers like this one state X''), evidence beside every number, no verdict word in the interface (tested) & a reader may still take a prevalence for a norm \\
 norms that encode dominant actors & the cohort is shown with its k, category and date window and can be re-cut; prevalence is reported, never compliance & a cohort of 200 holds about 177 distinct sites, or 200 papers (Appendix A, Table 14), but no measure of which actors dominate it \\
 the teacher's eye and a silver reference & OPP-115 as a human check for privacy; the gate relative to the teacher; the limits stated with every number & human validation of the revision labels, a human check for papers \\
 dual use: tuning a text until the ghosts disappear & every claim is a quote from a peer, visible to the reader; the catalogue ships with the demo & none beyond the reader \\
@@ -550,10 +550,9 @@ ECE of P(expected) against the judge & (a) genre-uniform prevalence & 0.048 [0.0
 \caption{OmitBench-synthetic, one-type regime: the other ranking metrics, and false alarms and calibration on untouched documents.}
 \end{table}
 
-\textbf{Cohort diagnosis, every variant}: how well cohort prevalence predicts which types an untouched test document states (within-document AUC), and on the one-type regime the recall@5 gain over genre-uniform with the cohort retrieved from the edited document (what the system sees) and from the original (before the deletion); the leak is their difference. The variant selected on the test bench (post\_hoc\_best) is not shown: it is not a gate result.
-
 \begin{table}[H]
 \centering\small
+\panel{\textbf{Cohort diagnosis, every variant} (within-document AUC on untouched test documents; one-type recall@5 gain over genre-uniform from the edited document, what the system sees, and from the original; the leak is their difference; the variant selected on the test bench, post\_hoc\_best, is not a gate result and is not shown):}
 \panel{\emph{Privacy policies} (AUC and Brier on 800 untouched test documents; recall@5 differences on the one-type instances):}
 \begin{adjustbox}{max width=\linewidth}
 \begin{tabular}{llllll}

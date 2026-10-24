@@ -157,7 +157,7 @@ def tabular(rows: list[str]) -> str:
     lines = [r"\begin{adjustbox}{max width=\linewidth}", r"\begin{tabular}{" + spec + "}", r"\toprule"]
     for i, r in enumerate(cells):
         r = r + [""] * (ncol - len(r))
-        lines.append(" & ".join(inline(c, cite=False) for c in r) + r" \\")
+        lines.append(" & ".join(_smart_quotes(inline(c, cite=False)) for c in r) + r" \\")
         if i == 0:
             lines.append(r"\midrule")
     lines += [r"\bottomrule", r"\end{tabular}", r"\end{adjustbox}"]

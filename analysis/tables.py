@@ -452,10 +452,9 @@ def leak_full_md(tables: Path, V: Values) -> str | None:
     if not genres:
         return None
     md = _source("cohort_diagnosis_<genre>.csv")
-    md += ("**Cohort diagnosis, every variant**: how well cohort prevalence predicts which types an untouched test document states "
-           "(within-document AUC), and on the one-type regime the recall@5 gain over genre-uniform with the cohort retrieved from the edited "
-           "document (what the system sees) and from the original (before the deletion); the leak is their difference. "
-           "The variant selected on the test bench (post_hoc_best) is not shown: it is not a gate result.\n\n")
+    md += ("**Cohort diagnosis, every variant** (within-document AUC on untouched test documents; one-type recall@5 gain over "
+           "genre-uniform from the edited document, what the system sees, and from the original; the leak is their difference; "
+           "the variant selected on the test bench, post_hoc_best, is not a gate result and is not shown):\n\n")
     for g in genres:
         rows = []
         for r in _read(tables / f"cohort_diagnosis_{g}.csv"):
