@@ -75,7 +75,35 @@ figures; gitignored, rebuilt on demand). Static checks: every environment balanc
 citations, quote pairs balanced on every line. **Not compiled:** no TeX installation on this Mac (no pdflatex, tectonic
 or running Docker); first compile is on Overleaf (pdfLaTeX).
 
-Tests: 489 passed. Nothing further committed, no API call, the Space untouched, no §0.2 change.
+**Report revision after a rubric read (Parsa asked for a mark; every weakness named was then fixed):** the report
+was marked against the Assessment 2 rubric at about 88 (problem 92, design 87, data 90, ethics 88, clarity 83, tools
+90); the five weaknesses were an architecture diagram missing, no picture of what the user gets and no explicit value
+proposition, no plain description of the input data, mitigations stated as stances rather than named against risks,
+and too many panel tables in the body. Fixed, all through the source and the scripts:
+- `analysis/figures.py` `draw_pipeline` → `reports/figures/pipeline.png` (Figure 1, Section 4): the offline pack
+  build above, the query-time path below, no LLM on the latter; drawn from the plan's decisions, reads no table.
+- `analysis/demo_figure.py` (`tests/test_demo_figure.py`) → `reports/figures/demo_ghost.png` (Figure 2): the demo's
+  own document renderer and stylesheet applied to the recorded Etilize analysis (`space_cpu_timing_privacy_s0`) and
+  the corpus sections, cut to the section the first ghost follows, screenshotted with headless Chrome at 2x; never a
+  live call. A paragraph **What the user gets** (output, interaction, value) joins Section 4.
+- Section 3 opens with what a policy and a paper look like here (median sections and characters from `values.json`).
+- Section 9 gains Table 10, risk / mitigation in place / still open, six rows, no number in it.
+- `analysis/tables.py`: `synth` is now the recall@5 headline only and `synth_more` holds the other metrics and the
+  untouched-document panels; `leak` is a two-row headline (the default cohort against genre-uniform: AUC, the two
+  gains, the leak) and `leak_full` holds every variant. `report_source.md` gains **Appendix A. Full benchmark
+  tables** after the references (Tables 11 and 12), which the exporters handle (the appendix closes the
+  bibliography in LaTeX) and the word count ignores. Figures renumbered 1–6, tables 1–12; every in-text reference
+  updated by script.
+- Word budget: the additions cost ≈ 140 words; twelve scripted sentence-level cuts (each asserting its target occurs
+  once) brought the count to **3,996 all-in, 3,842 for Sections 1–10**; checker zero errors.
+- Rebuilt: `report.md`, `report.docx` (178 blocks, 6 figures), `report.tex` and the Overleaf zip (12 tables, 6
+  figures; environments and braces balanced; the LaTeX is again uncompiled here).
+
+**7.5 GenAI acknowledgement, short form (Parsa's request):** one paragraph: generative AI as an assistant to work faster,
+not to replace the work (code, experiments, changelog, editing); the question, decisions, review, schema pass and final
+text the author's; the models inside the system named; prompts versioned, numbers from the tables. Rebuilt md, docx, tex.
+
+Tests: 491 passed. Nothing further committed, no API call, the Space untouched, no §0.2 change.
 
 ## 2026-10-25 — Phase 7.4 and 7.5: the class report, built from the tables; `analysis/tables.py`; `.docx` export
 

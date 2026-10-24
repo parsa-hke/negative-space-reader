@@ -232,9 +232,66 @@ def draw_llm_gap(tables: Path, out: Path) -> Path | None:
     return _save(fig, out / "llm_gap.png")
 
 
+def draw_pipeline(out: Path) -> Path:
+    """The architecture (report Section 4): the offline pack build on top, the query-time path below, no LLM on the
+    latter. Drawn from the plan's fixed decisions, so it reads no table."""
+    import matplotlib.patches as mp
+    import matplotlib.pyplot as plt
+
+    _figure(1, 7.2, 3.6)
+    fig = plt.gcf()
+    fig.clf()
+    ax = fig.add_axes([0, 0, 1, 1])
+    ax.set_xlim(0, 100)
+    ax.set_ylim(0, 50)
+    ax.axis("off")
+    pack, query, line = "#e8f4f4", "#fdf3e7", "#8a8f98"
+
+    def box(x, y, w, h, text, fc, bold=False):
+        ax.add_patch(mp.FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0.02,rounding_size=1.2", fc=fc, ec=line, lw=0.8))
+        ax.text(x + w / 2, y + h / 2, text, ha="center", va="center", fontsize=6.4, color=INK, wrap=True,
+                fontweight="bold" if bold else "normal", linespacing=1.25)
+
+    def arrow(x0, y0, x1, y1, dashed=False, rad=0.0):
+        ax.annotate("", (x1, y1), (x0, y0), arrowprops={"arrowstyle": "-|>", "color": line, "lw": 0.8, "connectionstyle": f"arc3,rad={rad}",
+                                                          "linestyle": (0, (2.5, 2)) if dashed else "solid", "shrinkA": 0, "shrinkB": 0})
+
+    ax.text(1, 47.5, "Offline, once per genre pack (teacher LLM here only)", fontsize=7.5, color=MUTED, fontweight="bold")
+    ax.text(1, 21.5, "Query time, seconds on a laptop (no LLM)", fontsize=7.5, color=MUTED, fontweight="bold")
+    ax.add_patch(mp.Rectangle((0.5, 24.5), 99, 21.5, fc="none", ec=GRID, lw=0.6))
+    ax.add_patch(mp.Rectangle((0.5, 1), 99, 19, fc="none", ec=GRID, lw=0.6))
+    # offline
+    box(2, 35, 15, 8, "Genre corpus\n20–30k documents,\nsections and sentences", pack)
+    box(21, 38.5, 18, 6.5, "Teacher extracts claims;\nembed, UMAP, HDBSCAN;\nname, prune, freeze", pack)
+    box(43, 38.5, 15, 6.5, "Schema\n40–60 assertion types\n(frozen)", pack, bold=True)
+    box(62, 38.5, 16, 6.5, "Teacher labels\n~2k sections per genre\n+ silver reference", pack)
+    box(82, 38.5, 16, 6.5, "Presence model\nlogistic heads +\nprototype matching", pack, bold=True)
+    box(21, 27, 18, 6.5, "Section and document\nembeddings\n(Qwen3-Embedding-0.6B)", pack)
+    box(43, 27, 15, 6.5, "FAISS index\n(train split)", pack, bold=True)
+    box(62, 27, 16, 6.5, "Profiles\na bit per type per\ndocument", pack, bold=True)
+    box(82, 27, 16, 6.5, "Evidence\nbest peer sentence\nper type", pack, bold=True)
+    arrow(17, 41, 21, 41.7); arrow(39, 41.7, 43, 41.7); arrow(58, 41.7, 62, 41.7); arrow(78, 41.7, 82, 41.7)
+    arrow(17, 37, 21, 30.2); arrow(39, 30.2, 43, 30.2); arrow(58, 30.2, 62, 30.2); arrow(78, 30.2, 82, 30.2)
+    arrow(90, 38.5, 70, 33.5)  # presence model -> profiles
+    # query
+    box(2, 7, 13, 8, "Document\n(upload or paste)\n→ sections", query)
+    box(18, 7, 14, 8, "Embed sections\nwith the pack's\nembedder", query)
+    box(35, 7, 14, 8, "P(present)\nper type", query, bold=True)
+    box(52, 7, 15, 8, "Cohort\nk = 200 nearest\npeers, same category", query, bold=True)
+    box(70, 7, 13, 8, "score(t) =\nP(expected) ×\n(1 − P(present)) × w", query, bold=True)
+    box(86, 7, 12.5, 8, "Ghost paragraphs\n+ peer evidence\n+ template text", query)
+    arrow(15, 11, 18, 11); arrow(32, 11, 35, 11); arrow(49, 11, 52, 11); arrow(67, 11, 70, 11); arrow(83, 11, 86, 11)
+    arrow(90, 27, 92, 15, dashed=True)   # evidence -> output
+    arrow(70, 27, 59.5, 15, dashed=True)  # profiles -> cohort prevalence
+    arrow(50.5, 27, 56, 15, dashed=True)  # index -> cohort
+    arrow(82, 40, 42, 15, dashed=True, rad=0.18)  # presence model -> P(present), around the profiles box
+    return _save(fig, Path(out) / "pipeline.png")
+
+
 def draw_all(tables: Path, out: Path) -> list[Path]:
     tables, out = Path(tables), Path(out)
-    figures = [draw_recall(tables, out), draw_differences(tables, out), draw_diagnosis(tables, out), draw_llm_gap(tables, out)]
+    figures = [draw_pipeline(out), draw_recall(tables, out), draw_differences(tables, out), draw_diagnosis(tables, out),
+               draw_llm_gap(tables, out)]
     return [p for p in figures if p is not None]
 
 

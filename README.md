@@ -173,6 +173,8 @@ is stale, `--words` counts the prose; a test keeps the committed report in step)
 `python -m analysis.report_tex --zip reports/report_overleaf.zip` converts the assembled Markdown to
 `reports/report.tex` (article class, booktabs tables, thebibliography, linked citations) and bundles it with its
 figures for Overleaf; a test keeps the committed `.tex` in step with the report.
+`python -m analysis.demo_figure` renders the report's demo figure from a recorded analysis with the app's own
+renderer and headless Chrome (macOS Chrome path by default).
 
 ## Compute
 

@@ -6,7 +6,11 @@ Written 2026-10-25 at the end of the second session of the day. Read with: `CLAU
 
 ## Where things stand
 
-- **7.4 report (awaiting Parsa's final read):** `reports/report.md`, 3,989 words all-in (3,835 for Sections 1–10;
+- **7.4 report, revised after the rubric read (awaiting Parsa's final read and an Overleaf recompile):** 6 figures
+  (new: `pipeline.png` from `analysis/figures.py`, `demo_ghost.png` from `analysis/demo_figure.py`), 12 tables (10 in
+  the body, Appendix A holds the panel tables; Table 10 is the risk/mitigation table), 3,996 words all-in (3,842 for
+  Sections 1–10; the brief's 3,000–4,000 is met on either count).
+- **Report (before the revision):** `reports/report.md`, 3,989 words all-in (3,835 for Sections 1–10;
   `python -m analysis.report --words`), checker zero errors, 30 IEEE references. Parsa's only edit so far (Demo and Code
   links on two lines) is in `reports/report_source.md`; `reports/report.docx` rebuilt from it. **Edit the prose in
   `report_source.md`, never in `report.md`;** then `python -m analysis.report`, `--check`, `--words`, the checker
@@ -22,7 +26,7 @@ Written 2026-10-25 at the end of the second session of the day. Read with: `CLAU
   the four figures (zip gitignored). **Never compiled here** (no TeX on the Mac): upload the zip to Overleaf, compile
   with pdfLaTeX, fix what the log says in `analysis/report_tex.py` (never by hand in the .tex), rebuild. Once it
   compiles, the Overleaf PDF can replace the .docx as the submitted copy if the outline allows a PDF.
-- **7.5:** the GenAI acknowledgement at the end of the report; Parsa confirms or edits the claims before submission.
+- **7.5:** the GenAI acknowledgement, short form as Parsa asked on 2026-10-25 (assistant for speed; decisions, review and final text the author's); Parsa confirms the wording before submission.
   **Not cited:** Claude Opus 5.5 / Haiku 5.5 (no vendor page surfaced); add a reference if Parsa has the URL.
 - **7.6 done:** README rewritten; `configs/smoke.yaml` redirects packs and embeddings under `data/processed_smoke/`
   and defines the smoke pack build (`embed`, `index`, `cohort_report`); builder bug fixed (pack folder of a pack built
@@ -40,8 +44,10 @@ Written 2026-10-25 at the end of the second session of the day. Read with: `CLAU
   `reports/report.docx`, `reports/report.md`, `reports/report_source.md`, `runs/log.csv`, `tests/test_builder.py`,
   `tests/test_report.py`, `tests/test_run.py`, `CHANGELOG.md`, `HANDOFF.md`; new `reports/demo_video_plan.md`,
   `reports/submission_v0.1-class.md`: **committed as b5bbedb.** After it, uncommitted: `analysis/report_tex.py`,
-  `tests/test_report_tex.py`, `reports/report.tex`, `.gitignore`, README, CHANGELOG, HANDOFF, plan note. Commit authored by Parsa only.
-- Tests: 489 passed (27 s).
+  `tests/test_report_tex.py`, `reports/report.tex`, `.gitignore`, README, CHANGELOG, HANDOFF, plan note: committed (046353a,
+  4a03462, 35d88b9). After those, uncommitted: the rubric revision (figures, demo_figure, tables split, source, md/docx/tex,
+  tests, CHANGELOG, HANDOFF, plan, README). Commit authored by Parsa only.
+- Tests: 491 passed (26 s).
 
 ## Next session, in order
 
@@ -68,7 +74,7 @@ Written 2026-10-25 at the end of the second session of the day. Read with: `CLAU
 ## Checks before starting
 
 ```bash
-.venv/bin/python -m pytest -q        # expected: 489 passed
+.venv/bin/python -m pytest -q        # expected: 491 passed
 git status --short                   # this session's changes, unless committed
 .venv/bin/python -m analysis.report --check                              # expected: up to date
 .venv/bin/python -m analysis.report_tex --check                          # expected: up to date

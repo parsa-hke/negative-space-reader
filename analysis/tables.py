@@ -258,7 +258,16 @@ def synth_md(tables: Path, V: Values) -> str | None:
                 cells.append(f"{f3(r['value'])} {ci(r['ci_low'], r['ci_high'])}{n}")
             rows.append([REGIME_NAMES[regime] if s == SYSTEMS[0] else "", SYSTEM_NAMES[s]] + cells)
     md += table(header, rows)
-    # other metrics, single_type, the two baselines
+    return md
+
+
+def synth_more_md(tables: Path, V: Values) -> str | None:
+    """The other ranking metrics and the untouched-document panels of OmitBench-synthetic (appendix)."""
+    data = {g: _read(tables / f"bench_synth_{g}.csv") for g in GENRES if (tables / f"bench_synth_{g}.csv").is_file()}
+    if not data:
+        return None
+    genres = list(data)
+    md = _source("bench_synth_<genre>.csv")
     rows = []
     for metric in ("recall@1", "recall@10", "mrr", "ndcg@10"):
         for s in ("genre_uniform", "level1"):
@@ -271,7 +280,7 @@ def synth_md(tables: Path, V: Values) -> str | None:
                 V.put(f"synth/{g}/single_type/{s}/{metric}", float(r["value"]))
                 cells.append(f"{f3(r['value'])} {ci(r['ci_low'], r['ci_high'])}")
             rows.append([metric if s == "genre_uniform" else "", SYSTEM_NAMES[s]] + cells)
-    md += "\n**Other ranking metrics, one-type regime:**\n\n" + table(["metric", "system"] + [GENRE_NAMES[g] for g in genres], rows)
+    md += "**Other ranking metrics, one-type regime:**\n\n" + table(["metric", "system"] + [GENRE_NAMES[g] for g in genres], rows)
     rows = []
     for metric, label in (("false_alarm@5", "false alarms@5 (share of the top 5 in fact present)"),
                           ("ece_expected", "ECE of P(expected) against the judge")):
@@ -372,11 +381,39 @@ def revision_md(tables: Path, V: Values) -> str | None:
 
 
 def leak_md(tables: Path, V: Values) -> str | None:
+    """The headline of the cohort diagnosis: the plan's default cohort against genre-wide prevalence, per genre
+    (within-document AUC, the one-type recall@5 gain seen from the edited and the original document, the leak)."""
     genres = [g for g in GENRES if (tables / f"cohort_diagnosis_{g}.csv").is_file()]
     if not genres:
         return None
     md = _source("cohort_diagnosis_<genre>.csv")
-    md += ("**Cohort diagnosis** (decision record 007): how well cohort prevalence predicts which types an untouched test document states "
+    md += ("**Cohort diagnosis, the default cohort** (decision record 007; within-document AUC of cohort prevalence on untouched test "
+           "documents; recall@5 gain over genre-uniform on the one-type regime with the cohort retrieved from the edited document, "
+           "what the system sees, and from the original; the leak is their difference):\n\n")
+    rows = []
+    for g in genres:
+        data = _read(tables / f"cohort_diagnosis_{g}.csv")
+        uni = _row(data, variant="genre_uniform")
+        d = _row(data, variant="default")
+        if d is None:
+            continue
+        cells = [GENRE_NAMES[g], f3(uni["within_doc_auc"]) if uni and uni.get("within_doc_auc") else "",
+                 f"{f3(d['within_doc_auc'])} {ci(*parse_interval(d['within_doc_auc_ci'])[1:])}" if d.get("within_doc_auc") else ""]
+        for key in ("single_type/edited_minus_uniform", "single_type/original_minus_uniform", "single_type/leak_original_minus_edited"):
+            iv = parse_interval(d.get(key))
+            cells.append(f"{s3(iv[0])} {ci(iv[1], iv[2], signed=True)}" if iv else "")
+        rows.append(cells)
+    md += table(["genre", "AUC, genre-uniform", "AUC, default cohort", "edited − uniform", "original − uniform", "leak (original − edited)"], rows)
+    return md
+
+
+def leak_full_md(tables: Path, V: Values) -> str | None:
+    """Every cohort variant (appendix)."""
+    genres = [g for g in GENRES if (tables / f"cohort_diagnosis_{g}.csv").is_file()]
+    if not genres:
+        return None
+    md = _source("cohort_diagnosis_<genre>.csv")
+    md += ("**Cohort diagnosis, every variant** (decision record 007): how well cohort prevalence predicts which types an untouched test document states "
            "(within-document AUC), and on the one-type regime the recall@5 gain over genre-uniform with the cohort retrieved from the edited "
            "document (what the system sees) and from the original (before the deletion); the leak is their difference. "
            "The variant selected on the test bench (post_hoc_best) is not shown: it is not a gate result.\n\n")
@@ -599,8 +636,9 @@ def agreement_md(tables: Path, V: Values) -> str | None:
 # ------------------------------------------------------------------------------------------------------------------- main
 
 FRAGMENTS = [("corpus", corpus_md), ("presence", presence_md), ("agreement", agreement_md), ("synth", synth_md),
-             ("gate66", gate66_md), ("revision", revision_md), ("leak", leak_md), ("llm_gap", llm_gap_md),
-             ("speed", speed_md), ("errors", errors_md), ("severity", severity_md)]
+             ("synth_more", synth_more_md), ("gate66", gate66_md), ("revision", revision_md), ("leak", leak_md),
+             ("leak_full", leak_full_md), ("llm_gap", llm_gap_md), ("speed", speed_md), ("errors", errors_md),
+             ("severity", severity_md)]
 
 
 def write_all(tables: Path, out: Path) -> dict[str, Path]:

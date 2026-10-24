@@ -129,7 +129,8 @@ def test_parse_interval():
 def test_every_fragment_is_written_from_the_tables(tables, tmp_path):
     out = tmp_path / "fragments"
     written = write_all(tables, out)
-    names = {"corpus", "presence", "agreement", "synth", "gate66", "revision", "leak", "llm_gap", "speed", "errors", "severity", "values"}
+    names = {"corpus", "presence", "agreement", "synth", "synth_more", "gate66", "revision", "leak", "leak_full", "llm_gap", "speed",
+             "errors", "severity", "values"}
     assert set(written) == names
     assert (out / "MISSING.md").read_text(encoding="utf-8").startswith("Every fragment")
     for name in names - {"values"}:
@@ -138,7 +139,7 @@ def test_every_fragment_is_written_from_the_tables(tables, tmp_path):
         assert "| " in text, name
     synth = (out / "synth.md").read_text(encoding="utf-8")
     assert "0.500 [0.470, 0.530]" in synth and "privacy policies" in synth and "research papers" in synth
-    assert "0.205 [0.175, 0.235]" in synth  # false alarms copied
+    assert "0.205 [0.175, 0.235]" in (out / "synth_more.md").read_text(encoding="utf-8")  # false alarms copied (appendix)
     gate = (out / "gate66.md").read_text(encoding="utf-8")
     assert "+0.100 [+0.050, +0.150] ✓" in gate and "+0.010 [-0.010, +0.030] (n = 10)" in gate
     llm = (out / "llm_gap.md").read_text(encoding="utf-8")
@@ -151,7 +152,9 @@ def test_post_hoc_variant_is_never_shown_and_values_are_keyed(tables, tmp_path):
     out = tmp_path / "fragments"
     write_all(tables, out)
     leak = (out / "leak.md").read_text(encoding="utf-8")
-    assert "post hoc best" not in leak and "+0.015 [+0.005, +0.026]" in leak
+    full = (out / "leak_full.md").read_text(encoding="utf-8")
+    assert "post hoc best" not in leak + full and "+0.015 [+0.005, +0.026]" in leak and "+0.015 [+0.005, +0.026]" in full
+    assert leak.count("| privacy policies") == 1  # the headline: one row per genre, the default cohort
     values = json.loads((out / "values.json").read_text(encoding="utf-8"))
     assert values["gate66/papers/single_type"] == pytest.approx(0.1) and values["gate66/papers/single_type/above_zero"] is True
     assert values["gate66/privacy/single_type/above_zero"] is False

@@ -51,5 +51,5 @@ def test_draw_all_writes_one_png_per_figure(tmp_path):
                         **{f"{m}_ci": f"[{v - 0.05:.3f}, {v + 0.05:.3f}]" for m in ("recall@1", "recall@5", "recall@10")}})
         _write(tables / f"llm_gap_candidate_{g}.csv", llm)
     written = draw_all(tables, out)
-    assert sorted(p.name for p in written) == ["bench_recall5.png", "cohort_diagnosis.png", "level1_minus_uniform.png", "llm_gap.png"]
+    assert sorted(p.name for p in written) == ["bench_recall5.png", "cohort_diagnosis.png", "level1_minus_uniform.png", "llm_gap.png", "pipeline.png"]
     assert all(p.stat().st_size > 1000 for p in written)
