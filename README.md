@@ -170,6 +170,9 @@ python -m analysis.tables && python -m analysis.figures && python -m analysis.re
 `analysis/tables.py` writes the table fragments and `values.json`; `reports/report_source.md` holds the prose with
 value, fragment and citation placeholders; `analysis/report.py` assembles `reports/report.md` (`--check` fails when it
 is stale, `--words` counts the prose; a test keeps the committed report in step). Figures go to `reports/figures/`.
+`python -m analysis.report_tex --zip reports/report_overleaf.zip` converts the assembled Markdown to
+`reports/report.tex` (article class, booktabs tables, thebibliography, linked citations) and bundles it with its
+figures for Overleaf; a test keeps the committed `.tex` in step with the report.
 
 ## Compute
 

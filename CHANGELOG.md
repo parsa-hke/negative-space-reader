@@ -60,7 +60,22 @@ dropdown order corpus then benchmark per genre); nothing on the Space changed.
 and commands, the checklist in order. Package version 0.1.0 (`pyproject.toml`). **Open:** the GitHub repository is
 private; it must be public or shared with the marker before submission. The tag is not created yet.
 
-Tests: 485 passed (27 s). Nothing committed, no API call, the Space untouched, no §0.2 change.
+**LaTeX export for Overleaf (Parsa's request, after the commit):** `analysis/report_tex.py` (`tests/test_report_tex.py`,
+4 tests) converts the assembled `reports/report.md` to `reports/report.tex`, so the LaTeX carries the same numbers,
+tables and citations and nothing is typed twice: article class (11 pt, A4, lmodern, microtype, hyperref), the H1 and
+byline as title/author/date with the Demo and Code links under them, `## N. Title` as numbered sections (LaTeX numbers
+them in the same order), the abstract environment, the 16 pipe tables grouped into the 9 numbered floats by the
+`*Table N.*` caption that follows each group (bold panel titles kept between the panels; booktabs; `adjustbox` scales a
+wide table to the line), the 4 figures as floats, the formula line centred, the IEEE list as `thebibliography` with
+`\bibitem{r<n>}` and every in-text `[n, m]` as `\cite`, so numbers stay linked; `**`/`*`/`` ` `` to textbf/emph/texttt,
+bare URLs to `\url`, straight quotes to LaTeX quote pairs, specials escaped, the report's non-ASCII symbols (≥ − × ✓ ✗ ·)
+mapped to macros and any unmapped character an error rather than a silent blank under pdfLaTeX. `--check` and a test
+keep the committed `.tex` in step with `report.md`. `--zip` writes `reports/report_overleaf.zip` (the `.tex` and its four
+figures; gitignored, rebuilt on demand). Static checks: every environment balanced, braces balanced, 30 bibitems, 30
+citations, quote pairs balanced on every line. **Not compiled:** no TeX installation on this Mac (no pdflatex, tectonic
+or running Docker); first compile is on Overleaf (pdfLaTeX).
+
+Tests: 489 passed. Nothing further committed, no API call, the Space untouched, no §0.2 change.
 
 ## 2026-10-25 — Phase 7.4 and 7.5: the class report, built from the tables; `analysis/tables.py`; `.docx` export
 

@@ -58,3 +58,5 @@ packs/*/cascade*.json
 space/
 # Word lock files
 reports/~$*.docx
+# Overleaf bundle, rebuilt by analysis/report_tex.py --zip
+reports/report_overleaf.zip

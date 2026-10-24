@@ -17,6 +17,11 @@ Written 2026-10-25 at the end of the second session of the day. Read with: `CLAU
   If it is gone: `cd <scratch>/docxbuild && npm install docx` and copy the script from a previous scratchpad, or install
   pandoc (`pandoc reports/report.md -o reports/report.docx --resource-path=reports`). Word must be closed when the
   file is replaced (`reports/~$report.docx` is Word's lock file, now gitignored).
+- **LaTeX (Overleaf), Parsa's preferred format:** `python -m analysis.report_tex --zip reports/report_overleaf.zip`
+  converts `reports/report.md` to `reports/report.tex` (tracked; `--check` and a test keep it in step) and bundles it with
+  the four figures (zip gitignored). **Never compiled here** (no TeX on the Mac): upload the zip to Overleaf, compile
+  with pdfLaTeX, fix what the log says in `analysis/report_tex.py` (never by hand in the .tex), rebuild. Once it
+  compiles, the Overleaf PDF can replace the .docx as the submitted copy if the outline allows a PDF.
 - **7.5:** the GenAI acknowledgement at the end of the report; Parsa confirms or edits the claims before submission.
   **Not cited:** Claude Opus 5.5 / Haiku 5.5 (no vendor page surfaced); add a reference if Parsa has the URL.
 - **7.6 done:** README rewritten; `configs/smoke.yaml` redirects packs and embeddings under `data/processed_smoke/`
@@ -34,8 +39,9 @@ Written 2026-10-25 at the end of the second session of the day. Read with: `CLAU
   notes), `README.md`, `analysis/report.py`, `configs/smoke.yaml`, `packs/builder.py`, `pyproject.toml`,
   `reports/report.docx`, `reports/report.md`, `reports/report_source.md`, `runs/log.csv`, `tests/test_builder.py`,
   `tests/test_report.py`, `tests/test_run.py`, `CHANGELOG.md`, `HANDOFF.md`; new `reports/demo_video_plan.md`,
-  `reports/submission_v0.1-class.md`. Commit authored by Parsa only, no Claude co-author line.
-- Tests: 485 passed (27 s).
+  `reports/submission_v0.1-class.md`: **committed as b5bbedb.** After it, uncommitted: `analysis/report_tex.py`,
+  `tests/test_report_tex.py`, `reports/report.tex`, `.gitignore`, README, CHANGELOG, HANDOFF, plan note. Commit authored by Parsa only.
+- Tests: 489 passed (27 s).
 
 ## Next session, in order
 
@@ -62,9 +68,10 @@ Written 2026-10-25 at the end of the second session of the day. Read with: `CLAU
 ## Checks before starting
 
 ```bash
-.venv/bin/python -m pytest -q        # expected: 485 passed
+.venv/bin/python -m pytest -q        # expected: 489 passed
 git status --short                   # this session's changes, unless committed
 .venv/bin/python -m analysis.report --check                              # expected: up to date
+.venv/bin/python -m analysis.report_tex --check                          # expected: up to date
 .venv/bin/python -m experiments.hub_sync status --bundles runs,packs   # expected: 984 matched, 8 differ (space_cpu_timing) until pushed
 ```
 
@@ -73,7 +80,7 @@ git status --short                   # this session's changes, unless committed
 > Read CLAUDE.md, HANDOFF.md, NEGATIVE_SPACE_PLAN.md (Phase 7) and both CHANGELOG entries of 2026-10-25. We are on
 > Phase 7: 7.6 is done, 7.2 is planned, 7.7 is prepared, 7.4 and 7.5 await my read. Run the checks in HANDOFF.md and
 > tell me if anything differs. Then: (1) apply my edits to reports/report_source.md, rebuild reports/report.md and
-> reports/report.docx, rerun the checker and `python -m analysis.report --words`; (2) walk me through recording the
+> reports/report.docx, rerun the checker and `python -m analysis.report --words`, and rebuild reports/report.tex plus the Overleaf zip (tell me what the Overleaf log said so the exporter is fixed, not the .tex); (2) walk me through recording the
 > 7.2 video from reports/demo_video_plan.md (wake the Space first), then link the exported video in the README; (3)
 > when I confirm, commit everything as me, create and push the tag v0.1-class per reports/submission_v0.1-class.md, and
 > tick 7.2, 7.4, 7.5, 7.7 in the plan with the date; (4) update HANDOFF.md for Phase 8. Rules as before: every run
