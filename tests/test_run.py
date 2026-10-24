@@ -77,6 +77,12 @@ def test_repo_configs_resolve(config, overlays):
     assert cfg["distil"]["label_sections_per_genre"] == (200 if "smoke" in overlays else want["labels"])
     assert cfg["baselines"]["rag_peers"] == want["rag_peers"]
     assert cfg["corpus"]["max_documents_per_genre"] == (200 if "smoke" in overlays else 25000)
+    if "smoke" in overlays:  # 7.6: smoke never writes into the real corpus, embeddings, packs, tables or figures
+        for key in ("data_processed", "splits", "embeddings", "packs", "tables", "figures"):
+            assert cfg["paths"][key].startswith("data/processed_smoke"), key
+        assert cfg["build"]["stages"] == ["embed", "index", "cohort_report"] and cfg["build"]["allow_gpu_stages_on_cpu"]
+    else:
+        assert cfg["paths"]["packs"] == "packs" and cfg["paths"]["embeddings"] == "data/embeddings"
     teacher = cfg["models"]["teacher"]
     if "smoke" in overlays:
         assert (teacher["backend"], teacher["id"]) == ("transformers", "Qwen/Qwen2.5-1.5B-Instruct")

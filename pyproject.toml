@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "negspace"
-version = "0.0.1"
+version = "0.1.0"          # v0.1-class: the class submission (plan 7.7)
 description = "Negative-Space Reader: detecting what a document conspicuously omits, relative to its genre peers."
 authors = [{ name = "Parsa Hosseini" }]
 requires-python = ">=3.11,<3.12"

@@ -2,7 +2,9 @@
 
 Parsa Hosseini · MAAI 902 (NLP Solution Design), Assessment 2 · University of Wollongong in Dubai · October 2026
 
-Demo: https://huggingface.co/spaces/parsa-hke/negative-space-reader · Code: https://github.com/parsa-hke/negative-space-reader
+Demo: https://huggingface.co/spaces/parsa-hke/negative-space-reader
+
+Code: https://github.com/parsa-hke/negative-space-reader
 
 <!-- Every result number in this report is filled from reports/tables/report_fragments/values.json by key (the HTML
      comment after each sentence that carries one names the keys); the tables are the fragments written by

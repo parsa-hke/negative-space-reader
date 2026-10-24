@@ -359,6 +359,7 @@ def build(cfg: dict[str, Any], genre: str, stages: list[Stage], *, manifest_path
     import datetime
 
     manifest_path = Path(manifest_path)
+    manifest_path.parent.mkdir(parents=True, exist_ok=True)  # a pack built from nothing (fresh clone, smoke; 7.6)
     man = json.loads(manifest_path.read_text()) if manifest_path.exists() else {}
     man.setdefault("stages", {})
     models = {k: v.get("id") for k, v in (cfg.get("models") or {}).items() if isinstance(v, dict) and v.get("id")}

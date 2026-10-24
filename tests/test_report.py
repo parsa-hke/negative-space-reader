@@ -4,7 +4,7 @@ import json
 
 import pytest
 
-from analysis.report import build
+from analysis.report import build, word_counts
 
 
 def test_build_fills_values_includes_fragments_and_numbers_citations(tmp_path):
@@ -39,3 +39,10 @@ def test_committed_report_matches_its_source():
     values = json.loads((frag / "values.json").read_text(encoding="utf-8"))
     built = build(Path("reports/report_source.md").read_text(encoding="utf-8"), values, frag, REFS)
     assert built == Path("reports/report.md").read_text(encoding="utf-8")
+
+
+def test_word_counts_skip_tables_captions_figures_comments_and_the_genai_section():
+    report = ("# Title here\n\nBy me\n\n## Abstract\n\nfour words in here\n\n## 1. Body\n\n<!-- a comment -->\n"
+              "one two three\n\n| a | b |\n|---|---|\n| 1 | 2 |\n\n*Table 1. A caption.*\n\n![fig](x.png)\n\n"
+              "*Figure 1. Another.*\n\nfour five\n\n## GenAI acknowledgement\n\nnot counted at all\n\n## References\n\n[1] X.\n")
+    assert word_counts(report) == {"": 4, "Abstract": 4, "1. Body": 5}

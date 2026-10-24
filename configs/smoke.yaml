@@ -6,11 +6,18 @@
 run:
   seeds: [0]
 
-paths:                            # smoke never overwrites the real corpus, tables or figures
+paths:                            # smoke never overwrites the real corpus, embeddings, packs, tables or figures
   data_processed: data/processed_smoke
   splits: data/processed_smoke/splits
   tables: data/processed_smoke/tables
   figures: data/processed_smoke/figures
+  embeddings: data/processed_smoke/embeddings   # 2026-10-25 (7.6): the smoke pack build writes here ...
+  packs: data/processed_smoke/packs             # ... and here, never into packs/<genre>/
+
+build:                            # 7.6: the smoke pack build = the label-free stages on the 200-document corpus
+  stages: [embed, index, cohort_report]         # heads, prototypes and cascade need the recorded teacher labels of the
+                                                # real corpus (presence.labels), which the smoke corpus does not hold
+  allow_gpu_stages_on_cpu: true                 # 200 documents embed on the Mac in minutes
 
 corpus:
   max_documents_per_genre: 200

@@ -127,6 +127,17 @@ def toy_stages(root, calls):
     ]
 
 
+def test_builder_creates_the_pack_folder_of_a_pack_built_from_nothing(tmp_path):
+    from packs.builder import build
+
+    calls = []
+    (tmp_path / "src.txt").write_text("hello")
+    cfg = {"x": 1, "y": 2, "tier": "lean", "models": {}, "run": {"device": "cuda"}}
+    man = tmp_path / "packs" / "g" / "pack.json"  # no packs/ folder yet: the fresh-clone smoke build (7.6)
+    build(cfg, "g", toy_stages(tmp_path, calls)[:1], manifest_path=man, run_dir=tmp_path)
+    assert calls == ["a"] and json.loads(man.read_text())["stages"]["a"]["adopted"] is False
+
+
 def test_builder_skips_unchanged_stages_and_reruns_what_changed(tmp_path):
     import pytest
 

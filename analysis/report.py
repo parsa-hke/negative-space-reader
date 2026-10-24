@@ -2,6 +2,8 @@
 
     python -m analysis.report                      # default paths
     python -m analysis.report --check              # fail if reports/report.md is not what the source produces
+    python -m analysis.report --words              # prose word count per section (tables, captions, figures,
+                                                   # references and the GenAI acknowledgement excluded)
 
 The source carries three kinds of placeholder, so that no result number is typed by hand:
   {{v:key|fmt}}          a value from reports/tables/report_fragments/values.json (written by analysis/tables.py);
@@ -104,13 +106,39 @@ def build(source: str, values: dict, fragments: Path, refs: dict | None = None) 
     return text.replace("{{references}}", "\n".join(f"[{i + 1}] {refs[k]}" for i, k in enumerate(order)))
 
 
+def word_counts(report: str) -> dict[str, int]:
+    """Prose words per section of an assembled report: table rows, figure lines, captions and HTML comments do not
+    count; the GenAI acknowledgement and everything after it (the references) are left out. The title block counts
+    as the first section ('')."""
+    text = re.sub(r"<!--.*?-->", "", report, flags=re.S).split("## GenAI acknowledgement")[0]
+    parts = re.split(r"^(## .*)$", text, flags=re.M)
+
+    def count(block: str) -> int:
+        return sum(len(line.lstrip("#").split()) for line in block.splitlines()
+                   if line.strip() and not line.lstrip().startswith(("|", "!["))
+                   and not re.match(r"^\*(Figure|Table) \d", line.strip()))
+
+    out = {"": count(parts[0])}
+    for i in range(1, len(parts), 2):
+        out[parts[i][3:].strip()] = count(parts[i + 1])
+    return out
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--source", default="reports/report_source.md")
     ap.add_argument("--fragments", default="reports/tables/report_fragments")
     ap.add_argument("--out", default="reports/report.md")
     ap.add_argument("--check", action="store_true", help="exit 1 if --out differs from what the source produces")
+    ap.add_argument("--words", action="store_true", help="print the prose word count per section of --out and exit")
     a = ap.parse_args()
+    if a.words:
+        counts = word_counts(Path(a.out).read_text(encoding="utf-8"))
+        for name, n in counts.items():
+            print(f"{n:6,d}  {name or '(title block)'}")
+        body = sum(n for k, n in counts.items() if k and not k.startswith("Abstract"))
+        print(f"{sum(counts.values()):6,d}  total (title block and abstract included)\n{body:6,d}  sections 1 onward")
+        return
     fragments = Path(a.fragments)
     values = json.loads((fragments / "values.json").read_text(encoding="utf-8"))
     text = build(Path(a.source).read_text(encoding="utf-8"), values, fragments)

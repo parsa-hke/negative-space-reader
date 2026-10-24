@@ -56,3 +56,5 @@ packs/*/cascade*.json
 
 # The Hugging Face Space bundle (python -m app.space_bundle): assembled, never committed here
 space/
+# Word lock files
+reports/~$*.docx

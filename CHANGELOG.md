@@ -2,6 +2,66 @@
 
 Date, what was done, what was found (negative findings included). Newest first.
 
+## 2026-10-25 (second session) — 7.6 README and fresh-clone smoke; 7.2 video plan; 7.7 submission list; report rebuilt
+
+**Checks (HANDOFF):** pytest 483 passed; `analysis.report --check` up to date; hub status as recorded (984 matched, the
+eight files of the two `space_cpu_timing_<genre>_s0` runs differ / missing, not pushed). **Differs:** the tree was not
+clean: `reports/report.docx` had been re-saved by Word (lock file `~$report.docx` present, now gitignored); its only
+text change was the title block's Demo and Code links on two lines instead of one.
+
+**7.4 report:** that edit applied to `reports/report_source.md` (two paragraphs); `reports/report.md` rebuilt;
+`reports/report.docx` rebuilt with last session's docx-js converter (text extracted with `textutil` equals the one
+Parsa saved, word for word); checker zero errors (one info line, a passive in the GenAI section, intended).
+`python -m analysis.report --words` added (`tests/test_report.py`): prose words per section, tables, captions, figures,
+HTML comments, the GenAI section and the references excluded, heading markers not counted: **3,989 all-in, 3,835 for
+Sections 1–10** (last session's 3,991 / 3,865 counted the title block differently). 7.4 and 7.5 stay open for Parsa's
+read and confirmation.
+
+**7.6 README and fresh-clone smoke.**
+- `configs/smoke.yaml` now redirects `paths.embeddings` and `paths.packs` under `data/processed_smoke/` (smoke never
+  writes into `data/embeddings/` or `packs/<genre>/`; before, a smoke pack build would have rebuilt the real pack's
+  index over the smoke corpus) and defines `build.stages: [embed, index, cohort_report]` with
+  `build.allow_gpu_stages_on_cpu: true`: **the smoke pack build is the label-free part of the builder on the
+  200-document corpus with bge-small.** The presence stages (`heads`, `prototypes`, `cascade`, `section_probs`,
+  `sentence_evidence`, `doc_presence`) need the recorded teacher labels of the real corpus (`presence.labels`), which the
+  smoke corpus does not hold, so they are not part of smoke; the bench smoke is the `eval` stage on the recorded synth
+  instances. `tests/test_run.py` asserts the smoke paths and stages for every config.
+- **Engine bug found by the smoke build (negative finding, fixed):** `packs/builder.py` `build` wrote the manifest
+  `pack.json` into a pack folder it never created, so a pack built from nothing failed after its first stage
+  (`pack_privacy_smoke_s0`, `pack_papers_smoke_s0`, both `failed` in the log after embedding 5,840 / 5,314 sections in
+  16.7 / 33.9 s). Every earlier build had run over an existing folder. Fixed (`mkdir -p` of the manifest's folder;
+  `tests/test_builder.py`). Reruns `pack_privacy_smoke_s0_20261025-012509-021585` (24.9 s) and
+  `pack_papers_smoke_s0_20261025-012534-392621` (41.7 s): `ran ['embed', 'index', 'cohort_report']`; artefacts under
+  `data/processed_smoke/packs/<genre>/index/`, `tables/cohort_similarity_<genre>.csv`, `figures/`.
+- **Bench smoke:** `bench_eval_readme_s0` (`bench.stage=eval` on `runs/bench_synth_v1_s0`, default settings, 51.4 s)
+  writes `bench_synth_<genre>.csv` into the run folder **byte-identical** to `reports/tables/` (values and bootstrap
+  intervals: the bench is deterministic given `bench.seed`).
+- **Fresh clone** (`git clone` of HEAD plus this session's text changes into a scratch folder): `python3.11 -m venv`
+  and `pip install -e .` 60 s with cached wheels; `pytest` 484 passed, 1 skipped (the MLX teacher test, `.[mac]` not
+  installed), 2 min 8 s cold; `data/processed_smoke/` copied in (38 MB; a clone without the raw downloads cannot build
+  it); both smoke pack builds ok (28.6 s, 43.4 s wall, model loading included). Smoke passes from a clean checkout.
+- **README rewritten:** what it is, one-command setup, the three levels a clone can run (tests / smoke pack build /
+  smoke bench) and what each needs, the smoke corpus and the private hub bundles, `experiments/run.py` usage with every
+  overlay and task, **the pipeline as runs with the recorded durations and hardware** from `runs/log.csv`, the teacher
+  backends, the demo and the Space bundle, how the report is built, compute, models, layout. API costs copied from
+  this CHANGELOG (teacher labels ≈ $6.8, judge ≈ $1 + $2.6, Opus ≈ $4.2, Qwen ≈ $0.40). Nothing in it is taken from the
+  report's prose (Turnitin).
+
+**7.2 video plan** (`reports/demo_video_plan.md`): shot list with times and narration gist for 3–5 minutes on the Space
+(wake it first; it sleeps after 48 h idle); the Etilize policy and the FANS paper (the pinned corpus examples), the
+**MarIA benchmark instance as the reveal ending**: the recorded ranks (`runs/bench_eval_v2_s0/papers/per_instance.csv`,
+`app/examples/papers.json`) put three of its five removed types in level 1's top five (software and libraries at
+rank 1), two in Opus 5.5's (first hit at rank 2), none in Qwen's (first hit at rank 6). Fallback ending RSsportscars
+(Opus finds all three removed types, level 1 two of three in the top five). Every number in the narration checked
+against `values.json` and the tables. The examples were already pinned (`serve.examples`, `serve.bench_examples`;
+dropdown order corpus then benchmark per genre); nothing on the Space changed.
+
+**7.7 submission list** (`reports/submission_v0.1-class.md`): the four deliverables with their state, the tag message
+and commands, the checklist in order. Package version 0.1.0 (`pyproject.toml`). **Open:** the GitHub repository is
+private; it must be public or shared with the marker before submission. The tag is not created yet.
+
+Tests: 485 passed (27 s). Nothing committed, no API call, the Space untouched, no §0.2 change.
+
 ## 2026-10-25 — Phase 7.4 and 7.5: the class report, built from the tables; `analysis/tables.py`; `.docx` export
 
 **Checks (HANDOFF):** pytest 476 passed; git clean; `hub_sync status --bundles runs,packs` **differs from HANDOFF**:

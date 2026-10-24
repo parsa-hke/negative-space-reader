@@ -3,42 +3,74 @@
 Detecting what a document *conspicuously omits*, by modelling what its genre peers assert.
 MAAI 902 Assessment 2 (NLP Solution Design) → paper → product. Parsa Hosseini, UOWD, 2026.
 
-**Starting a session? Read [HANDOFF.md](HANDOFF.md) first** (current state, artefact locations, open decisions). The working plan is [NEGATIVE_SPACE_PLAN.md](NEGATIVE_SPACE_PLAN.md); progress and findings are in [CHANGELOG.md](CHANGELOG.md); design decisions written for the report are in [reports/decisions/](reports/decisions/).
-Status: **Phases 1 and 2 done; task 3.1 iterated locally** (72B confirmation pending, plan Appendix D); architecture revised to the lean/full tier design (decision 001). Modules from Phase 3 on are stubs until their task.
+Given a document and a corpus of its genre, the engine ranks the kinds of statement the document lacks by how many of
+its 200 closest peers make them, and shows the peers' own sentences as evidence. Two genres ship as **packs** (privacy
+policies, 58 kinds of statement; cs.CL/cs.LG papers, 47): the engine has no genre-specific code. Nothing is a verdict:
+every number is a count of peers and every quote is theirs.
 
-## The two tiers
+- **Demo:** https://huggingface.co/spaces/parsa-hke/negative-space-reader (public, free CPU hardware; it sleeps after
+  two idle days and wakes on the first visit).
+- **Report:** [reports/report.md](reports/report.md) (`reports/report.docx` is the submitted copy).
+- **Status:** Phases 1–7 of [NEGATIVE_SPACE_PLAN.md](NEGATIVE_SPACE_PLAN.md) on the lean tier, tag `v0.1-class`.
+  Progress and findings, including negative ones, are in [CHANGELOG.md](CHANGELOG.md); design decisions written for the
+  report are in [reports/decisions/](reports/decisions/). **Starting a work session? Read [HANDOFF.md](HANDOFF.md).**
 
-Every swappable component is a config key with a **lean** default and a **full** alternative (plan §0.2 #25). The engine, benchmark and MAM are the same in both; only the models plugged in differ.
+## One-command setup
 
-| Component | Lean (default) | Full (`--overlay full`) |
-|---|---|---|
-| Embedder | `Qwen/Qwen3-Embedding-0.6B` | `Qwen/Qwen3-Embedding-8B` |
-| Late interaction | `answerdotai/answerai-colbert-small-v1` | `jinaai/jina-colbert-v2` (CC-BY-NC) |
-| Presence classifier | logistic heads on frozen embeddings, labels from OPP-115 + ~2k teacher labels (`presence.head: linear`, `setfit`) | ModernBERT-large fine-tune on 5k teacher labels (`finetune`) |
-| Explanations | template from evidence (`explain.mode: template`) | teacher rationale, opt-in (`teacher`) |
-| Real-omission benchmark | OmitBench-revision + 50-doc validation (`bench.real.source: revision`) | 150 × 2 blind annotation (`annotation`) |
-| Corpus | 20–30k documents per genre, both tiers | |
-
-The lean tier runs on the Mac overnight and costs about $10 in API calls for the class (the frontier-model baseline). Full details, rationale and trade-offs: [reports/decisions/001-lean-architecture.md](reports/decisions/001-lean-architecture.md).
-
-## Setup
-
-Python 3.11 is required (pinned in `pyproject.toml`).
+Python 3.11 is required (pinned in `pyproject.toml`; `python3.11` must be on the path).
 
 ```bash
-python3.11 -m venv .venv
-.venv/bin/pip install -e .
+python3.11 -m venv .venv && .venv/bin/pip install -e .
 ```
 
-Optional extras:
+Then the tests, which need no data and no model weights beyond two optional tiny ones:
 
-| Extra | Where | What |
-|---|---|---|
-| `.[mac]` | Apple Silicon | `mlx-lm` for the local teacher (Qwen2.5-7B-Instruct 4-bit) |
-| `.[gpu]` | Linux + CUDA | vLLM (pins `torch==2.13.0`, which matches ours) |
-| `.[tracking]` | anywhere | wandb |
+```bash
+.venv/bin/python -m pytest -q
+```
 
-`requirements.txt` is the full transitive freeze of the local environment, kept for the record.
+Optional extras: `.[mac]` (Apple Silicon: `mlx-lm` for the local 7B teacher), `.[gpu]` (Linux + CUDA: vLLM),
+`.[tracking]` (wandb). `requirements.txt` is the transitive freeze of the development machine, for the record.
+
+## What a fresh clone can run
+
+The corpora, embeddings, pack artefacts, run folders and caches are never committed (`.gitignore`): they are third-party
+text or rebuildable. Three levels of "it works", from nothing to everything:
+
+| Level | Needs | Command | Time on the M5 |
+|---|---|---|---|
+| Tests | the clone | `.venv/bin/python -m pytest -q` | ≈ 25 s (485 tests) |
+| Smoke pack build | the 200-document smoke corpus (38 MB, see below) | `python -m experiments.run --config configs/pack_privacy.yaml --overlay local --overlay smoke` (same for `pack_papers`) | privacy ≈ 25 s, papers ≈ 42 s |
+| Smoke bench | the recorded bench artefacts (`hub_sync pull --bundles runs,packs`) | `python -m experiments.run --config configs/bench.yaml --set bench.stage=eval --set 'bench.eval.synth=runs/bench_synth_v1_s0/{genre}'` | 51 s; reproduces `reports/tables/bench_synth_<genre>.csv` exactly |
+| Everything | the raw downloads (57 GB) or the hub bundles | the runs in the table further down | hours to days, see below |
+
+**The smoke corpus** (`data/processed_smoke/`, 200 documents per genre, written by the data build with the `smoke`
+overlay) needs the raw downloads listed in [data/README.md](data/README.md):
+
+```bash
+python -m experiments.run --config configs/data.yaml --overlay local --overlay smoke
+```
+
+**The smoke pack build** runs the label-free stages of the pack builder (`embed`, `index`, `cohort_report`) on that
+corpus with the smoke models (`BAAI/bge-small-en-v1.5`), and writes only under `data/processed_smoke/` (`packs/`,
+`embeddings/`, `tables/`, `figures/`): the real packs are never touched. The presence stages (`heads`, `prototypes`,
+`cascade`, …) need the recorded teacher labels of the real corpus and are not part of smoke. Smoke must pass before
+any full run (CLAUDE.md); the smoke overlay goes last so that its models win: `--overlay local --overlay smoke`.
+
+**Fresh-clone test (2026-10-25):** `git clone`, the one-command setup (60 s with cached wheels; the first
+install downloads about 3 GB of wheels), `pytest` (484 passed, 1 skipped: the MLX teacher test, since the `.[mac]` extra
+was not installed; 2 min 8 s on a cold cache), the smoke corpus copied in, both smoke pack builds (28.6 s and 43.4 s,
+model loading included). It found and fixed one bug: the builder did not create the pack folder of a
+pack built from nothing.
+
+**The private data repo.** Everything gitignored but needed to reproduce a run travels through one private Hugging Face
+dataset repo (`hub.repo` in `configs/base.yaml`), as named bundles:
+
+```bash
+python -m experiments.hub_sync pull --bundles data,embeddings,packs,runs
+```
+
+`status` compares without writing; `push` uploads what differs (never while a job writes into a bundle).
 
 ## Running things
 
@@ -52,67 +84,92 @@ python -m experiments.run --device-info
 python -m experiments.run --config configs/induce.yaml --overlay local --overlay smoke --set pack=papers
 ```
 
-- `--overlay NAME` applies `configs/NAME.yaml` on top (repeatable, in order; put the compute overlay first and `smoke` last).
-  - **Compute:** `local` (Mac, MPS, MLX teacher), `gpu` (server, vLLM teacher), `openrouter` (72B teacher through OpenRouter; needs `OPENROUTER_API_KEY` in the environment).
-  - **Mode:** `smoke` (200 documents per genre, tiny models, one seed), `full` (the full tier).
-- `--set dotted.key=value` overrides one key (value parsed as YAML). Unknown keys are rejected; prefix with `+` to add one.
-- `--seed N` limits the run to seed N; otherwise every seed in `run.seeds` runs.
-- `--print-config` prints the resolved config and exits.
-- Tasks: `build_pack | induce | distil | train_mam | bench | baselines | drift | serve`.
-- Each (config, seed) writes `runs/<name>_s<seed>/{config.yaml,metrics.json}` and appends a line to `runs/log.csv` (failed and interrupted runs too). The line records the tier, config hash, git commit, device, the version and hash of every prompt rendered, and which model build served every teacher call.
+- `--overlay NAME` applies `configs/NAME.yaml` on top (repeatable, in order; compute overlay first, `smoke` last).
+  - **Compute:** `local` (Mac, MPS, MLX teacher), `lab` (the UOWD machine, llama.cpp teacher), `colab` (CUDA, fp16),
+    `gpu` (a Linux server with vLLM), `openrouter` (72B teacher through OpenRouter; `OPENROUTER_API_KEY`),
+    `llm_gap_anthropic` / `judge_anthropic` (Claude through the Anthropic SDK; `ANTHROPIC_API_KEY`).
+  - **Mode:** `smoke` (200 documents per genre, tiny models, one seed, everything under `data/processed_smoke/`),
+    `full` (the full tier: every tiered key flipped at once, plan §0.2 #25).
+- `--set dotted.key=value` overrides one key (YAML-parsed; unknown keys are rejected, `+key` adds one); `--seed N`;
+  `--name` names the run; `--print-config` shows the resolved config.
+- Tasks: `build_data | build_pack | embed | induce | distil | train_mam | bench | analyse | baselines | drift | serve`.
+- Each (config, seed) writes `runs/<name>_s<seed>/{config.yaml,metrics.json}` and one line to `runs/log.csv`, failed
+  and interrupted runs included: tier, config hash, git commit, device, the version and hash of every prompt rendered,
+  which model build served every teacher call. Of `runs/`, only `log.csv` is tracked.
+
+### The pipeline, as runs (lean tier)
+
+Recorded durations from `runs/log.csv`; the hardware column names where the recorded run happened.
+
+| Step (plan) | Config and stage | Hardware | Duration |
+|---|---|---|---|
+| Corpus build, both genres (Phase 2) | `data.yaml --overlay local` | M5 | 3–4 min per genre, plus ≈ 1.5 h once for the arXiv e-prints of the revision pairs (one request per 3 s, cached) |
+| Schema induction: extraction (3.1–3.3) | `induce.yaml --overlay lab`, `induce.stage=extract` | lab, Qwen2.5-32B Q4_K_M on 4 GPUs | 107 min for 500 policies; 179 min for 303 papers (stopped at the session deadline) |
+| Schema induction: cluster, name, review, freeze (3.3–3.6) | `induce.yaml`, stages `cluster`, `name`, `candidate`, `freeze` | M5 / OpenRouter | minutes each; naming ≈ 8–10 min per genre through OpenRouter |
+| Teacher labels, ≈ 2k sections per genre (4.1–4.2) | `distil.yaml --overlay openrouter`, `distil.stage=teacher_labels` | OpenRouter, Qwen2.5-72B | ≈ 1.5 h both genres, ≈ $7 |
+| Silver reference labels (4.2) | `distil.yaml --overlay judge_anthropic` | Anthropic API, Claude Haiku 5.5 | ≈ 10 min, ≈ $1 (plus ≈ $2.6 for the document-level set) |
+| Corpus embeddings (5.1) | `embed.yaml --overlay lab` | lab, one GPU | 29 min both genres (Qwen3-Embedding-0.6B) |
+| Presence heads and cascade thresholds (4.3–4.5) | `pack_<genre>.yaml` stages `heads`, `prototypes`, `cascade` | M5 | seconds; cascade ≈ 2 min |
+| Section probabilities and sentence evidence (Phase 5) | `pack_<genre>.yaml` stages `section_probs`, `sentence_evidence` | Colab A100 (`colab_jobs.yaml`) | 30 min and 2.4 h, both genres |
+| Document presence, profiles, index, evidence (5.1–5.6) | `pack_<genre>.yaml` stages `doc_presence`, `index`, `evidence` | M5 | seconds per stage |
+| Gate 5.9: analyse held-out documents | `pack_<genre>.yaml` stage `analyse_gate` | M5, MPS | 0.74 s per policy, 2.2 s per paper |
+| OmitBench-synthetic: test probabilities, instances, scoring (6.1–6.3) | `bench.yaml`, stages `probs`, `synth`, `eval` | Colab A100; eval on the M5 | 23 min; 1.8 h; 51 s |
+| OmitBench-revision (6.3b) | `bench.yaml`, stages `revision_probs`, `revision` | M5 | 1.8 h; 3.5 min |
+| Cohort diagnosis, error analysis, severity ablation (6.4–6.6) | `bench.yaml`, stages `diagnose`, `errors`; `rank.use_severity_weights=true` | M5 | 9 min; 5 s; 52 s |
+| Frontier comparison, candidate-list setting (7.3) | `baselines.yaml --overlay llm_gap_anthropic` / `--overlay openrouter` | Anthropic Message Batches; OpenRouter | 12 min, ≈ $4.2 (Claude Opus 5.5); 4.7 min, ≈ $0.40 (Qwen2.5-72B) |
+| The demo (7.1) | `serve.yaml` | M5 | app ready in ≈ 15 s; on the Space's free CPU 9.6 s per policy, 36 s per paper |
+
+A full pack rebuild is one command per genre; the builder skips every stage whose inputs, settings and model ids are
+unchanged, and a stale GPU stage on a machine without CUDA stops and names its Colab job instead of running for hours:
+
+```bash
+python -m experiments.run --config configs/pack_privacy.yaml --name pack_privacy
+```
 
 ### The teacher
 
-One `Teacher` interface, four backends, chosen by the compute overlay, never by code ([models/teacher.py](models/teacher.py)):
+One `Teacher` interface, several backends, chosen by the compute overlay, never by code ([models/teacher.py](models/teacher.py)):
 
 | Backend | Overlay | Model | Use |
 |---|---|---|---|
-| `mlx` | `local` | `mlx-community/Qwen2.5-7B-Instruct-4bit`, 24 tok/s on the M5 | prompt iteration, coverage checks |
-| `vllm` | `gpu` | `Qwen/Qwen2.5-72B-Instruct-AWQ` | the recorded extraction pass, genre-B labels |
-| `openai` | `openrouter` | `qwen/qwen-2.5-72b-instruct`, provider pinned to `deepinfra/fp8`, fallbacks off | the same pass from home, ≈ $13 |
-| `transformers` | `smoke` | `Qwen/Qwen2.5-1.5B-Instruct` | tests |
+| `mlx` | `local` | `mlx-community/Qwen2.5-7B-Instruct-4bit` | prompt iteration, coverage checks |
+| `openai` (llama.cpp server) | `lab` | `Qwen2.5-32B-Instruct` Q4_K_M, one server per GPU | the recorded schema-induction pass (decision record 002) |
+| `openai` (OpenRouter) | `openrouter` | `qwen/qwen-2.5-72b-instruct`, provider pinned | teacher labels, cluster naming, the open-model baseline |
+| `anthropic` | `judge_anthropic`, `llm_gap_anthropic` | Claude Haiku 5.5, Claude Opus 5.5 | silver reference labels; the frontier baseline |
+| `vllm` | `gpu` | `Qwen/Qwen2.5-72B-Instruct-AWQ` | a CUDA server with vLLM, if one is available |
+| `transformers` | `smoke` | `Qwen/Qwen2.5-1.5B-Instruct` | tests and smoke |
 
-All backends return validated pydantic objects from `generate_structured(prompt, Model)` and cache every response on disk (`models.teacher.cache_dir`), so a rerun is free and byte-identical. Prompts live in `prompts/*.md` with a version header; their hashes are logged per run.
+All backends return validated pydantic objects and cache every response on disk (`models.teacher.cache_dir`), so a rerun
+is free and byte-identical. Prompts live in `prompts/*.md` with a version header; their hashes are logged per run. The
+teacher is never on the per-query path: the demo calls no API.
 
-## Data (Phase 2)
-
-Sources, licences and the real field names are in [data/README.md](data/README.md). Raw files go in `data/raw/<source>/` (about 57 GB in total, mostly the Princeton SQLite). Download commands and URLs are listed there.
-
-Build both genres (about 7 minutes on the M5 plus the arXiv e-print fetch, which is cached and rate-limited):
-
-```bash
-python -m experiments.run --config configs/data.yaml --overlay local
-```
-
-Smoke build (200 documents per genre, writes to `data/processed_smoke/`):
+## The demo
 
 ```bash
-python -m experiments.run --config configs/data.yaml --overlay local --overlay smoke
+python -m experiments.run --config configs/serve.yaml
 ```
 
-Outputs per genre in `data/processed/<genre>/`: `documents.jsonl`, `sections.jsonl`, `sentences.jsonl`, `revisions.jsonl` with `revisions/` (the version texts), and for privacy `opp115_labels.jsonl`. Split manifests with the sealed test hash are in `data/processed/splits/`; tables in `reports/tables/` (`corpus_stats`, `corpus_sample`, `dedup`, `revisions`); loader previews in `reports/figures/loader_check_<source>.html`.
+Opens http://127.0.0.1:7860: paste or upload a document, or pick one of the pinned examples (two corpus documents and
+four OmitBench instances with the recorded chat-model answers, `app/examples/`, rebuilt by `python -m app.examples`
+when tables or runs change). Ghost paragraphs mark the ranked absences where peers usually make the statement; a click
+opens the evidence panel; the cohort panel re-ranks by k, category and date window without re-embedding; the comparison
+toggle shows the recorded answers of Claude Opus 5.5 and Qwen2.5-72B for a benchmark document. The About tab's numbers
+come from `reports/tables/` through `app/examples/results.json`, never typed.
 
-| | privacy | papers |
-|---|---|---|
-| documents (train / dev / test) | 28,440 (22,300 / 3,043 / 3,097) | 17,644 (14,114 / 1,784 / 1,746) |
-| sections / sentences | 248k / 1.7M | 373k / 5.0M |
-| years | 1998–2019 | 2018–2022 |
+`python -m app.space_bundle` assembles the Hugging Face Space in `space/` (gitignored): the code, the configs, the
+examples and the subset of each pack the app reads, with no corpus. It copies; uploading is a separate, deliberate step.
 
-## Tests
+## The report
+
+Every number in the report comes from `reports/tables/*.csv`:
 
 ```bash
-.venv/bin/python -m pytest
+python -m analysis.tables && python -m analysis.figures && python -m analysis.report
 ```
 
-About 15 s on the M5 (plus the two model tests). Two tests load real models and are skipped if the weights are not in the Hugging Face cache:
-
-```bash
-.venv/bin/hf download Qwen/Qwen2.5-1.5B-Instruct
-```
-
-```bash
-.venv/bin/hf download mlx-community/Qwen2.5-7B-Instruct-4bit
-```
+`analysis/tables.py` writes the table fragments and `values.json`; `reports/report_source.md` holds the prose with
+value, fragment and citation placeholders; `analysis/report.py` assembles `reports/report.md` (`--check` fails when it
+is stale, `--words` counts the prose; a test keeps the committed report in step). Figures go to `reports/figures/`.
 
 ## Compute
 
@@ -120,28 +177,33 @@ Recorded with `python -m experiments.run --device-info` (plan §0.6).
 
 | Target | Hardware | Role in the lean tier |
 |---|---|---|
-| Local | Apple M5, 10 cores, 24.0 GiB unified memory (17.8 GiB usable by MPS), macOS 27.0.1, torch 2.13.0, MPS, no CUDA | primary: data build, embeddings, presence heads, index, MAM, bench, demo; 7B teacher for iteration |
-| UOWD lab machine | Windows Server 2022, 4 × RTX 5000 Ada 32 GiB (128 GiB), 112 cores, 1 TB RAM, driver 581.42, torch 2.13.0+cu126; no vLLM | teacher via llama.cpp (Qwen2.5-32B Q4_K_M, one server per GPU), corpus embeddings; `lab_session.py` (decision record 002) |
-| OpenRouter | API | the 72B teacher from home; frontier baselines |
-| Google Colab Pro | A100 40 GB or L4 24 GB, varies | fallback; CUDA rehearsal for the vLLM path |
-
-**Teacher (plan §0.2 #6): `Qwen/Qwen2.5-72B-Instruct`.** Precision on the server depends on its VRAM: bf16 with tensor parallelism on ≥ 4×80 GB (145 GB of weights); `-AWQ` (41.6 GB) on 1×80 GB or ≥ 2×48 GB (the `gpu.yaml` default); `Qwen/Qwen2.5-32B-Instruct-AWQ` below 48 GB.
+| Local | Apple M5, 10 cores, 24 GiB unified memory, macOS 27, torch 2.13.0, MPS | primary: data build, heads, index, bench scoring, demo, tests, smoke |
+| UOWD lab machine | Windows Server 2022, 4 × RTX 5000 Ada 32 GiB, torch 2.13.0+cu126; no vLLM | schema extraction (llama.cpp), corpus embeddings; `lab_session.py` (decision record 002, plan Appendix D) |
+| Google Colab Pro | A100 40 GB | the long presence and bench stages (`configs/colab_jobs.yaml`, `notebooks/`) |
+| OpenRouter, Anthropic API | API | the 72B teacher from home; silver labels; the frontier baseline (about $20 of API spend for the whole class project, CHANGELOG) |
+| Hugging Face Space | `cpu-basic`, 2 vCPU, 16 GB | the public demo |
 
 ## Models
 
-All checked on the Hugging Face hub on 2026-10-12. Weight sizes are the safetensors/bin totals.
+All checked on the Hugging Face hub (CHANGELOG 2026-10-12, 2026-10-18).
 
-| Role | Lean | Full | Smoke |
+| Role | Lean (default) | Full (`--overlay full`) | Smoke |
 |---|---|---|---|
-| Teacher | `Qwen/Qwen2.5-72B-Instruct` (Qwen licence; 145 GB / AWQ 41.6 GB); local proxy `mlx-community/Qwen2.5-7B-Instruct-4bit` | same | `Qwen/Qwen2.5-1.5B-Instruct` (Apache-2.0) |
-| Teacher fallback | `Qwen/Qwen2.5-32B-Instruct` (Apache-2.0; 65.5 GB / AWQ 19.3 GB) | same | |
-| Embedder | `Qwen/Qwen3-Embedding-0.6B` (Apache-2.0, 1.2 GB); fallback `BAAI/bge-m3` (MIT) | `Qwen/Qwen3-Embedding-8B` (Apache-2.0, 15.1 GB); fallback `nvidia/NV-Embed-v2` (**CC-BY-NC**) | `BAAI/bge-small-en-v1.5` |
-| Late interaction | `answerdotai/answerai-colbert-small-v1` (Apache-2.0) | `jinaai/jina-colbert-v2` (**CC-BY-NC**) | same as lean |
-| Reranker | `BAAI/bge-reranker-v2-m3` (Apache-2.0); upgrade candidate `Qwen/Qwen3-Reranker-8B` | same | `cross-encoder/ms-marco-MiniLM-L6-v2` |
-| Presence classifier | heads on the embedder | `answerdotai/ModernBERT-large` (Apache-2.0); fallback `microsoft/deberta-v3-large` (MIT) | `answerdotai/ModernBERT-base` |
+| Teacher | `Qwen/Qwen2.5-72B-Instruct` (recorded pass: `Qwen2.5-32B-Instruct` Q4_K_M, decision 002) | same | `Qwen/Qwen2.5-1.5B-Instruct` |
+| Embedder | `Qwen/Qwen3-Embedding-0.6B` (Apache-2.0) | `Qwen/Qwen3-Embedding-8B` | `BAAI/bge-small-en-v1.5` |
+| Late interaction | `answerdotai/answerai-colbert-small-v1` (Apache-2.0) | `jinaai/jina-colbert-v2` (CC-BY-NC) | same as lean |
+| Reranker (ablation only in the lean tier) | `BAAI/bge-reranker-v2-m3` | same | `cross-encoder/ms-marco-MiniLM-L6-v2` |
+| Presence classifier | calibrated logistic heads on the embedder, teacher labels (decision 005) | `answerdotai/ModernBERT-large` fine-tune | heads |
+| Frontier baseline | Claude Opus 5.5 (Anthropic API), Qwen2.5-72B (OpenRouter) | same | 2 instances |
 
-The lean tier is Apache-2.0/MIT throughout. The full tier's two CC-BY-NC models are fine for the class and the paper but cannot ship in the product layer (Phase 12) without a commercial licence or a swap.
+The lean tier is Apache-2.0/MIT throughout. OPP-115's annotations (non-commercial) are a reported human check, not
+training data, since decision 005. The full tier's CC-BY-NC models are fine for the class and the paper, not for the
+product layer.
 
 ## Layout
 
-The repository layout is plan §0.4. `experiments/config.py` (config loading) was added alongside `run.py`. Corpora, pack artefacts (prototypes, classifier, index), checkpoints, caches and run directories are gitignored. Of `runs/`, only `runs/log.csv` is tracked.
+The repository layout is plan §0.4: `data/` (loaders, segmentation, schema), `packs/` (schemas and the pack builder),
+`engine/` (embedding, presence, cohort, expectation, ranking, evidence, explanation), `models/` (the teacher), `bench/`
+(OmitBench), `experiments/` (the entry point, one module per task, the hub sync), `app/` (Gradio demo, examples, Space
+bundle), `analysis/` (tables, figures, report), `configs/`, `prompts/`, `tests/`, `reports/`. Corpora, pack artefacts,
+checkpoints, caches and run folders are gitignored; `runs/log.csv` is tracked.
