@@ -1,64 +1,36 @@
-# Session handoff — 7.6 done (README, fresh-clone smoke); 7.2 planned; 7.7 prepared; report rebuilt; next: Parsa's read, the video, tag and submit
+# Session handoff — v0.1-class tagged and public; report final; Parsa submits; next: Phase 8 (MAM)
 
-Written 2026-10-25 at the end of the second session of the day. Read with: `CLAUDE.md`, `NEGATIVE_SPACE_PLAN.md`
-(§0.2 #21, #24; Phase 7), `CHANGELOG.md` (both entries of 2026-10-25), `reports/submission_v0.1-class.md`,
-`reports/demo_video_plan.md`. Replace this file at the end of the next session.
+Written 2026-10-25 at the end of the submission session. Read with: `CLAUDE.md`, `NEGATIVE_SPACE_PLAN.md` (Phase 7 notes,
+Phase 8), `CHANGELOG.md` (the three entries of 2026-10-25), `reports/submission_v0.1-class.md`. Replace this file at the
+end of the next session.
 
 ## Where things stand
 
-- **7.4 report, revised after the rubric read (awaiting Parsa's final read and an Overleaf recompile):** 6 figures
-  (new: `pipeline.png` from `analysis/figures.py`, `demo_ghost.png` from `analysis/demo_figure.py`), 12 tables (10 in
-  the body, Appendix A holds the panel tables; Table 10 is the risk/mitigation table). After the second rubric read
-  (CHANGELOG): 14 tables, named user and cost of error, plan/gate numbers resolved, **3,728 words all-in, 3,574 for
-  Sections 1–10, 3,992 with leads and captions**; README status fixed; `LICENSE` (MIT) added, Parsa's choice to change.
-- **Report (before the revision):** `reports/report.md`, 3,989 words all-in (3,835 for Sections 1–10;
-  `python -m analysis.report --words`), checker zero errors, 30 IEEE references. Parsa's only edit so far (Demo and Code
-  links on two lines) is in `reports/report_source.md`; `reports/report.docx` rebuilt from it. **Edit the prose in
-  `report_source.md`, never in `report.md`;** then `python -m analysis.report`, `--check`, `--words`, the checker
-  (`python3 ~/.claude/skills/my-academic-writing/check_ai_tells.py --no-color reports/report.md`), and the .docx.
-- **The .docx converter** lives in a session scratchpad (`docxbuild/md2docx.js`, `docx` npm package installed there;
-  `node md2docx.js reports/report.md out.docx`); this session's copy is under
-  `/private/tmp/claude-501/-Users-parsa-Documents-negative-space-reader/6c3a6e0b-ee4c-4c7d-94c0-20a24d5e6d2c/scratchpad/docxbuild/`.
-  If it is gone: `cd <scratch>/docxbuild && npm install docx` and copy the script from a previous scratchpad, or install
-  pandoc (`pandoc reports/report.md -o reports/report.docx --resource-path=reports`). Word must be closed when the
-  file is replaced (`reports/~$report.docx` is Word's lock file, now gitignored).
-- **LaTeX (Overleaf), Parsa's preferred format:** `python -m analysis.report_tex --zip reports/report_overleaf.zip`
-  converts `reports/report.md` to `reports/report.tex` (tracked; `--check` and a test keep it in step) and bundles it with
-  the four figures (zip gitignored). **Never compiled here** (no TeX on the Mac): upload the zip to Overleaf, compile
-  with pdfLaTeX, fix what the log says in `analysis/report_tex.py` (never by hand in the .tex), rebuild. Once it
-  compiles, the Overleaf PDF can replace the .docx as the submitted copy if the outline allows a PDF.
-- **Before the marking window:** the Space must be public and warm (a cold paper takes 36 s); the repository visible.
-- **7.5:** the GenAI acknowledgement, short form as Parsa asked on 2026-10-25 (assistant for speed; decisions, review and final text the author's); Parsa confirms the wording before submission.
-  **Not cited:** Claude Opus 5.5 / Haiku 5.5 (no vendor page surfaced); add a reference if Parsa has the URL.
-- **7.6 done:** README rewritten; `configs/smoke.yaml` redirects packs and embeddings under `data/processed_smoke/`
-  and defines the smoke pack build (`embed`, `index`, `cohort_report`); builder bug fixed (pack folder of a pack built
-  from nothing); fresh clone: install 60 s, 484 tests passed + 1 skipped, smoke builds 28.6 s / 43.4 s. The bench smoke
-  (`bench_eval_readme_s0`) reproduces `reports/tables/bench_synth_<genre>.csv` byte for byte.
-- **7.2 planned, not recorded:** `reports/demo_video_plan.md` (shot list, narration gist, timings; MarIA benchmark
-  instance as the reveal ending; the Space must be woken first). Examples are pinned and shipped; nothing to change.
-- **7.7 prepared, not done:** `reports/submission_v0.1-class.md` (deliverables, tag message and commands, checklist).
-  `pyproject.toml` version 0.1.0. **The GitHub repository is private**: make it public or share it with the marker.
-- **Hub:** unchanged, 984 matched, the two `space_cpu_timing_<genre>_s0` runs (8 files) not pushed; this session's
-  runs (`pack_*_smoke*`, `bench_eval_readme_s0`) are local only. Push with
-  `python -m experiments.hub_sync push --bundles runs` when no job is running, before the tag if wanted.
-- **Uncommitted (everything from this session):** `.gitignore`, `NEGATIVE_SPACE_PLAN.md` (7.2, 7.4, 7.6 ticked, 7.7
-  notes), `README.md`, `analysis/report.py`, `configs/smoke.yaml`, `packs/builder.py`, `pyproject.toml`,
-  `reports/report.docx`, `reports/report.md`, `reports/report_source.md`, `runs/log.csv`, `tests/test_builder.py`,
-  `tests/test_report.py`, `tests/test_run.py`, `CHANGELOG.md`, `HANDOFF.md`; new `reports/demo_video_plan.md`,
-  `reports/submission_v0.1-class.md`: **committed as b5bbedb.** After it, uncommitted: `analysis/report_tex.py`,
-  `tests/test_report_tex.py`, `reports/report.tex`, `.gitignore`, README, CHANGELOG, HANDOFF, plan note: committed (046353a,
-  4a03462, 35d88b9). After those, uncommitted: the rubric revision (figures, demo_figure, tables split, source, md/docx/tex,
-  tests, CHANGELOG, HANDOFF, plan, README). Commit authored by Parsa only.
-- Tests: 491 passed (26 s).
+- **Submission state:** tag `v0.1-class` = commit `1b5647b` on `main`, pushed; repository **public** at
+  https://github.com/parsa-hke/negative-space-reader; licence **Apache 2.0** (`LICENSE`, `NOTICE`); the Space is public
+  and always on (Pro). **Parsa submits** the report, the repository link at the tag and the Space link on the portal, then
+  ticks 7.7 in the plan (GATE: submitted). No video (7.2 dropped, Parsa's decision).
+- **The report:** `reports/report.md` ← `reports/report_source.md` + `reports/tables/report_fragments/` (`python -m
+  analysis.tables`, `python -m analysis.report`); `reports/report.tex` + `reports/report_overleaf.zip` (`python -m
+  analysis.report_tex --zip ...`); `reports/report.docx` (session docx-js converter, or pandoc). Compiled on Overleaf:
+  16 pages, 6 figures, 14 tables (10 in the body, Appendix A), **3,728 words all-in / 3,574 for Sections 1–10 / 3,992 with
+  table leads and captions**; checker zero errors. Two rubric reads (marker-style) applied in full; see CHANGELOG.
+  Figures: `python -m analysis.figures` (pipeline diagram included) and `python -m analysis.demo_figure` (headless Chrome).
+- **Checks that keep it honest:** `tests/test_report.py` (committed md = build), `tests/test_report_tex.py` (committed tex
+  = build; 14 tables, 6 figures), `tests/test_tables.py`, `tests/test_figures.py`, `tests/test_demo_figure.py`.
+- **Hub:** the two `space_cpu_timing_<genre>_s0` runs and today's smoke / bench_eval_readme runs are local only; push with
+  `python -m experiments.hub_sync push --bundles runs` when no job is running.
+- Tests: 491 passed (25 s). Tree clean after this commit.
 
 ## Next session, in order
 
-1. Checks below. Commit what Parsa approves.
-2. Parsa's read of the report → edits in `report_source.md` → rebuild (md, check, words, checker, docx).
-3. Record the 7.2 video per the plan; export; upload per the outline; link it in the README's demo section; tick 7.2.
-4. Make the repository visible to the marker; optional hub push; final `pytest`; commit; tag `v0.1-class`; push
-   (`reports/submission_v0.1-class.md` has the commands).
-5. Submit (.docx, repository link at the tag, Space link, video); tick 7.4, 7.5, 7.7; GATE passed. Then Phase 8 (MAM).
+1. Checks below. If Parsa has submitted, tick 7.7 with the date (GATE passed).
+2. **Phase 8, the masked-assertion model (MAM):** read plan Phase 8 and §0.2 #12; `configs/mam.yaml` and
+   `experiments/train_mam.py` are stubs from Phase 1. Smoke first (`--overlay local --overlay smoke`), then the Mac
+   overnight or a Colab job per `configs/colab_jobs.yaml`. The report's Section 6 says why: an expectation conditioned
+   on what the document states cannot be moved by the absence it is asked to find (the privacy leak).
+3. Keep the report's build green: any new table goes through `analysis/tables.py`; `report_source.md` never carries a
+   typed number.
 
 ## Watch
 
@@ -66,31 +38,29 @@ Written 2026-10-25 at the end of the second session of the day. Read with: `CLAU
 - FAISS and PyTorch must not both initialise in one macOS process.
 - `post_hoc_best` is not a gate result; severity-weighted numbers are an ablation.
 - `analyse()` is not bitwise reproducible on MPS (≈ 1e-9 in P(present)); compare reports with rounded floats.
-- `space/` is assembled, never committed; the Space is re-uploaded only when Parsa says so; it sleeps after 48 h idle.
+- `space/` is assembled, never committed; the Space is re-uploaded only when Parsa says so.
 - `app/examples/results.json` is generated: rerun `python -m app.examples` when tables or runs change.
-- Report prose lives in `reports/report_source.md`; `reports/report.md` is generated and tested against it.
-- The smoke overlay must come last (`--overlay local --overlay smoke`); it writes only under `data/processed_smoke/`.
-- The smoke pack build covers the label-free stages only; the presence stages need the real corpus and its labels.
-- Commits are authored by Parsa only; no Claude co-author line.
+- Report prose lives in `reports/report_source.md`; `report.md` and `report.tex` are generated and tested against it.
+- The smoke overlay comes last (`--overlay local --overlay smoke`) and writes only under `data/processed_smoke/`.
+- Commits are authored by Parsa only; no Claude co-author line. The tag `v0.1-class` is immutable: fixes after it go
+  on `main` as new commits, never a moved tag.
 
 ## Checks before starting
 
 ```bash
 .venv/bin/python -m pytest -q        # expected: 491 passed
-git status --short                   # this session's changes, unless committed
-.venv/bin/python -m analysis.report --check                              # expected: up to date
-.venv/bin/python -m analysis.report_tex --check                          # expected: up to date
-.venv/bin/python -m experiments.hub_sync status --bundles runs,packs   # expected: 984 matched, 8 differ (space_cpu_timing) until pushed
+git status --short                   # expected: clean
+.venv/bin/python -m analysis.report --check && .venv/bin/python -m analysis.report_tex --check   # expected: up to date, up to date
+git describe --tags                  # expected: v0.1-class (or v0.1-class-N-g... after new commits)
 ```
 
 ## Prompt for the next session
 
-> Read CLAUDE.md, HANDOFF.md, NEGATIVE_SPACE_PLAN.md (Phase 7) and both CHANGELOG entries of 2026-10-25. We are on
-> Phase 7: 7.6 is done, 7.2 is planned, 7.7 is prepared, 7.4 and 7.5 await my read. Run the checks in HANDOFF.md and
-> tell me if anything differs. Then: (1) apply my edits to reports/report_source.md, rebuild reports/report.md and
-> reports/report.docx, rerun the checker and `python -m analysis.report --words`, and rebuild reports/report.tex plus the Overleaf zip (tell me what the Overleaf log said so the exporter is fixed, not the .tex); (2) walk me through recording the
-> 7.2 video from reports/demo_video_plan.md (wake the Space first), then link the exported video in the README; (3)
-> when I confirm, commit everything as me, create and push the tag v0.1-class per reports/submission_v0.1-class.md, and
-> tick 7.2, 7.4, 7.5, 7.7 in the plan with the date; (4) update HANDOFF.md for Phase 8. Rules as before: every run
-> through experiments/run.py with a config; schemas frozen; no §0.2 change without editing the plan first and telling
-> me; the Space is re-uploaded only when I say so; commits authored by me only; nothing sent to any API without asking.
+> Read CLAUDE.md, HANDOFF.md, NEGATIVE_SPACE_PLAN.md (Phase 7 notes and Phase 8) and the CHANGELOG entries of
+> 2026-10-25. v0.1-class is tagged and public; I have submitted (tick 7.7). We start Phase 8, the masked-assertion
+> model. Run the checks in HANDOFF.md and tell me if anything differs. Then: (1) read plan Phase 8 and §0.2 #12 and
+> propose the MAM data pipeline and training config as a decision record before writing code; (2) implement
+> experiments/train_mam.py with a test and a smoke run through experiments/run.py; (3) report the smoke result in the
+> CHANGELOG. Rules as before: every run through experiments/run.py with a config; schemas frozen; no §0.2 change without
+> editing the plan first and telling me; the Space is re-uploaded only when I say so; commits authored by me only;
+> nothing sent to any API without asking. Update HANDOFF.md at the end and give me the prompt for the next session.
