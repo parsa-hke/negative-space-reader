@@ -2,6 +2,63 @@
 
 Date, what was done, what was found (negative findings included). Newest first.
 
+## 2026-10-25 — Phase 7.4 and 7.5: the class report, built from the tables; `analysis/tables.py`; `.docx` export
+
+**Checks (HANDOFF):** pytest 476 passed; git clean; `hub_sync status --bundles runs,packs` **differs from HANDOFF**:
+984 matched, 8 differ, 8 missing on the hub, all eight the files of the two `space_cpu_timing_<genre>_s0` runs made
+after the last push. Not pushed this session (nothing else touched the hub).
+
+**`analysis/tables.py`** (plan 7.4; `tests/test_tables.py`, 4 tests, 0.1 s): reads `reports/tables/*.csv` only and
+writes `reports/tables/report_fragments/`: `corpus`, `presence` (section variants, gate 4.8, document level),
+`agreement`, `synth` (recall@5 per regime, other metrics, false alarms and ECE on the untouched documents),
+`gate66`, `revision`, `leak`, `llm_gap`, `speed`, `errors`, `severity`, plus `values.json` (every shown value, keyed)
+and `MISSING.md`. The `post_hoc_best` row is excluded from `leak` by construction (test); severity is labelled an
+ablation. The `agreement` fragment pools the per-type tp/fp/fn of `teacher_vs_judge_privacy.csv`,
+`teacher_vs_judge_v2_papers.csv` and the two OPP-115 tables and reproduces the micro-F1 recorded on 2026-10-17/18
+exactly (0.775, 0.692, 0.596, 0.614), which confirms those tables as the source. `analysis/figures.py` gains
+`llm_gap.png` (recall@1/5/10 of the four systems on the same 100 instances per genre; test updated).
+
+**`analysis/report.py`** (`tests/test_report.py`, 3 tests): assembles `reports/report.md` from
+`reports/report_source.md`, filling `{{v:key|fmt}}` from `values.json`, including fragments verbatim, numbering
+`[@ref]` citations by first appearance and appending the IEEE list; a missing key, fragment or reference raises;
+`--check` fails when `report.md` is stale, and a test asserts the committed report equals the build. Prose edits go
+into `report_source.md`.
+
+**The report** (`reports/report.md`, plan §11.1 trimmed to the class scope; limitations drafted first per 11.0):
+abstract; introduction (absence as a signal, the LLM gap); task and the §0.2 #21 stance; data; architecture (packs,
+schema induction, presence cascade, cohort, evidence); model selection (decisions 002, 004, 005, 006); OmitBench and
+the privacy turn (gate 6.6, decision 007, the leak); the frontier gap, speed and errors; related work; limitations
+and responsible use; conclusion; GenAI acknowledgement (plan 7.5, drafted for Parsa to confirm); 30 references.
+**Word count** (prose; tables, captions, references and the GenAI section excluded): 3,991 all-in, 3,865 for
+Sections 1–10. The AI-tell checker of the writing skill reports zero errors (two warnings are legitimate: a phrase
+inside two reference titles; result/finding used on purpose). No em-dashes; "I" twice (the 32B teacher, declining
+the post-hoc variant); no verdict word about documents.
+- **References:** every entry verified by web search or fetch before citation (DOI or arXiv id, authors, venue,
+  year, pages); details a search did not confirm were dropped (a DOI for the unarXive JCDL paper) or fetched (Polisis
+  pages 531–548; the Anthology DOIs of Hossain et al. 2022 and Magnusson et al. 2023). **Not cited:** Claude Opus
+  5.5 and Claude Haiku 5.5, because no Anthropic page surfaced, only third-party coverage; named in the text without
+  a reference, for Parsa to add.
+- **Stated qualitatively because not in `reports/tables/`:** the Space's cpu-basic timings (status line), the share
+  of Qwen lists in catalogue order (run metrics), the coverage-check rates (plan 3.5). Everything numeric otherwise
+  comes through `values.json`; configuration facts (k = 200, 58/47 types, 300 reference sections, 150 labelled
+  documents) come from the plan and the packs.
+- **Process finding (negative):** the first full draft was 6,487 words. Two whole-file rewrites each shortened it by
+  under ten per cent (the same sentences came back); scripted sentence-level cuts, each asserting its target occurs
+  exactly once in the source, brought it under 4,000 in six passes. For the paper: budget per section before
+  drafting, cut by script.
+- **Turnitin:** prose written from the facts; nothing taken from `app/about.py`, README, the plan or the decision
+  records; the CHANGELOG's tables enter only through the fragments.
+
+**`.docx`** (`reports/report.docx`): pandoc and LibreOffice are not installed, so a small docx-js converter (session
+scratchpad; the `docx` npm package installed there, not in the project) renders the Markdown subset the report uses
+(headings, inline bold/italic/code, 16 tables with header shading and DXA widths, 4 PNG figures at 6.3 in, hanging
+reference entries, A4, page numbers). The docx skill's schema validator passes (702 paragraphs); the text extracted
+with `textutil` matches the Markdown's words; no visual render was possible without LibreOffice (the browser pane
+cannot screenshot a local file), so **open it once in Word before submitting**. Rebuild after any edit: rerun the
+converter, or install pandoc and run `pandoc reports/report.md -o reports/report.docx --resource-path=reports`.
+
+Tests: 483 passed. HANDOFF replaced. Nothing committed, no API call, the Space untouched.
+
 ## 2026-10-21 (night, 4) — The Space moved to CPU: ZeroGPU charges each visitor's own quota
 
 **Parsa, after trying the live Space:** "You have exceeded your ZeroGPU runs limit" after a few analyses. ZeroGPU bills

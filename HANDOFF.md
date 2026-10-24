@@ -1,67 +1,80 @@
-# Session handoff — 7.1 live on a ZeroGPU Space and ticked; 7.3 done; next 7.2 video and 7.4 report
+# Session handoff — 7.4 report drafted and polished; 7.5 GenAI section drafted; next 7.2 video, 7.6 README, 7.7 submit
 
-Written 2026-10-21 at the end of the first Phase 7 session. Read with: `CLAUDE.md`, `NEGATIVE_SPACE_PLAN.md` (§0.2 #14,
-#17, #21, #24; Phase 7), `CHANGELOG.md` (entry "2026-10-21 (afternoon)"), decision record 007. Replace this file at
-the end of the next session.
+Written 2026-10-25 at the end of the report session. Read with: `CLAUDE.md`, `NEGATIVE_SPACE_PLAN.md` (§0.2 #21, #24;
+Phase 7; §11.0–11.1), `CHANGELOG.md` (entry "2026-10-25"), `reports/report.md`. Replace this file at the end of the next
+session.
 
 ## Where things stand
 
-- **7.1 (ticked):** live at https://huggingface.co/spaces/parsa-hke/negative-space-reader (public, **cpu-basic**; ZeroGPU
-  was tried and dropped the same evening: it charges each visitor's own GPU quota, so anonymous visitors hit "runs limit").
-  Rebuild and re-upload after any change: `python -m app.space_bundle --clean` (CPU variant is the default) then
-  `HfApi().upload_folder(folder_path="space", repo_id="parsa-hke/negative-space-reader", repo_type="space")`.
-  Packaging facts in the CHANGELOG (night, 3). Timings on cpu-basic: policy 9.6 s, paper 35.8 s (first calls); a paid
-  "CPU upgrade" (8 vCPU) would cut that 3-4× if the video needs it. The Space sleeps after 48 h idle (wakes in ~1 min).
-- **7.1 design (Parsa's palette, 2026-10-21 evening):** cream #FFF0C5 page; teal #359FA0 = absent; light teal #8AD6D1 =
-  evidence and text-carrying fills; orange #FF8C52 = action, severity, reveals; derived darker teal/orange for small text
-  (contrast); containers near-white with solid teal borders and one soft shadow (`--nsr-card`, `--nsr-line`,
-  `--nsr-shadow`). CSS variables keep their old names (`--nsr-lime` is the teal). Severity as a badge only when the weight is
-  not 1; 7/5 layout with Cohort and Evidence tabs; comparison panel full width below. No `backdrop-filter`/`transform`
-  on ancestors of Gradio dropdowns (it detaches their options list).
-- **7.3 (ticked):** recall@5 on 100 single_type instances per genre, privacy / papers: Opus 5.5 0.242 / 0.235
-  (`llm_gap_candidate_opus_s0`, ≈ $4.2), Qwen2.5-72B 0.137 / 0.181 (`llm_gap_candidate_qwen_s0`, ≈ $0.40), level 1
-  0.376 / 0.655, genre-uniform 0.375 / 0.465; both chat models below both corpus systems, paired CIs excluding zero.
-  Table `reports/tables/llm_gap_candidate_<genre>.csv`. Caveats and the Qwen catalogue-order finding in the CHANGELOG.
-  API keys are exported per command: `set -a; . ./.env; set +a` (OpenRouter: `export OPENROUTER_API_KEY="$OPEN_ROUTER_KEY"`).
-- **Gate 5.9 rerun on mains power:** privacy max 1.37 s, papers max 3.28 s; `packs/*/pack.json` and
-  `reports/tables/analyse_gate_<genre>.csv` updated.
-- **Hub:** runs and packs pushed at the end of the session (986 matched, 0 differ, 0 missing).
-- **Committed:** `fc6e4a9` (this session up to the Space upload). **Uncommitted:** the post-upload fixes in
-  `app/space_bundle.py`, `tests/test_space_bundle.py`, CHANGELOG, HANDOFF, plan (Parsa reviews; authored by Parsa only).
-- Tests: 476 passed.
-
-## Optional 7.3 follow-ups (ask Parsa; each a few dollars)
-
-1. Opus at effort high on the same instances (at medium it used ≈ 220 output tokens per answer, thinking included).
-2. Both chat models on the 150 untouched dev documents per genre: false alarms@5, as reported for the system.
+- **7.4 (drafted, polished, awaiting Parsa's final read):** `reports/report.md`, 3,991 words all-in (title block and
+  abstract included; 3,865 for Sections 1–10), excluding tables, captions, references and the GenAI section. Structure:
+  abstract; 1 introduction; 2 task; 3 data; 4 architecture; 5 model selection; 6 OmitBench and the privacy turn
+  (decision 007); 7 frontier gap, speed, errors; 8 related work; 9 limitations (written first); 10 conclusion; GenAI
+  acknowledgement; 30 IEEE references. The AI-tell checker (`~/.claude/skills/my-academic-writing/check_ai_tells.py`)
+  reports zero errors. `reports/report.docx` is the submission copy (A4, 16 tables, 4 figures).
+- **How the report is built (no number typed by hand):** `python -m analysis.tables` writes
+  `reports/tables/report_fragments/*.md` and `values.json` from `reports/tables/*.csv`; `reports/report_source.md`
+  holds the prose with `{{v:key|fmt}}`, `<!-- include: name -->` and `[@ref]` placeholders;
+  `python -m analysis.report` assembles `reports/report.md` (`--check` fails if it is stale; `tests/test_report.py`
+  asserts the committed report equals the build). Edit the prose in `report_source.md`, never in `report.md`.
+  Figures: `python -m analysis.figures` (now also `llm_gap.png`).
+- **The .docx** was made with a docx-js converter kept in the session scratchpad (pandoc and LibreOffice are not
+  installed on this Mac); rebuild = rerun that converter or install pandoc (`pandoc reports/report.md -o
+  reports/report.docx --resource-path=reports`). Fonts Calibri, page numbers in the footer, figures at 6.3 in.
+- **7.5 (drafted):** the GenAI acknowledgement at the end of the report states the practice from CLAUDE.md; **Parsa
+  confirms or edits the claims before submission.**
+- **Facts in the report stated qualitatively because they are not in `reports/tables/`:** the Space's cpu-basic
+  timings (status line, CHANGELOG 2026-10-21 night 4), the share of Qwen lists in catalogue order (run metrics of
+  `llm_gap_candidate_qwen_s0`), the coverage-check rates (plan 3.5). If numbers are wanted, add a stage that writes
+  them to a table and a fragment to `analysis/tables.py`.
+- **Not cited:** Claude Opus 5.5 and Claude Haiku 5.5 (no Anthropic page surfaced in search; third-party coverage
+  only). Add a vendor reference if Parsa has the URL.
+- **Hub:** 984 matched, 8 differ / 8 missing on the hub: the two `space_cpu_timing_<genre>_s0` runs made after the last
+  push. Push with `python -m experiments.hub_sync push --bundles runs` when convenient (no job running).
+- **Uncommitted:** `analysis/tables.py`, `analysis/report.py`, `analysis/figures.py` (llm_gap), `tests/test_tables.py`,
+  `tests/test_report.py`, `tests/test_figures.py`, `reports/report.md`, `reports/report_source.md`, `reports/report.docx`,
+  `reports/tables/report_fragments/`, `reports/figures/llm_gap.png`, CHANGELOG, HANDOFF. Commit authored by Parsa only.
+- Tests: 483 passed.
 
 ## Next session, in order
 
-1. Checks below. Commit what Parsa approves (authored by Parsa only).
-2. Any 7.3 follow-up Parsa approves (the table keeps other models' rows; a rerun of a model replaces its own).
-3. 7.2: the walkthrough video on the Space (one policy, one paper; the benchmark reveal makes a good ending).
-4. 7.2 video, then 7.4 report via `analysis/tables.py`.
+1. Checks below. Commit what Parsa approves (authored by Parsa only; no Claude co-author).
+2. Parsa's read of `reports/report.md`: edits go into `reports/report_source.md`, then `python -m analysis.report`,
+   the checker, the word count (`tests/test_report.py` keeps report.md in step), and the .docx rebuilt.
+3. 7.2: the 3–5 minute walkthrough video on the Space (one policy, one paper; pin examples with `serve.examples`;
+   the benchmark reveal makes a good ending; the first drawn privacy example is an adult site).
+4. 7.6: README (one-command setup, smoke pack build, bench, runtimes); fresh-clone smoke test.
+5. 7.7: tag `v0.1-class`; submit report (.docx), repository link and demo per the outline. GATE: submitted.
 
 ## Watch
 
 - Never push a hub bundle while a job writes into it.
 - FAISS and PyTorch must not both initialise in one macOS process.
-- `post_hoc_best` is not a gate result. Severity-weighted numbers are an ablation, not a gate result. The app ranks
-  with severity weights on (the config default); its numbers are not bench results.
+- `post_hoc_best` is not a gate result; severity-weighted numbers are an ablation. The report's leak table excludes the
+  post-hoc row by construction (test).
 - `analyse()` is not bitwise reproducible on MPS (≈ 1e-9 in P(present)); compare reports with rounded floats.
-- The pane's stop button kills `serve` without SIGTERM: no metrics. Use Ctrl-C / SIGTERM.
-- `space/` is assembled, never committed; rebuild it after any code or pack change before uploading.
-- `app/examples/results.json` and `app/examples/*.json` are generated: rerun `python -m app.examples` when tables or runs change.
-- Gradio 6: a synthetic Textbox `input` event does not reach the backend (press a hidden button instead); `gr.Tabs(selected=)`
-  as a return value is ignored (`gr.update(selected=)`); theme fonts are `gr.themes.Font` objects; verify the app with the
-  browser pane visible (a hidden pane throttles timers and drops dropdown focus).
-- The first drawn privacy example is an adult site: pin examples before recording the video.
+- `space/` is assembled, never committed; the Space is re-uploaded only when Parsa says so.
+- `app/examples/results.json` is generated: rerun `python -m app.examples` when tables or runs change.
+- Report prose lives in `reports/report_source.md`; `reports/report.md` is generated and tested against it.
 - Commits are authored by Parsa only; no Claude co-author line.
 
 ## Checks before starting
 
 ```bash
-.venv/bin/python -m pytest -q        # expected: 476 passed
+.venv/bin/python -m pytest -q        # expected: 483 passed
 git status --short                   # this session's changes, unless committed
-.venv/bin/python -m experiments.hub_sync status --bundles runs,packs   # expected: 0 differ, 0 missing
+.venv/bin/python -m analysis.report --check                              # expected: up to date
+.venv/bin/python -m experiments.hub_sync status --bundles runs,packs   # expected: 0 differ after the runs push
 ```
+
+## Prompt for the next session
+
+> Read CLAUDE.md, HANDOFF.md, NEGATIVE_SPACE_PLAN.md (Phase 7) and the CHANGELOG entry of 2026-10-25. We are on
+> Phase 7, tasks 7.2, 7.6 and 7.7; 7.4 and 7.5 are drafted. Run the checks in HANDOFF.md and tell me if anything
+> differs. Then: (1) apply my edits to reports/report_source.md, rebuild reports/report.md and reports/report.docx,
+> rerun the checker and the word count; (2) plan the 7.2 walkthrough video on the Space (one policy, one paper, the
+> benchmark reveal as the ending) and pin the examples; (3) 7.6: README with one-command setup, smoke pack build and
+> bench, expected runtimes, then a fresh-clone smoke test; (4) prepare the v0.1-class tag and the submission list for
+> 7.7. Rules as before: every run through experiments/run.py with a config; schemas frozen; no §0.2 change without
+> editing the plan first and telling me; the Space is re-uploaded only when I say so; commits authored by me only;
+> nothing sent to any API without asking. Update HANDOFF.md at the end and give me the prompt for the next session.

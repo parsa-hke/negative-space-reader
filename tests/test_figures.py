@@ -45,6 +45,11 @@ def test_draw_all_writes_one_png_per_figure(tmp_path):
                          "single_type/edited_minus_uniform": "+0.0100 [-0.0100, +0.0300]",
                          "single_type/original_minus_uniform": "+0.0300 [+0.0100, +0.0500]"})
         _write(tables / f"cohort_diagnosis_{g}.csv", diag)
+        llm = []
+        for s, v in (("anthropic:claude-opus-5-5", 0.24), ("openai:qwen/qwen-2.5-72b-instruct", 0.14), ("level1", 0.38), ("genre_uniform", 0.37)):
+            llm.append({"genre": g, "system": s, "n": 100, **{m: v for m in ("recall@1", "recall@5", "recall@10")},
+                        **{f"{m}_ci": f"[{v - 0.05:.3f}, {v + 0.05:.3f}]" for m in ("recall@1", "recall@5", "recall@10")}})
+        _write(tables / f"llm_gap_candidate_{g}.csv", llm)
     written = draw_all(tables, out)
-    assert sorted(p.name for p in written) == ["bench_recall5.png", "cohort_diagnosis.png", "level1_minus_uniform.png"]
+    assert sorted(p.name for p in written) == ["bench_recall5.png", "cohort_diagnosis.png", "level1_minus_uniform.png", "llm_gap.png"]
     assert all(p.stat().st_size > 1000 for p in written)

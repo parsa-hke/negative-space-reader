@@ -12,9 +12,11 @@ Figures (one PNG each, both genres side by side):
                             single_type the recall@5 gain over genre-uniform with the cohort retrieved from the edited
                             vs the original document (the deletion leak). post_hoc_best is drawn hollow and labelled:
                             it was selected on the test bench and is not a gate result.
+  llm_gap.png               plan 7.3: recall@1/5/10 of the two chat models (candidate-list setting) and the two corpus
+                            systems on the same 100 single_type instances per genre, with 95% bootstrap CIs
 
-Inputs: bench_synth_<genre>.csv, bench_revision_<genre>.csv, cohort_diagnosis_<genre>.csv. Nothing is computed here
-beyond reading those tables.
+Inputs: bench_synth_<genre>.csv, bench_revision_<genre>.csv, cohort_diagnosis_<genre>.csv, llm_gap_candidate_<genre>.csv.
+Nothing is computed here beyond reading those tables.
 """
 
 from __future__ import annotations
@@ -196,9 +198,44 @@ def draw_diagnosis(tables: Path, out: Path) -> Path:
     return _save(fig, out / "cohort_diagnosis.png")
 
 
+LLM_SYSTEMS = (("level1", COLORS["level1"], "(b) level 1 cohort"), ("genre_uniform", COLORS["genre_uniform"], "(a) genre-uniform"),
+               ("anthropic:claude-opus-5-5", "#7b3fb8", "Claude Opus 5.5, candidate list"),
+               ("openai:qwen/qwen-2.5-72b-instruct", "#2f9e77", "Qwen2.5-72B, candidate list"))
+
+
+def draw_llm_gap(tables: Path, out: Path) -> Path | None:
+    paths = [tables / f"llm_gap_candidate_{g}.csv" for g in GENRES]
+    if not all(p.exists() for p in paths):
+        return None
+    metrics = ("recall@1", "recall@5", "recall@10")
+    fig, axes = _figure(len(GENRES), 7.2, 2.6)
+    for ax, genre, path in zip(axes, GENRES, paths):
+        rows = _read(path)
+        n = rows[0]["n"] if rows else "?"
+        for j, metric in enumerate(metrics):
+            for s_i, (system, color, label) in enumerate(LLM_SYSTEMS):
+                r = _row(rows, system=system)
+                if r is None or not r.get(metric):
+                    continue
+                iv = parse_interval(r.get(f"{metric}_ci"))
+                y = j + (s_i - (len(LLM_SYSTEMS) - 1) / 2) * 0.17
+                if iv:
+                    ax.plot([iv[1], iv[2]], [y, y], color=color, lw=2, solid_capstyle="round")
+                ax.plot(float(r[metric]), y, "o", ms=5, color=color, mec="white", mew=1, label=label if j == 0 else None)
+        ax.set_yticks(range(len(metrics)), list(metrics))
+        ax.set_xlim(0, 1)
+        ax.set_xlabel(f"same {n} single-type instances (95% bootstrap CI)")
+        ax.set_title(genre, loc="left", color=INK)
+        _style(ax)
+    axes[0].invert_yaxis()
+    axes[0].legend(loc="lower center", bbox_to_anchor=(1.05, -0.55), ncol=2, frameon=False, fontsize=8)
+    return _save(fig, out / "llm_gap.png")
+
+
 def draw_all(tables: Path, out: Path) -> list[Path]:
     tables, out = Path(tables), Path(out)
-    return [draw_recall(tables, out), draw_differences(tables, out), draw_diagnosis(tables, out)]
+    figures = [draw_recall(tables, out), draw_differences(tables, out), draw_diagnosis(tables, out), draw_llm_gap(tables, out)]
+    return [p for p in figures if p is not None]
 
 
 def main() -> None:

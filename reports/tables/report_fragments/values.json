@@ -1,0 +1,1145 @@
+{
+ "corpus/privacy/documents_train": 22300,
+ "corpus/privacy/documents_dev": 3043,
+ "corpus/privacy/documents_test": 3097,
+ "corpus/privacy/documents_total": 28440,
+ "corpus/privacy/documents": "28,440 (22,300 / 3,043 / 3,097)",
+ "corpus/papers/documents_train": 14114,
+ "corpus/papers/documents_dev": 1784,
+ "corpus/papers/documents_test": 1746,
+ "corpus/papers/documents_total": 17644,
+ "corpus/papers/documents": "17,644 (14,114 / 1,784 / 1,746)",
+ "corpus/privacy/entities": "23,310",
+ "corpus/papers/entities": "17,644",
+ "corpus/privacy/sections_per_doc_median": "7",
+ "corpus/papers/sections_per_doc_median": "19",
+ "corpus/privacy/sentences_per_section_mean": "8.1",
+ "corpus/papers/sentences_per_section_mean": "13.9",
+ "corpus/privacy/chars_per_doc_median": "5,791",
+ "corpus/papers/chars_per_doc_median": "28,914",
+ "corpus/privacy/dates": "1998-07 to 2019-12",
+ "corpus/papers/dates": "2018-01 to 2022-12",
+ "corpus/privacy/near_duplicate_rate": "18.6%",
+ "corpus/papers/near_duplicate_rate": "0.3%",
+ "corpus/privacy/cross_split_dropped": "1,949",
+ "corpus/papers/cross_split_dropped": "37",
+ "corpus/privacy/revision_pairs": "4,029",
+ "corpus/papers/revision_pairs": "343",
+ "corpus/privacy/top_categories": "education 5,149, business 4,945, shopping 3,944, informationtech 3,650, entertainment 2,392",
+ "corpus/papers/top_categories": "cs.LG 10,655, cs.CL 6,989",
+ "presence/privacy/classifier only/macro_f1": 0.617,
+ "presence/privacy/classifier only/ece": 0.061,
+ "presence/privacy/classifier only/ms_per_section": 107.4,
+ "presence/papers/classifier only/macro_f1": 0.508,
+ "presence/papers/classifier only/ece": 0.124,
+ "presence/papers/classifier only/ms_per_section": 485.2,
+ "presence/privacy/prototypes only/macro_f1": 0.417,
+ "presence/privacy/prototypes only/ms_per_section": 5.0,
+ "presence/papers/prototypes only/macro_f1": 0.328,
+ "presence/papers/prototypes only/ms_per_section": 12.8,
+ "presence/privacy/classifier + prototypes/macro_f1": 0.619,
+ "presence/privacy/classifier + prototypes/ece": 0.003,
+ "presence/privacy/classifier + prototypes/ms_per_section": 112.5,
+ "presence/papers/classifier + prototypes/macro_f1": 0.497,
+ "presence/papers/classifier + prototypes/ece": 0.013,
+ "presence/papers/classifier + prototypes/ms_per_section": 498.1,
+ "presence/privacy/teacher labels (ceiling)/macro_f1": 0.773,
+ "presence/papers/teacher labels (ceiling)/macro_f1": 0.688,
+ "presence/privacy/gate/macro_f1": 0.619,
+ "presence/privacy/gate/teacher_ceiling": 0.773,
+ "presence/privacy/gate/share_of_ceiling": 0.801,
+ "presence/privacy/gate/result": "pass",
+ "presence/privacy/gate/sections_per_second": 133.6,
+ "presence/privacy/gate/profiled_documents": 22300,
+ "presence/papers/gate/macro_f1": 0.497,
+ "presence/papers/gate/teacher_ceiling": 0.688,
+ "presence/papers/gate/share_of_ceiling": 0.722,
+ "presence/papers/gate/result": "not met",
+ "presence/papers/gate/sections_per_second": 65.2,
+ "presence/papers/gate/profiled_documents": 14114,
+ "doc_presence/privacy/v1/macro_f1": 0.687,
+ "doc_presence/privacy/v1/micro_f1": 0.739,
+ "doc_presence/privacy/v1/ece": 0.15,
+ "doc_presence/privacy/v1/prevalence_abs_error": 0.136,
+ "doc_presence/privacy/v1/types_present_per_document": 22.76,
+ "doc_presence/privacy/labelled_types_per_document": 26.76,
+ "doc_presence/privacy/v2/macro_f1": 0.754,
+ "doc_presence/privacy/v2/micro_f1": 0.808,
+ "doc_presence/privacy/v2/ece": 0.018,
+ "doc_presence/privacy/v2/prevalence_abs_error": 0.063,
+ "doc_presence/privacy/v2/types_present_per_document": 26.09,
+ "doc_presence/papers/v1/macro_f1": 0.734,
+ "doc_presence/papers/v1/micro_f1": 0.789,
+ "doc_presence/papers/v1/ece": 0.217,
+ "doc_presence/papers/v1/prevalence_abs_error": 0.152,
+ "doc_presence/papers/v1/types_present_per_document": 25.95,
+ "doc_presence/papers/labelled_types_per_document": 27.76,
+ "doc_presence/papers/v2/macro_f1": 0.788,
+ "doc_presence/papers/v2/micro_f1": 0.85,
+ "doc_presence/papers/v2/ece": 0.02,
+ "doc_presence/papers/v2/prevalence_abs_error": 0.094,
+ "doc_presence/papers/v2/types_present_per_document": 29.73,
+ "agreement/privacy/teacher_vs_judge_privacy/micro_f1": 0.775,
+ "agreement/privacy/teacher_vs_judge_privacy/micro_precision": 0.74,
+ "agreement/privacy/teacher_vs_judge_privacy/micro_recall": 0.814,
+ "agreement/privacy/teacher_vs_judge_privacy/sections": 300,
+ "agreement/papers/teacher_vs_judge_v2_papers/micro_f1": 0.692,
+ "agreement/papers/teacher_vs_judge_v2_papers/micro_precision": 0.673,
+ "agreement/papers/teacher_vs_judge_v2_papers/micro_recall": 0.711,
+ "agreement/papers/teacher_vs_judge_v2_papers/sections": 300,
+ "agreement/privacy/teacher_vs_opp115_reference_privacy/micro_f1": 0.596,
+ "agreement/privacy/teacher_vs_opp115_reference_privacy/micro_precision": 0.606,
+ "agreement/privacy/teacher_vs_opp115_reference_privacy/micro_recall": 0.586,
+ "agreement/privacy/teacher_vs_opp115_reference_privacy/sections": 300,
+ "agreement/privacy/teacher_vs_opp115_judge_privacy/micro_f1": 0.614,
+ "agreement/privacy/teacher_vs_opp115_judge_privacy/micro_precision": 0.657,
+ "agreement/privacy/teacher_vs_opp115_judge_privacy/micro_recall": 0.577,
+ "agreement/privacy/teacher_vs_opp115_judge_privacy/sections": 300,
+ "synth/privacy/single_type/genre_uniform/recall@5": 0.385,
+ "synth/privacy/single_type/genre_uniform/recall@5/ci": [
+  0.353,
+  0.414
+ ],
+ "synth/privacy/single_type/n": 500,
+ "synth/papers/single_type/genre_uniform/recall@5": 0.514,
+ "synth/papers/single_type/genre_uniform/recall@5/ci": [
+  0.481,
+  0.552
+ ],
+ "synth/papers/single_type/n": 500,
+ "synth/privacy/single_type/level1/recall@5": 0.396,
+ "synth/privacy/single_type/level1/recall@5/ci": [
+  0.363,
+  0.425
+ ],
+ "synth/papers/single_type/level1/recall@5": 0.622,
+ "synth/papers/single_type/level1/recall@5/ci": [
+  0.587,
+  0.655
+ ],
+ "synth/privacy/single_type/random/recall@5": 0.159,
+ "synth/privacy/single_type/random/recall@5/ci": [
+  0.138,
+  0.182
+ ],
+ "synth/papers/single_type/random/recall@5": 0.278,
+ "synth/papers/single_type/random/recall@5/ci": [
+  0.249,
+  0.308
+ ],
+ "synth/privacy/single_type/absence_only/recall@5": 0.028,
+ "synth/privacy/single_type/absence_only/recall@5/ci": [
+  0.019,
+  0.038
+ ],
+ "synth/papers/single_type/absence_only/recall@5": 0.042,
+ "synth/papers/single_type/absence_only/recall@5/ci": [
+  0.028,
+  0.057
+ ],
+ "synth/privacy/three_types/genre_uniform/recall@5": 0.345,
+ "synth/privacy/three_types/genre_uniform/recall@5/ci": [
+  0.33,
+  0.362
+ ],
+ "synth/privacy/three_types/n": 500,
+ "synth/papers/three_types/genre_uniform/recall@5": 0.476,
+ "synth/papers/three_types/genre_uniform/recall@5/ci": [
+  0.457,
+  0.494
+ ],
+ "synth/papers/three_types/n": 468,
+ "synth/privacy/three_types/level1/recall@5": 0.33,
+ "synth/privacy/three_types/level1/recall@5/ci": [
+  0.314,
+  0.347
+ ],
+ "synth/papers/three_types/level1/recall@5": 0.552,
+ "synth/papers/three_types/level1/recall@5/ci": [
+  0.532,
+  0.572
+ ],
+ "synth/privacy/three_types/random/recall@5": 0.134,
+ "synth/privacy/three_types/random/recall@5/ci": [
+  0.123,
+  0.146
+ ],
+ "synth/papers/three_types/random/recall@5": 0.248,
+ "synth/papers/three_types/random/recall@5/ci": [
+  0.233,
+  0.263
+ ],
+ "synth/privacy/three_types/absence_only/recall@5": 0.042,
+ "synth/privacy/three_types/absence_only/recall@5/ci": [
+  0.035,
+  0.048
+ ],
+ "synth/papers/three_types/absence_only/recall@5": 0.055,
+ "synth/papers/three_types/absence_only/recall@5/ci": [
+  0.046,
+  0.065
+ ],
+ "synth/privacy/whole_section/genre_uniform/recall@5": 0.408,
+ "synth/privacy/whole_section/genre_uniform/recall@5/ci": [
+  0.382,
+  0.436
+ ],
+ "synth/privacy/whole_section/n": 500,
+ "synth/papers/whole_section/genre_uniform/recall@5": 0.495,
+ "synth/papers/whole_section/genre_uniform/recall@5/ci": [
+  0.465,
+  0.525
+ ],
+ "synth/papers/whole_section/n": 500,
+ "synth/privacy/whole_section/level1/recall@5": 0.412,
+ "synth/privacy/whole_section/level1/recall@5/ci": [
+  0.386,
+  0.44
+ ],
+ "synth/papers/whole_section/level1/recall@5": 0.564,
+ "synth/papers/whole_section/level1/recall@5/ci": [
+  0.533,
+  0.596
+ ],
+ "synth/privacy/whole_section/random/recall@5": 0.146,
+ "synth/privacy/whole_section/random/recall@5/ci": [
+  0.128,
+  0.165
+ ],
+ "synth/papers/whole_section/random/recall@5": 0.252,
+ "synth/papers/whole_section/random/recall@5/ci": [
+  0.226,
+  0.278
+ ],
+ "synth/privacy/whole_section/absence_only/recall@5": 0.064,
+ "synth/privacy/whole_section/absence_only/recall@5/ci": [
+  0.051,
+  0.078
+ ],
+ "synth/papers/whole_section/absence_only/recall@5": 0.053,
+ "synth/papers/whole_section/absence_only/recall@5/ci": [
+  0.039,
+  0.07
+ ],
+ "synth/privacy/single_type/genre_uniform/recall@1": 0.117,
+ "synth/papers/single_type/genre_uniform/recall@1": 0.162,
+ "synth/privacy/single_type/level1/recall@1": 0.11,
+ "synth/papers/single_type/level1/recall@1": 0.198,
+ "synth/privacy/single_type/genre_uniform/recall@10": 0.599,
+ "synth/papers/single_type/genre_uniform/recall@10": 0.785,
+ "synth/privacy/single_type/level1/recall@10": 0.628,
+ "synth/papers/single_type/level1/recall@10": 0.893,
+ "synth/privacy/single_type/genre_uniform/mrr": 0.466,
+ "synth/papers/single_type/genre_uniform/mrr": 0.489,
+ "synth/privacy/single_type/level1/mrr": 0.444,
+ "synth/papers/single_type/level1/mrr": 0.553,
+ "synth/privacy/single_type/genre_uniform/ndcg@10": 0.425,
+ "synth/papers/single_type/genre_uniform/ndcg@10": 0.524,
+ "synth/privacy/single_type/level1/ndcg@10": 0.431,
+ "synth/papers/single_type/level1/ndcg@10": 0.609,
+ "synth/privacy/untouched/genre_uniform/false_alarm@5": 0.205,
+ "synth/privacy/untouched/n": 150,
+ "synth/papers/untouched/genre_uniform/false_alarm@5": 0.305,
+ "synth/papers/untouched/n": 150,
+ "synth/privacy/untouched/level1/false_alarm@5": 0.223,
+ "synth/papers/untouched/level1/false_alarm@5": 0.341,
+ "synth/privacy/untouched/random/false_alarm@5": 0.176,
+ "synth/papers/untouched/random/false_alarm@5": 0.204,
+ "synth/privacy/untouched/genre_uniform/ece_expected": 0.048,
+ "synth/papers/untouched/genre_uniform/ece_expected": 0.079,
+ "synth/privacy/untouched/level1/ece_expected": 0.067,
+ "synth/papers/untouched/level1/ece_expected": 0.091,
+ "gate66/privacy/single_type": 0.011,
+ "gate66/privacy/single_type/ci": [
+  -0.01,
+  0.033
+ ],
+ "gate66/privacy/single_type/above_zero": false,
+ "gate66/papers/single_type": 0.108,
+ "gate66/papers/single_type/ci": [
+  0.074,
+  0.141
+ ],
+ "gate66/papers/single_type/above_zero": true,
+ "gate66/privacy/three_types": -0.015,
+ "gate66/privacy/three_types/ci": [
+  -0.028,
+  -0.004
+ ],
+ "gate66/privacy/three_types/above_zero": false,
+ "gate66/papers/three_types": 0.075,
+ "gate66/papers/three_types/ci": [
+  0.059,
+  0.092
+ ],
+ "gate66/papers/three_types/above_zero": true,
+ "gate66/privacy/whole_section": 0.004,
+ "gate66/privacy/whole_section/ci": [
+  -0.015,
+  0.022
+ ],
+ "gate66/privacy/whole_section/above_zero": false,
+ "gate66/papers/whole_section": 0.069,
+ "gate66/papers/whole_section/ci": [
+  0.042,
+  0.098
+ ],
+ "gate66/papers/whole_section/above_zero": true,
+ "gate66/privacy/revision": -0.01,
+ "gate66/privacy/revision/ci": [
+  -0.023,
+  0.002
+ ],
+ "gate66/privacy/revision/above_zero": false,
+ "gate66/papers/revision": 0.107,
+ "gate66/papers/revision/ci": [
+  0.046,
+  0.166
+ ],
+ "gate66/papers/revision/above_zero": true,
+ "gate66/privacy/revision_all_added": -0.009,
+ "gate66/privacy/revision_all_added/ci": [
+  -0.017,
+  -0.002
+ ],
+ "gate66/privacy/revision_all_added/above_zero": false,
+ "gate66/papers/revision_all_added": 0.041,
+ "gate66/papers/revision_all_added/ci": [
+  -0.003,
+  0.086
+ ],
+ "gate66/papers/revision_all_added/above_zero": false,
+ "revision/privacy/pairs": 4029,
+ "revision/privacy/no_added_type": 1357,
+ "revision/privacy/below_prevalence": 994,
+ "revision/privacy/instances": 1678,
+ "revision/privacy/instances_all_added": 2672,
+ "revision/privacy/years": [
+  1999,
+  2019
+ ],
+ "revision/papers/pairs": 343,
+ "revision/papers/no_added_type": 117,
+ "revision/papers/below_prevalence": 89,
+ "revision/papers/instances": 137,
+ "revision/papers/instances_all_added": 226,
+ "revision/papers/years": [
+  2019,
+  2022
+ ],
+ "revision/privacy/revision/genre_uniform/recall@5": 0.602,
+ "revision/privacy/revision/genre_uniform/recall@5/ci": [
+  0.58,
+  0.625
+ ],
+ "revision/papers/revision/genre_uniform/recall@5": 0.674,
+ "revision/papers/revision/genre_uniform/recall@5/ci": [
+  0.611,
+  0.739
+ ],
+ "revision/privacy/revision/level1/recall@5": 0.592,
+ "revision/privacy/revision/level1/recall@5/ci": [
+  0.568,
+  0.614
+ ],
+ "revision/papers/revision/level1/recall@5": 0.781,
+ "revision/papers/revision/level1/recall@5/ci": [
+  0.722,
+  0.838
+ ],
+ "revision/privacy/revision/random/recall@5": 0.147,
+ "revision/privacy/revision/random/recall@5/ci": [
+  0.133,
+  0.161
+ ],
+ "revision/papers/revision/random/recall@5": 0.343,
+ "revision/papers/revision/random/recall@5/ci": [
+  0.271,
+  0.409
+ ],
+ "revision/privacy/revision/absence_only/recall@5": 0.007,
+ "revision/privacy/revision/absence_only/recall@5/ci": [
+  0.004,
+  0.012
+ ],
+ "revision/papers/revision/absence_only/recall@5": 0.016,
+ "revision/papers/revision/absence_only/recall@5/ci": [
+  0.0,
+  0.038
+ ],
+ "revision/privacy/revision_all_added/genre_uniform/recall@5": 0.29,
+ "revision/privacy/revision_all_added/genre_uniform/recall@5/ci": [
+  0.278,
+  0.303
+ ],
+ "revision/papers/revision_all_added/genre_uniform/recall@5": 0.474,
+ "revision/papers/revision_all_added/genre_uniform/recall@5/ci": [
+  0.43,
+  0.522
+ ],
+ "revision/privacy/revision_all_added/level1/recall@5": 0.281,
+ "revision/privacy/revision_all_added/level1/recall@5/ci": [
+  0.268,
+  0.293
+ ],
+ "revision/papers/revision_all_added/level1/recall@5": 0.516,
+ "revision/papers/revision_all_added/level1/recall@5/ci": [
+  0.471,
+  0.559
+ ],
+ "revision/privacy/revision_all_added/random/recall@5": 0.17,
+ "revision/privacy/revision_all_added/random/recall@5/ci": [
+  0.16,
+  0.18
+ ],
+ "revision/papers/revision_all_added/random/recall@5": 0.301,
+ "revision/papers/revision_all_added/random/recall@5/ci": [
+  0.257,
+  0.346
+ ],
+ "revision/privacy/revision_all_added/absence_only/recall@5": 0.045,
+ "revision/privacy/revision_all_added/absence_only/recall@5/ci": [
+  0.04,
+  0.052
+ ],
+ "revision/papers/revision_all_added/absence_only/recall@5": 0.208,
+ "revision/papers/revision_all_added/absence_only/recall@5/ci": [
+  0.17,
+  0.25
+ ],
+ "leak/privacy/genre_uniform/within_doc_auc": 0.854,
+ "leak/privacy/genre_uniform/brier": 0.176,
+ "leak/privacy/default/within_doc_auc": 0.88,
+ "leak/privacy/default/brier": 0.17,
+ "leak/privacy/default/edited_minus_uniform": 0.011,
+ "leak/privacy/default/edited_minus_uniform/ci": [
+  -0.0106,
+  0.0326
+ ],
+ "leak/privacy/default/original_minus_uniform": 0.026,
+ "leak/privacy/default/original_minus_uniform/ci": [
+  0.0049,
+  0.0472
+ ],
+ "leak/privacy/default/leak_original_minus_edited": 0.015,
+ "leak/privacy/default/leak_original_minus_edited/ci": [
+  0.0052,
+  0.0257
+ ],
+ "leak/privacy/no_category/within_doc_auc": 0.893,
+ "leak/privacy/no_category/brier": 0.166,
+ "leak/privacy/no_category/edited_minus_uniform": -0.0036,
+ "leak/privacy/no_category/edited_minus_uniform/ci": [
+  -0.0289,
+  0.0208
+ ],
+ "leak/privacy/no_category/original_minus_uniform": 0.0226,
+ "leak/privacy/no_category/original_minus_uniform/ci": [
+  -0.0031,
+  0.0472
+ ],
+ "leak/privacy/no_category/leak_original_minus_edited": 0.0262,
+ "leak/privacy/no_category/leak_original_minus_edited/ci": [
+  0.0163,
+  0.037
+ ],
+ "leak/privacy/no_title/within_doc_auc": 0.896,
+ "leak/privacy/no_title/brier": 0.173,
+ "leak/privacy/no_title/edited_minus_uniform": -0.0032,
+ "leak/privacy/no_title/edited_minus_uniform/ci": [
+  -0.0302,
+  0.0242
+ ],
+ "leak/privacy/no_title/original_minus_uniform": 0.0183,
+ "leak/privacy/no_title/original_minus_uniform/ci": [
+  -0.0098,
+  0.0469
+ ],
+ "leak/privacy/no_title/leak_original_minus_edited": 0.0215,
+ "leak/privacy/no_title/leak_original_minus_edited/ci": [
+  0.0091,
+  0.0341
+ ],
+ "leak/privacy/no_title_no_category/within_doc_auc": 0.915,
+ "leak/privacy/no_title_no_category/brier": 0.166,
+ "leak/privacy/no_title_no_category/edited_minus_uniform": 0.0129,
+ "leak/privacy/no_title_no_category/edited_minus_uniform/ci": [
+  -0.0201,
+  0.048
+ ],
+ "leak/privacy/no_title_no_category/original_minus_uniform": 0.0688,
+ "leak/privacy/no_title_no_category/original_minus_uniform/ci": [
+  0.036,
+  0.1023
+ ],
+ "leak/privacy/no_title_no_category/leak_original_minus_edited": 0.0559,
+ "leak/privacy/no_title_no_category/leak_original_minus_edited/ci": [
+  0.0387,
+  0.073
+ ],
+ "leak/privacy/k20/within_doc_auc": 0.879,
+ "leak/privacy/k20/brier": 0.171,
+ "leak/privacy/k20/edited_minus_uniform": 0.0077,
+ "leak/privacy/k20/edited_minus_uniform/ci": [
+  -0.0189,
+  0.0338
+ ],
+ "leak/privacy/k20/original_minus_uniform": 0.0218,
+ "leak/privacy/k20/original_minus_uniform/ci": [
+  -0.0062,
+  0.0518
+ ],
+ "leak/privacy/k20/leak_original_minus_edited": 0.0141,
+ "leak/privacy/k20/leak_original_minus_edited/ci": [
+  0.0011,
+  0.0289
+ ],
+ "leak/privacy/k50/within_doc_auc": 0.883,
+ "leak/privacy/k50/brier": 0.169,
+ "leak/privacy/k50/edited_minus_uniform": 0.0105,
+ "leak/privacy/k50/edited_minus_uniform/ci": [
+  -0.015,
+  0.0356
+ ],
+ "leak/privacy/k50/original_minus_uniform": 0.0412,
+ "leak/privacy/k50/original_minus_uniform/ci": [
+  0.0144,
+  0.0684
+ ],
+ "leak/privacy/k50/leak_original_minus_edited": 0.0307,
+ "leak/privacy/k50/leak_original_minus_edited/ci": [
+  0.0182,
+  0.0443
+ ],
+ "leak/privacy/k1000/within_doc_auc": 0.874,
+ "leak/privacy/k1000/brier": 0.173,
+ "leak/privacy/k1000/edited_minus_uniform": -0.0154,
+ "leak/privacy/k1000/edited_minus_uniform/ci": [
+  -0.036,
+  0.0059
+ ],
+ "leak/privacy/k1000/original_minus_uniform": -0.0042,
+ "leak/privacy/k1000/original_minus_uniform/ci": [
+  -0.0253,
+  0.0165
+ ],
+ "leak/privacy/k1000/leak_original_minus_edited": 0.0112,
+ "leak/privacy/k1000/leak_original_minus_edited/ci": [
+  0.0062,
+  0.017
+ ],
+ "leak/privacy/one_per_entity/within_doc_auc": 0.882,
+ "leak/privacy/one_per_entity/brier": 0.17,
+ "leak/privacy/one_per_entity/edited_minus_uniform": 0.0002,
+ "leak/privacy/one_per_entity/edited_minus_uniform/ci": [
+  -0.0218,
+  0.02
+ ],
+ "leak/privacy/one_per_entity/original_minus_uniform": 0.0178,
+ "leak/privacy/one_per_entity/original_minus_uniform/ci": [
+  -0.0043,
+  0.0379
+ ],
+ "leak/privacy/one_per_entity/leak_original_minus_edited": 0.0176,
+ "leak/privacy/one_per_entity/leak_original_minus_edited/ci": [
+  0.009,
+  0.0272
+ ],
+ "leak/privacy/mean_probability/within_doc_auc": 0.877,
+ "leak/privacy/mean_probability/brier": 0.174,
+ "leak/privacy/mean_probability/edited_minus_uniform": 0.0075,
+ "leak/privacy/mean_probability/edited_minus_uniform/ci": [
+  -0.0147,
+  0.0281
+ ],
+ "leak/privacy/mean_probability/original_minus_uniform": 0.0299,
+ "leak/privacy/mean_probability/original_minus_uniform/ci": [
+  0.008,
+  0.0514
+ ],
+ "leak/privacy/mean_probability/leak_original_minus_edited": 0.0224,
+ "leak/privacy/mean_probability/leak_original_minus_edited/ci": [
+  0.0132,
+  0.033
+ ],
+ "leak/privacy/presence_documents": 800,
+ "leak/papers/genre_uniform/within_doc_auc": 0.922,
+ "leak/papers/genre_uniform/brier": 0.127,
+ "leak/papers/default/within_doc_auc": 0.959,
+ "leak/papers/default/brier": 0.102,
+ "leak/papers/default/edited_minus_uniform": 0.1078,
+ "leak/papers/default/edited_minus_uniform/ci": [
+  0.0746,
+  0.1419
+ ],
+ "leak/papers/default/original_minus_uniform": 0.1167,
+ "leak/papers/default/original_minus_uniform/ci": [
+  0.0847,
+  0.1486
+ ],
+ "leak/papers/default/leak_original_minus_edited": 0.0089,
+ "leak/papers/default/leak_original_minus_edited/ci": [
+  -0.001,
+  0.0188
+ ],
+ "leak/papers/no_category/within_doc_auc": 0.96,
+ "leak/papers/no_category/brier": 0.101,
+ "leak/papers/no_category/edited_minus_uniform": 0.1092,
+ "leak/papers/no_category/edited_minus_uniform/ci": [
+  0.0767,
+  0.1429
+ ],
+ "leak/papers/no_category/original_minus_uniform": 0.123,
+ "leak/papers/no_category/original_minus_uniform/ci": [
+  0.0892,
+  0.158
+ ],
+ "leak/papers/no_category/leak_original_minus_edited": 0.0138,
+ "leak/papers/no_category/leak_original_minus_edited/ci": [
+  0.0045,
+  0.0236
+ ],
+ "leak/papers/no_title/within_doc_auc": 0.962,
+ "leak/papers/no_title/brier": 0.101,
+ "leak/papers/no_title/edited_minus_uniform": 0.1029,
+ "leak/papers/no_title/edited_minus_uniform/ci": [
+  0.0673,
+  0.1384
+ ],
+ "leak/papers/no_title/original_minus_uniform": 0.1213,
+ "leak/papers/no_title/original_minus_uniform/ci": [
+  0.087,
+  0.156
+ ],
+ "leak/papers/no_title/leak_original_minus_edited": 0.0185,
+ "leak/papers/no_title/leak_original_minus_edited/ci": [
+  0.0085,
+  0.0278
+ ],
+ "leak/papers/no_title_no_category/within_doc_auc": 0.963,
+ "leak/papers/no_title_no_category/brier": 0.1,
+ "leak/papers/no_title_no_category/edited_minus_uniform": 0.1105,
+ "leak/papers/no_title_no_category/edited_minus_uniform/ci": [
+  0.0765,
+  0.1447
+ ],
+ "leak/papers/no_title_no_category/original_minus_uniform": 0.1256,
+ "leak/papers/no_title_no_category/original_minus_uniform/ci": [
+  0.0916,
+  0.1593
+ ],
+ "leak/papers/no_title_no_category/leak_original_minus_edited": 0.015,
+ "leak/papers/no_title_no_category/leak_original_minus_edited/ci": [
+  0.0035,
+  0.0264
+ ],
+ "leak/papers/k20/within_doc_auc": 0.958,
+ "leak/papers/k20/brier": 0.098,
+ "leak/papers/k20/edited_minus_uniform": 0.1274,
+ "leak/papers/k20/edited_minus_uniform/ci": [
+  0.0933,
+  0.1625
+ ],
+ "leak/papers/k20/original_minus_uniform": 0.1355,
+ "leak/papers/k20/original_minus_uniform/ci": [
+  0.1001,
+  0.1711
+ ],
+ "leak/papers/k20/leak_original_minus_edited": 0.0081,
+ "leak/papers/k20/leak_original_minus_edited/ci": [
+  -0.0015,
+  0.0174
+ ],
+ "leak/papers/k50/within_doc_auc": 0.96,
+ "leak/papers/k50/brier": 0.099,
+ "leak/papers/k50/edited_minus_uniform": 0.1268,
+ "leak/papers/k50/edited_minus_uniform/ci": [
+  0.0951,
+  0.1624
+ ],
+ "leak/papers/k50/original_minus_uniform": 0.1333,
+ "leak/papers/k50/original_minus_uniform/ci": [
+  0.1016,
+  0.1665
+ ],
+ "leak/papers/k50/leak_original_minus_edited": 0.0066,
+ "leak/papers/k50/leak_original_minus_edited/ci": [
+  -0.003,
+  0.0153
+ ],
+ "leak/papers/k1000/within_doc_auc": 0.954,
+ "leak/papers/k1000/brier": 0.107,
+ "leak/papers/k1000/edited_minus_uniform": 0.0756,
+ "leak/papers/k1000/edited_minus_uniform/ci": [
+  0.0442,
+  0.1072
+ ],
+ "leak/papers/k1000/original_minus_uniform": 0.0818,
+ "leak/papers/k1000/original_minus_uniform/ci": [
+  0.0494,
+  0.1122
+ ],
+ "leak/papers/k1000/leak_original_minus_edited": 0.0061,
+ "leak/papers/k1000/leak_original_minus_edited/ci": [
+  0.0022,
+  0.0106
+ ],
+ "leak/papers/one_per_entity/within_doc_auc": 0.959,
+ "leak/papers/one_per_entity/brier": 0.102,
+ "leak/papers/one_per_entity/edited_minus_uniform": 0.1078,
+ "leak/papers/one_per_entity/edited_minus_uniform/ci": [
+  0.0746,
+  0.1419
+ ],
+ "leak/papers/one_per_entity/original_minus_uniform": 0.1167,
+ "leak/papers/one_per_entity/original_minus_uniform/ci": [
+  0.0847,
+  0.1486
+ ],
+ "leak/papers/one_per_entity/leak_original_minus_edited": 0.0089,
+ "leak/papers/one_per_entity/leak_original_minus_edited/ci": [
+  -0.001,
+  0.0188
+ ],
+ "leak/papers/mean_probability/within_doc_auc": 0.958,
+ "leak/papers/mean_probability/brier": 0.111,
+ "leak/papers/mean_probability/edited_minus_uniform": 0.0916,
+ "leak/papers/mean_probability/edited_minus_uniform/ci": [
+  0.0573,
+  0.1247
+ ],
+ "leak/papers/mean_probability/original_minus_uniform": 0.0977,
+ "leak/papers/mean_probability/original_minus_uniform/ci": [
+  0.0634,
+  0.1318
+ ],
+ "leak/papers/mean_probability/leak_original_minus_edited": 0.0061,
+ "leak/papers/mean_probability/leak_original_minus_edited/ci": [
+  -0.0038,
+  0.0166
+ ],
+ "leak/papers/presence_documents": 800,
+ "llm_gap/n": 100,
+ "llm_gap/privacy/anthropic:claude-opus-5-5/recall@1": 0.051,
+ "llm_gap/privacy/anthropic:claude-opus-5-5/recall@1/ci": [
+  0.029,
+  0.077
+ ],
+ "llm_gap/papers/anthropic:claude-opus-5-5/recall@1": 0.07,
+ "llm_gap/papers/anthropic:claude-opus-5-5/recall@1/ci": [
+  0.035,
+  0.113
+ ],
+ "llm_gap/privacy/anthropic:claude-opus-5-5/recall@5": 0.242,
+ "llm_gap/privacy/anthropic:claude-opus-5-5/recall@5/ci": [
+  0.185,
+  0.301
+ ],
+ "llm_gap/papers/anthropic:claude-opus-5-5/recall@5": 0.235,
+ "llm_gap/papers/anthropic:claude-opus-5-5/recall@5/ci": [
+  0.172,
+  0.306
+ ],
+ "llm_gap/privacy/anthropic:claude-opus-5-5/recall@10": 0.405,
+ "llm_gap/privacy/anthropic:claude-opus-5-5/recall@10/ci": [
+  0.341,
+  0.474
+ ],
+ "llm_gap/papers/anthropic:claude-opus-5-5/recall@10": 0.352,
+ "llm_gap/papers/anthropic:claude-opus-5-5/recall@10/ci": [
+  0.281,
+  0.427
+ ],
+ "llm_gap/privacy/anthropic:claude-opus-5-5/mrr@10": 0.339,
+ "llm_gap/privacy/anthropic:claude-opus-5-5/mrr@10/ci": [
+  0.272,
+  0.405
+ ],
+ "llm_gap/papers/anthropic:claude-opus-5-5/mrr@10": 0.275,
+ "llm_gap/papers/anthropic:claude-opus-5-5/mrr@10/ci": [
+  0.208,
+  0.353
+ ],
+ "llm_gap/privacy/openai:qwen/qwen-2.5-72b-instruct/recall@1": 0.042,
+ "llm_gap/privacy/openai:qwen/qwen-2.5-72b-instruct/recall@1/ci": [
+  0.018,
+  0.075
+ ],
+ "llm_gap/papers/openai:qwen/qwen-2.5-72b-instruct/recall@1": 0.022,
+ "llm_gap/papers/openai:qwen/qwen-2.5-72b-instruct/recall@1/ci": [
+  0.007,
+  0.04
+ ],
+ "llm_gap/privacy/openai:qwen/qwen-2.5-72b-instruct/recall@5": 0.137,
+ "llm_gap/privacy/openai:qwen/qwen-2.5-72b-instruct/recall@5/ci": [
+  0.09,
+  0.187
+ ],
+ "llm_gap/papers/openai:qwen/qwen-2.5-72b-instruct/recall@5": 0.181,
+ "llm_gap/papers/openai:qwen/qwen-2.5-72b-instruct/recall@5/ci": [
+  0.126,
+  0.245
+ ],
+ "llm_gap/privacy/openai:qwen/qwen-2.5-72b-instruct/recall@10": 0.225,
+ "llm_gap/privacy/openai:qwen/qwen-2.5-72b-instruct/recall@10/ci": [
+  0.165,
+  0.287
+ ],
+ "llm_gap/papers/openai:qwen/qwen-2.5-72b-instruct/recall@10": 0.293,
+ "llm_gap/papers/openai:qwen/qwen-2.5-72b-instruct/recall@10/ci": [
+  0.226,
+  0.363
+ ],
+ "llm_gap/privacy/openai:qwen/qwen-2.5-72b-instruct/mrr@10": 0.199,
+ "llm_gap/privacy/openai:qwen/qwen-2.5-72b-instruct/mrr@10/ci": [
+  0.14,
+  0.266
+ ],
+ "llm_gap/papers/openai:qwen/qwen-2.5-72b-instruct/mrr@10": 0.179,
+ "llm_gap/papers/openai:qwen/qwen-2.5-72b-instruct/mrr@10/ci": [
+  0.127,
+  0.235
+ ],
+ "llm_gap/privacy/level1/recall@1": 0.098,
+ "llm_gap/privacy/level1/recall@1/ci": [
+  0.068,
+  0.132
+ ],
+ "llm_gap/papers/level1/recall@1": 0.189,
+ "llm_gap/papers/level1/recall@1/ci": [
+  0.128,
+  0.256
+ ],
+ "llm_gap/privacy/level1/recall@5": 0.376,
+ "llm_gap/privacy/level1/recall@5/ci": [
+  0.316,
+  0.439
+ ],
+ "llm_gap/papers/level1/recall@5": 0.655,
+ "llm_gap/papers/level1/recall@5/ci": [
+  0.586,
+  0.723
+ ],
+ "llm_gap/privacy/level1/recall@10": 0.596,
+ "llm_gap/privacy/level1/recall@10/ci": [
+  0.526,
+  0.663
+ ],
+ "llm_gap/papers/level1/recall@10": 0.882,
+ "llm_gap/papers/level1/recall@10/ci": [
+  0.833,
+  0.925
+ ],
+ "llm_gap/privacy/level1/mrr@10": 0.451,
+ "llm_gap/privacy/level1/mrr@10/ci": [
+  0.374,
+  0.525
+ ],
+ "llm_gap/papers/level1/mrr@10": 0.545,
+ "llm_gap/papers/level1/mrr@10/ci": [
+  0.477,
+  0.614
+ ],
+ "llm_gap/privacy/genre_uniform/recall@1": 0.103,
+ "llm_gap/privacy/genre_uniform/recall@1/ci": [
+  0.074,
+  0.136
+ ],
+ "llm_gap/papers/genre_uniform/recall@1": 0.177,
+ "llm_gap/papers/genre_uniform/recall@1/ci": [
+  0.118,
+  0.236
+ ],
+ "llm_gap/privacy/genre_uniform/recall@5": 0.375,
+ "llm_gap/privacy/genre_uniform/recall@5/ci": [
+  0.312,
+  0.435
+ ],
+ "llm_gap/papers/genre_uniform/recall@5": 0.465,
+ "llm_gap/papers/genre_uniform/recall@5/ci": [
+  0.385,
+  0.544
+ ],
+ "llm_gap/privacy/genre_uniform/recall@10": 0.573,
+ "llm_gap/privacy/genre_uniform/recall@10/ci": [
+  0.504,
+  0.643
+ ],
+ "llm_gap/papers/genre_uniform/recall@10": 0.758,
+ "llm_gap/papers/genre_uniform/recall@10/ci": [
+  0.694,
+  0.824
+ ],
+ "llm_gap/privacy/genre_uniform/mrr@10": 0.484,
+ "llm_gap/privacy/genre_uniform/mrr@10/ci": [
+  0.412,
+  0.561
+ ],
+ "llm_gap/papers/genre_uniform/mrr@10": 0.48,
+ "llm_gap/papers/genre_uniform/mrr@10/ci": [
+  0.407,
+  0.555
+ ],
+ "llm_gap/privacy/anthropic:claude-opus-5-5 - level1/recall@5": -0.133,
+ "llm_gap/privacy/anthropic:claude-opus-5-5 - level1/recall@5/ci": [
+  -0.198,
+  -0.064
+ ],
+ "llm_gap/papers/anthropic:claude-opus-5-5 - level1/recall@5": -0.42,
+ "llm_gap/papers/anthropic:claude-opus-5-5 - level1/recall@5/ci": [
+  -0.518,
+  -0.325
+ ],
+ "llm_gap/privacy/anthropic:claude-opus-5-5 - genre_uniform/recall@5": -0.132,
+ "llm_gap/privacy/anthropic:claude-opus-5-5 - genre_uniform/recall@5/ci": [
+  -0.199,
+  -0.061
+ ],
+ "llm_gap/papers/anthropic:claude-opus-5-5 - genre_uniform/recall@5": -0.23,
+ "llm_gap/papers/anthropic:claude-opus-5-5 - genre_uniform/recall@5/ci": [
+  -0.328,
+  -0.129
+ ],
+ "llm_gap/privacy/openai:qwen/qwen-2.5-72b-instruct - level1/recall@5": -0.239,
+ "llm_gap/privacy/openai:qwen/qwen-2.5-72b-instruct - level1/recall@5/ci": [
+  -0.311,
+  -0.16
+ ],
+ "llm_gap/papers/openai:qwen/qwen-2.5-72b-instruct - level1/recall@5": -0.473,
+ "llm_gap/papers/openai:qwen/qwen-2.5-72b-instruct - level1/recall@5/ci": [
+  -0.569,
+  -0.378
+ ],
+ "llm_gap/privacy/openai:qwen/qwen-2.5-72b-instruct - genre_uniform/recall@5": -0.238,
+ "llm_gap/privacy/openai:qwen/qwen-2.5-72b-instruct - genre_uniform/recall@5/ci": [
+  -0.304,
+  -0.166
+ ],
+ "llm_gap/papers/openai:qwen/qwen-2.5-72b-instruct - genre_uniform/recall@5": -0.283,
+ "llm_gap/papers/openai:qwen/qwen-2.5-72b-instruct - genre_uniform/recall@5/ci": [
+  -0.387,
+  -0.182
+ ],
+ "speed/privacy/documents": 5,
+ "speed/privacy/max_seconds": 1.374,
+ "speed/privacy/median_seconds": 0.349,
+ "speed/privacy/embed_share": 0.782,
+ "speed/privacy/sections": [
+  4,
+  17
+ ],
+ "speed/papers/documents": 5,
+ "speed/papers/max_seconds": 3.278,
+ "speed/papers/median_seconds": 3.111,
+ "speed/papers/embed_share": 0.858,
+ "speed/papers/sections": [
+  13,
+  31
+ ],
+ "errors/privacy/false_alarm/reserves_right_to_change_policy": [
+  11,
+  59
+ ],
+ "errors/privacy/false_alarm/browser_cookie_controls": [
+  11,
+  41
+ ],
+ "errors/privacy/false_alarm/provides_third_party_links": [
+  10,
+  26
+ ],
+ "errors/privacy/false_alarm/uses_data_to_personalize": [
+  9,
+  29
+ ],
+ "errors/privacy/false_alarm/security_not_guaranteed": [
+  9,
+  26
+ ],
+ "errors/privacy/types_scored": 58,
+ "errors/privacy/types_never_in_top5": 13,
+ "errors/privacy/never_types": [
+  "advises_users_on_security",
+  "california_disclosure_rights",
+  "complies_with_laws_and_programs",
+  "continued_use_means_acceptance",
+  "deletes_children_data_if_found",
+  "disclaims_control_of_third_party_cookies",
+  "disclose_data_rights",
+  "do_not_track_response",
+  "does_not_store_payment_cards",
+  "governing_law_and_disputes",
+  "limits_internal_access",
+  "stores_data_securely",
+  "uses_web_beacons"
+ ],
+ "errors/privacy/median_prevalence_never": 0.1,
+ "errors/privacy/median_prevalence_all": 0.384,
+ "errors/privacy/by_length/q1": 0.042,
+ "errors/privacy/by_length/q1/ci": [
+  0.002,
+  0.086
+ ],
+ "errors/privacy/by_length/q2": 0.001,
+ "errors/privacy/by_length/q2/ci": [
+  -0.053,
+  0.052
+ ],
+ "errors/privacy/by_length/q3": -0.013,
+ "errors/privacy/by_length/q3/ci": [
+  -0.049,
+  0.023
+ ],
+ "errors/privacy/by_length/q4": 0.014,
+ "errors/privacy/by_length/q4/ci": [
+  -0.022,
+  0.053
+ ],
+ "errors/papers/false_alarm/refers_to_appendix": [
+  16,
+  32
+ ],
+ "errors/papers/false_alarm/code_and_data_availability": [
+  15,
+  32
+ ],
+ "errors/papers/false_alarm/assumption_and_distribution": [
+  15,
+  21
+ ],
+ "errors/papers/false_alarm/gives_illustrative_example": [
+  14,
+  27
+ ],
+ "errors/papers/false_alarm/reports_dataset_statistics": [
+  13,
+  34
+ ],
+ "errors/papers/types_scored": 47,
+ "errors/papers/types_never_in_top5": 7,
+ "errors/papers/never_types": [
+  "describes_method_details",
+  "ethics_and_declarations",
+  "motivates_problem",
+  "proposes_method",
+  "reviews_prior_work",
+  "states_limitations_of_existing_approaches",
+  "task_description"
+ ],
+ "errors/papers/median_prevalence_never": 1.0,
+ "errors/papers/median_prevalence_all": 0.728,
+ "errors/papers/by_length/q1": 0.071,
+ "errors/papers/by_length/q1/ci": [
+  0.002,
+  0.133
+ ],
+ "errors/papers/by_length/q2": 0.054,
+ "errors/papers/by_length/q2/ci": [
+  -0.011,
+  0.116
+ ],
+ "errors/papers/by_length/q3": 0.187,
+ "errors/papers/by_length/q3/ci": [
+  0.12,
+  0.261
+ ],
+ "errors/papers/by_length/q4": 0.119,
+ "errors/papers/by_length/q4/ci": [
+  0.046,
+  0.188
+ ],
+ "severity/privacy/single_type/level1 - reference/recall@5": 0.005,
+ "severity/privacy/single_type/level1 - reference/recall@5/ci": [
+  -0.024,
+  0.032
+ ],
+ "severity/papers/single_type/level1 - reference/recall@5": 0.0,
+ "severity/papers/single_type/level1 - reference/recall@5/ci": [
+  0.0,
+  0.0
+ ],
+ "severity/privacy/single_type/genre_uniform - reference/recall@5": -0.001,
+ "severity/privacy/single_type/genre_uniform - reference/recall@5/ci": [
+  -0.029,
+  0.026
+ ],
+ "severity/papers/single_type/genre_uniform - reference/recall@5": 0.0,
+ "severity/papers/single_type/genre_uniform - reference/recall@5/ci": [
+  0.0,
+  0.0
+ ],
+ "severity/privacy/single_type/level1 - genre_uniform/recall@5": 0.017,
+ "severity/privacy/single_type/level1 - genre_uniform/recall@5/ci": [
+  -0.001,
+  0.035
+ ],
+ "severity/papers/single_type/level1 - genre_uniform/recall@5": 0.108,
+ "severity/papers/single_type/level1 - genre_uniform/recall@5/ci": [
+  0.074,
+  0.141
+ ],
+ "severity/privacy/three_types/level1 - reference/recall@5": 0.031,
+ "severity/privacy/three_types/level1 - reference/recall@5/ci": [
+  0.017,
+  0.045
+ ],
+ "severity/papers/three_types/level1 - reference/recall@5": 0.0,
+ "severity/papers/three_types/level1 - reference/recall@5/ci": [
+  0.0,
+  0.0
+ ],
+ "severity/privacy/three_types/genre_uniform - reference/recall@5": 0.003,
+ "severity/privacy/three_types/genre_uniform - reference/recall@5/ci": [
+  -0.01,
+  0.015
+ ],
+ "severity/papers/three_types/genre_uniform - reference/recall@5": 0.0,
+ "severity/papers/three_types/genre_uniform - reference/recall@5/ci": [
+  0.0,
+  0.0
+ ],
+ "severity/privacy/three_types/level1 - genre_uniform/recall@5": 0.013,
+ "severity/privacy/three_types/level1 - genre_uniform/recall@5/ci": [
+  0.003,
+  0.023
+ ],
+ "severity/papers/three_types/level1 - genre_uniform/recall@5": 0.075,
+ "severity/papers/three_types/level1 - genre_uniform/recall@5/ci": [
+  0.059,
+  0.092
+ ],
+ "severity/privacy/whole_section/level1 - reference/recall@5": 0.017,
+ "severity/privacy/whole_section/level1 - reference/recall@5/ci": [
+  -0.002,
+  0.036
+ ],
+ "severity/papers/whole_section/level1 - reference/recall@5": 0.0,
+ "severity/papers/whole_section/level1 - reference/recall@5/ci": [
+  0.0,
+  0.0
+ ],
+ "severity/privacy/whole_section/genre_uniform - reference/recall@5": 0.0,
+ "severity/privacy/whole_section/genre_uniform - reference/recall@5/ci": [
+  -0.018,
+  0.019
+ ],
+ "severity/papers/whole_section/genre_uniform - reference/recall@5": 0.0,
+ "severity/papers/whole_section/genre_uniform - reference/recall@5/ci": [
+  0.0,
+  0.0
+ ],
+ "severity/privacy/whole_section/level1 - genre_uniform/recall@5": 0.021,
+ "severity/privacy/whole_section/level1 - genre_uniform/recall@5/ci": [
+  0.004,
+  0.036
+ ],
+ "severity/papers/whole_section/level1 - genre_uniform/recall@5": 0.069,
+ "severity/papers/whole_section/level1 - genre_uniform/recall@5/ci": [
+  0.042,
+  0.098
+ ],
+ "severity/privacy/untouched/genre_uniform/false_alarm@5": 0.245,
+ "severity/papers/untouched/genre_uniform/false_alarm@5": 0.305,
+ "severity/privacy/untouched/level1/false_alarm@5": 0.243,
+ "severity/papers/untouched/level1/false_alarm@5": 0.341
+}
