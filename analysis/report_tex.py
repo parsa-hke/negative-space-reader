@@ -32,6 +32,8 @@ PREAMBLE = r"""\documentclass[11pt,a4paper]{article}
 \usepackage{pifont}
 \usepackage{graphicx}
 \usepackage{booktabs}
+\usepackage{array}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
 \usepackage{adjustbox}
 \usepackage[font=small,labelfont=bf,skip=4pt]{caption}
 \usepackage{xcolor}
@@ -124,10 +126,29 @@ def _smart_quotes(tex: str) -> str:
     return "".join(out)
 
 
+LINE_CHARS = 100   # about what one line of a \small table holds across the text width
+TEXT_CM = 16.2     # the text width (A4, 2.4 cm margins)
+
+
+def column_spec(cells: list[list[str]], ncol: int) -> str:
+    """l for every column while the widest cells fit one line; otherwise the long columns (over 28 characters) become
+    ragged-right P{} columns sharing the width the short ones leave, so a table wraps its text instead of shrinking as a whole."""
+    widest = [max((len(r[c]) for r in cells if c < len(r)), default=0) for c in range(ncol)]
+    if sum(widest) + 3 * ncol <= LINE_CHARS:
+        return "l" * ncol
+    long = [c for c in range(ncol) if widest[c] > 28]
+    if not long:
+        return "l" * ncol
+    short_cm = sum(widest[c] for c in range(ncol) if c not in long) * TEXT_CM / LINE_CHARS + 0.5 * ncol
+    left = max(TEXT_CM - short_cm, 2.0 * len(long))
+    total = sum(widest[c] for c in long)
+    return "".join(f"P{{{left * widest[c] / total:.1f}cm}}" if c in long else "l" for c in range(ncol))
+
+
 def tabular(rows: list[str]) -> str:
     cells = [[c.strip() for c in r.strip().strip("|").split("|")] for r in rows if not re.match(r"^\|\s*-{3,}", r)]
     ncol = max(len(r) for r in cells)
-    spec = "l" * ncol
+    spec = column_spec(cells, ncol)
     lines = [r"\begin{adjustbox}{max width=\linewidth}", r"\begin{tabular}{" + spec + "}", r"\toprule"]
     for i, r in enumerate(cells):
         r = r + [""] * (ncol - len(r))
@@ -238,6 +259,10 @@ def convert(md: str) -> str:
             buf.append(lines[i].strip())
             i += 1
         text = " ".join(buf)
+        nxt = next((l for l in lines[i:] if l.strip()), "")
+        if not in_bib and nxt.startswith("|") and re.match(r"^\*{1,2}[^*]", text):
+            pending_table.append(r"\panel{" + _smart_quotes(inline(text)) + "}")  # the lead of the float that follows
+            continue
         if in_bib:
             m = re.match(r"^\[(\d+)\] (.*)$", text)
             if not m:

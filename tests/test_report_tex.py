@@ -72,6 +72,16 @@ def test_convert_builds_title_abstract_sections_floats_and_bibliography():
     assert tex.rstrip().endswith(r"\end{document}") and tex.count("{") == tex.count("}")
 
 
+def test_a_lead_paragraph_before_a_table_joins_its_float_and_long_columns_wrap():
+    from analysis.report_tex import column_spec
+
+    md = MD.replace("| a | b |\n", "**Lead title** (details):\n\n| a | b |\n")
+    tex = convert(md)
+    assert r"\panel{\textbf{Lead title} (details):}" in tex and tex.index(r"\begin{table}") < tex.index("Lead title")
+    assert column_spec([["a", "b"], ["1", "2"]], 2) == "ll"
+    assert column_spec([["name", "a very long description " * 4, "n"], ["x", "y", "1"]], 3).count("P{") == 1
+
+
 def test_convert_refuses_a_table_without_a_caption():
     with pytest.raises(ValueError):
         convert("# T\n\nA · B · C · D\n\n## 1. S\n\n| a |\n|---|\n| 1 |\n\n## References\n\n[1] X.\n")
