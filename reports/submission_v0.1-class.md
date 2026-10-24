@@ -41,6 +41,7 @@ Optional before the tag, when no job writes into the hub: `python -m experiments
 2. Record the video per `reports/demo_video_plan.md`; export; upload per the subject outline; link it in the README.
 3. Fresh-clone smoke passes (7.6; recorded in CHANGELOG 2026-10-25).
 4. Commit everything (CHANGELOG, HANDOFF, plan ticks for 7.2, 7.4–7.7), tag, push.
-5. Repository visible to the marker (public or collaborator), Space awake, then submit: .docx, repository link at the
+5. Repository visible to the marker (public or collaborator); `LICENSE` and the README status line checked; the Space
+   public and warm (restart it, run one paper so the 36-second cold call is already paid), then submit: .docx, repository link at the
    tag, Space link, video link.
 6. Tick 7.7 in the plan with the submission date. GATE passed.

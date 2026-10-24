@@ -92,6 +92,6 @@ def test_committed_tex_matches_the_report():
     assert tex == Path("reports/report.tex").read_text(encoding="utf-8")
     for env in set(re.findall(r"\\begin\{(\w+)\}", tex)):
         assert tex.count(f"\\begin{{{env}}}") == tex.count(f"\\end{{{env}}}"), env
-    assert tex.count(r"\begin{table}") == 12 and tex.count(r"\begin{figure}") == 6 and tex.count(r"\bibitem") == 30
+    assert tex.count(r"\begin{table}") == 14 and tex.count(r"\begin{figure}") == 6 and tex.count(r"\bibitem") == 30
     for rel in figures_used(tex):
         assert (Path("reports") / rel).is_file(), rel

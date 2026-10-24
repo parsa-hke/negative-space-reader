@@ -11,7 +11,9 @@ every number is a count of peers and every quote is theirs.
 - **Demo:** https://huggingface.co/spaces/parsa-hke/negative-space-reader (public, free CPU hardware; it sleeps after
   two idle days and wakes on the first visit).
 - **Report:** [reports/report.md](reports/report.md) (`reports/report.docx` is the submitted copy).
-- **Status:** Phases 1–7 of [NEGATIVE_SPACE_PLAN.md](NEGATIVE_SPACE_PLAN.md) on the lean tier, tag `v0.1-class`.
+- **Status (2026-10-25):** Phases 1–7 of [NEGATIVE_SPACE_PLAN.md](NEGATIVE_SPACE_PLAN.md) done on the lean tier: both packs
+  built, OmitBench-synthetic and OmitBench-revision run, the frontier comparison recorded, the demo live, the report written.
+  Phase 8 (the masked-assertion model) is next. Tag `v0.1-class` marks the class submission.
   Progress and findings, including negative ones, are in [CHANGELOG.md](CHANGELOG.md); design decisions written for the
   report are in [reports/decisions/](reports/decisions/). **Starting a work session? Read [HANDOFF.md](HANDOFF.md).**
 
@@ -212,3 +214,8 @@ The repository layout is plan §0.4: `data/` (loaders, segmentation, schema), `p
 (OmitBench), `experiments/` (the entry point, one module per task, the hub sync), `app/` (Gradio demo, examples, Space
 bundle), `analysis/` (tables, figures, report), `configs/`, `prompts/`, `tests/`, `reports/`. Corpora, pack artefacts,
 checkpoints, caches and run folders are gitignored; `runs/log.csv` is tracked.
+
+## Licence
+
+The code in this repository is released under the MIT License ([LICENSE](LICENSE)). The corpora, the models and OPP-115
+carry their own licences, listed in [data/README.md](data/README.md) and in the Models table above.

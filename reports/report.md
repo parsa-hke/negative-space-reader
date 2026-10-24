@@ -17,15 +17,11 @@ We define conspicuous omission as a ranking task: given a document and a corpus 
 
 ## 1. Introduction: absence as a signal
 
-A building inspector enters a house for the first time and, within seconds and without a checklist, notices that the hallway has no smoke alarm. Nothing on the ceiling told them so; what told them was the memory of every other hallway, in which an alarm hung in exactly that place. An absence becomes visible only against an expectation, and the expectation is borrowed from peers.
+A building inspector walks into a house and notices, without a checklist, that the hallway has no smoke alarm. Nothing on the ceiling told them so; the memory of every other hallway did. An absence becomes visible only against an expectation, and the expectation is borrowed from peers.
 
-Documents have the same property, and our tools do not. A privacy policy that never says how long it keeps data, or a paper that never reports how its results vary across runs, contains no sentence to search for, embed or classify. The distance between what a document says and what documents like it usually say is not a property of the document alone. It needs the thousand hallways.
+Documents have the same property, and our tools do not. A privacy policy that never says how long it keeps data, or a paper that never reports variance across runs, contains no sentence to search for, embed or classify; what is missing is a property of the document and its peers together. A large language model seems to carry those peers in its weights, yet Section 7 shows two capable chat models, asked which statements a document lacks, falling well behind the simplest corpus statistic, in line with work on negation [1, 2] and on retrieval [3]: a model trained to predict the next token learns what is present, and an absence leaves no token to predict.
 
-A large language model seems to carry the thousand hallways in its weights; Section 7 shows that, asked which statements a document lacks, two capable chat models fall well behind the simplest corpus statistic. That agrees with work showing that language models handle negation poorly [1, 2] and that retrieval models struggle to separate "states X" from "does not state X" [3]. A model trained to predict the next token learns what is present; an absence leaves no token to predict.
-
-This report describes Negative-Space Reader, which makes absence a first-class signal by modelling what a document's genre peers assert. Its research question has three parts: can conspicuous omission be formalised as a ranking task with a label-free evaluation; does an expectation conditioned on the document beat a genre-wide prevalence; and how far behind are frontier chat models at the same task?
-
-Where does the analogy break? The inspector has a building code behind the missing alarm; we have only peers, who encode what the dominant authors of a genre happen to do, including their habits of saying too little. That is why the system never calls a document deficient: it reports what share of similar documents state something, and shows their sentences.
+This report describes Negative-Space Reader, which models what a document's genre peers assert. Its research question has three parts: can conspicuous omission be formalised as a ranking task with a label-free evaluation; does an expectation conditioned on the document beat a genre-wide prevalence; and how far behind are frontier chat models at the same task? Peers encode what the dominant authors of a genre do, including their habits of saying too little, so the system never calls a document deficient: it reports what share of similar documents state something, and shows their sentences.
 
 ## 2. The task, and what a score may mean
 
@@ -35,19 +31,19 @@ score(*t*) = P(*t* expected | *d*, *C*) × (1 − P(*t* present in *d*)) × *w*(
 
 returning the top ten with their peer counts, up to five peer sentences and a template explanation.
 
-The first factor is the whole idea. A house without a garage is unremarkable in a street of Victorian terraces and conspicuous in a new suburb: the same absence, two expectations, and the neighbourhood supplies the difference. Here the neighbourhood is the cohort, the *k* = 200 indexed documents nearest to *d* in embedding space, same category where the genre has one, never another version of *d*; the expectation, which we call level 1, is the share of the cohort that states *t*, with a Wilson interval [4], and its baseline is the genre-wide prevalence of *t*. The second factor discounts types the detector half-sees; the third is an optional severity weight, 1 by default (1.5 for a few privacy types tied to GDPR or CCPA obligations, reported only as an ablation).
+The first factor is the whole idea. The neighbourhood is the cohort, the *k* = 200 indexed documents nearest to *d* in embedding space, same category where the genre has one, never another version of *d*; the expectation, which we call level 1, is the share of the cohort that states *t*, with a Wilson interval [4], and its baseline is the genre-wide prevalence of *t*. The second factor discounts types the detector half-sees; on its own it ranks barely above random (the absence-only rows of Table 4), so in practice it filters out what the document already states and the cohort does the ranking. The third is a severity weight, 1 by default and 1.5 for a few privacy types tied to GDPR or CCPA obligations; the demo applies it and shows a badge (Figure 2), while the benchmarks rank with *w* = 1 and report the weighted ranking as an ablation.
 
-The picture has a limit. A neighbourhood is a description, not a standard: if most policies in a category say nothing about retention, the cohort will not expect it. The score ranks; it does not judge. Hence the plan's wording rule: "*N* per cent of peers like this one state *X*; this document does not", never "non-compliant", never "deficient". A second level, a masked-assertion model conditioned on the types the document already states rather than on an embedding of its text, is future work (Section 10).
+A neighbourhood is a description, not a standard: if most policies in a category say nothing about retention, the cohort will not expect it; the score ranks, it does not judge. Hence the wording rule, fixed before any result was seen: "*N* per cent of peers like this one state *X*; this document does not", never "non-compliant", never "deficient". A second level, a masked-assertion model conditioned on the types the document already states rather than on an embedding of its text, is future work (Section 10).
 
 ## 3. Data
 
 A neighbourhood needs a census. Three corpora supply it, each with the version history the real-omission benchmark needs [5, 6, 7].
 
-What a document looks like here: a privacy policy is one web page of a few thousand characters under a handful of headings (median 7 sections, 5,791 characters); a paper is the body text of an arXiv preprint, abstract to conclusion (median 19 sections, 28,914 characters). <!-- values: corpus/*/sections_per_doc_median, corpus/*/chars_per_doc_median --> The unit the system reads is the section; the unit it quotes is the sentence.
+What a document looks like here: a privacy policy is one web page of a few thousand characters under a handful of headings (median 7 sections, 5,791 characters); a paper is the body text of an arXiv preprint, abstract to conclusion (median 19 sections, 28,914 characters). <!-- values: corpus/*/sections_per_doc_median, corpus/*/chars_per_doc_median -->
 
 **Privacy policies** come from the Princeton–Leuven Longitudinal Corpus [5], about a million Wayback Machine snapshots of 130 thousand sites' policies, mostly the same policies repeated, so we keep one snapshot per site per year, stratified by year and category, with every site's full version chain. OPP-115 [6], 115 policies hand-annotated with ten data-practice categories, checks our models and never trains them. **Research papers** come from the open subset of unarXive 2022 [7], primary category cs.CL or cs.LG with a first version from 2018 on; earlier versions of the test papers are fetched as arXiv e-prints and parsed with the same loader.
 
-A heading-aware segmenter cuts policies into sections, with paragraph chunks as the fallback; unarXive's sections are split when they run to tens of thousands of characters. MinHash finds near-duplicates, collapsed into version chains; splits are disjoint by entity and sealed with a hash; every entity with a revision pair is in the test split, and no version of it is ever indexed (Table 1).
+A heading-aware segmenter cuts policies into sections, with paragraph chunks as the fallback; sections under 80 characters are dropped, sections over 8,000 are split on paragraph breaks, boilerplate lines are removed by rule, and a round-trip test asserts that segmentation loses no body text. The embedder reads at most 1,024 tokens of a section, so the tail of a very long section goes unseen; how often that happens was not measured. MinHash finds near-duplicates, collapsed into version chains; splits are disjoint by entity and sealed with a hash; every entity with a revision pair is in the test split, and no version of it is ever indexed (Table 1).
 
 <!-- include: corpus.md -->
 
@@ -67,35 +63,35 @@ A heading-aware segmenter cuts policies into sections, with paragraph chunks as 
 
 *Table 1. Corpus statistics (train is the indexed corpus; dev holds calibration and labelling samples; test is never indexed).*
 
-Two findings shaped later phases. 18.6% of sampled policies are near-duplicates of another: many sites reuse one template, so some cohort neighbours are the same house painted twice, and 1,949 near-copies of test documents were dropped from train and dev. <!-- values: corpus/privacy/near_duplicate_rate, corpus/privacy/cross_split_dropped --> And the open subset holds only 17,644 permissively licensed papers in scope, below the twenty to thirty thousand the plan asked for; we recorded this as a negative finding rather than widen the licence filter. <!-- values: corpus/papers/documents -->
+Two findings shaped later phases: 18.6% of sampled policies are near-duplicates of another (many sites reuse one template), so 1,949 near-copies of test documents were dropped from train and dev; <!-- values: corpus/privacy/near_duplicate_rate, corpus/privacy/cross_split_dropped --> and the open subset holds only 17,644 permissively licensed papers in scope, below the twenty to thirty thousand the plan asked for, recorded as a negative finding rather than widening the licence filter. <!-- values: corpus/papers/documents -->
 
 The yearly snapshots suggest a shortcut, comparing a site's policy with its own earlier pages; but a site's earlier self says nothing about what the street expects, so cohort retrieval excludes the query's own entity, and in the revision benchmark the chain supplies the label and the street the expectation.
 
 ## 4. Architecture
 
-The system is five steps, none of which asks a language model to guess at query time, in the lean tier that runs on a laptop and a free host; each component has a larger alternative behind one configuration key (decision record 001; Figure 1).
+The system is five steps, none of which asks a language model to guess at query time, in the lean tier that runs on a laptop and a free host; each component has a larger alternative behind one configuration key (Figure 1). A written plan, kept in the repository, fixed every design decision and every pass-or-fail gate before the experiments, and seven decision records log where the build departed from it; this report names each gate by what it tests.
 
 ![Figure 1](figures/pipeline.png)
 *Figure 1. The architecture: the offline pack build (top) and the query-time path (bottom), which calls no language model.*
 
-**A genre is a pack.** The engine contains no genre-specific code. A pack bundles corpus, schema, presence model, prototypes, index and configuration, and adding a genre means running the pack builder, as a console plays whatever cartridge is inserted; a cartridge that needs the console modified is a bug in the console.
+**A genre is a pack.** The engine contains no genre-specific code. A pack bundles corpus, schema, presence model, prototypes, index and configuration, and adding a genre means running the pack builder, as a console plays whatever cartridge is inserted.
 
-**Schema induction.** An open teacher model reads a stratified sample of development documents and extracts each section's assertions as short claims with verbatim spans, phrased as the *move* the document makes ("the authors report variance over seeds") rather than its subject, which would have induced a taxonomy of topics. Claims are embedded with Qwen3-Embedding-0.6B [8] under an instruction asking for the kind of statement, centred on their document's mean so that topic drops out, reduced with UMAP [9] and clustered with HDBSCAN [10, 11]. The larger teacher names each cluster; a single reviewer merges, splits and prunes against seeds (OPP-115's categories; the NeurIPS and ACL checklists [12, 13]); a coverage check on held-out sections found almost no statement without a type. Privacy has 58 types, papers 47.
+**Schema induction.** An open teacher model reads a stratified sample of development documents and extracts each section's assertions as short claims with verbatim spans, phrased as the *move* the document makes ("the authors report variance over seeds") rather than its subject. Claims are embedded with Qwen3-Embedding-0.6B [8] under an instruction asking for the kind of statement, centred on their document's mean so that topic drops out, reduced with UMAP [9] and clustered with HDBSCAN [10, 11]. The larger teacher names each cluster; a single reviewer merges, splits and prunes against seeds (OPP-115's categories; the NeurIPS and ACL checklists [12, 13]); a coverage check on held-out sections found almost no statement without a type. Privacy has 58 types, papers 47.
 
-**Presence detection** combines two cheap signals per section and type through a learned logistic layer: one calibrated logistic head per type over the frozen section embedding, and the maximum late-interaction similarity between the section's sentences and ten to thirty prototype sentences per type, computed ColBERT-style [14] with a small Apache-licensed model [15, 16]. The plan added a cross-encoder reranker [17] for a borderline band, the way a clinic triages: a fast check for everyone, the specialist for the unsettled cases. The specialist did not pay, a few thousandths of macro-F1 at five to nine times the time, so it stays implemented, ablated and off. A small model fitted on whole labelled documents aggregates section probabilities to the document (Section 5).
+**Presence detection** combines two cheap signals per section and type through a learned logistic layer: one calibrated logistic head per type over the frozen section embedding, and the maximum late-interaction similarity between the section's sentences and ten to thirty prototype sentences per type, computed ColBERT-style [14] with a small Apache-licensed model [15, 16]. We added a cross-encoder reranker [17] for a borderline band; it added a few thousandths of macro-F1 at five to nine times the time, so it stays implemented, ablated and off. A small model fitted on whole labelled documents aggregates section probabilities to the document (Section 5).
 
-**Cohort, ranking and evidence.** A document's vector is the mean of its section vectors blended with a title-and-abstract vector; the index is FAISS [18]. Each indexed document carries a profile, a bit per type, and the expectation for an absent type is the cohort's mean bit. Evidence is each peer's best sentence per type, precomputed over the index. The Gradio demo [19] renders each absence as a ghost paragraph where peers usually place that statement, with the evidence beside it. The stack is PyTorch, transformers and sentence-transformers [20, 21], with every experiment run from one entry point and logged.
+**Cohort, ranking and evidence.** A document's vector is the mean of its section vectors blended with a title-and-abstract vector; the index is FAISS [18]. Each indexed document carries a profile, a bit per type, and the expectation for an absent type is the cohort's mean bit. Evidence is each peer's best sentence per type, precomputed over the index. The stack is PyTorch, transformers and sentence-transformers [19, 20], with every experiment run from one entry point and logged.
 
-**What the user gets.** A document pasted or uploaded comes back in seconds with ghost paragraphs between its sections, one for each of the ten kinds of statement its peers state most often and it does not, each placed where peers usually say it and carrying the count, the interval and a peer's sentence (Figure 2); a click opens the evidence panel, and the cohort can be re-cut by k, category or date without re-embedding. The value is a second pair of eyes that has read the thousand hallways: for a policy, the practices sites of this kind usually disclose and this one does not; for a paper, the reporting its field expects.
+**What the user gets, and who.** The user is a reviewer with a document and a question: a compliance officer reading a vendor's policy before signing, an area chair checking a submission's reporting, an author self-checking before release. They get the document back from a Gradio app [21] in seconds, with ghost paragraphs between its sections, one for each kind of statement that its 200 closest peers state most often and it does not, placed where peers say it, with the count, the interval and a peer's sentence (Figure 2); a click opens the evidence. The decision it supports is where to look first, not whether to sign or accept. A wrong ghost therefore costs a minute spent reading the peers' sentences and dismissing it; a missed omission costs what it always did, which is why the output is a ranked list with counts rather than a verdict.
 
 ![Figure 2](figures/demo_ghost.png)
 *Figure 2. The demo's document panel on a test-split policy: the first ghost paragraph, placed where peers state what this document does not, with the count, the interval and a peer's sentence.*
 
 ## 5. Model selection and tuning
 
-Why these models and not the plan's first choices? Three decisions, each recorded in the repository.
+Three decisions departed from the plan; each has a decision record.
 
-**The teacher.** The plan named Qwen2.5-72B-Instruct [22] on the university GPU server, which turned out to be a Windows workstation with four 32 GB consumer GPUs and a day-long session, where the 72B would have needed ten hours or more. I chose the plan's named fallback, the 32B of the same family at four-bit quantisation under llama.cpp [23], confirmed the extraction prompt by eye on it, and used the 72B through a pinned, cached API route to name the clusters and label presence.
+**The teacher.** The plan named Qwen2.5-72B-Instruct [22] on the university GPU server, which turned out to be a workstation with four 32 GB GPUs and a day-long session, too slow for the 72B. We chose the plan's named fallback, the 32B of the same family at four-bit quantisation under llama.cpp [23], confirmed the extraction prompt by eye on it, and used the 72B through a pinned, cached API route to name the clusters and label presence.
 
 **The reference, and what a gate can measure.** The plan's hand-labelled reference set did not fit the schedule, so the reference became silver: the same 300 fixed sections per genre labelled by a second model of another family, Claude Haiku 5.5, with the teacher's own two-pass prompts (Table 2).
 
@@ -115,28 +111,19 @@ Why these models and not the plan's first choices? Three decisions, each recorde
 
 Teacher and judge agree at micro-F1 0.775 on policies and 0.692 on papers, while either model agrees with OPP-115's human labels at about 0.596, whose scheme, mapped onto ours, is often narrower or broader than our definitions. <!-- values: agreement/* --> A student trained on the master's answers cannot agree with a third examiner more than the master does, so the plan's gate of macro-F1 0.80 was unreachable by construction and became relative, 80 per cent of the teacher's own macro-F1 against the same reference, with heads trained on teacher labels.
 
-**The presence model.** Each head is a class-weighted logistic regression over the section embedding, regularisation and threshold chosen on the fitting half of the reference, with a temperature per type [24]; expected calibration error (ECE) [25] is reported because later stages use P(present) as a probability (Table 3, evaluation half).
+**The presence model.** Each head is a class-weighted logistic regression over the section embedding, regularisation and threshold chosen on the fitting half of the reference, with a temperature per type [24]; expected calibration error (ECE) [25] is reported because later stages use P(present) as a probability (Table 3; the section-level variants are in Appendix A, Table 13).
 
 <!-- include: presence.md -->
 
-<!-- generated by analysis/tables.py from presence_ablation_<genre>.csv, presence_gate.csv, doc_presence_<genre>.csv; do not edit -->
-**Section level** (evaluation half of the silver reference set; the ceiling is the teacher's own labels scored the same way):
-
-| section-level variant | privacy policies: macro-F1 / ECE / ms per section | research papers: macro-F1 / ECE / ms per section |
-|---|---|---|
-| classifier only | 0.617 / 0.061 / 107 | 0.508 / 0.124 / 485 |
-| prototypes only | 0.417 / – / 5 | 0.328 / – / 13 |
-| classifier + prototypes | 0.619 / 0.003 / 112 | 0.497 / 0.013 / 498 |
-| teacher labels (ceiling) | 0.773 / – / – | 0.688 / – / – |
-
-**Gate 4.8** (macro-F1 relative to the teacher ceiling, decision record 005):
+<!-- generated by analysis/tables.py from presence_gate.csv, doc_presence_<genre>.csv; do not edit -->
+**The presence gate** (macro-F1 at or above 80 per cent of the teacher's own macro-F1 against the same silver reference):
 
 | genre | presence model | macro-F1 | teacher ceiling | share of ceiling | gate | documents profiled | sections / s |
 |---|---|---|---|---|---|---|---|
 | privacy policies | classifier + prototypes | 0.619 | 0.773 | 0.801 (gate ≥ 0.80) | pass | 22,300 of 22,300 | 134 (mps) |
 | research papers | classifier + prototypes | 0.497 | 0.688 | 0.722 (gate ≥ 0.80) | not met | 14,114 of 14,114 | 65 (mps) |
 
-**Document level** (decision record 006; evaluation half, 75 whole labelled documents per genre, against the judge):
+**Document level** (evaluation half, 75 whole labelled documents per genre, against the judge):
 
 | genre | aggregation | macro-F1 | micro-F1 | ECE | prevalence error | types per document |
 |---|---|---|---|---|---|---|
@@ -145,15 +132,15 @@ Teacher and judge agree at micro-F1 0.775 on policies and 0.692 on papers, while
 | research papers | best section ≥ section threshold (v1) | 0.734 | 0.789 | 0.217 | 0.152 | 25.9 (labelled 27.8) |
 | research papers | document model (v2) | 0.788 | 0.850 | 0.020 | 0.094 | 29.7 (labelled 27.8) |
 
-*Table 3. Presence detection: section-level variants, the Phase 4 gate, and document-level aggregation.*
+*Table 3. Presence detection: the gate, and document-level aggregation.*
 
-Three things stand out. Prototypes alone are weak, but next to the classifier they cut ECE from 0.061 to 0.003 on policies. <!-- values: presence/privacy/classifier only/ece, presence/privacy/classifier + prototypes/ece --> The gate passes for policies at 0.801 of the ceiling and is not met for papers at 0.722: a frozen whole-section embedding cannot separate 47 fine-grained types in long sections that carry about five each. <!-- values: presence/*/gate/share_of_ceiling --> The gate was recorded as not met; fine-tuning the embedder is the recorded remedy. And aggregating by "any section above its threshold" was miscalibrated in both directions; a logistic model over the best section probabilities and the section count, fitted on 150 whole judge-labelled documents per genre, raised document-level macro-F1 from 0.687 to 0.754 on policies and from 0.734 to 0.788 on papers, and cut ECE to 0.018 and 0.020. <!-- values: doc_presence/* -->
+Three things stand out. Prototypes alone are weak, but next to the classifier they cut ECE from 0.061 to 0.003 on policies. <!-- values: presence/privacy/classifier only/ece, presence/privacy/classifier + prototypes/ece --> The gate passes for policies at 0.801 of the ceiling and is not met for papers at 0.722: a frozen whole-section embedding cannot separate 47 fine-grained types in long sections that carry about five each. <!-- values: presence/*/gate/share_of_ceiling --> The gate was recorded as not met and the remedy, fine-tuning the embedder, is recorded but not attempted, so the papers pack ships below its specification. Aggregating by "any section above its threshold" was miscalibrated in both directions; a logistic model over the best section probabilities and the section count, fitted on 150 whole judge-labelled documents per genre, raised document-level macro-F1 from 0.687 to 0.754 on policies and from 0.734 to 0.788 on papers, and cut ECE to 0.018 and 0.020. <!-- values: doc_presence/* -->
 
 The cohort settings were fixed in the plan and selected on no benchmark; nothing was selected on the test split.
 
 ## 6. Evaluation I: OmitBench, and the privacy turn
 
-**OmitBench-synthetic** is a jigsaw whose missing piece we removed ourselves. From each held-out test document we draw a type it states, delete the sentences that carry it, verify that it is now absent, and ask each system to rank the absences; three regimes delete one type, three types or every section carrying the type, 500 instances per regime and genre, except that long papers resist three-type deletion and gave 468. <!-- values: synth/papers/three_types/n --> Metrics are recall at 1, 5 and 10, MRR and nDCG@10 with 95 per cent bootstrap intervals [26], plus the false-alarm rate (the share of the top five in fact stated) and the calibration of P(expected) on 150 untouched judge-labelled documents (Table 4, Figure 3; the other metrics and the untouched-document checks are in Appendix A, Table 11).
+**OmitBench-synthetic** removes a piece we can check. From each held-out test document we draw a type it states, delete the sentences that carry it, verify that it is now absent, and ask each system to rank the absences; three regimes delete one type, three types or every section carrying the type, 500 instances per regime and genre, except that long papers resist three-type deletion and gave 468. <!-- values: synth/papers/three_types/n --> Metrics are recall at 1, 5 and 10, MRR and nDCG@10 with 95 per cent bootstrap intervals [26], plus false alarms and calibration on 150 untouched judge-labelled documents (Table 4, Figure 3; the other metrics and the untouched-document checks are in Appendix A, Table 11).
 
 <!-- include: synth.md -->
 
@@ -180,19 +167,19 @@ The cohort settings were fixed in the plan and selected on no benchmark; nothing
 ![Figure 3](figures/bench_recall5.png)
 *Figure 3. Recall@5 per regime and system, both genres, with 95 per cent bootstrap intervals; reference rows in grey.*
 
-Both systems sit far above random order; whether the cohort beats genre-wide prevalence outside the paired interval is the plan's gate (Table 5, Figure 4).
+Both systems sit far above random order; whether the cohort beats genre-wide prevalence outside the paired interval is the cohort gate (Table 5, Figure 4).
 
 <!-- include: gate66.md -->
 
 <!-- generated by analysis/tables.py from bench_synth_<genre>.csv, bench_revision_<genre>.csv; do not edit -->
-**Recall@5, level 1 − genre-uniform** (paired bootstrap over documents; over entities for the revision rows). The gate 6.6 criterion is the one-type row with a 95% CI above zero. ✓ marks a CI above zero, ✗ a CI below zero.
+**Recall@5, level 1 − genre-uniform** (paired bootstrap, 95% CI; ✓ above zero, ✗ below; the cohort gate is the one-type row):
 
 | benchmark, regime | privacy policies | research papers |
 |---|---|---|
 | one type | +0.011 [-0.010, +0.033] (n = 500) | +0.108 [+0.074, +0.141] ✓ (n = 500) |
 | three types | -0.015 [-0.028, -0.004] ✗ (n = 500) | +0.075 [+0.059, +0.092] ✓ (n = 468) |
 | whole section | +0.004 [-0.015, +0.022] (n = 500) | +0.069 [+0.042, +0.098] ✓ (n = 500) |
-| revision (plan filter) | -0.010 [-0.023, +0.002] (n = 1678) | +0.107 [+0.046, +0.166] ✓ (n = 137) |
+| revision (peer filter) | -0.010 [-0.023, +0.002] (n = 1678) | +0.107 [+0.046, +0.166] ✓ (n = 137) |
 | revision (every added type) | -0.009 [-0.017, -0.002] ✗ (n = 2672) | +0.041 [-0.003, +0.086] (n = 226) |
 
 *Table 5. The gate quantity across benchmarks.*
@@ -207,7 +194,7 @@ Both systems sit far above random order; whether the cohort beats genre-wide pre
 <!-- generated by analysis/tables.py from revision_bench_<genre>.csv, bench_revision_<genre>.csv; do not edit -->
 **From version pairs to instances** (a pair qualifies when a type added in version n+1 was stated by at least half of the peers dated before version n):
 
-| genre | pairs | no added type | no added type at ≥ 0.5 prevalence | instances (plan filter) | instances (every added type) | years |
+| genre | pairs | no added type | no added type at ≥ 0.5 prevalence | instances (peer filter) | instances (every added type) | years |
 |---|---|---|---|---|---|---|
 | privacy policies | 4,029 | 1,357 | 994 | 1,678 | 2,672 | 1999–2019 |
 | research papers | 343 | 117 | 89 | 137 | 226 | 2019–2022 |
@@ -216,7 +203,7 @@ Both systems sit far above random order; whether the cohort beats genre-wide pre
 
 | variant | system | privacy policies | research papers |
 |---|---|---|---|
-| revision (plan filter) | (a) genre-uniform prevalence | 0.602 [0.580, 0.625] | 0.674 [0.611, 0.739] |
+| revision (peer filter) | (a) genre-uniform prevalence | 0.602 [0.580, 0.625] | 0.674 [0.611, 0.739] |
 |  | (b) level-1 cohort prevalence | 0.592 [0.568, 0.614] | 0.781 [0.722, 0.838] |
 |  | random order | 0.147 [0.133, 0.161] | 0.343 [0.271, 0.409] |
 |  | absence only (1 − P(present)) | 0.007 [0.004, 0.012] | 0.016 [0.000, 0.038] |
@@ -227,14 +214,14 @@ Both systems sit far above random order; whether the cohort beats genre-wide pre
 
 *Table 6. OmitBench-revision.*
 
-For papers the cohort wins everywhere the plan asked, by +0.108 on the one-type regime and +0.107 on real revisions, intervals above zero. <!-- values: gate66/papers/single_type, gate66/papers/revision --> For policies it wins nowhere: +0.011 [-0.010, +0.033] on the gate regime, and small negative differences elsewhere. <!-- values: gate66/privacy/single_type -->
+For papers the cohort passes the gate on every regime, by +0.108 on the one-type regime and +0.107 on real revisions, intervals above zero. <!-- values: gate66/papers/single_type, gate66/papers/revision --> For policies it wins nowhere: +0.011 [-0.010, +0.033] on the gate regime, and small negative differences elsewhere. <!-- values: gate66/privacy/single_type -->
 
 **The diagnosis.** Per cohort variant we measured how well cohort prevalence predicts which types an untouched document states (a within-document AUC, 800 test documents), and recall@5 with the cohort retrieved from the edited document's vector, what the system sees, against the original's, what it would see if the deletion left no trace (Table 7, Figure 5; every variant in Appendix A, Table 12).
 
 <!-- include: leak.md -->
 
 <!-- generated by analysis/tables.py from cohort_diagnosis_<genre>.csv; do not edit -->
-**Cohort diagnosis, the default cohort** (decision record 007; within-document AUC of cohort prevalence on untouched test documents; recall@5 gain over genre-uniform on the one-type regime with the cohort retrieved from the edited document, what the system sees, and from the original; the leak is their difference):
+**Cohort diagnosis, the default cohort** (within-document AUC on untouched test documents; one-type recall@5 gain over genre-uniform from the edited and from the original document; the leak is their difference):
 
 | genre | AUC, genre-uniform | AUC, default cohort | edited − uniform | original − uniform | leak (original − edited) |
 |---|---|---|---|---|---|
@@ -246,11 +233,11 @@ For papers the cohort wins everywhere the plan asked, by +0.108 on the one-type 
 ![Figure 5](figures/cohort_diagnosis.png)
 *Figure 5. Within-document AUC per cohort variant and, for privacy, the deletion leak: gain over genre-uniform with the cohort retrieved from the edited versus the original document.*
 
-Privacy cohorts carry little information about practices: against genre prevalence the default cohort raises within-document AUC from 0.854 to 0.880, against 0.922 to 0.959 for papers. <!-- values: leak/*/genre_uniform/within_doc_auc, leak/*/default/within_doc_auc --> Two settings fixed in the plan weaken them further, the site category, which does not track data practices, and the title part of the vector, which mostly encodes a brand; without both, AUC reaches 0.915. <!-- values: leak/privacy/no_title_no_category/within_doc_auc --> The main cause: the deletion leaks into the cohort. Picture an essay with its methods section cut out, compared with the essays it now most resembles: they also lack a methods section, and they vouch for the omission. A policy that loses a topic moves towards the policies that never had it, so the deleted type's cohort prevalence drops exactly where it is needed. With the better cohort, the original vector would give +0.069 [+0.036, +0.102] over genre-uniform; the edited vector gives +0.013, and the leak, +0.056, takes most of the gain away. <!-- values: leak/privacy/no_title_no_category/* --> Papers are shielded by their title and abstract, which no deletion touches; their leak at the default is +0.009. <!-- values: leak/papers/default/leak_original_minus_edited -->
+Privacy cohorts carry little information about practices: against genre prevalence the default cohort raises within-document AUC from 0.854 to 0.880, against 0.922 to 0.959 for papers. <!-- values: leak/*/genre_uniform/within_doc_auc, leak/*/default/within_doc_auc --> Two plan settings, the site category and the title part of the vector, weaken them further; without both, AUC reaches 0.915. <!-- values: leak/privacy/no_title_no_category/within_doc_auc --> The main cause: the deletion leaks into the cohort. A policy that loses a topic moves towards the policies that never had it, so the deleted type's cohort prevalence drops exactly where it is needed. With the better cohort, the original vector would give +0.069 [+0.036, +0.102] over genre-uniform; the edited vector gives +0.013, and the leak, +0.056, takes most of the gain away. <!-- values: leak/privacy/no_title_no_category/* --> Papers are shielded by their title and abstract, which no deletion touches; their leak at the default is +0.009. <!-- values: leak/papers/default/leak_original_minus_edited -->
 
-One could object that the leak is an artefact of deletion; but a real omitter also resembles other omitters, and the revision benchmark, where nothing was deleted, shows the same sign for policies (Table 5). The leak is a property of the task, and it points at level 2: an expectation conditioned on what the document states cannot be moved by the absence it is asked to find.
+A real omitter also resembles other omitters, and the revision benchmark, where nothing was deleted, shows the same sign for policies (Table 5). The leak is a property of the task, and it points at level 2: an expectation conditioned on what the document states cannot be moved by the absence it is asked to find.
 
-A search over eleven cohort settings on the test bench finds a variant that would pass the privacy gate; I did not adopt it, since it was selected on test data, and it is recorded as post hoc and excluded from every table here.
+A search over eleven cohort settings on the test bench finds a variant that would pass the privacy gate; we did not adopt it, since it was selected on test data, and it is recorded as post hoc and excluded from every table here.
 
 ## 7. Evaluation II: the frontier gap, speed and errors
 
@@ -294,16 +281,16 @@ Could a chat model have done this without a corpus? In the candidate-list settin
 ![Figure 6](figures/llm_gap.png)
 *Figure 6. Recall@1, 5 and 10 of the four systems on the same instances.*
 
-An auditor with a checklist and no memory of the other thousand documents searches for silence 58 times over a long text; the surveyor who knows the neighbourhood does not search but counts. Opus reaches recall@5 of 0.242 on policies and 0.235 on papers, against 0.376 and 0.655 for the cohort and 0.375 and 0.465 for genre-wide prevalence; every paired difference has an interval that excludes zero. <!-- values: llm_gap/*/recall@5 --> The open model is further behind: most of its lists follow the catalogue's own order, so it filters rather than ranks.
+Opus reaches recall@5 of 0.242 on policies and 0.235 on papers, against 0.376 and 0.655 for the cohort and 0.375 and 0.465 for genre-wide prevalence; every paired difference has an interval that excludes zero. <!-- values: llm_gap/*/recall@5 --> The open model is further behind: most of its lists follow the catalogue's own order, so it filters rather than ranks.
 
-Two caveats. The yardstick was built with our own detector, so a chat model that reads a paraphrase we left behind as stated is marked wrong by a ruler it did not help make; and each model ran once, at one setting, so a better prompt or more thinking may close part of the gap.
+Two caveats: the yardstick is our own detector, so a chat model that reads a paraphrase we left behind as stated is marked wrong; and each model ran once, at one setting.
 
 **Speed.** The whole pipeline runs in seconds on a laptop (Apple M5, MPS; Table 9), embedding being most of the time; on the demo's free two-core host a policy takes roughly ten seconds and a paper about half a minute.
 
 <!-- include: speed.md -->
 
 <!-- generated by analysis/tables.py from analyse_gate_<genre>.csv; do not edit -->
-**Gate 5.9, end-to-end `analyse()` time per held-out document** (template explanations, after one warm-up call; the machine is named in the text):
+**End-to-end time per held-out document** (template explanations, after one warm-up call; the machine is named in the text):
 
 | genre | documents | sections | median s | max s | embedding share of time |
 |---|---|---|---|---|---|
@@ -312,7 +299,7 @@ Two caveats. The yardstick was built with our own detector, so a chat model that
 
 *Table 9. End-to-end time per document on the laptop.*
 
-**Errors.** The types the cohort never finds are the rare ones: 13 of 58 privacy types never reach the top five, with a median corpus prevalence of 0.100 against 0.384 for all scored types; a prevalence ranker cannot rank what few peers state. <!-- values: errors/privacy/* --> (For papers the never-found types are the opposite case, stated by every paper and so hardly ever deletable.) The recurring false alarms are types stated in unusual words, which the detector half-sees. The cohort's gain grows with length for papers, from +0.071 in the shortest quartile to +0.187 in the third, while for policies only the shortest quartile shows a gain with an interval above zero, +0.042. <!-- values: errors/*/by_length/* -->
+**Errors.** The types the cohort never finds are the rare ones: 13 of 58 privacy types never reach the top five, with a median corpus prevalence of 0.100 against 0.384 for all scored types; a prevalence ranker cannot rank what few peers state. <!-- values: errors/privacy/* --> The recurring false alarms are types stated in unusual words, which the detector half-sees. The cohort's gain grows with length for papers, from +0.071 in the shortest quartile to +0.187 in the third, while for policies only the shortest quartile shows a gain with an interval above zero, +0.042. <!-- values: errors/*/by_length/* -->
 
 ## 8. Related work
 
@@ -320,22 +307,22 @@ Automated reading of privacy policies runs from the OPP-115 corpus [6] to Polisi
 
 ## 9. Limitations and responsible use
 
-**Prevalence describes a community; it is not a standard.** A share of peers encodes what the dominant actors of a genre do, including their habits of saying too little: a dress code inferred from the people already in a room tells a newcomer what is usual and nothing about what is right. Every output is therefore a prevalence with evidence attached, never a verdict.
+**Prevalence describes a community; it is not a standard.** A share of peers encodes what the dominant actors of a genre do, including their habits of saying too little. Every output is therefore a prevalence with evidence attached, never a verdict.
 
-**The catalogue carries the teacher's eye, and the reference is silver.** A kind of statement the teacher does not notice cannot become a type, and every presence number measures agreement between two models; OPP-115 is the one human check, for privacy and a subset of types. Corpora, prompts and catalogues are English only.
+**The catalogue carries the teacher's eye, and the reference is silver.** A kind of statement the teacher does not notice cannot become a type, and every presence number measures agreement between two models; OPP-115 is the one human check, for privacy and a subset of types. The teacher also decided what counts as a statement, and the severity weights follow its reading of GDPR and CCPA; neither was probed against a person. Corpora, prompts and catalogues are English only.
 
-**A deletion is not an omission, and the benchmark shares our detector.** The synthetic benchmark favours the corpus systems in the frontier comparison, and the deletion leaks into the cohort. Section 6 argued that real omissions leak the same way, but that rests on the revision benchmark, which people have not yet validated: the 50-document, two-annotator check is the next phase, and until then the revision labels carry two confounds, additions driven by regulation rather than by peers, and authors' own drift, neither quantified.
+**A deletion is not an omission, and the benchmark shares our detector.** The synthetic benchmark favours the corpus systems in the frontier comparison, and the deletion leaks into the cohort. Section 6 argued that real omissions leak the same way, but that rests on the revision benchmark, not yet validated by people: until the 50-document, two-annotator check, the revision labels carry two unquantified confounds, regulation-driven additions and authors' own drift.
 
 **Small models, one pass, two genres.** The papers detector is below its gate, so presence misses become omission false alarms; the chat models ran once each; the open-ended and retrieval-augmented baselines, the masked-assertion model and a third genre are future work.
 
-**Dual use.** A detector of conspicuous absence is also a map of what a document can leave out unnoticed: an author could tune a text until the ghost paragraphs disappear while the substance stays missing. We see no clean technical answer: the choices that make the system honest also make it legible to such an author, and the mitigation is the reader, who sees the peers' sentences.
+**Dual use.** A detector of conspicuous absence is also a map of what a document can leave out unnoticed: an author could tune a text until the ghost paragraphs disappear while the substance stays missing.
 
 Table 10 sets each risk against its mitigation.
 
 | risk | mitigation in place | still open |
 |---|---|---|
 | a count read as a standard | the wording rule ("N% of peers like this one state X"), evidence beside every number, no verdict word in the interface (tested) | a reader may still take a prevalence for a norm |
-| norms that encode dominant actors | the cohort is shown with its k, category and date window and can be re-cut; prevalence is reported, never compliance | no measure of whose practices a cohort over-represents |
+| norms that encode dominant actors | the cohort is shown with its k, category and date window and can be re-cut; prevalence is reported, never compliance | a cohort of 200 holds about 177 distinct sites, or 200 papers (Appendix A, Table 14), but no measure of which actors dominate it |
 | the teacher's eye and a silver reference | OPP-115 as a human check for privacy; the gate relative to the teacher; the limits stated with every number | human validation of the revision labels, a human check for papers |
 | dual use: tuning a text until the ghosts disappear | every claim is a quote from a peer, visible to the reader; the catalogue ships with the demo | none beyond the reader |
 | the privacy of uploaded documents | processed in memory, never stored; no API call on the query path; teacher explanations off by default and flagged | none |
@@ -375,9 +362,9 @@ Generative AI was used as an assistant throughout this project, to work faster r
 [16] B. Clavié, "JaColBERTv2.5: Optimising multi-vector retrievers to create state-of-the-art Japanese retrievers with constrained resources," arXiv:2407.20750, 2024.
 [17] J. Chen, S. Xiao, P. Zhang, K. Luo, D. Lian, and Z. Liu, "BGE M3-Embedding: Multi-lingual, multi-functionality, multi-granularity text embeddings through self-knowledge distillation," arXiv:2402.03216, 2024.
 [18] M. Douze et al., "The Faiss library," arXiv:2401.08281, 2024.
-[19] A. Abid, A. Abdalla, A. Abid, D. Khan, A. Alfozan, and J. Zou, "Gradio: Hassle-free sharing and testing of ML models in the wild," arXiv:1906.02569, 2019.
-[20] T. Wolf et al., "Transformers: State-of-the-art natural language processing," in *Proc. 2020 Conf. on Empirical Methods in Natural Language Processing: System Demonstrations*, 2020, pp. 38–45, doi: 10.18653/v1/2020.emnlp-demos.6.
-[21] N. Reimers and I. Gurevych, "Sentence-BERT: Sentence embeddings using Siamese BERT-networks," in *Proc. 2019 Conf. on Empirical Methods in Natural Language Processing and 9th Int. Joint Conf. on Natural Language Processing (EMNLP-IJCNLP)*, Hong Kong, China, 2019, pp. 3982–3992, doi: 10.18653/v1/D19-1410.
+[19] T. Wolf et al., "Transformers: State-of-the-art natural language processing," in *Proc. 2020 Conf. on Empirical Methods in Natural Language Processing: System Demonstrations*, 2020, pp. 38–45, doi: 10.18653/v1/2020.emnlp-demos.6.
+[20] N. Reimers and I. Gurevych, "Sentence-BERT: Sentence embeddings using Siamese BERT-networks," in *Proc. 2019 Conf. on Empirical Methods in Natural Language Processing and 9th Int. Joint Conf. on Natural Language Processing (EMNLP-IJCNLP)*, Hong Kong, China, 2019, pp. 3982–3992, doi: 10.18653/v1/D19-1410.
+[21] A. Abid, A. Abdalla, A. Abid, D. Khan, A. Alfozan, and J. Zou, "Gradio: Hassle-free sharing and testing of ML models in the wild," arXiv:1906.02569, 2019.
 [22] Qwen Team, "Qwen2.5 technical report," arXiv:2412.15115, 2024.
 [23] G. Gerganov and contributors, "llama.cpp: LLM inference in C/C++," 2023. [Online]. Available: https://github.com/ggml-org/llama.cpp
 [24] C. Guo, G. Pleiss, Y. Sun, and K. Q. Weinberger, "On calibration of modern neural networks," in *Proc. 34th Int. Conf. on Machine Learning*, PMLR 70, Sydney, Australia, 2017, pp. 1321–1330.
@@ -421,7 +408,7 @@ Generative AI was used as an assistant throughout this project, to work faster r
 <!-- include: leak_full.md -->
 
 <!-- generated by analysis/tables.py from cohort_diagnosis_<genre>.csv; do not edit -->
-**Cohort diagnosis, every variant** (decision record 007): how well cohort prevalence predicts which types an untouched test document states (within-document AUC), and on the one-type regime the recall@5 gain over genre-uniform with the cohort retrieved from the edited document (what the system sees) and from the original (before the deletion); the leak is their difference. The variant selected on the test bench (post_hoc_best) is not shown: it is not a gate result.
+**Cohort diagnosis, every variant**: how well cohort prevalence predicts which types an untouched test document states (within-document AUC), and on the one-type regime the recall@5 gain over genre-uniform with the cohort retrieved from the edited document (what the system sees) and from the original (before the deletion); the leak is their difference. The variant selected on the test bench (post_hoc_best) is not shown: it is not a gate result.
 
 *Privacy policies* (AUC and Brier on 800 untouched test documents; recall@5 differences on the one-type instances):
 
@@ -454,3 +441,29 @@ Generative AI was used as an assistant throughout this project, to work faster r
 | mean probability | 0.111 | 0.958 [0.956, 0.960] | +0.092 [+0.057, +0.125] | +0.098 [+0.063, +0.132] | +0.006 [-0.004, +0.017] |
 
 *Table 12. Cohort diagnosis, every variant; the variant selected on the test bench is not shown.*
+
+<!-- include: presence_variants.md -->
+
+<!-- generated by analysis/tables.py from presence_ablation_<genre>.csv; do not edit -->
+**Section-level presence variants** (evaluation half of the silver reference set; the ceiling is the teacher's own labels scored the same way):
+
+| section-level variant | privacy policies: macro-F1 / ECE / ms per section | research papers: macro-F1 / ECE / ms per section |
+|---|---|---|
+| classifier only | 0.617 / 0.061 / 107 | 0.508 / 0.124 / 485 |
+| prototypes only | 0.417 / – / 5 | 0.328 / – / 13 |
+| classifier + prototypes | 0.619 / 0.003 / 112 | 0.497 / 0.013 / 498 |
+| teacher labels (ceiling) | 0.773 / – / – | 0.688 / – / – |
+
+*Table 13. Section-level presence variants against the teacher ceiling.*
+
+<!-- include: cohort.md -->
+
+<!-- generated by analysis/tables.py from cohort_similarity_<genre>.csv; do not edit -->
+**Cohorts of held-out documents** (k nearest indexed documents of the same category; a cohort never holds another version of the query's entity):
+
+| genre | query documents | k | distinct entities per cohort (mean) | mean similarity | category filter dropped |
+|---|---|---|---|---|---|
+| privacy policies | 500 | 200 | 177 | 0.783 | 5.6% |
+| research papers | 500 | 200 | 200 | 0.745 | 0.0% |
+
+*Table 14. Cohorts of held-out documents: entities, similarity and the category fallback.*

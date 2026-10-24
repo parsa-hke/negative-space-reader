@@ -110,6 +110,35 @@ paragraphs before one table all join its float (a lead ending in a colon followe
 only over 40 characters with 150 characters to the line (Table 1's numbers and Table 3's aggregation column no
 longer wrap); the diagram's type enlarged (7.6 pt boxes, taller figure). Rebuilt tex, zip and docx.
 
+**Second rubric read (Parsa pasted a marker's criterion-by-criterion feedback; every item implemented):**
+- Named user and cost of error: the §4 paragraph is now "What the user gets, and who" (compliance officer, area chair,
+  self-checking author; the decision is where to look first; a wrong ghost costs a minute, a missed omission what it
+  always did).
+- The (1 − P(present)) term: §2 says it ranks barely above random on its own (the absence-only rows) and in practice
+  filters what the document states while the cohort ranks.
+- Severity weight reconciled with Figure 2: §2 now says the demo applies w (badge) and the benchmarks rank with w = 1
+  and report the weighted ranking as an ablation (`rank.use_severity_weights` is true in base, false in bench).
+- Plan, gate and decision-record numbers resolved: one sentence in §4 defines the plan and the decision records;
+  "gate 4.8 / 6.6 / 5.9" became the presence gate (defined in its table lead), the cohort gate and the speed table;
+  "decision record 00N" dropped from text and table leads (`analysis/tables.py`); "plan filter" → "peer filter".
+- Preprocessing examined, not only named (§3): 80-character minimum, 8,000-character split on paragraph breaks,
+  boilerplate rule, the segmentation round-trip test, the embedder's 1,024-token window with the honest note that
+  the share of truncated sections was not measured.
+- Teacher bias acknowledged (§9): the teacher decided what counts as a statement and the severity weights follow its
+  reading of GDPR/CCPA, neither probed against a person. Table 10's open item on dominant actors now carries a
+  measure: distinct entities per cohort (new fragment `cohort` from `cohort_similarity_<genre>.csv`, Appendix A
+  Table 14: 177 sites / 200 papers per cohort of 200).
+- Table 3 split: the section-level variants moved to Appendix A (Table 13, fragment `presence_variants`); Table 3 is
+  the gate and the document level.
+- "I" → "we" throughout (two places).
+- Word count: §1 rewritten to 258 words; two rounds of scripted cuts (each target asserted unique) and two shorter
+  table leads: **3,728 all-in, 3,574 for Sections 1–10, 3,992 with every table lead and caption counted** (the
+  marker's extraction counted leads as prose); checker zero errors.
+- Repository: README status line rewritten (it still said "Phases 1 and 2 done; modules from Phase 3 on are stubs");
+  `LICENSE` added (MIT, Parsa's name; the choice is Parsa's to change before the tag) and a Licence section in the
+  README; `license` in `pyproject.toml`.
+- Rebuilt md, docx, tex, zip (14 tables, 6 figures).
+
 Tests: 491 passed. Nothing further committed, no API call, the Space untouched, no §0.2 change.
 
 ## 2026-10-25 — Phase 7.4 and 7.5: the class report, built from the tables; `analysis/tables.py`; `.docx` export

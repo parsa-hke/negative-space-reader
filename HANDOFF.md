@@ -8,8 +8,9 @@ Written 2026-10-25 at the end of the second session of the day. Read with: `CLAU
 
 - **7.4 report, revised after the rubric read (awaiting Parsa's final read and an Overleaf recompile):** 6 figures
   (new: `pipeline.png` from `analysis/figures.py`, `demo_ghost.png` from `analysis/demo_figure.py`), 12 tables (10 in
-  the body, Appendix A holds the panel tables; Table 10 is the risk/mitigation table), 3,996 words all-in (3,842 for
-  Sections 1–10; the brief's 3,000–4,000 is met on either count).
+  the body, Appendix A holds the panel tables; Table 10 is the risk/mitigation table). After the second rubric read
+  (CHANGELOG): 14 tables, named user and cost of error, plan/gate numbers resolved, **3,728 words all-in, 3,574 for
+  Sections 1–10, 3,992 with leads and captions**; README status fixed; `LICENSE` (MIT) added, Parsa's choice to change.
 - **Report (before the revision):** `reports/report.md`, 3,989 words all-in (3,835 for Sections 1–10;
   `python -m analysis.report --words`), checker zero errors, 30 IEEE references. Parsa's only edit so far (Demo and Code
   links on two lines) is in `reports/report_source.md`; `reports/report.docx` rebuilt from it. **Edit the prose in
@@ -26,6 +27,7 @@ Written 2026-10-25 at the end of the second session of the day. Read with: `CLAU
   the four figures (zip gitignored). **Never compiled here** (no TeX on the Mac): upload the zip to Overleaf, compile
   with pdfLaTeX, fix what the log says in `analysis/report_tex.py` (never by hand in the .tex), rebuild. Once it
   compiles, the Overleaf PDF can replace the .docx as the submitted copy if the outline allows a PDF.
+- **Before the marking window:** the Space must be public and warm (a cold paper takes 36 s); the repository visible.
 - **7.5:** the GenAI acknowledgement, short form as Parsa asked on 2026-10-25 (assistant for speed; decisions, review and final text the author's); Parsa confirms the wording before submission.
   **Not cited:** Claude Opus 5.5 / Haiku 5.5 (no vendor page surfaced); add a reference if Parsa has the URL.
 - **7.6 done:** README rewritten; `configs/smoke.yaml` redirects packs and embeddings under `data/processed_smoke/`

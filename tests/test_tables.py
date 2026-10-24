@@ -42,6 +42,10 @@ def tables(tmp_path):
     _write(t / "corpus_stats.csv", stats)
     _write(t / "dedup.csv", [{"genre": g, "near_near_duplicate_rate": 0.1856, "cross_split_dropped": 19} for g in ("privacy", "papers")])
     _write(t / "revisions.csv", [{"genre": g, "year": y, "pairs": 5, "median_change": 0.2} for g in ("privacy", "papers") for y in (2018, 2019)])
+    for g in ("privacy", "papers"):
+        _write(t / f"cohort_similarity_{g}.csv", [{"doc_id": f"{g}:{i}", "category": "x", "k": 200, "n": 200, "entities": 177 + i,
+                                                   "mean_similarity": 0.83, "min_similarity": 0.8, "max_similarity": 0.9, "fallback": i % 2,
+                                                   "own_entity_in_cohort": 0} for i in range(4)])
     _write(t / "presence_gate.csv", [
         {"genre": "privacy", "presence_model": "classifier + prototypes", "macro_f1": 0.619, "teacher_ceiling": 0.773, "share_of_ceiling": 0.801,
          "required_share": 0.8, "f1_gate": "pass", "profiled_documents": 200, "indexable_documents": 200, "profiles_complete": True,
@@ -129,8 +133,8 @@ def test_parse_interval():
 def test_every_fragment_is_written_from_the_tables(tables, tmp_path):
     out = tmp_path / "fragments"
     written = write_all(tables, out)
-    names = {"corpus", "presence", "agreement", "synth", "synth_more", "gate66", "revision", "leak", "leak_full", "llm_gap", "speed",
-             "errors", "severity", "values"}
+    names = {"corpus", "presence", "presence_variants", "cohort", "agreement", "synth", "synth_more", "gate66", "revision", "leak",
+             "leak_full", "llm_gap", "speed", "errors", "severity", "values"}
     assert set(written) == names
     assert (out / "MISSING.md").read_text(encoding="utf-8").startswith("Every fragment")
     for name in names - {"values"}:
@@ -159,7 +163,7 @@ def test_post_hoc_variant_is_never_shown_and_values_are_keyed(tables, tmp_path):
     assert values["gate66/papers/single_type"] == pytest.approx(0.1) and values["gate66/papers/single_type/above_zero"] is True
     assert values["gate66/privacy/single_type/above_zero"] is False
     assert values["synth/privacy/single_type/level1/recall@5"] == pytest.approx(0.5)
-    assert values["presence/papers/gate/result"] == "not met"
+    assert values["presence/papers/gate/result"] == "not met" and values["cohort/privacy/entities_mean"] == 178
     assert values["doc_presence/privacy/v2/macro_f1"] == pytest.approx(0.754)  # the lowest cross-validated loss
     assert values["revision/privacy/instances"] == 18 and values["revision/privacy/years"] == [2018, 2019]
     assert values["speed/privacy/documents"] == 5 and values["errors/privacy/types_never_in_top5"] == 1

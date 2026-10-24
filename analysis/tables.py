@@ -39,7 +39,7 @@ GENRES = ("privacy", "papers")
 GENRE_NAMES = {"privacy": "privacy policies", "papers": "research papers"}
 REGIMES = ("single_type", "three_types", "whole_section")
 REGIME_NAMES = {"single_type": "one type", "three_types": "three types", "whole_section": "whole section",
-                "revision": "revision (plan filter)", "revision_all_added": "revision (every added type)"}
+                "revision": "revision (peer filter)", "revision_all_added": "revision (every added type)"}
 SYSTEMS = ("genre_uniform", "level1", "random", "absence_only")
 SYSTEM_NAMES = {"genre_uniform": "(a) genre-uniform prevalence", "level1": "(b) level-1 cohort prevalence",
                 "random": "random order", "absence_only": "absence only (1 − P(present))",
@@ -161,13 +161,13 @@ def corpus_md(tables: Path, V: Values) -> str | None:
 # --------------------------------------------------------------------------------------------------------------- presence
 
 
-def presence_md(tables: Path, V: Values) -> str | None:
+def presence_variants_md(tables: Path, V: Values) -> str | None:
+    """Section-level presence variants against the teacher ceiling (appendix)."""
     gate_p = tables / "presence_gate.csv"
     if not gate_p.is_file():
         return None
-    gate = {r["genre"]: r for r in _read(gate_p)}
-    genres = [g for g in GENRES if g in gate]
-    md = _source("presence_ablation_<genre>.csv", "presence_gate.csv", "doc_presence_<genre>.csv")
+    genres = [g for g in GENRES if g in {r["genre"] for r in _read(gate_p)}]
+    md = _source("presence_ablation_<genre>.csv")
     variants = ["classifier only", "prototypes only", "classifier + prototypes", "teacher labels (ceiling)"]
     header = ["section-level variant"] + [f"{GENRE_NAMES[g]}: macro-F1 / ECE / ms per section" for g in genres]
     rows = []
@@ -188,8 +188,19 @@ def presence_md(tables: Path, V: Values) -> str | None:
             cells.append(" / ".join(x for x in (f3(r["macro_f1"]), f3(r.get("ece")) or "–",
                                                 f"{float(r['ms_per_section']):.0f}" if r.get("ms_per_section") else "–")))
         rows.append([v] + cells)
-    md += "**Section level** (evaluation half of the silver reference set; the ceiling is the teacher's own labels scored the same way):\n\n"
+    md += "**Section-level presence variants** (evaluation half of the silver reference set; the ceiling is the teacher's own labels scored the same way):\n\n"
     md += table(header, rows)
+    return md
+
+
+def presence_md(tables: Path, V: Values) -> str | None:
+    """The presence gate and document-level aggregation (body)."""
+    gate_p = tables / "presence_gate.csv"
+    if not gate_p.is_file():
+        return None
+    gate = {r["genre"]: r for r in _read(gate_p)}
+    genres = [g for g in GENRES if g in gate]
+    md = _source("presence_gate.csv", "doc_presence_<genre>.csv")
     rows = []
     for g in genres:
         r = gate[g]
@@ -203,7 +214,7 @@ def presence_md(tables: Path, V: Values) -> str | None:
                      f3(r["share_of_ceiling"]) + f" (gate ≥ {float(r['required_share']):.2f})", r["f1_gate"],
                      f"{int(r['profiled_documents']):,} of {int(r['indexable_documents']):,}",
                      f"{float(r['sections_per_second']):.0f} ({r['device']})"])
-    md += "\n**Gate 4.8** (macro-F1 relative to the teacher ceiling, decision record 005):\n\n"
+    md += "**The presence gate** (macro-F1 at or above 80 per cent of the teacher's own macro-F1 against the same silver reference):\n\n"
     md += table(["genre", "presence model", "macro-F1", "teacher ceiling", "share of ceiling", "gate",
                  "documents profiled", "sections / s"], rows)
     rows = []
@@ -225,8 +236,37 @@ def presence_md(tables: Path, V: Values) -> str | None:
                          f3(r["macro_f1"]), f3(r["micro_f1"]), f3(r["ece"]), f3(r["prevalence_abs_error"]),
                          f"{float(r['types_present_per_document']):.1f} (labelled {float(r['labelled_types_per_document']):.1f})"])
     if rows:
-        md += "\n**Document level** (decision record 006; evaluation half, 75 whole labelled documents per genre, against the judge):\n\n"
+        md += "\n**Document level** (evaluation half, 75 whole labelled documents per genre, against the judge):\n\n"
         md += table(["genre", "aggregation", "macro-F1", "micro-F1", "ECE", "prevalence error", "types per document"], rows)
+    return md
+
+
+# ----------------------------------------------------------------------------------------------------------------- cohort
+
+
+def cohort_md(tables: Path, V: Values) -> str | None:
+    """Cohorts of held-out dev documents (appendix): how many distinct entities a cohort of k holds, its similarity,
+    how often the category filter had to be dropped. The answer to 'whose practices does a cohort represent'."""
+    genres = [g for g in GENRES if (tables / f"cohort_similarity_{g}.csv").is_file()]
+    if not genres:
+        return None
+    md = _source("cohort_similarity_<genre>.csv")
+    md += "**Cohorts of held-out documents** (k nearest indexed documents of the same category; a cohort never holds another version of the query's entity):\n\n"
+    rows = []
+    for g in genres:
+        data = _read(tables / f"cohort_similarity_{g}.csv")
+        n = len(data)
+        k = int(float(data[0]["k"]))
+        ent = sum(float(r["entities"]) for r in data) / n
+        sim = sum(float(r["mean_similarity"]) for r in data) / n
+        fb = sum(float(r["fallback"]) for r in data) / n
+        V.put(f"cohort/{g}/queries", n)
+        V.put(f"cohort/{g}/k", k)
+        V.put(f"cohort/{g}/entities_mean", int(round(ent)))
+        V.put(f"cohort/{g}/mean_similarity", sim)
+        V.put(f"cohort/{g}/fallback_rate", fb)
+        rows.append([GENRE_NAMES[g], f"{n:,}", f"{k}", f"{ent:.0f}", f3(sim), pct(fb, 1)])
+    md += table(["genre", "query documents", "k", "distinct entities per cohort (mean)", "mean similarity", "category filter dropped"], rows)
     return md
 
 
@@ -312,7 +352,7 @@ def gate66_md(tables: Path, V: Values) -> str | None:
     if not genres:
         return None
     md = _source("bench_synth_<genre>.csv", "bench_revision_<genre>.csv")
-    md += "**Recall@5, level 1 − genre-uniform** (paired bootstrap over documents; over entities for the revision rows). The gate 6.6 criterion is the one-type row with a 95% CI above zero. ✓ marks a CI above zero, ✗ a CI below zero.\n\n"
+    md += "**Recall@5, level 1 − genre-uniform** (paired bootstrap, 95% CI; ✓ above zero, ✗ below; the cohort gate is the one-type row):\n\n"
     rows = []
     for tbl, regime in spec:
         cells = []
@@ -356,7 +396,7 @@ def revision_md(tables: Path, V: Values) -> str | None:
                          f"{c[('revision', 'below_prevalence')]:,}", f"{c[('revision', 'instances')]:,}",
                          f"{c[('revision_all_added', 'instances')]:,}", f"{min(years)}–{max(years)}" if years else ""])
         md += "**From version pairs to instances** (a pair qualifies when a type added in version n+1 was stated by at least half of the peers dated before version n):\n\n"
-        md += table(["genre", "pairs", "no added type", "no added type at ≥ 0.5 prevalence", "instances (plan filter)",
+        md += table(["genre", "pairs", "no added type", "no added type at ≥ 0.5 prevalence", "instances (peer filter)",
                      "instances (every added type)", "years"], rows)
     rows = []
     for regime in ("revision", "revision_all_added"):
@@ -387,9 +427,8 @@ def leak_md(tables: Path, V: Values) -> str | None:
     if not genres:
         return None
     md = _source("cohort_diagnosis_<genre>.csv")
-    md += ("**Cohort diagnosis, the default cohort** (decision record 007; within-document AUC of cohort prevalence on untouched test "
-           "documents; recall@5 gain over genre-uniform on the one-type regime with the cohort retrieved from the edited document, "
-           "what the system sees, and from the original; the leak is their difference):\n\n")
+    md += ("**Cohort diagnosis, the default cohort** (within-document AUC on untouched test documents; one-type recall@5 gain "
+           "over genre-uniform from the edited and from the original document; the leak is their difference):\n\n")
     rows = []
     for g in genres:
         data = _read(tables / f"cohort_diagnosis_{g}.csv")
@@ -413,7 +452,7 @@ def leak_full_md(tables: Path, V: Values) -> str | None:
     if not genres:
         return None
     md = _source("cohort_diagnosis_<genre>.csv")
-    md += ("**Cohort diagnosis, every variant** (decision record 007): how well cohort prevalence predicts which types an untouched test document states "
+    md += ("**Cohort diagnosis, every variant**: how well cohort prevalence predicts which types an untouched test document states "
            "(within-document AUC), and on the one-type regime the recall@5 gain over genre-uniform with the cohort retrieved from the edited "
            "document (what the system sees) and from the original (before the deletion); the leak is their difference. "
            "The variant selected on the test bench (post_hoc_best) is not shown: it is not a gate result.\n\n")
@@ -513,7 +552,7 @@ def speed_md(tables: Path, V: Values) -> str | None:
         V.put(f"speed/{g}/embed_share", round(embed_share, 3))
         V.put(f"speed/{g}/sections", [min(secs), max(secs)])
         rows.append([GENRE_NAMES[g], len(rs), f"{min(secs)}–{max(secs)}", f"{totals[len(totals) // 2]:.2f}", f"{totals[-1]:.2f}", pct(embed_share, 0)])
-    md += "**Gate 5.9, end-to-end `analyse()` time per held-out document** (template explanations, after one warm-up call; the machine is named in the text):\n\n"
+    md += "**End-to-end time per held-out document** (template explanations, after one warm-up call; the machine is named in the text):\n\n"
     md += table(["genre", "documents", "sections", "median s", "max s", "embedding share of time"], rows)
     return md
 
@@ -635,7 +674,7 @@ def agreement_md(tables: Path, V: Values) -> str | None:
 
 # ------------------------------------------------------------------------------------------------------------------- main
 
-FRAGMENTS = [("corpus", corpus_md), ("presence", presence_md), ("agreement", agreement_md), ("synth", synth_md),
+FRAGMENTS = [("corpus", corpus_md), ("presence", presence_md), ("presence_variants", presence_variants_md), ("cohort", cohort_md), ("agreement", agreement_md), ("synth", synth_md),
              ("synth_more", synth_more_md), ("gate66", gate66_md), ("revision", revision_md), ("leak", leak_md),
              ("leak_full", leak_full_md), ("llm_gap", llm_gap_md), ("speed", speed_md), ("errors", errors_md),
              ("severity", severity_md)]
