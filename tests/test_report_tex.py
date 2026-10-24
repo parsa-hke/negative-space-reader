@@ -79,7 +79,7 @@ def test_a_lead_paragraph_before_a_table_joins_its_float_and_long_columns_wrap()
     tex = convert(md)
     assert r"\panel{\textbf{Lead title} (details):}" in tex and tex.index(r"\begin{table}") < tex.index("Lead title")
     assert column_spec([["a", "b"], ["1", "2"]], 2) == "ll"
-    assert column_spec([["name", "a very long description " * 4, "n"], ["x", "y", "1"]], 3).count("P{") == 1
+    assert column_spec([["name", "a very long description " * 8, "n"], ["x", "y", "1"]], 3).count("P{") == 1
 
 
 def test_convert_refuses_a_table_without_a_caption():

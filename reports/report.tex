@@ -12,6 +12,11 @@
 \usepackage{array}
 \newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
 \usepackage{adjustbox}
+\usepackage{float}
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.6}
+\renewcommand{\textfraction}{0.08}
+\renewcommand{\floatpagefraction}{0.85}
 \usepackage[font=small,labelfont=bf,skip=4pt]{caption}
 \usepackage{xcolor}
 \usepackage[hidelinks]{hyperref}
@@ -74,10 +79,10 @@ What a document looks like here: a privacy policy is one web page of a few thous
 
 A heading-aware segmenter cuts policies into sections, with paragraph chunks as the fallback; unarXive's sections are split when they run to tens of thousands of characters. MinHash finds near-duplicates, collapsed into version chains; splits are disjoint by entity and sealed with a hash; every entity with a revision pair is in the test split, and no version of it is ever indexed (Table 1).
 
-\begin{table}[htbp]
+\begin{table}[!htbp]
 \centering\small
 \begin{adjustbox}{max width=\linewidth}
-\begin{tabular}{P{3.5cm}P{8.4cm}P{2.8cm}}
+\begin{tabular}{lP{7.5cm}l}
 \toprule
  & privacy policies & research papers \\
 \midrule
@@ -135,11 +140,11 @@ Why these models and not the plan's first choices? Three decisions, each recorde
 
 \textbf{The reference, and what a gate can measure.} The plan's hand-labelled reference set did not fit the schedule, so the reference became silver: the same 300 fixed sections per genre labelled by a second model of another family, Claude Haiku 5.5, with the teacher's own two-pass prompts (Table 2).
 
-\begin{table}[htbp]
+\begin{table}[!htbp]
 \centering\small
 \panel{\textbf{Label agreement on the reference sections} (micro precision, recall and F1 pooled over types from the per-type counts):}
 \begin{adjustbox}{max width=\linewidth}
-\begin{tabular}{lP{5.7cm}llll}
+\begin{tabular}{llllll}
 \toprule
 genre & comparison & sections & micro P & micro R & micro F1 \\
 \midrule
@@ -157,11 +162,11 @@ Teacher and judge agree at micro-F1 0.775 on policies and 0.692 on papers, while
 
 \textbf{The presence model.} Each head is a class-weighted logistic regression over the section embedding, regularisation and threshold chosen on the fitting half of the reference, with a temperature per type \cite{r24}; expected calibration error (ECE) \cite{r25} is reported because later stages use P(present) as a probability (Table 3, evaluation half).
 
-\begin{table}[htbp]
+\begin{table}[!htbp]
 \centering\small
 \panel{\textbf{Section level} (evaluation half of the silver reference set; the ceiling is the teacher's own labels scored the same way):}
 \begin{adjustbox}{max width=\linewidth}
-\begin{tabular}{lP{5.5cm}P{5.4cm}}
+\begin{tabular}{lll}
 \toprule
 section-level variant & privacy policies: macro-F1 / ECE / ms per section & research papers: macro-F1 / ECE / ms per section \\
 \midrule
@@ -185,7 +190,7 @@ research papers & classifier + prototypes & 0.497 & 0.688 & 0.722 (gate $\geq$ 0
 \end{adjustbox}
 \panel{\textbf{Document level} (decision record 006; evaluation half, 75 whole labelled documents per genre, against the judge):}
 \begin{adjustbox}{max width=\linewidth}
-\begin{tabular}{lP{2.0cm}lllll}
+\begin{tabular}{lllllll}
 \toprule
 genre & aggregation & macro-F1 & micro-F1 & ECE & prevalence error & types per document \\
 \midrule
@@ -207,11 +212,11 @@ The cohort settings were fixed in the plan and selected on no benchmark; nothing
 
 \textbf{OmitBench-synthetic} is a jigsaw whose missing piece we removed ourselves. From each held-out test document we draw a type it states, delete the sentences that carry it, verify that it is now absent, and ask each system to rank the absences; three regimes delete one type, three types or every section carrying the type, 500 instances per regime and genre, except that long papers resist three-type deletion and gave 468.  Metrics are recall at 1, 5 and 10, MRR and nDCG@10 with 95 per cent bootstrap intervals \cite{r26}, plus the false-alarm rate (the share of the top five in fact stated) and the calibration of P(expected) on 150 untouched judge-labelled documents (Table 4, Figure 3; the other metrics and the untouched-document checks are in Appendix A, Table 11).
 
-\begin{table}[htbp]
+\begin{table}[!htbp]
 \centering\small
 \panel{\textbf{Recall@5 on OmitBench-synthetic} (500 instances per regime and genre unless stated; 95\% bootstrap CI over documents):}
 \begin{adjustbox}{max width=\linewidth}
-\begin{tabular}{lP{4.4cm}lP{4.5cm}}
+\begin{tabular}{llll}
 \toprule
 regime & system & privacy policies & research papers \\
 \midrule
@@ -241,11 +246,11 @@ whole section & (a) genre-uniform prevalence & 0.408 [0.382, 0.436] & 0.495 [0.4
 
 Both systems sit far above random order; whether the cohort beats genre-wide prevalence outside the paired interval is the plan's gate (Table 5, Figure 4).
 
-\begin{table}[htbp]
+\begin{table}[!htbp]
 \centering\small
 \panel{\textbf{Recall@5, level 1 $-$ genre-uniform} (paired bootstrap over documents; over entities for the revision rows). The gate 6.6 criterion is the one-type row with a 95\% CI above zero. \checkmark marks a CI above zero, \ding{55} a CI below zero.}
 \begin{adjustbox}{max width=\linewidth}
-\begin{tabular}{lP{5.2cm}P{5.1cm}}
+\begin{tabular}{lll}
 \toprule
 benchmark, regime & privacy policies & research papers \\
 \midrule
@@ -268,11 +273,11 @@ revision (every added type) & -0.009 [-0.017, -0.002] \ding{55} (n = 2672) & +0.
 
 \textbf{OmitBench-revision} treats the authors' own later addition as a confession: if version \emph{n}+1 adds a type that at least half of the peers dated before version \emph{n} already stated, version \emph{n} conspicuously omitted it, with expectation computed against the time-windowed cohort (Table 6).
 
-\begin{table}[htbp]
+\begin{table}[!htbp]
 \centering\small
 \panel{\textbf{From version pairs to instances} (a pair qualifies when a type added in version n+1 was stated by at least half of the peers dated before version n):}
 \begin{adjustbox}{max width=\linewidth}
-\begin{tabular}{lllP{2.0cm}lll}
+\begin{tabular}{lllllll}
 \toprule
 genre & pairs & no added type & no added type at $\geq$ 0.5 prevalence & instances (plan filter) & instances (every added type) & years \\
 \midrule
@@ -283,7 +288,7 @@ research papers & 343 & 117 & 89 & 137 & 226 & 2019–2022 \\
 \end{adjustbox}
 \panel{\textbf{Recall@5 on OmitBench-revision} (time-windowed cohorts; genre-uniform uses the prevalence of the same date window; bootstrap over entities):}
 \begin{adjustbox}{max width=\linewidth}
-\begin{tabular}{lP{3.3cm}ll}
+\begin{tabular}{llll}
 \toprule
 variant & system & privacy policies & research papers \\
 \midrule
@@ -305,7 +310,7 @@ For papers the cohort wins everywhere the plan asked, by +0.108 on the one-type 
 
 \textbf{The diagnosis.} Per cohort variant we measured how well cohort prevalence predicts which types an untouched document states (a within-document AUC, 800 test documents), and recall@5 with the cohort retrieved from the edited document's vector, what the system sees, against the original's, what it would see if the deletion left no trace (Table 7, Figure 5; every variant in Appendix A, Table 12).
 
-\begin{table}[htbp]
+\begin{table}[!htbp]
 \centering\small
 \panel{\textbf{Cohort diagnosis, the default cohort} (decision record 007; within-document AUC of cohort prevalence on untouched test documents; recall@5 gain over genre-uniform on the one-type regime with the cohort retrieved from the edited document, what the system sees, and from the original; the leak is their difference):}
 \begin{adjustbox}{max width=\linewidth}
@@ -337,7 +342,7 @@ A search over eleven cohort settings on the test bench finds a variant that woul
 
 Could a chat model have done this without a corpus? In the candidate-list setting the model reads one document and the genre's catalogue with definitions, and returns the ten types it judges most conspicuously absent; the prompt never mentions that text was removed. We ran Claude Opus 5.5 (batch mode, moderate reasoning) and the open teacher Qwen2.5-72B-Instruct (pinned provider), each once, on the same 100 one-type instances per genre, paired against the corpus systems (Table 8, Figure 6).
 
-\begin{table}[htbp]
+\begin{table}[!htbp]
 \centering\small
 \panel{\textbf{Candidate-list setting, the same 100 one-type instances per genre} (MRR cut at 10 for every system; 95\% bootstrap CIs):}
 \begin{adjustbox}{max width=\linewidth}
@@ -366,7 +371,7 @@ Qwen2.5-72B-Instruct (candidate list) & recall@1 & 0.042 [0.018, 0.075] & 0.022 
 \end{adjustbox}
 \panel{\textbf{Paired differences in recall@5} (chat model $-$ corpus system):}
 \begin{adjustbox}{max width=\linewidth}
-\begin{tabular}{P{7.2cm}ll}
+\begin{tabular}{lll}
 \toprule
 difference & privacy policies & research papers \\
 \midrule
@@ -392,7 +397,7 @@ Two caveats. The yardstick was built with our own detector, so a chat model that
 
 \textbf{Speed.} The whole pipeline runs in seconds on a laptop (Apple M5, MPS; Table 9), embedding being most of the time; on the demo's free two-core host a policy takes roughly ten seconds and a paper about half a minute.
 
-\begin{table}[htbp]
+\begin{table}[!htbp]
 \centering\small
 \panel{\textbf{Gate 5.9, end-to-end \texttt{analyse()} time per held-out document} (template explanations, after one warm-up call; the machine is named in the text):}
 \begin{adjustbox}{max width=\linewidth}
@@ -428,10 +433,10 @@ Automated reading of privacy policies runs from the OPP-115 corpus \cite{r6} to 
 
 Table 10 sets each risk against its mitigation.
 
-\begin{table}[htbp]
+\begin{table}[!htbp]
 \centering\small
 \begin{adjustbox}{max width=\linewidth}
-\begin{tabular}{P{3.0cm}P{7.7cm}P{3.9cm}}
+\begin{tabular}{P{3.1cm}P{7.9cm}P{4.0cm}}
 \toprule
 risk & mitigation in place & still open \\
 \midrule
@@ -522,9 +527,11 @@ Generative AI was used as an assistant throughout this project, to work faster r
 
 \end{thebibliography}
 
+\clearpage
+
 \section*{Appendix A. Full benchmark tables}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering\small
 \panel{\textbf{Other ranking metrics, one-type regime:}}
 \begin{adjustbox}{max width=\linewidth}
@@ -545,7 +552,7 @@ ndcg@10 & (a) genre-uniform prevalence & 0.425 [0.399, 0.449] & 0.524 [0.500, 0.
 \end{adjustbox}
 \panel{\textbf{Untouched labelled documents} (150 per genre, judge labels, out-of-fold document presence):}
 \begin{adjustbox}{max width=\linewidth}
-\begin{tabular}{P{4.9cm}P{2.8cm}ll}
+\begin{tabular}{llll}
 \toprule
 measure & system & privacy policies & research papers \\
 \midrule
@@ -562,7 +569,7 @@ ECE of P(expected) against the judge & (a) genre-uniform prevalence & 0.048 [0.0
 
 \textbf{Cohort diagnosis, every variant} (decision record 007): how well cohort prevalence predicts which types an untouched test document states (within-document AUC), and on the one-type regime the recall@5 gain over genre-uniform with the cohort retrieved from the edited document (what the system sees) and from the original (before the deletion); the leak is their difference. The variant selected on the test bench (post\_hoc\_best) is not shown: it is not a gate result.
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering\small
 \panel{\emph{Privacy policies} (AUC and Brier on 800 untouched test documents; recall@5 differences on the one-type instances):}
 \begin{adjustbox}{max width=\linewidth}

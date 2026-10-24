@@ -103,6 +103,13 @@ and too many panel tables in the body. Fixed, all through the source and the scr
 not to replace the work (code, experiments, changelog, editing); the question, decisions, review, schema pass and final
 text the author's; the models inside the system named; prompts versioned, numbers from the tables. Rebuilt md, docx, tex.
 
+**Exporter, after the second Overleaf compile (17 pages):** body tables `[!htbp]` with float fractions that refuse a
+half-empty float page (Table 8 had one to itself); back matter after the references starts on a new page and its
+tables are placed where the text puts them (`[H]`; Table 11 had floated above the Appendix heading); several lead
+paragraphs before one table all join its float (a lead ending in a colon followed by another lead); a column wraps
+only over 40 characters with 150 characters to the line (Table 1's numbers and Table 3's aggregation column no
+longer wrap); the diagram's type enlarged (7.6 pt boxes, taller figure). Rebuilt tex, zip and docx.
+
 Tests: 491 passed. Nothing further committed, no API call, the Space untouched, no §0.2 change.
 
 ## 2026-10-25 — Phase 7.4 and 7.5: the class report, built from the tables; `analysis/tables.py`; `.docx` export

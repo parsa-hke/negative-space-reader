@@ -35,6 +35,11 @@ PREAMBLE = r"""\documentclass[11pt,a4paper]{article}
 \usepackage{array}
 \newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
 \usepackage{adjustbox}
+\usepackage{float}
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.6}
+\renewcommand{\textfraction}{0.08}
+\renewcommand{\floatpagefraction}{0.85}
 \usepackage[font=small,labelfont=bf,skip=4pt]{caption}
 \usepackage{xcolor}
 \usepackage[hidelinks]{hyperref}
@@ -126,20 +131,20 @@ def _smart_quotes(tex: str) -> str:
     return "".join(out)
 
 
-LINE_CHARS = 100   # about what one line of a \small table holds across the text width
+LINE_CHARS = 150   # about what one line of a \small table holds across the text width
 TEXT_CM = 16.2     # the text width (A4, 2.4 cm margins)
 
 
 def column_spec(cells: list[list[str]], ncol: int) -> str:
-    """l for every column while the widest cells fit one line; otherwise the long columns (over 28 characters) become
-    ragged-right P{} columns sharing the width the short ones leave, so a table wraps its text instead of shrinking as a whole."""
+    """l for every column while the widest cells fit one line; otherwise the long columns become
+    ragged-right P{} columns (over 40 characters) sharing the width the short ones leave, so a table wraps its text instead of shrinking as a whole."""
     widest = [max((len(r[c]) for r in cells if c < len(r)), default=0) for c in range(ncol)]
     if sum(widest) + 3 * ncol <= LINE_CHARS:
         return "l" * ncol
-    long = [c for c in range(ncol) if widest[c] > 28]
+    long = [c for c in range(ncol) if widest[c] > 40]
     if not long:
         return "l" * ncol
-    short_cm = sum(widest[c] for c in range(ncol) if c not in long) * TEXT_CM / LINE_CHARS + 0.5 * ncol
+    short_cm = sum(widest[c] for c in range(ncol) if c not in long) * TEXT_CM / LINE_CHARS + 0.4 * ncol
     left = max(TEXT_CM - short_cm, 2.0 * len(long))
     total = sum(widest[c] for c in long)
     return "".join(f"P{{{left * widest[c] / total:.1f}cm}}" if c in long else "l" for c in range(ncol))
@@ -191,11 +196,11 @@ def convert(md: str) -> str:
     body.append(head)
     pending_table: list[str] = []  # panels of the float whose caption has not arrived yet
     pending_figure: str | None = None
-    in_abstract = in_bib = False
+    in_abstract = in_bib = in_appendix = False
 
     def flush_table(caption: str) -> None:
         nonlocal pending_table
-        body.append("\n".join([r"\begin{table}[htbp]", r"\centering\small"] + pending_table
+        body.append("\n".join([r"\begin{table}[H]" if in_appendix else r"\begin{table}[!htbp]", r"\centering\small"] + pending_table
                               + [r"\caption{" + inline(caption, cite=False) + "}", r"\end{table}"]))
         pending_table = []
 
@@ -212,6 +217,8 @@ def convert(md: str) -> str:
             if in_bib:
                 body.append(r"\end{thebibliography}")
                 in_bib = False
+                in_appendix = True  # whatever follows the references is back matter: new page, tables in place
+                body.append(r"\clearpage")
             name = s[3:].strip()
             if name.lower() == "abstract":
                 body.append(r"\begin{abstract}")
@@ -259,8 +266,16 @@ def convert(md: str) -> str:
             buf.append(lines[i].strip())
             i += 1
         text = " ".join(buf)
-        nxt = next((l for l in lines[i:] if l.strip()), "")
-        if not in_bib and nxt.startswith("|") and re.match(r"^\*{1,2}[^*]", text):
+        j = i
+        while j < len(lines) and not lines[j].strip():
+            j += 1
+        nxt = lines[j] if j < len(lines) else ""
+        # a lead paragraph joins the float that follows: it opens bold or italic and either sits right before a
+        # table, or ends with a colon and is followed by another lead and its table (a float with several panels)
+        is_lead = re.match(r"^\*{1,2}[^*]", text) is not None
+        leads_to_table = nxt.startswith("|") or (text.rstrip("*").endswith(":") and re.match(r"^\*{1,2}[^*]", nxt)
+                                                 and any(l.startswith("|") for l in lines[j:j + 4]))
+        if not in_bib and is_lead and leads_to_table:
             pending_table.append(r"\panel{" + _smart_quotes(inline(text)) + "}")  # the lead of the float that follows
             continue
         if in_bib:

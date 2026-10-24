@@ -238,7 +238,7 @@ def draw_pipeline(out: Path) -> Path:
     import matplotlib.patches as mp
     import matplotlib.pyplot as plt
 
-    _figure(1, 7.2, 3.6)
+    _figure(1, 7.2, 4.2)
     fig = plt.gcf()
     fig.clf()
     ax = fig.add_axes([0, 0, 1, 1])
@@ -249,27 +249,27 @@ def draw_pipeline(out: Path) -> Path:
 
     def box(x, y, w, h, text, fc, bold=False):
         ax.add_patch(mp.FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0.02,rounding_size=1.2", fc=fc, ec=line, lw=0.8))
-        ax.text(x + w / 2, y + h / 2, text, ha="center", va="center", fontsize=6.4, color=INK, wrap=True,
+        ax.text(x + w / 2, y + h / 2, text, ha="center", va="center", fontsize=7.0, color=INK, wrap=True,
                 fontweight="bold" if bold else "normal", linespacing=1.25)
 
     def arrow(x0, y0, x1, y1, dashed=False, rad=0.0):
         ax.annotate("", (x1, y1), (x0, y0), arrowprops={"arrowstyle": "-|>", "color": line, "lw": 0.8, "connectionstyle": f"arc3,rad={rad}",
                                                           "linestyle": (0, (2.5, 2)) if dashed else "solid", "shrinkA": 0, "shrinkB": 0})
 
-    ax.text(1, 47.5, "Offline, once per genre pack (teacher LLM here only)", fontsize=7.5, color=MUTED, fontweight="bold")
-    ax.text(1, 21.5, "Query time, seconds on a laptop (no LLM)", fontsize=7.5, color=MUTED, fontweight="bold")
+    ax.text(1, 47.5, "Offline, once per genre pack (teacher LLM here only)", fontsize=8.5, color=MUTED, fontweight="bold")
+    ax.text(1, 21.5, "Query time, seconds on a laptop (no LLM)", fontsize=8.5, color=MUTED, fontweight="bold")
     ax.add_patch(mp.Rectangle((0.5, 24.5), 99, 21.5, fc="none", ec=GRID, lw=0.6))
     ax.add_patch(mp.Rectangle((0.5, 1), 99, 19, fc="none", ec=GRID, lw=0.6))
     # offline
-    box(2, 35, 15, 8, "Genre corpus\n20–30k documents,\nsections and sentences", pack)
+    box(2, 35, 15, 8, "Genre corpus\n20–30k documents\nin sections", pack)
     box(21, 38.5, 18, 6.5, "Teacher extracts claims;\nembed, UMAP, HDBSCAN;\nname, prune, freeze", pack)
-    box(43, 38.5, 15, 6.5, "Schema\n40–60 assertion types\n(frozen)", pack, bold=True)
-    box(62, 38.5, 16, 6.5, "Teacher labels\n~2k sections per genre\n+ silver reference", pack)
-    box(82, 38.5, 16, 6.5, "Presence model\nlogistic heads +\nprototype matching", pack, bold=True)
+    box(43, 38.5, 15, 6.5, "Schema\n40–60 types\n(frozen)", pack, bold=True)
+    box(62, 38.5, 16, 6.5, "Teacher labels\n~2k sections\n+ silver reference", pack)
+    box(82, 38.5, 16, 6.5, "Presence model\nheads +\nprototypes", pack, bold=True)
     box(21, 27, 18, 6.5, "Section and document\nembeddings\n(Qwen3-Embedding-0.6B)", pack)
     box(43, 27, 15, 6.5, "FAISS index\n(train split)", pack, bold=True)
     box(62, 27, 16, 6.5, "Profiles\na bit per type per\ndocument", pack, bold=True)
-    box(82, 27, 16, 6.5, "Evidence\nbest peer sentence\nper type", pack, bold=True)
+    box(82, 27, 16, 6.5, "Evidence\nbest peer\nsentence per type", pack, bold=True)
     arrow(17, 41, 21, 41.7); arrow(39, 41.7, 43, 41.7); arrow(58, 41.7, 62, 41.7); arrow(78, 41.7, 82, 41.7)
     arrow(17, 37, 21, 30.2); arrow(39, 30.2, 43, 30.2); arrow(58, 30.2, 62, 30.2); arrow(78, 30.2, 82, 30.2)
     arrow(90, 38.5, 70, 33.5)  # presence model -> profiles
@@ -277,10 +277,10 @@ def draw_pipeline(out: Path) -> Path:
     box(2, 7, 13, 8, "Document\n(upload or paste)\n→ sections", query)
     box(18, 7, 14, 8, "Embed sections\nwith the pack's\nembedder", query)
     box(35, 7, 14, 8, "P(present)\nper type", query, bold=True)
-    box(52, 7, 15, 8, "Cohort\nk = 200 nearest\npeers, same category", query, bold=True)
-    box(70, 7, 13, 8, "score(t) =\nP(expected) ×\n(1 − P(present)) × w", query, bold=True)
-    box(86, 7, 12.5, 8, "Ghost paragraphs\n+ peer evidence\n+ template text", query)
-    arrow(15, 11, 18, 11); arrow(32, 11, 35, 11); arrow(49, 11, 52, 11); arrow(67, 11, 70, 11); arrow(83, 11, 86, 11)
+    box(52, 7, 15, 8, "Cohort\n200 nearest peers,\nsame category", query, bold=True)
+    box(69.5, 7, 15, 8, "score(t) =\nP(expected) ×\n(1 − P(present)) × w", query, bold=True)
+    box(87, 7, 11.5, 8, "Ghost paragraphs\n+ peer evidence\n+ template text", query)
+    arrow(15, 11, 18, 11); arrow(32, 11, 35, 11); arrow(49, 11, 52, 11); arrow(67, 11, 69.5, 11); arrow(84.5, 11, 87, 11)
     arrow(90, 27, 92, 15, dashed=True)   # evidence -> output
     arrow(70, 27, 59.5, 15, dashed=True)  # profiles -> cohort prevalence
     arrow(50.5, 27, 56, 15, dashed=True)  # index -> cohort
