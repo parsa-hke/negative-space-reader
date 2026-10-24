@@ -144,6 +144,12 @@ longer wrap); the diagram's type enlarged (7.6 pt boxes, taller figure). Rebuilt
 quote in Table 10 faced the wrong way (table cells now get LaTeX quote pairs too); the appendix lead of Table 12 now
 ends with a colon so it travels with its tables. Rebuilt figures, md, docx, tex, zip.
 
+**Submission steps (Parsa's instructions):** code licence changed to **Apache 2.0** (`LICENSE` fetched from apache.org,
+`NOTICE` with the copyright line; README and pyproject follow); **7.2 dropped** (no video required; the live Space is the
+demonstration; `reports/demo_video_plan.md` removed, the plan's 7.2 struck through, the checklist and README updated;
+the Space is always on under Parsa's Pro subscription, so the wake-up notes are gone); the eight commits pushed, tag
+`v0.1-class` created and pushed, the repository made public (see below).
+
 Tests: 491 passed. Nothing further committed, no API call, the Space untouched, no §0.2 change.
 
 ## 2026-10-25 — Phase 7.4 and 7.5: the class report, built from the tables; `analysis/tables.py`; `.docx` export

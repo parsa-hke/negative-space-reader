@@ -8,8 +8,7 @@ its 200 closest peers make them, and shows the peers' own sentences as evidence.
 policies, 58 kinds of statement; cs.CL/cs.LG papers, 47): the engine has no genre-specific code. Nothing is a verdict:
 every number is a count of peers and every quote is theirs.
 
-- **Demo:** https://huggingface.co/spaces/parsa-hke/negative-space-reader (public, free CPU hardware; it sleeps after
-  two idle days and wakes on the first visit).
+- **Demo:** https://huggingface.co/spaces/parsa-hke/negative-space-reader (public, free CPU hardware, kept always on).
 - **Report:** [reports/report.md](reports/report.md) (`reports/report.docx` is the submitted copy).
 - **Status (2026-10-25):** Phases 1–7 of [NEGATIVE_SPACE_PLAN.md](NEGATIVE_SPACE_PLAN.md) done on the lean tier: both packs
   built, OmitBench-synthetic and OmitBench-revision run, the frontier comparison recorded, the demo live, the report written.
@@ -217,5 +216,5 @@ checkpoints, caches and run folders are gitignored; `runs/log.csv` is tracked.
 
 ## Licence
 
-The code in this repository is released under the MIT License ([LICENSE](LICENSE)). The corpora, the models and OPP-115
+The code in this repository is released under the Apache License 2.0 ([LICENSE](LICENSE), [NOTICE](NOTICE)). The corpora, the models and OPP-115
 carry their own licences, listed in [data/README.md](data/README.md) and in the Models table above.
