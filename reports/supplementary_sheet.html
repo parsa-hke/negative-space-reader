@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Negative-Space Reader: marker's sheet</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #12393a;
+    --ink-2: #1f4a4b;
+    --teal: #359FA0;
+    --teal-light: #8AD6D1;
+    --cream: #FFF0C5;
+    --cream-2: #fff8e3;
+    --orange: #FF8C52;
+    --orange-dark: #b24a12;
+    --muted: #5d6b6b;
+    --rule: #d9e6e5;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  @page { size: A4; margin: 0; }
+  html, body { background: #fff; }
+  body {
+    font-family: 'Inter', -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    color: var(--ink);
+    font-size: 9pt;
+    line-height: 1.42;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  a { color: var(--ink-2); text-decoration: none; }
+  code, .mono { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 8.2pt; }
+
+  .page {
+    width: 210mm; height: 297mm; overflow: hidden;
+    display: grid; grid-template-rows: auto 1fr auto;
+    page-break-after: always;
+  }
+  .page:last-child { page-break-after: auto; }
+
+  /* header */
+  .head {
+    background: var(--ink); color: #fff;
+    padding: 11mm 14mm 9mm;
+    position: relative; overflow: hidden;
+  }
+  .head::after {
+    content: ''; position: absolute; right: -30mm; top: -40mm;
+    width: 90mm; height: 90mm; border-radius: 50%;
+    background: radial-gradient(circle at 40% 40%, rgba(138,214,209,.35), rgba(138,214,209,0) 70%);
+  }
+  .kicker {
+    font-size: 7.5pt; font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--teal-light); margin-bottom: 3mm;
+  }
+  .kicker span { color: var(--orange); }
+  h1 { font-size: 19pt; font-weight: 800; line-height: 1.12; letter-spacing: -.01em; max-width: 160mm; }
+  h1 em { font-style: normal; color: var(--teal-light); }
+  .byline { margin-top: 3.5mm; font-size: 9pt; color: #d7e6e5; }
+  .byline b { color: #fff; font-weight: 600; }
+
+  /* body */
+  .head.small { padding: 7mm 14mm 6mm; } .head.small .kicker { margin-bottom: 0; }
+  .body.p2 { grid-template-rows: auto minmax(0,1fr); gap: 6mm; }
+  .body { padding: 6mm 14mm 3mm; display: grid; grid-template-rows: auto auto auto minmax(0,1fr); gap: 4.5mm; overflow: hidden; }
+
+  .links { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 3.5mm; }
+  .link {
+    background: var(--cream-2); border-top: 3px solid var(--orange);
+    padding: 3mm 3.5mm 3mm; border-radius: 0 0 2mm 2mm;
+  }
+  .link .lab { font-size: 7pt; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--orange-dark); }
+  .link .what { font-weight: 700; font-size: 10pt; margin: 1mm 0 1.2mm; }
+  .link .url { display: block; font-family: 'JetBrains Mono', Menlo, monospace; font-size: 7.6pt; color: var(--ink-2); word-break: break-all; line-height: 1.35; }
+  .link .note { font-size: 7.8pt; color: var(--muted); margin-top: 1.4mm; }
+
+  .lede { font-size: 9.6pt; line-height: 1.5; max-width: 182mm; }
+  .lede b { color: var(--ink); }
+
+  .stats { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 4mm; }
+  .stat { border-left: 3px solid var(--teal); padding: .5mm 0 1mm 3mm; }
+  .stat .big { font-size: 17pt; font-weight: 800; line-height: 1; letter-spacing: -.02em; color: var(--ink); }
+  .stat .big small { font-size: 9pt; font-weight: 600; color: var(--teal); margin-left: 1mm; }
+  .stat .lab { font-size: 7.2pt; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-top: 1.4mm; }
+
+  .cols { display: grid; grid-template-columns: minmax(0,1.15fr) minmax(0,1fr); gap: 7mm; align-content: start; }
+  h2 {
+    font-size: 8pt; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--teal);
+    padding-bottom: 1.4mm; border-bottom: 1.5px solid var(--teal-light); margin-bottom: 2.6mm;
+  }
+  .block + .block { margin-top: 5mm; }
+
+  table { width: 100%; border-collapse: collapse; }
+  td { padding: 1.1mm 0; vertical-align: top; border-bottom: 1px solid var(--rule); }
+  tr:last-child td { border-bottom: 0; }
+  td.k { width: 31%; font-family: 'JetBrains Mono', Menlo, monospace; font-size: 7.8pt; color: var(--ink-2); padding-right: 2mm; }
+  td.v { color: #2d3f3f; }
+
+  .cmd { background: var(--ink); color: #e8f4f3; border-radius: 1.5mm; padding: 2mm 3mm; font-family: 'JetBrains Mono', Menlo, monospace; font-size: 7.5pt; line-height: 1.5; white-space: pre-wrap; word-break: normal; overflow-wrap: anywhere; overflow: hidden; margin-top: 1.5mm; }
+  .cmd .c { color: var(--teal-light); }
+  .step { display: grid; grid-template-columns: 6mm 1fr; gap: 1.5mm; margin-bottom: 2.2mm; }
+  .step .n { width: 5mm; height: 5mm; border-radius: 50%; background: var(--orange); color: #fff; font-weight: 800; font-size: 7.5pt; display: flex; align-items: center; justify-content: center; margin-top: .4mm; }
+  .step p { font-size: 8.6pt; }
+
+  .result { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 3mm; }
+  .res { background: var(--cream-2); border-radius: 1.5mm; padding: 3mm 3.5mm 2.5mm; }
+  .res .g { font-size: 7.2pt; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--orange-dark); margin-bottom: 1.6mm; }
+  .bar { display: grid; margin-bottom: 1.3mm; grid-template-columns: 38mm minmax(0,1fr) 9mm; gap: 1.5mm; align-items: center; font-size: 7.8pt; margin-bottom: 1.1mm; }
+  .bar .track { height: 2.6mm; background: #e9e2cc; border-radius: 1mm; overflow: hidden; }
+  .bar .fill { height: 100%; background: var(--teal); border-radius: 1mm; }
+  .bar .fill.o { background: var(--orange); }
+  .bar .fill.g { background: #9fb2b1; }
+  .bar .num { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .res .cap { font-size: 7.3pt; color: var(--muted); margin-top: 1.5mm; line-height: 1.35; }
+
+  ul.tips { list-style: none; }
+  ul.tips li { position: relative; padding-left: 4mm; margin-bottom: 1.6mm; font-size: 8.6pt; }
+  ul.tips li::before { content: ''; position: absolute; left: 0; top: 1.6mm; width: 2mm; height: 2mm; border-radius: 50%; background: var(--orange); }
+
+  /* footer */
+  .foot {
+    padding: 3mm 14mm 8mm; border-top: 1.5px solid var(--teal-light);
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 7.6pt; color: var(--muted);
+  }
+  .foot b { color: var(--ink); font-weight: 600; }
+  .foot > div:first-child { white-space: nowrap; margin-right: 6mm; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="head">
+    <div class="kicker">MAAI 902 · NLP Solution Design · Assessment 2 · <span>Supplementary sheet for the marker</span></div>
+    <h1>Negative-Space Reader<br><em>detecting what a document conspicuously omits by modelling what its peers assert</em></h1>
+    <div class="byline"><b>Parsa Hosseini</b> · University of Wollongong in Dubai · October 2026 · Report, repository and live demo submitted together</div>
+  </header>
+
+  <main class="body">
+
+    <section class="links">
+      <div class="link">
+        <div class="lab">Repository · tag v0.1-class</div>
+        <div class="what">Code, README, plan, changelog</div>
+        <a class="url" href="https://github.com/parsa-hke/negative-space-reader/tree/v0.1-class">github.com/parsa-hke/negative-space-reader/tree/v0.1-class</a>
+        <div class="note">Public. Apache 2.0. The tag is the submitted state; later commits on <code>main</code> are post-submission.</div>
+      </div>
+      <div class="link">
+        <div class="lab">Live demo · Hugging Face Space</div>
+        <div class="what">Working prototype, no install</div>
+        <a class="url" href="https://huggingface.co/spaces/parsa-hke/negative-space-reader">huggingface.co/spaces/parsa-hke/negative-space-reader</a>
+        <div class="note">Free CPU hardware. If it is asleep, the first visit wakes it in about a minute.</div>
+      </div>
+      <div class="link">
+        <div class="lab">Technical report</div>
+        <div class="what">Submitted on the portal</div>
+        <a class="url" href="https://github.com/parsa-hke/negative-space-reader/blob/v0.1-class/reports/report.md">…/blob/v0.1-class/reports/report.md</a>
+        <div class="note">Same text as the submitted file, with the source and every table it is built from alongside.</div>
+      </div>
+    </section>
+
+    <p class="lede">
+      <b>The problem.</b> Given a document and a corpus of its genre, rank the kinds of statement the document <i>lacks</i> by how many
+      of its 200 closest peers make them, and show the peers' own sentences as evidence. One engine, no genre-specific code: a genre is a
+      <b>pack</b> of configuration and data. Two packs ship, privacy policies and cs.CL/cs.LG papers. Nothing is a verdict: every number is a
+      count of peers, every quote is theirs.
+    </p>
+
+    <section class="stats">
+      <div class="stat"><div class="big">2 <small>packs</small></div><div class="lab">58 + 47 statement types</div></div>
+      <div class="stat"><div class="big">46k <small>documents</small></div><div class="lab">28,440 policies · 17,644 papers</div></div>
+      <div class="stat"><div class="big">2 <small>benchmarks</small></div><div class="lab">controlled deletion · authors' own revisions</div></div>
+      <div class="stat"><div class="big">491 <small>tests</small></div><div class="lab">pass in ≈ 25 s on a clean clone</div></div>
+    </section>
+
+    <section class="cols">
+      <div>
+        <div class="block">
+          <h2>Where to look in the repository</h2>
+          <table>
+            <tr><td class="k">README.md</td><td class="v">Setup, what a fresh clone can run, each pipeline step as a recorded run with duration and hardware.</td></tr>
+            <tr><td class="k">NEGATIVE_SPACE_PLAN.md</td><td class="v">The phased plan, each gate ticked and dated; frozen decisions in §0.2.</td></tr>
+            <tr><td class="k">CHANGELOG.md</td><td class="v">Dated record of what was done and found, negative findings included.</td></tr>
+            <tr><td class="k">engine/ · packs/</td><td class="v">The genre-agnostic engine; the pack builder and both packs.</td></tr>
+            <tr><td class="k">experiments/ · configs/</td><td class="v">One entry point for every run, one YAML per experiment.</td></tr>
+            <tr><td class="k">prompts/</td><td class="v">Every teacher and baseline prompt, versioned and hashed.</td></tr>
+            <tr><td class="k">analysis/ · reports/</td><td class="v">Scripts that regenerate every table and figure; the report is built from them. Decision records in reports/decisions/.</td></tr>
+            <tr><td class="k">app/ · tests/</td><td class="v">The Gradio demo; the test suite.</td></tr>
+          </table>
+        </div>
+
+      </div>
+
+      <div>
+        <div class="block">
+          <h2>Run it yourself · three commands</h2>
+          <div class="step"><div class="n">1</div><p>Install into a virtual environment (Python 3.11).</p></div>
+          <div class="cmd">python3.11 -m venv .venv
+.venv/bin/pip install -e .</div>
+          <div class="step" style="margin-top:2.5mm"><div class="n">2</div><p>Run the tests. They need no data and no large model weights.</p></div>
+          <div class="cmd">.venv/bin/python -m pytest -q   <span class="c"># 491 passed</span></div>
+          <div class="step" style="margin-top:2.5mm"><div class="n">3</div><p>Build a pack in smoke mode on the 200-document corpus (README explains the data download).</p></div>
+          <div class="cmd">python -m experiments.run \
+    --config configs/pack_privacy.yaml \
+    --overlay local --overlay smoke</div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="foot">
+    <div><b>Parsa Hosseini</b> · GitHub <span class="mono">parsa-hke</span> · Hugging Face <span class="mono">parsa-hke</span></div>
+    <div>Generative AI use is declared in the report's acknowledgement section · Sheet generated from the repository at <span class="mono">v0.1-class</span></div>
+  </footer>
+
+</div>
+
+<div class="page">
+  <header class="head small">
+    <div class="kicker">Negative-Space Reader · <span>Supplementary sheet for the marker</span> · page 2</div>
+  </header>
+  <main class="body p2">
+    <section class="headline">
+        <div class="block" style="margin:0">
+          <h2>Headline result · OmitBench-synthetic, recall@5</h2>
+          <div class="result">
+            <div class="res">
+              <div class="g">Papers · 500 instances</div>
+              <div class="bar"><span>Peer expectation (this system)</span><div class="track"><div class="fill" style="width:62.2%"></div></div><span class="num">0.62</span></div>
+              <div class="bar"><span>Genre-wide frequency</span><div class="track"><div class="fill g" style="width:51.4%"></div></div><span class="num">0.51</span></div>
+              <div class="bar"><span>Claude Opus 5.5, given the catalogue</span><div class="track"><div class="fill o" style="width:23.5%"></div></div><span class="num">0.24</span></div>
+              <div class="bar"><span>Random</span><div class="track"><div class="fill g" style="width:27.8%"></div></div><span class="num">0.28</span></div>
+            </div>
+            <div class="res">
+              <div class="g">Privacy policies · 500 instances</div>
+              <div class="bar"><span>Peer expectation (this system)</span><div class="track"><div class="fill" style="width:39.6%"></div></div><span class="num">0.40</span></div>
+              <div class="bar"><span>Genre-wide frequency</span><div class="track"><div class="fill g" style="width:38.5%"></div></div><span class="num">0.39</span></div>
+              <div class="bar"><span>Claude Opus 5.5, given the catalogue</span><div class="track"><div class="fill o" style="width:24.2%"></div></div><span class="num">0.24</span></div>
+              <div class="bar"><span>Random</span><div class="track"><div class="fill g" style="width:15.9%"></div></div><span class="num">0.16</span></div>
+            </div>
+          </div>
+          <p class="cap" style="font-size:7.3pt;color:var(--muted);margin-top:1.6mm;line-height:1.35">
+            Single-type deletion, one hidden statement per document. Peers beat genre-wide frequency for papers and not for policies; the report's
+            Section 6 explains why. The chat-model rows are the 100-instance frontier comparison (Table 8), reported with confidence intervals there.
+          </p>
+        </div>
+
+    </section>
+    <section class="cols">
+      <div>
+        <div class="block">
+          <h2>What keeps the numbers honest</h2>
+          <ul class="tips">
+            <li>Every experiment runs through <code>experiments/run.py</code> with a config; each run records its config hash, git commit, device and the version and hash of every prompt it rendered.</li>
+            <li>The report's source carries no typed number: every value is filled by key from <code>reports/tables/report_fragments/values.json</code>, written by <code>analysis/tables.py</code> from the run outputs.</li>
+            <li>Tests assert that the committed report, tables and figures equal a fresh build, so the submitted text cannot drift from the results.</li>
+            <li>Smoke mode (200 documents per genre, small models) must pass before any full run; the fresh-clone test of 2026-10-25 is recorded in the changelog.</li>
+            <li>Negative findings are kept: the plan and changelog record what did not work and why, including the privacy-policy result above.</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="block">
+          <h2>Using the demo</h2>
+          <ul class="tips">
+            <li>Start with a <b>pinned example</b>: the guided walkthrough narrates each step and ends with a challenge-and-reveal on a benchmark instance.</li>
+            <li>Paste or upload your own policy or paper; auto-detect picks the pack. On the free CPU a policy takes about 10 s and a paper about 36 s.</li>
+            <li>Click a <b>ghost paragraph</b> to open its evidence: peer count, five peer sentences with document ids, suggested wording.</li>
+            <li>The cohort panel re-ranks without re-embedding: change k, the category filter or the date window and watch the list move.</li>
+            <li>The <b>About</b> tab carries the same numbers as the report tables.</li>
+          </ul>
+        </div>
+
+        <div class="block">
+          <h2>Models and data, for the record</h2>
+          <table>
+            <tr><td class="k">Schema induction</td><td class="v">Qwen2.5-32B (lab), confirmed on Qwen2.5-72B</td></tr>
+            <tr><td class="k">Teacher labels</td><td class="v">Qwen2.5-72B-Instruct; silver reference by Claude Haiku 5.5</td></tr>
+            <tr><td class="k">Embeddings</td><td class="v">Qwen3-Embedding-0.6B (packs); bge-small in smoke</td></tr>
+            <tr><td class="k">Frontier comparison</td><td class="v">Claude Opus 5.5 and Qwen2.5-72B, candidate-list setting</td></tr>
+            <tr><td class="k">Corpora</td><td class="v">Privacy policies 1998–2019; permissively licensed arXiv cs.CL/cs.LG 2018–2022</td></tr>
+          </table>
+        </div>
+
+      </div>
+    </section>
+  </main>
+  <footer class="foot">
+    <div><b>Parsa Hosseini</b> · GitHub <span class="mono">parsa-hke</span> · Hugging Face <span class="mono">parsa-hke</span></div>
+    <div>Repository at <span class="mono">v0.1-class</span> · Space <span class="mono">parsa-hke/negative-space-reader</span></div>
+  </footer>
+</div>
+</body>
+</html>
