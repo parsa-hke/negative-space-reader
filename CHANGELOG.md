@@ -2,6 +2,17 @@
 
 Date, what was done, what was found (negative findings included). Newest first.
 
+## 2026-10-26 — 7.5 confirmed; submission note corrected
+
+**Checks (HANDOFF):** pytest 491 passed (28 s); tree clean; `analysis.report --check` and `analysis.report_tex --check`
+up to date; `git describe` v0.1-class-1-geb57d74; the tag resolves on GitHub; repository public, Apache 2.0 recognised.
+**Differs:** the Space reported stage SLEEPING with no sleep timer set (HANDOFF said "always on"); it wakes on the first
+visit, so open it before submitting and check the sleep setting in the Space settings.
+
+**7.5 ticked:** Parsa confirmed the GenAI acknowledgement as written. `reports/submission_v0.1-class.md`: the stale
+"repository is private" line in the deliverables table replaced with the public state. 7.7 stays open until the portal
+submission.
+
 ## 2026-10-25 (second session) — 7.6 README and fresh-clone smoke; 7.2 video plan; 7.7 submission list; report rebuilt
 
 **Checks (HANDOFF):** pytest 483 passed; `analysis.report --check` up to date; hub status as recorded (984 matched, the

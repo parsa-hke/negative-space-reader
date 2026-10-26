@@ -9,7 +9,7 @@ Written 2026-10-25. Plan §0.3 (class deliverables) and Appendix C (brief and ru
 | Technical report, 3,000–4,000 words | `reports/report.docx` (A4, Calibri, 16 tables, 4 figures, 30 IEEE references), built from `reports/report.md` | 3,989 words all-in (title block and abstract included; `python -m analysis.report --words`); AI-tell checker zero errors. **Parsa:** open it once in Word, confirm the GenAI acknowledgement, add the Anthropic references for Claude Opus 5.5 / Haiku 5.5 if a vendor page exists. |
 | Working prototype | https://huggingface.co/spaces/parsa-hke/negative-space-reader (public, `cpu-basic`, always on under Parsa's Pro subscription) | Live since 2026-10-21; results identical to the Mac. Re-uploaded only on Parsa's say-so. |
 | Demonstration | the live Space (no video required by the outline; 7.2 dropped 2026-10-25) | Ready. |
-| Repository with README and commented code | https://github.com/parsa-hke/negative-space-reader at tag `v0.1-class` | **The repository is private.** Before submitting: make it public, or add the marker as a collaborator, or attach the archive `git archive v0.1-class` produces. README rewritten 2026-10-25 (7.6). |
+| Repository with README and commented code | https://github.com/parsa-hke/negative-space-reader at tag `v0.1-class` | Public since 2026-10-25 (Apache 2.0 licence recognised by GitHub; tag `v0.1-class` on the remote). README rewritten 2026-10-25 (7.6). |
 
 ## Tag `v0.1-class` (after the last commit Parsa approves)
 
