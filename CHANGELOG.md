@@ -2,6 +2,14 @@
 
 Date, what was done, what was found (negative findings included). Newest first.
 
+## 2026-10-27 — Keep-awake ping for the Space
+
+`.github/workflows/keep-space-awake.yml`: every 6 hours (and on manual dispatch) a GitHub Action requests
+`https://parsa-hke-negative-space-reader.hf.space/`, retrying up to 10 times 30 s apart while a sleeping Space starts,
+and logs the Space's stage from the hub API before and after. Answers last session's finding that the Space had gone
+to SLEEPING. Steps dry-run locally against the live Space: stage RUNNING, HTTP 200 on the first attempt. Not yet run on
+GitHub. Caveat: GitHub turns scheduled workflows off after 60 days with no commits to the repository.
+
 ## 2026-10-26 — 7.5 confirmed; submission note corrected
 
 **Checks (HANDOFF):** pytest 491 passed (28 s); tree clean; `analysis.report --check` and `analysis.report_tex --check`

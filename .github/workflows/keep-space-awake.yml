@@ -1,0 +1,41 @@
+# Pings the Hugging Face Space so the free tier's inactivity timer (48 h) never runs out.
+# A visit to the app URL counts as activity and wakes a sleeping Space.
+name: Keep Space awake
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"   # every 6 hours, off the hour to avoid the top-of-hour queue
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      SPACE_ID: parsa-hke/negative-space-reader
+      SPACE_URL: https://parsa-hke-negative-space-reader.hf.space/
+    steps:
+      - name: Stage before ping
+        run: |
+          curl -s --max-time 30 "https://huggingface.co/api/spaces/$SPACE_ID" \
+            | python3 -c "import sys,json; print('stage:', json.load(sys.stdin).get('runtime',{}).get('stage'))"
+
+      - name: Ping the app
+        run: |
+          # A sleeping Space can take a few minutes to build and start; retry until it answers.
+          for i in $(seq 1 10); do
+            code=$(curl -s -o /dev/null -w "%{http_code}" -L --max-time 60 "$SPACE_URL" || echo 000)
+            echo "attempt $i: HTTP $code"
+            [ "$code" = "200" ] && exit 0
+            sleep 30
+          done
+          echo "Space did not answer 200 after 10 attempts" >&2
+          exit 1
+
+      - name: Stage after ping
+        if: always()
+        run: |
+          curl -s --max-time 30 "https://huggingface.co/api/spaces/$SPACE_ID" \
+            | python3 -c "import sys,json; print('stage:', json.load(sys.stdin).get('runtime',{}).get('stage'))"
